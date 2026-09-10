@@ -6,58 +6,18 @@
   <meta name="description" content="DEGAJA – Karten, Sterne, Zahlen und persönliche Beratung.">
   <title>DEGAJA – Dein Moment der Klarheit</title>
   <link rel="stylesheet" href="style.css">
-  <style>
-    .site-header .brand{display:flex;align-items:center}
-    .site-logo{display:block;width:118px;height:auto;max-height:58px;object-fit:contain}
-    .footer-logo{display:block;width:150px;height:auto;margin:0 auto}
-    .footer-brand{display:flex;justify-content:center}
-  </style>
+  <style>.site-header .brand{display:flex;align-items:center}.site-logo{display:block;width:118px;height:auto;max-height:58px;object-fit:contain}.footer-logo{display:block;width:150px;height:auto;margin:0 auto}.footer-brand{display:flex;justify-content:center}</style>
 </head>
 <body>
 <div class="page-glow"></div>
-<header class="site-header">
-  <a class="brand" href="#home" aria-label="DEGAJA"><img src="assets/degaja-logo.svg" alt="DEGAJA" class="site-logo"></a>
-  <nav class="nav"><a href="#home">Start</a><a href="#oracle">Orakel</a><a href="#topics">Themen</a><a href="#advisors">Berater</a><a href="#live">Live-Beratung</a></nav>
-  <button class="login-btn" id="loginBtn">Anmelden</button>
-</header>
+<header class="site-header"><a class="brand" href="#home" aria-label="DEGAJA"><img src="assets/degaja-logo.svg" alt="DEGAJA" class="site-logo"></a><nav class="nav"><a href="#home">Start</a><a href="#oracle">Orakel</a><a href="#topics">Themen</a><a href="#advisors">Berater</a><a href="#live">Live-Beratung</a></nav><button class="login-btn" id="loginBtn">Anmelden</button></header>
 <main>
-<section id="home" class="hero compact-hero">
-  <div class="hero-art">
-    <div class="art-sun">☼</div><div class="art-moon">☾</div>
-    <span class="art-star star-a">✦</span><span class="art-star star-b">✦</span><span class="art-star star-c">✧</span>
-    <div class="oracle-orb"><div class="oracle-ring"><div class="oracle-symbol">✦</div></div></div>
-  </div>
-  <div class="hero-copy">
-    <div class="eyebrow">✧ DEIN MOMENT DER KLARHEIT ✧</div>
-    <h1>Was beschäftigt <em>dich?</em></h1>
-    <p>Stelle deine Frage. DEGAJA zeigt dir, was Karten, Sterne und Zahlen dir heute sagen können.</p>
-    <div class="quick-topics" aria-label="Themen">
-      <button class="quick-topic" data-topic="Liebe & Beziehung">❤️ Liebe</button>
-      <button class="quick-topic" data-topic="Beruf & Karriere">💼 Beruf</button>
-      <button class="quick-topic" data-topic="Zukunft">✨ Zukunft</button>
-    </div>
-    <button class="hero-btn" id="startBtn">✨ Jetzt starten</button>
-  </div>
-</section>
-<section id="oracle" class="oracle-section compact-oracle">
-  <div class="oracle-card">
-    <div class="eyebrow">✦ DEGAJA ORAKEL ✦</div>
-    <h2>Deine Frage. Dein Moment.</h2>
-    <div class="oracle-form">
-      <label for="aiQuestion">Was möchtest du wissen?</label>
-      <textarea id="aiQuestion" maxlength="800" placeholder="Zum Beispiel: Kommt er zurück?"></textarea>
-      <input type="hidden" id="aiTopic" value="">
-      <button class="primary-btn" id="aiBtn">Orakel öffnen →</button>
-      <div id="aiResult" class="ai-result"></div>
-    </div>
-  </div>
-</section>
-<section id="topics" class="compact-after">
-  <div class="mini-links"><a href="#oracle">Karten</a><span>·</span><a href="#oracle">Sterne</a><span>·</span><a href="#oracle">Zahlen</a><span>·</span><button id="accountBtn" class="text-button">Mein DEGAJA</button></div>
-</section>
+<section id="home" class="hero compact-hero"><div class="hero-art"><div class="art-sun">☼</div><div class="art-moon">☾</div><span class="art-star star-a">✦</span><span class="art-star star-b">✦</span><span class="art-star star-c">✧</span><div class="oracle-orb"><div class="oracle-ring"><div class="oracle-symbol">✦</div></div></div></div><div class="hero-copy"><div class="eyebrow">✧ DEIN MOMENT DER KLARHEIT ✧</div><h1>Was beschäftigt <em>dich?</em></h1><p>Stelle deine Frage. DEGAJA zeigt dir, was Karten, Sterne und Zahlen dir heute sagen können.</p><div class="quick-topics" aria-label="Themen"><button class="quick-topic" data-topic="Liebe & Beziehung">❤️ Liebe</button><button class="quick-topic" data-topic="Beruf & Karriere">💼 Beruf</button><button class="quick-topic" data-topic="Zukunft">✨ Zukunft</button></div><button class="hero-btn" id="startBtn">✨ Jetzt starten</button></div></section>
+<section id="oracle" class="oracle-section compact-oracle"><div class="oracle-card"><div class="eyebrow">✦ DEGAJA ORAKEL ✦</div><h2>Deine Frage. Dein Moment.</h2><div class="oracle-form"><label for="aiQuestion">Was möchtest du wissen?</label><textarea id="aiQuestion" maxlength="800" placeholder="Zum Beispiel: Kommt er zurück?"></textarea><input type="hidden" id="aiTopic" value=""><button class="primary-btn" id="aiBtn">Orakel öffnen →</button><div id="aiResult" class="ai-result"></div></div></div></section>
+<section id="topics" class="compact-after"><div class="mini-links"><a href="#oracle">Karten</a><span>·</span><a href="#oracle">Sterne</a><span>·</span><a href="#oracle">Zahlen</a><span>·</span><button id="accountBtn" class="text-button">Mein DEGAJA</button></div></section>
 </main>
 <footer><div class="footer-brand"><img src="assets/degaja-logo.svg" alt="DEGAJA" class="footer-logo"></div><p>Deine Frage. Dein Weg.</p><div class="footer-links"><a href="#">Impressum</a><a href="#">Datenschutz</a><a href="#">AGB</a><a href="#">Kontakt</a></div><small>DEGAJA dient der persönlichen Orientierung und Unterhaltung und ersetzt keine professionelle Beratung.</small></footer>
 <div class="modal" id="modal" aria-hidden="true"><div class="modal-card"><button class="close" id="closeModal">×</button><div id="modalContent"></div></div></div>
-<script src="script.js"></script>
+<script src="script.js"></script><script>document.querySelectorAll('.quick-topic').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('.quick-topic').forEach(x=>x.classList.remove('active'));b.classList.add('active');document.querySelector('#aiTopic').value=b.dataset.topic||'';document.querySelector('#oracle').scrollIntoView({behavior:'smooth',block:'center'});setTimeout(()=>document.querySelector('#aiQuestion')?.focus(),450)}));document.querySelector('#startBtn')?.addEventListener('click',()=>{document.querySelector('#oracle')?.scrollIntoView({behavior:'smooth',block:'center'});setTimeout(()=>document.querySelector('#aiQuestion')?.focus(),450)});</script>
 </body>
 </html>
