@@ -126,7 +126,7 @@
       <h2>Hallo, ${escapeHtml(state.user.name)}</h2>
       <div class="account-panel">
         <div class="account-row"><span>E-Mail</span><strong>${escapeHtml(state.user.email)}</strong></div>
-        <div class="account-row"><span>AI-Zugang</span><strong>${state.paidAccess ? "Aktiv" : "Kostenlose Demo"}</strong></div>
+        <div class="account-row"><span>Zugang</span><strong>${state.paidAccess ? "Aktiv" : "Kostenlose Demo"}</strong></div>
       </div>
       <div style="display:flex;gap:10px;margin-top:22px;flex-wrap:wrap">
         <button class="primary" id="profileClose">Schließen</button>
@@ -159,21 +159,21 @@
       const topicText = topic || "dein Anliegen";
 
       return mode === "free"
-        ? `Dein Thema ist **${topicText}**. Nimm dir einen Moment und höre auf das, was sich für dich wirklich stimmig anfühlt. Deine Frage: „${question}“. Diese erste Deutung ist dein kostenloser Impuls. Für eine tiefere persönliche Lesung mit 24/7 AI-Chat kannst du jederzeit freischalten.`
-        : `DEGAJA AI ist für dich da. Wir betrachten dein Thema „${topicText}“ Schritt für Schritt und bleiben bei deiner Frage: „${question}“. Du kannst jederzeit weiterfragen.`;
+        ? `Dein Thema ist **${topicText}**. Nimm dir einen Moment und höre auf das, was sich für dich wirklich stimmig anfühlt. Deine Frage: „${question}“. Diese erste Deutung ist dein kostenloser Impuls. Für eine tiefere persönliche Lesung mit anschließender 24/7-Begleitung kannst du jederzeit freischalten.`
+        : `DEGAJA ist für dich da. Wir betrachten dein Thema „${topicText}“ Schritt für Schritt und bleiben bei deiner Frage: „${question}“. Du kannst jederzeit weiterfragen.`;
     }
   }
 
   function showPurchaseModal() {
     openModal(`
-      <div class="eyebrow">DEGAJA AI · 24/7</div>
+      <div class="eyebrow">DEGAJA · 24/7</div>
       <h2>Geh tiefer</h2>
       <p style="color:#687384">
-        Deine erste Antwort war kostenlos. Schalte jetzt eine tiefere persönliche AI-Lesung mit anschließendem 24/7 AI-Chat frei.
+        Deine erste Antwort war kostenlos. Schalte jetzt eine tiefere persönliche Lesung mit anschließender 24/7-Begleitung frei.
       </p>
       <div class="pricing-grid" style="grid-template-columns:1fr;gap:10px">
-        <button class="price-btn" data-checkout="single">Eine AI-Lesung · €4,99</button>
-        <button class="price-btn" data-checkout="pack">3 AI-Lesungen · €9,99</button>
+        <button class="price-btn" data-checkout="single">Eine Lesung · €4,99</button>
+        <button class="price-btn" data-checkout="pack">3 Lesungen · €9,99</button>
       </div>
       <p class="pay-note">Einmalige Zahlung · keine automatische Verlängerung.</p>
     `);
@@ -217,13 +217,13 @@
       .replace(/\n/g, "<br>");
 
     result.innerHTML = `
-      <strong>${paid ? "DEGAJA AI · Deine persönliche Lesung" : "DEGAJA AI · Deine erste Antwort"}</strong>
+      <strong>${paid ? "DEGAJA · Deine persönliche Lesung" : "DEGAJA · Deine erste Antwort"}</strong>
       <p style="margin:8px 0;color:#596273">${safeText}</p>
       <div style="font-size:13px;color:#687384"><b>Deine Frage:</b> ${escapeHtml(question)}</div>
       ${paid
         ? `
           <div class="chat-box">
-            <div class="badge">24/7 AI-CHAT</div>
+            <div class="badge">24/7 BEGLEITUNG</div>
             <div class="chat-messages" id="chatMessages">
               <div class="chat-msg ai">Ich bin hier. Du kannst zu deiner Lesung jederzeit weiterfragen.</div>
             </div>
