@@ -3,181 +3,39 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-  <meta name="description" content="DEGAJA 2.0 – Karten, Sterne, Zahlen und persönliche Beratung.">
-  <title>DEGAJA 2.0 – Dein Moment der Klarheit</title>
+  <meta name="description" content="DEGAJA – Karten, Sterne, Zahlen und persönliche Beratung.">
+  <title>DEGAJA – Dein Moment der Klarheit</title>
   <link rel="stylesheet" href="style.css">
+  <style>
+    .site-header .brand{display:flex;align-items:center}
+    .site-logo{display:block;width:118px;height:auto;max-height:58px;object-fit:contain}
+    .footer-logo{display:block;width:150px;height:auto;margin:0 auto}
+    .footer-brand{display:flex;justify-content:center}
+  </style>
 </head>
 <body>
 <div class="page-glow"></div>
-
 <header class="site-header">
-  <a class="brand" href="#home" aria-label="DEGAJA 2.0">
-    <span class="brand-symbol">✧</span>
-    <span class="brand-name">DEGAJA</span>
-    <span class="brand-sub">BALANCE YOUR LIFE</span>
-  </a>
+  <a class="brand" href="#home" aria-label="DEGAJA"><img src="assets/degaja-logo.svg" alt="DEGAJA" class="site-logo"></a>
   <nav class="nav">
-    <a href="#home">Start</a>
-    <a href="#oracle">Orakel</a>
-    <a href="#topics">Themen</a>
-    <a href="#advisors">Berater</a>
-    <a href="#live">Live-Beratung</a>
+    <a href="#home">Start</a><a href="#oracle">Orakel</a><a href="#topics">Themen</a><a href="#advisors">Berater</a><a href="#live">Live-Beratung</a>
   </nav>
   <button class="login-btn" id="loginBtn">Anmelden</button>
 </header>
-
 <main>
 <section id="home" class="hero">
-  <div class="hero-art">
-    <div class="art-sun">☼</div>
-    <div class="art-moon">☾</div>
-    <span class="art-star star-a">✦</span>
-    <span class="art-star star-b">✦</span>
-    <span class="art-star star-c">✧</span>
-    <div class="oracle-orb">
-      <div class="oracle-ring">
-        <div class="oracle-symbol">✦</div>
-        <div class="oracle-name">DEGAJA</div>
-      </div>
-    </div>
-  </div>
-
-  <div class="hero-copy">
-    <div class="eyebrow">✧ DEIN MOMENT DER KLARHEIT ✧</div>
-    <h1>Was hält die<br><em>Zukunft</em> für dich<br>bereit?</h1>
-    <p>Stelle deine Frage und entdecke, was Karten, Sterne und Zahlen dir heute zeigen.</p>
-    <button class="hero-btn" id="startBtn">✨ Jetzt Orakel starten</button>
-  </div>
+  <div class="hero-art"><div class="art-sun">☼</div><div class="art-moon">☾</div><span class="art-star star-a">✦</span><span class="art-star star-b">✦</span><span class="art-star star-c">✧</span><div class="oracle-orb"><div class="oracle-ring"><div class="oracle-symbol">✦</div><div class="oracle-name">DEGAJA</div></div></div></div>
+  <div class="hero-copy"><div class="eyebrow">✧ DEIN MOMENT DER KLARHEIT ✧</div><h1>Was hält die<br><em>Zukunft</em> für dich<br>bereit?</h1><p>Stelle deine Frage und entdecke, was Karten, Sterne und Zahlen dir heute zeigen.</p><button class="hero-btn" id="startBtn">✨ Jetzt Orakel starten</button></div>
 </section>
-
-<section id="oracle" class="section oracle-section">
-  <div class="section-heading">
-    <div class="eyebrow">✦ DEGAJA ORAKEL ✦</div>
-    <h2>Deine Frage. Dein Moment.</h2>
-    <p>Schreibe frei, was dich beschäftigt. Wähle ein Thema und erhalte eine erste persönliche Einordnung.</p>
-  </div>
-  <div class="oracle-card">
-    <div class="card-deco">✧</div>
-    <div class="oracle-form">
-      <label for="aiQuestion">Was möchtest du wissen?</label>
-      <textarea id="aiQuestion" maxlength="800" placeholder="Zum Beispiel: Was erwartet mich in der Liebe?"></textarea>
-      <div class="form-row">
-        <select id="aiTopic">
-          <option value="">Thema auswählen</option>
-          <option>Liebe & Beziehung</option>
-          <option>Beruf & Karriere</option>
-          <option>Familie</option>
-          <option>Business & Geld</option>
-          <option>Persönliche Entwicklung</option>
-          <option>Tarot & Spiritualität</option>
-          <option>Einfach reden</option>
-        </select>
-        <button class="primary-btn" id="aiBtn">Orakel öffnen →</button>
-      </div>
-      <div id="aiResult" class="ai-result"></div>
-    </div>
-  </div>
-</section>
-
-<section id="topics" class="section">
-  <div class="section-heading centered">
-    <div class="eyebrow">✦ DEINE THEMEN ✦</div>
-    <h2>Was bewegt dich?</h2>
-    <p>Wähle den Bereich, der gerade am wichtigsten für dich ist.</p>
-  </div>
-  <div class="topic-grid">
-    <button class="topic-card"><span>♡</span><strong>Liebe & Beziehung</strong><small>Gefühle · Partnerschaft · Zukunft</small></button>
-    <button class="topic-card"><span>◈</span><strong>Beruf & Karriere</strong><small>Entscheidungen · Chancen · Weg</small></button>
-    <button class="topic-card"><span>☼</span><strong>Persönliche Entwicklung</strong><small>Selbstvertrauen · Ziele · Veränderung</small></button>
-    <button class="topic-card"><span>♧</span><strong>Business & Geld</strong><small>Strategie · Chancen · Klarheit</small></button>
-    <button class="topic-card"><span>☾</span><strong>Tarot & Spiritualität</strong><small>Karten · Sterne · Intuition</small></button>
-    <button class="topic-card"><span>✦</span><strong>Einfach reden</strong><small>Jemand hört dir wirklich zu</small></button>
-  </div>
-</section>
-
-<section id="advisors" class="section advisors-section">
-  <div class="section-heading">
-    <div class="eyebrow">✦ DEGAJA BERATER ✦</div>
-    <h2>Ein Mensch für deinen Weg.</h2>
-    <p>Finde Menschen mit Erfahrung, Persönlichkeit und dem richtigen Gespür für dein Thema.</p>
-  </div>
-  <div class="advisor-grid">
-    <article class="advisor-card">
-      <div class="advisor-avatar">EL</div><span class="online">● Online</span>
-      <h3>Elena</h3><p>Beziehungen · Lebensberatung</p>
-      <div class="rating">★★★★★ <span>4.9 · 328 Sessions</span></div>
-      <div class="match">98% Match</div><button class="primary-btn advisor-btn">Profil ansehen</button>
-    </article>
-    <article class="advisor-card">
-      <div class="advisor-avatar blue">MK</div><span class="online">● Online</span>
-      <h3>Michael</h3><p>Business · Karriere · Entscheidungen</p>
-      <div class="rating">★★★★★ <span>4.8 · 241 Sessions</span></div>
-      <div class="match">94% Match</div><button class="primary-btn advisor-btn">Profil ansehen</button>
-    </article>
-    <article class="advisor-card">
-      <div class="advisor-avatar gold">SA</div><span class="online">● Online</span>
-      <h3>Sarah</h3><p>Tarot · Spiritualität · Liebe</p>
-      <div class="rating">★★★★★ <span>5.0 · 517 Sessions</span></div>
-      <div class="match">91% Match</div><button class="primary-btn advisor-btn">Profil ansehen</button>
-    </article>
-  </div>
-</section>
-
-<section id="live" class="live-section">
-  <div class="live-inner">
-    <div class="section-heading">
-      <div class="eyebrow">✦ LIVE-BERATUNG ✦</div>
-      <h2>Manche Fragen brauchen einen Menschen.</h2>
-      <p>Starte eine private Session mit einem passenden DEGAJA Berater.</p>
-    </div>
-    <div class="plans">
-      <button class="plan"><strong>10 Minuten</strong><b>12 €</b><span>Eine konkrete Frage</span></button>
-      <button class="plan"><strong>20 Minuten</strong><b>24 €</b><span>Vertiefte Beratung</span></button>
-      <button class="plan featured"><i>Beliebt</i><strong>30 Minuten</strong><b>35 €</b><span>Mehr Zeit für dein Thema</span></button>
-      <button class="plan"><strong>60 Minuten</strong><b>60 €</b><span>Intensive Session</span></button>
-    </div>
-  </div>
-</section>
-
-<section class="section how">
-  <div class="section-heading centered">
-    <div class="eyebrow">✦ SO FUNKTIONIERT DEGAJA ✦</div>
-    <h2>Von der Frage zur Klarheit.</h2>
-  </div>
-  <div class="steps">
-    <div><span>01</span><strong>Fragen</strong><p>Erzähl uns, was dich gerade beschäftigt.</p></div>
-    <div><span>02</span><strong>Verstehen</strong><p>DEGAJA strukturiert dein Anliegen.</p></div>
-    <div><span>03</span><strong>Matchen</strong><p>Finde die passende Unterstützung.</p></div>
-    <div><span>04</span><strong>Weitergehen</strong><p>Behalte deine Sessions und nächsten Schritte im Blick.</p></div>
-  </div>
-</section>
-
-<section class="section">
-  <div class="dashboard">
-    <div>
-      <div class="eyebrow">✦ DEIN DEGAJA SPACE ✦</div>
-      <h2>Alles an einem Ort.</h2>
-      <p>Sessions, Favoriten und deine persönlichen Themen – übersichtlich in deinem Space.</p>
-    </div>
-    <button class="primary-btn" id="accountBtn">Konto öffnen</button>
-  </div>
-</section>
+<section id="oracle" class="section oracle-section"><div class="section-heading"><div class="eyebrow">✦ DEGAJA ORAKEL ✦</div><h2>Deine Frage. Dein Moment.</h2><p>Schreibe frei, was dich beschäftigt. Wähle ein Thema und erhalte eine erste persönliche Einordnung.</p></div><div class="oracle-card"><div class="card-deco">✧</div><div class="oracle-form"><label for="aiQuestion">Was möchtest du wissen?</label><textarea id="aiQuestion" maxlength="800" placeholder="Zum Beispiel: Was erwartet mich in der Liebe?"></textarea><div class="form-row"><select id="aiTopic"><option value="">Thema auswählen</option><option>Liebe & Beziehung</option><option>Beruf & Karriere</option><option>Familie</option><option>Business & Geld</option><option>Persönliche Entwicklung</option><option>Tarot & Spiritualität</option><option>Einfach reden</option></select><button class="primary-btn" id="aiBtn">Orakel öffnen →</button></div><div id="aiResult" class="ai-result"></div></div></div></section>
+<section id="topics" class="section"><div class="section-heading centered"><div class="eyebrow">✦ DEINE THEMEN ✦</div><h2>Was bewegt dich?</h2><p>Wähle den Bereich, der gerade am wichtigsten für dich ist.</p></div><div class="topic-grid"><button class="topic-card"><span>♡</span><strong>Liebe & Beziehung</strong><small>Gefühle · Partnerschaft · Zukunft</small></button><button class="topic-card"><span>◈</span><strong>Beruf & Karriere</strong><small>Entscheidungen · Chancen · Weg</small></button><button class="topic-card"><span>☼</span><strong>Persönliche Entwicklung</strong><small>Selbstvertrauen · Ziele · Veränderung</small></button><button class="topic-card"><span>♧</span><strong>Business & Geld</strong><small>Strategie · Chancen · Klarheit</small></button><button class="topic-card"><span>☾</span><strong>Tarot & Spiritualität</strong><small>Karten · Sterne · Intuition</small></button><button class="topic-card"><span>✦</span><strong>Einfach reden</strong><small>Jemand hört dir wirklich zu</small></button></div></section>
+<section id="advisors" class="section advisors-section"><div class="section-heading"><div class="eyebrow">✦ DEGAJA BERATER ✦</div><h2>Ein Mensch für deinen Weg.</h2><p>Finde Menschen mit Erfahrung, Persönlichkeit und dem richtigen Gespür für dein Thema.</p></div><div class="advisor-grid"><article class="advisor-card"><div class="advisor-avatar">EL</div><span class="online">● Online</span><h3>Elena</h3><p>Beziehungen · Lebensberatung</p><div class="rating">★★★★★ <span>4.9 · 328 Sessions</span></div><div class="match">98% Match</div><button class="primary-btn advisor-btn">Profil ansehen</button></article><article class="advisor-card"><div class="advisor-avatar blue">MK</div><span class="online">● Online</span><h3>Michael</h3><p>Business · Karriere · Entscheidungen</p><div class="rating">★★★★★ <span>4.8 · 241 Sessions</span></div><div class="match">94% Match</div><button class="primary-btn advisor-btn">Profil ansehen</button></article><article class="advisor-card"><div class="advisor-avatar gold">SA</div><span class="online">● Online</span><h3>Sarah</h3><p>Tarot · Spiritualität · Liebe</p><div class="rating">★★★★★ <span>5.0 · 517 Sessions</span></div><div class="match">91% Match</div><button class="primary-btn advisor-btn">Profil ansehen</button></article></div></section>
+<section id="live" class="live-section"><div class="live-inner"><div class="section-heading"><div class="eyebrow">✦ LIVE-BERATUNG ✦</div><h2>Manche Fragen brauchen einen Menschen.</h2><p>Starte eine private Session mit einem passenden DEGAJA Berater.</p></div><div class="plans"><button class="plan"><strong>10 Minuten</strong><b>12 €</b><span>Eine konkrete Frage</span></button><button class="plan"><strong>20 Minuten</strong><b>24 €</b><span>Vertiefte Beratung</span></button><button class="plan featured"><i>Beliebt</i><strong>30 Minuten</strong><b>35 €</b><span>Mehr Zeit für dein Thema</span></button><button class="plan"><strong>60 Minuten</strong><b>60 €</b><span>Intensive Session</span></button></div></div></section>
+<section class="section how"><div class="section-heading centered"><div class="eyebrow">✦ SO FUNKTIONIERT DEGAJA ✦</div><h2>Von der Frage zur Klarheit.</h2></div><div class="steps"><div><span>01</span><strong>Fragen</strong><p>Erzähl uns, was dich gerade beschäftigt.</p></div><div><span>02</span><strong>Verstehen</strong><p>DEGAJA strukturiert dein Anliegen.</p></div><div><span>03</span><strong>Matchen</strong><p>Finde die passende Unterstützung.</p></div><div><span>04</span><strong>Weitergehen</strong><p>Behalte deine Sessions und nächsten Schritte im Blick.</p></div></div></section>
+<section class="section"><div class="dashboard"><div><div class="eyebrow">✦ DEIN DEGAJA SPACE ✦</div><h2>Alles an einem Ort.</h2><p>Sessions, Favoriten und deine persönlichen Themen – übersichtlich in deinem Space.</p></div><button class="primary-btn" id="accountBtn">Konto öffnen</button></div></section>
 </main>
-
-<footer>
-  <div class="footer-brand"><span>✧</span> DEGAJA <small>2.0</small></div>
-  <p>Deine Frage. Dein Weg.</p>
-  <div class="footer-links"><a href="#">Impressum</a><a href="#">Datenschutz</a><a href="#">AGB</a><a href="#">Kontakt</a></div>
-  <small>DEGAJA dient der persönlichen Orientierung und Unterhaltung und ersetzt keine professionelle Beratung.</small>
-</footer>
-
-<div class="modal" id="modal" aria-hidden="true">
-  <div class="modal-card">
-    <button class="close" id="closeModal">×</button>
-    <div id="modalContent"></div>
-  </div>
-</div>
-
+<footer><div class="footer-brand"><img src="assets/degaja-logo.svg" alt="DEGAJA" class="footer-logo"></div><p>Deine Frage. Dein Weg.</p><div class="footer-links"><a href="#">Impressum</a><a href="#">Datenschutz</a><a href="#">AGB</a><a href="#">Kontakt</a></div><small>DEGAJA dient der persönlichen Orientierung und Unterhaltung und ersetzt keine professionelle Beratung.</small></footer>
+<div class="modal" id="modal" aria-hidden="true"><div class="modal-card"><button class="close" id="closeModal">×</button><div id="modalContent"></div></div></div>
 <script src="script.js"></script>
 </body>
 </html>
