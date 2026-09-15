@@ -4,7 +4,7 @@
   const CREDIT_KEY = 'degajaVoiceCredits';
   const SESSION_KEY = 'degajaVoiceSession';
   const ADVISOR_KEY = 'degajaSelectedAdvisor';
-  const prices = {15:'29,99',30:'54,99',60:'99,99'};
+  const prices = {15:'29,99',30:'59,99',60:'99,99'};
   const fallbackAdvisors = [
     {id:'anna',name:'Anna',title:'Tarot & Liebe'},
     {id:'sophie',name:'Sophie',title:'Beziehung & Gefühle'},

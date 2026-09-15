@@ -263,7 +263,7 @@
         <p style="color:#687384">${urgent ? "Sende deine Anfrage. Unsere Expertin prüft ihre aktuelle Verfügbarkeit und wir versuchen, den direkten Audio-Kontakt innerhalb von 10–30 Minuten herzustellen." : "Wähle deine Dauer und vereinbare einen Termin für ein vertrauliches Audio-Gespräch."}</p>
         <div class="consult-options">
           <button class="consult-option" data-duration="15"><span><strong>15 Minuten</strong><small>Persönliches Audio-Gespräch</small></span><b>€29,99</b></button>
-          <button class="consult-option" data-duration="30"><span><strong>30 Minuten</strong><small>Persönliches Audio-Gespräch</small></span><b>€54,99</b></button>
+          <button class="consult-option" data-duration="30"><span><strong>30 Minuten</strong><small>Persönliches Audio-Gespräch</small></span><b>€59,99</b></button>
           <button class="consult-option" data-duration="60"><span><strong>60 Minuten</strong><small>Persönliches Audio-Gespräch</small></span><b>€99,99</b></button>
         </div>
         <div id="consultFormWrap" style="display:none"></div>
@@ -280,7 +280,7 @@
     const wrap = $("#consultFormWrap");
     if (!wrap) return;
 
-    const price = ({ "15": "29,99", "30": "54,99", "60": "99,99" }[duration] || "29,99");
+    const price = ({ "15": "29,99", "30": "59,99", "60": "99,99" }[duration] || "29,99");
 
     wrap.style.display = "block";
     wrap.innerHTML = `
