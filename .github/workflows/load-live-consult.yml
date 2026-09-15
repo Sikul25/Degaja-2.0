@@ -40,23 +40,20 @@ jobs:
 
           script = Path('script.js')
           js = script.read_text(encoding='utf-8')
-          old = '''<button class="consult-option" data-duration="15"><span><strong>15 Minuten</strong><small>Persönliches Audio-Gespräch</small></span><b>${urgent ? "€24,99" : "€19,99"}</b></button>\n          <button class="consult-option" data-duration="30"><span><strong>30 Minuten</strong><small>Persönliches Audio-Gespräch</small></span><b>${urgent ? "€34,99" : "€29,99"}</b></button>\n          <button class="consult-option" data-duration="60"><span><strong>60 Minuten</strong><small>Persönliches Audio-Gespräch</small></span><b>${urgent ? "€54,99" : "€49,99"}</b></button>'''
-          new = '''<button class="consult-option" data-duration="15"><span><strong>15 Minuten</strong><small>Persönliches Audio-Gespräch</small></span><b>€29,99</b></button>\n          <button class="consult-option" data-duration="30"><span><strong>30 Minuten</strong><small>Persönliches Audio-Gespräch</small></span><b>€54,99</b></button>\n          <button class="consult-option" data-duration="60"><span><strong>60 Minuten</strong><small>Persönliches Audio-Gespräch</small></span><b>€99,99</b></button>'''
-          if old not in js:
-              raise SystemExit('Old consultation price block not found in script.js')
-          js = js.replace(old, new, 1)
-
-          old_maps = '''const price = urgent\n      ? ({ "15": "24,99", "30": "34,99", "60": "54,99" }[duration] || "24,99")\n      : ({ "15": "19,99", "30": "29,99", "60": "49,99" }[duration] || "19,99");'''
-          new_maps = '''const price = ({ "15": "29,99", "30": "54,99", "60": "99,99" }[duration] || "29,99");'''
-          if old_maps not in js:
-              raise SystemExit('Old consultation price map not found in script.js')
-          js = js.replace(old_maps, new_maps, 1)
+          js = js.replace('€54,99', '€59,99')
+          js = js.replace('"30": "54,99"', '"30": "59,99"')
           script.write_text(js, encoding='utf-8')
+
+          live = Path('live-consult.js')
+          livejs = live.read_text(encoding='utf-8')
+          livejs = livejs.replace("30:'54,99'", "30:'59,99'")
+          livejs = livejs.replace('30:"54,99"', '30:"59,99"')
+          live.write_text(livejs, encoding='utf-8')
       - name: Commit fixes
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add index.html script.js
+          git add index.html script.js live-consult.js
           git diff --cached --quiet && exit 0
-          git commit -m "Remove duplicate consultation UI and set live prices [skip consultation-modules]"
+          git commit -m "Set DEGAJA live audio 30 minute price to 59.99 [skip consultation-modules]"
           git push
