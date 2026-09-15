@@ -3,7 +3,7 @@
   const $ = (s,r=document) => r.querySelector(s);
   const CREDIT_KEY = 'degajaVoiceCredits';
   const SESSION_KEY = 'degajaVoiceSession';
-  const prices = {15:'19,99',30:'29,99',60:'49,99'};
+  const prices = {15:'29,99',30:'54,99',60:'99,99'};
   const esc = v => String(v ?? '').replace(/[&<>\"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;',"'":'&#039;'}[c]));
   const getCredits = () => Math.max(0, Number(localStorage.getItem(CREDIT_KEY)||0));
   const setCredits = n => localStorage.setItem(CREDIT_KEY,String(Math.max(0,n)));
