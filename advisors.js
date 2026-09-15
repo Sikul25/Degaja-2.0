@@ -100,3 +100,56 @@ window.DEGAJA_ADVISORS = [
 ];
 
 window.DEGAJA_ADVISOR_LIMIT = 100;
+
+/* Central live-consultation price guard.
+ * The live-consult.js card already uses these values. This observer also
+ * corrects the legacy consultation modal in script.js so the public UI
+ * cannot continue showing the previous prices.
+ */
+window.DEGAJA_LIVE_PRICES = {
+  15: "29,99",
+  30: "54,99",
+  60: "99,99"
+};
+
+(() => {
+  "use strict";
+
+  const prices = window.DEGAJA_LIVE_PRICES;
+
+  function fixText(root = document) {
+    const replacements = [
+      ["€19,99", `€${prices[15]}`],
+      ["€24,99", `€${prices[15]}`],
+      ["€29,99", `€${prices[30]}`],
+      ["€34,99", `€${prices[30]}`],
+      ["€49,99", `€${prices[60]}`],
+      ["€54,99", `€${prices[60]}`]
+    ];
+
+    const walker = document.createTreeWalker(root.body || root, NodeFilter.SHOW_TEXT);
+    const nodes = [];
+    let node;
+    while ((node = walker.nextNode())) nodes.push(node);
+
+    nodes.forEach(textNode => {
+      let value = textNode.nodeValue;
+      replacements.forEach(([from, to]) => {
+        if (value.includes(from)) value = value.split(from).join(to);
+      });
+      if (value !== textNode.nodeValue) textNode.nodeValue = value;
+    });
+  }
+
+  function init() {
+    fixText();
+    const observer = new MutationObserver(() => fixText());
+    observer.observe(document.body, { childList: true, subtree: true });
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", init, { once: true });
+  } else {
+    init();
+  }
+})();
