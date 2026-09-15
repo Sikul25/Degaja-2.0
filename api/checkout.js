@@ -3,9 +3,9 @@ export default async function handler(req, res) {
 
   const { product, duration, email, name } = req.body || {};
   const voicePrices = {
-    15: { name: "DEGAJA Live Audio – 15 Minuten", amount: 1999 },
-    30: { name: "DEGAJA Live Audio – 30 Minuten", amount: 2999 },
-    60: { name: "DEGAJA Live Audio – 60 Minuten", amount: 4999 }
+    15: { name: "DEGAJA Live Audio – 15 Minuten", amount: 2999 },
+    30: { name: "DEGAJA Live Audio – 30 Minuten", amount: 5499 },
+    60: { name: "DEGAJA Live Audio – 60 Minuten", amount: 9999 }
   };
   const products = {
     single: { name: "DEGAJA AI – Einzelne Lesung", amount: 499, quantity: 1, type: "ai" },
