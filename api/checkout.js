@@ -1,7 +1,7 @@
 export default async function handler(req, res) {
   if (req.method !== "POST") return res.status(405).json({ error: "Method not allowed" });
 
-  const { product, duration, email, name } = req.body || {};
+  const { product, duration, email, name, advisorId } = req.body || {};
   const voicePrices = {
     15: { name: "DEGAJA Live Audio – 15 Minuten", amount: 2999 },
     30: { name: "DEGAJA Live Audio – 30 Minuten", amount: 5499 },
@@ -36,6 +36,7 @@ export default async function handler(req, res) {
   body.set("line_items[0][quantity]", String(item.quantity || 1));
   body.set("metadata[type]", type);
   if (voiceDuration) body.set("metadata[duration]", String(voiceDuration));
+  if (advisorId) body.set("metadata[advisorId]", String(advisorId).slice(0, 100));
   if (email) body.set("customer_email", String(email));
   if (email) body.set("client_reference_id", String(email).slice(0, 200));
   if (name) body.set("metadata[name]", String(name).slice(0, 200));
