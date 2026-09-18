@@ -65,7 +65,6 @@
 
     openModal(`
       <img src="assets/degaja-logo.png" alt="DEGAJA" class="modal-logo">
-      <div class="eyebrow">DEGAJA</div>
       <h2>${isSignup ? "Konto erstellen" : "Willkommen zurück"}</h2>
       <p style="color:#687384">
         ${isSignup
