@@ -4,6 +4,17 @@
   const $ = (selector, root = document) => root.querySelector(selector);
   const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
 
+  async function fetchWithTimeout(url, options = {}, timeoutMs = 15000) {
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), timeoutMs);
+    try {
+      return await fetch(url, { ...options, signal: controller.signal });
+    } finally {
+      clearTimeout(timer);
+    }
+  }
+  window.degajaFetch = fetchWithTimeout;
+
   const state = {
     user: JSON.parse(localStorage.getItem("degajaUser") || "null"),
     authMode: "signin",
@@ -138,11 +149,11 @@
 
   async function getOracle(question, topic, mode = "free") {
     try {
-      const response = await fetch("/api/oracle", {
+      const response = await fetchWithTimeout("/api/oracle", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ question, topic, mode })
-      });
+      }, 25000);
 
       if (!response.ok) throw new Error("API nicht verfügbar");
       const data = await response.json();
@@ -175,11 +186,11 @@
 
   async function startCheckout(product) {
     try {
-      const response = await fetch("/api/checkout", {
+      const response = await fetchWithTimeout("/api/checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ product })
-      });
+      }, 15000);
 
       const data = await response.json();
       if (!response.ok || !data.url) throw new Error(data.error || "Zahlung nicht verfügbar");
@@ -312,11 +323,11 @@
       }
 
       try {
-        const response = await fetch("/api/consultation", {
+        const response = await fetchWithTimeout("/api/consultation", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(payload)
-        });
+        }, 15000);
         const data = await response.json().catch(() => ({}));
         if (!response.ok || data.ok === false) throw new Error(data.error || "Beratungssystem nicht verfügbar");
 

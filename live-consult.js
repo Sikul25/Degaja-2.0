@@ -4,7 +4,10 @@
   const CREDIT_KEY = 'degajaVoiceCredits';
   const SESSION_KEY = 'degajaVoiceSession';
   const ADVISOR_KEY = 'degajaSelectedAdvisor';
-  const prices = {15:'29,99',30:'59,99',60:'99,99'};
+  // Fallback data only — the real source of truth is GET /api/advisors,
+  // which shares its data with the checkout and oracle endpoints (api/_data.js).
+  // Used only if that request fails (e.g. offline).
+  let prices = {15:'29,99',30:'59,99',60:'99,99'};
   const fallbackAdvisors = [
     {id:'anna',name:'Anna',title:'Tarot & Liebe'},
     {id:'sophie',name:'Sophie',title:'Beziehung & Gefühle'},
@@ -17,11 +20,23 @@
     {id:'nina',name:'Nina',title:'Karten & Beziehungen'},
     {id:'isabella',name:'Isabella',title:'Astrologie & Numerologie'}
   ];
+  let remoteAdvisors = null;
   const esc = v => String(v ?? '').replace(/[&<>\"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;',"'":'&#039;'}[c]));
   const getCredits = () => Math.max(0, Number(localStorage.getItem(CREDIT_KEY)||0));
   const setCredits = n => localStorage.setItem(CREDIT_KEY,String(Math.max(0,n)));
   const getUser = () => { try{return JSON.parse(localStorage.getItem('degajaUser')||'null')}catch(_){return null} };
-  const getAdvisors = () => (Array.isArray(window.DEGAJA_ADVISORS) && window.DEGAJA_ADVISORS.length ? window.DEGAJA_ADVISORS.filter(a=>a&&a.active!==false) : fallbackAdvisors);
+  const doFetch = (url,opts,ms) => (window.degajaFetch ? window.degajaFetch(url,opts,ms) : fetch(url,opts));
+  const getAdvisors = () => (remoteAdvisors && remoteAdvisors.length ? remoteAdvisors : fallbackAdvisors);
+
+  async function loadRemoteData(){
+    try{
+      const r = await doFetch('/api/advisors', {}, 8000);
+      if(!r.ok) return;
+      const d = await r.json();
+      if(Array.isArray(d.advisors) && d.advisors.length) remoteAdvisors = d.advisors.filter(a=>a&&a.active!==false);
+      if(d.prices && typeof d.prices === 'object') prices = { ...prices, ...d.prices };
+    }catch(_){ /* keep fallback data */ }
+  }
   const getSelectedAdvisor = () => {
     const list=getAdvisors();
     let id=''; try{id=String(JSON.parse(localStorage.getItem(ADVISOR_KEY)||'null')?.id||'')}catch(_){ }
@@ -113,12 +128,12 @@
 
   async function checkout(duration,advisor){
     const u=getUser(); if(!u||!advisor)return;
-    try{const r=await fetch('/api/checkout',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({product:'voice',duration,email:u.email,name:u.name||'',advisorId:advisor.id})});const d=await r.json();if(!r.ok||!d.url)throw new Error(d.error||'Checkout');localStorage.setItem(SESSION_KEY,JSON.stringify({type:'voice',duration,advisorId:advisor.id}));location.href=d.url}catch(_){const e=$('#degajaCall');if(e)e.innerHTML='<div class="degaja-call-panel"><b>Zahlung konnte nicht vorbereitet werden.</b><p class="degaja-live-copy">Bitte versuche es erneut.</p></div>';}
+    try{const r=await doFetch('/api/checkout',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({product:'voice',duration,email:u.email,name:u.name||'',advisorId:advisor.id})},15000);const d=await r.json();if(!r.ok||!d.url)throw new Error(d.error||'Checkout');localStorage.setItem(SESSION_KEY,JSON.stringify({type:'voice',duration,advisorId:advisor.id}));location.href=d.url}catch(_){const e=$('#degajaCall');if(e)e.innerHTML='<div class="degaja-call-panel"><b>Zahlung konnte nicht vorbereitet werden.</b><p class="degaja-live-copy">Bitte versuche es erneut.</p></div>';}
   }
 
   async function verify(){
     const p=new URLSearchParams(location.search), id=p.get('session_id'); if(p.get('payment')!=='success'||!id)return;
-    try{const r=await fetch('/api/verify-payment?session_id='+encodeURIComponent(id));const d=await r.json();if(!r.ok||!d.paid||d.type!=='voice')throw new Error('not paid');const advisor=d.advisorId?setSelectedAdvisor(d.advisorId):getSelectedAdvisor();localStorage.setItem('degajaPaidVoice','1');localStorage.setItem(SESSION_KEY,JSON.stringify({type:'voice',duration:d.duration||60,advisorId:advisor.id,sessionId:id,verifiedAt:Date.now()}));history.replaceState({},document.title,location.pathname+location.hash);call('paid',d.duration||60,advisor)}catch(_){console.warn('DEGAJA payment verification failed');}
+    try{const r=await doFetch('/api/verify-payment?session_id='+encodeURIComponent(id),{},15000);const d=await r.json();if(!r.ok||!d.paid||d.type!=='voice')throw new Error('not paid');const advisor=d.advisorId?setSelectedAdvisor(d.advisorId):getSelectedAdvisor();localStorage.setItem('degajaPaidVoice','1');localStorage.setItem(SESSION_KEY,JSON.stringify({type:'voice',duration:d.duration||60,advisorId:advisor.id,sessionId:id,verifiedAt:Date.now()}));history.replaceState({},document.title,location.pathname+location.hash);call('paid',d.duration||60,advisor)}catch(_){console.warn('DEGAJA payment verification failed');}
   }
 
   function peerScript(){return new Promise((ok,no)=>{if(window.Peer)return ok();const s=document.createElement('script');s.src='https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js';s.onload=ok;s.onerror=no;document.head.appendChild(s)})}
@@ -182,6 +197,13 @@
     const e=$('#degajaStatus');if(e)e.textContent='Gespräch beendet.';
     const lines=$('#degajaTranscriptLines');if(lines)lines.innerHTML='';
   }
-  function init(){style();card();verify()}
+  function init(){
+    style();card();verify();
+    loadRemoteData().then(()=>{
+      const select=document.getElementById('degajaAdvisorSelect');
+      if(select){ select.innerHTML=advisorOptions(); select.value=getSelectedAdvisor().id; }
+      creditText();
+    });
+  }
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init();
 })();

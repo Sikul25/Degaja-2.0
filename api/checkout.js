@@ -1,12 +1,9 @@
+import { VOICE_PRICES } from "./_data.js";
+
 export default async function handler(req, res) {
   if (req.method !== "POST") return res.status(405).json({ error: "Method not allowed" });
 
   const { product, duration, email, name, advisorId } = req.body || {};
-  const voicePrices = {
-    15: { name: "DEGAJA Live Audio – 15 Minuten", amount: 2999 },
-    30: { name: "DEGAJA Live Audio – 30 Minuten", amount: 5999 },
-    60: { name: "DEGAJA Live Audio – 60 Minuten", amount: 9999 }
-  };
   const products = {
     single: { name: "DEGAJA AI – Einzelne Lesung", amount: 499, quantity: 1, type: "ai" },
     pack: { name: "DEGAJA AI – 3 Lesungen", amount: 999, quantity: 1, type: "ai" }
@@ -17,7 +14,8 @@ export default async function handler(req, res) {
   let voiceDuration = null;
   if (product === "voice") {
     voiceDuration = Number(duration);
-    item = voicePrices[voiceDuration];
+    const price = VOICE_PRICES[voiceDuration];
+    item = price ? { name: `DEGAJA Live Audio – ${voiceDuration} Minuten`, amount: price.amount } : null;
     type = "voice";
   }
   if (!item) return res.status(400).json({ error: "Invalid product" });
