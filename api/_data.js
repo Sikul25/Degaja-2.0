@@ -6,6 +6,12 @@ export const ADVISORS = [
 
 export const ADVISOR_CAPACITY = 100;
 
+// Private contact info, keyed by advisor id — used only server-side to send
+// WhatsApp session-code notifications. Never exposed via api/advisors.js.
+export const ADVISOR_WHATSAPP = {
+  papuli: "" // fill in as "+49..." once known
+};
+
 export function getAdvisor(advisorId) {
   return ADVISORS.find(a => a.id === String(advisorId || "papuli").toLowerCase()) || ADVISORS[0];
 }

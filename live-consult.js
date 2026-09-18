@@ -140,6 +140,8 @@
       window.__degajaPeer=peer;window.__degajaStream=stream;
       $('#degajaCode').textContent=code;
       $('#degajaStatus').textContent='Warte auf die Beraterin …';
+      const u=getUser();
+      doFetch('/api/notify-advisor',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({advisorId:advisor.id,code,customerName:u?.name||u?.email||''})},8000).catch(()=>{});
       const transcript=attachTranscript($('#degajaTranscript'));
       peer.on('call',c=>{c.answer(stream);c.on('stream',remote=>{$('#degajaRemoteAudio').srcObject=remote;$('#degajaStatus').textContent='Live verbunden.'})});
       peer.on('connection',conn=>{
