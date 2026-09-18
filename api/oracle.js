@@ -7,7 +7,7 @@ export default async function handler(req, res) {
     question,
     topic,
     mode = "free",
-    advisorId = "anna",
+    advisorId = "papuli",
     conversationId = null,
     history = []
   } = req.body || {};
@@ -60,7 +60,7 @@ export default async function handler(req, res) {
     return res.status(200).json({
       text,
       advisor: {
-        id: String(advisorId || "anna").toLowerCase(),
+        id: String(advisorId || "papuli").toLowerCase(),
         name: advisor.name,
         title: advisor.title
       }

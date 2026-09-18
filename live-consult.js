@@ -9,16 +9,7 @@
   // Used only if that request fails (e.g. offline).
   let prices = {15:'29,99',30:'59,99',60:'99,99'};
   const fallbackAdvisors = [
-    {id:'anna',name:'Anna',title:'Tarot & Liebe'},
-    {id:'sophie',name:'Sophie',title:'Beziehung & Gefühle'},
-    {id:'lea',name:'Lea',title:'Zukunft & Karten'},
-    {id:'maria',name:'Maria',title:'Numerologie'},
-    {id:'clara',name:'Clara',title:'Astrologie'},
-    {id:'julia',name:'Julia',title:'Liebe & Partnerschaft'},
-    {id:'elena',name:'Elena',title:'Tarot & Intuition'},
-    {id:'laura',name:'Laura',title:'Beruf & Lebensweg'},
-    {id:'nina',name:'Nina',title:'Karten & Beziehungen'},
-    {id:'isabella',name:'Isabella',title:'Astrologie & Numerologie'}
+    {id:'papuli',name:'Papuli',title:'Tarot, Astrologie & Zukunft'}
   ];
   let remoteAdvisors = null;
   const esc = v => String(v ?? '').replace(/[&<>\"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;',"'":'&#039;'}[c]));
