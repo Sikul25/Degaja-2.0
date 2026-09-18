@@ -4,12 +4,29 @@
   const $ = (selector, root = document) => root.querySelector(selector);
   const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
 
+  async function fetchWithTimeout(url, options = {}, timeoutMs = 15000) {
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), timeoutMs);
+    try {
+      return await fetch(url, { ...options, signal: controller.signal });
+    } finally {
+      clearTimeout(timer);
+    }
+  }
+  window.degajaFetch = fetchWithTimeout;
+
   const state = {
     user: JSON.parse(localStorage.getItem("degajaUser") || "null"),
     authMode: "signin",
     freeUsed: localStorage.getItem("degajaFreeUsed") === "1",
-    paidAccess: localStorage.getItem("degajaPaidAccess") === "1"
+    paidAccess: localStorage.getItem("degajaPaidAccess") === "1",
+    conversationHistory: []
   };
+
+  const AI_CREDIT_KEY = "degajaAiCredits";
+  const PENDING_READING_KEY = "degajaPendingReading";
+  const getAiCredits = () => Math.max(0, Number(localStorage.getItem(AI_CREDIT_KEY) || 0));
+  const setAiCredits = n => localStorage.setItem(AI_CREDIT_KEY, String(Math.max(0, n)));
 
   const modal = $("#modal");
   const modalContent = $("#modalContent");
@@ -136,13 +153,24 @@
     });
   }
 
-  async function getOracle(question, topic, mode = "free") {
+  const freeFallbackVariants = topicText => [
+    `Dein Thema ist **${topicText}**. Nimm dir einen Moment und höre auf das, was sich für dich wirklich stimmig anfühlt. Diese erste Deutung ist dein kostenloser Impuls. Für eine tiefere persönliche Lesung mit anschließender 24/7-Begleitung kannst du jederzeit freischalten.`,
+    `Bei **${topicText}** lohnt es sich, kurz innezuhalten. Was fühlt sich gerade am ehrlichsten an, wenn du an diese Frage denkst? Das ist dein kostenloser erster Impuls – für eine tiefere Lesung mit 24/7-Begleitung kannst du jederzeit weitermachen.`,
+    `Danke, dass du das mit mir teilst. Zu **${topicText}** gibt dir dieser erste Impuls schon eine Richtung – hör in dich hinein, was davon stimmt. Für mehr Tiefe und dauerhafte Begleitung ist die persönliche Lesung da.`
+  ];
+  const paidFallbackVariants = topicText => [
+    `DEGAJA ist für dich da. Wir betrachten dein Thema **${topicText}** Schritt für Schritt. Du kannst jederzeit weiterfragen.`,
+    `Ich bin bei dir. Lass uns bei **${topicText}** bleiben und genauer hinschauen – frag ruhig weiter, wenn dir noch etwas durch den Kopf geht.`,
+    `Gut, dass du weiterfragst. Bei **${topicText}** gibt es meist mehr als eine Ebene – erzähl mir gern noch etwas dazu.`
+  ];
+
+  async function getOracle(question, topic, mode = "free", history = []) {
     try {
-      const response = await fetch("/api/oracle", {
+      const response = await fetchWithTimeout("/api/oracle", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ question, topic, mode })
-      });
+        body: JSON.stringify({ question, topic, mode, history })
+      }, 25000);
 
       if (!response.ok) throw new Error("API nicht verfügbar");
       const data = await response.json();
@@ -150,13 +178,23 @@
       return data.text;
     } catch (error) {
       const topicText = topic || "dein Anliegen";
-      return mode === "free"
-        ? `Dein Thema ist **${topicText}**. Nimm dir einen Moment und höre auf das, was sich für dich wirklich stimmig anfühlt. Deine Frage: „${question}“. Diese erste Deutung ist dein kostenloser Impuls. Für eine tiefere persönliche Lesung mit anschließender 24/7-Begleitung kannst du jederzeit freischalten.`
-        : `DEGAJA ist für dich da. Wir betrachten dein Thema „${topicText}“ Schritt für Schritt und bleiben bei deiner Frage: „${question}“. Du kannst jederzeit weiterfragen.`;
+      const variants = mode === "free" ? freeFallbackVariants(topicText) : paidFallbackVariants(topicText);
+      return variants[Math.floor(Math.random() * variants.length)];
     }
   }
 
-  function showPurchaseModal() {
+  function stashPendingReading(question, topic) {
+    if (question) localStorage.setItem(PENDING_READING_KEY, JSON.stringify({ question, topic: topic || "" }));
+    else localStorage.removeItem(PENDING_READING_KEY);
+  }
+
+  function showPurchaseModal(question = "", topic = "") {
+    if (getAiCredits() > 0) {
+      unlockDeepReading(question, topic);
+      return;
+    }
+
+    stashPendingReading(question, topic);
     openModal(`
       <div class="eyebrow">DEGAJA · 24/7</div>
       <h2>Geh tiefer</h2>
@@ -173,13 +211,79 @@
     });
   }
 
+  async function unlockDeepReading(question, topic) {
+    if (!question) {
+      document.querySelector("#oracle")?.scrollIntoView({ behavior: "smooth", block: "center" });
+      return;
+    }
+
+    const credits = getAiCredits();
+    if (credits > 0) setAiCredits(credits - 1);
+
+    const questionField = $("#aiQuestion");
+    const topicField = $("#aiTopic");
+    if (questionField) questionField.value = question;
+    if (topicField) topicField.value = topic || "";
+
+    const result = $("#aiResult");
+    if (result) {
+      result.innerHTML = `<strong>DEGAJA · Deine persönliche Lesung</strong><p style="margin:8px 0;color:#596273">DEGAJA liest tiefer …</p>`;
+      result.classList.add("show");
+      result.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    }
+
+    state.conversationHistory = [];
+    const text = await getOracle(question, topic, "paid", state.conversationHistory);
+    state.conversationHistory.push({ role: "user", content: question });
+    state.conversationHistory.push({ role: "assistant", content: text });
+    state.paidAccess = true;
+    localStorage.setItem("degajaPaidAccess", "1");
+    renderResult(text, question, topic, true);
+  }
+
+  async function verifyAiPayment() {
+    const params = new URLSearchParams(location.search);
+    const sessionId = params.get("session_id");
+    if (params.get("payment") !== "success" || !sessionId) return;
+
+    try {
+      const response = await fetchWithTimeout(`/api/verify-payment?session_id=${encodeURIComponent(sessionId)}`, {}, 15000);
+      const data = await response.json();
+      if (!response.ok || !data.paid || data.type !== "ai") return;
+
+      setAiCredits(getAiCredits() + (Number(data.credits) || 1));
+      state.paidAccess = true;
+      localStorage.setItem("degajaPaidAccess", "1");
+      history.replaceState({}, document.title, location.pathname + location.hash);
+
+      let pending = null;
+      try { pending = JSON.parse(localStorage.getItem(PENDING_READING_KEY) || "null"); } catch (_) { /* ignore */ }
+      localStorage.removeItem(PENDING_READING_KEY);
+
+      if (pending?.question) {
+        await unlockDeepReading(pending.question, pending.topic || "");
+        return;
+      }
+
+      const remaining = getAiCredits();
+      const result = $("#aiResult");
+      if (result) {
+        result.innerHTML = `<strong>Zahlung erfolgreich.</strong><p style="margin:8px 0;color:#596273">Du hast jetzt ${remaining} tiefere Lesung${remaining === 1 ? "" : "en"} verfügbar. Stell deine Frage oben, um sie zu nutzen.</p>`;
+        result.classList.add("show");
+      }
+      document.querySelector("#oracle")?.scrollIntoView({ behavior: "smooth", block: "center" });
+    } catch (error) {
+      // Payment already went through on Stripe's side; nothing to recover client-side here.
+    }
+  }
+
   async function startCheckout(product) {
     try {
-      const response = await fetch("/api/checkout", {
+      const response = await fetchWithTimeout("/api/checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ product })
-      });
+      }, 15000);
 
       const data = await response.json();
       if (!response.ok || !data.url) throw new Error(data.error || "Zahlung nicht verfügbar");
@@ -223,7 +327,7 @@
 
     result.classList.add("show");
     result.scrollIntoView({ behavior: "smooth", block: "nearest" });
-    $("#deepBtn")?.addEventListener("click", showPurchaseModal);
+    $("#deepBtn")?.addEventListener("click", () => showPurchaseModal(question, topic));
 
     if (paid) {
       $("#chatSend")?.addEventListener("click", sendChat);
@@ -245,95 +349,14 @@
     messages.insertAdjacentHTML("beforeend", `<div class="chat-msg ai" id="typing">DEGAJA denkt nach …</div>`);
     messages.scrollTop = messages.scrollHeight;
 
-    const question = $("#aiQuestion")?.value.trim() || "";
     const topic = $("#aiTopic")?.value || "";
-    const answer = await getOracle(`${question}\n\nFollow-up: ${text}`, topic, "paid");
+    state.conversationHistory.push({ role: "user", content: text });
+    const answer = await getOracle(text, topic, "paid", state.conversationHistory);
+    state.conversationHistory.push({ role: "assistant", content: answer });
 
     $("#typing")?.remove();
     messages.insertAdjacentHTML("beforeend", `<div class="chat-msg ai">${escapeHtml(answer).replace(/\n/g, "<br>")}</div>`);
     messages.scrollTop = messages.scrollHeight;
-  }
-
-  function consultationView(type = "scheduled") {
-    const urgent = type === "urgent";
-    openModal(`
-      <div class="consult-modal">
-        <div class="eyebrow">${urgent ? "🔥 SOFORTBERATUNG" : "🎧 PERSÖNLICHE BERATUNG"}</div>
-        <h2>${urgent ? "Du möchtest jetzt sprechen?" : "Wähle deine Beratung"}</h2>
-        <p style="color:#687384">${urgent ? "Sende deine Anfrage. Unsere Expertin prüft ihre aktuelle Verfügbarkeit und wir versuchen, den direkten Audio-Kontakt innerhalb von 10–30 Minuten herzustellen." : "Wähle deine Dauer und vereinbare einen Termin für ein vertrauliches Audio-Gespräch."}</p>
-        <div class="consult-options">
-          <button class="consult-option" data-duration="15"><span><strong>15 Minuten</strong><small>Persönliches Audio-Gespräch</small></span><b>€29,99</b></button>
-          <button class="consult-option" data-duration="30"><span><strong>30 Minuten</strong><small>Persönliches Audio-Gespräch</small></span><b>€59,99</b></button>
-          <button class="consult-option" data-duration="60"><span><strong>60 Minuten</strong><small>Persönliches Audio-Gespräch</small></span><b>€99,99</b></button>
-        </div>
-        <div id="consultFormWrap" style="display:none"></div>
-        <div class="consult-hint">Diskret & privat · Nur Audio · Keine Weitergabe deiner privaten Telefonnummer</div>
-      </div>
-    `);
-
-    $$(".consult-option").forEach(option => {
-      option.addEventListener("click", () => showConsultForm(urgent, option.dataset.duration));
-    });
-  }
-
-  function showConsultForm(urgent, duration) {
-    const wrap = $("#consultFormWrap");
-    if (!wrap) return;
-
-    const price = ({ "15": "29,99", "30": "59,99", "60": "99,99" }[duration] || "29,99");
-
-    wrap.style.display = "block";
-    wrap.innerHTML = `
-      <div class="selected-consult">${urgent ? "🔥 Sofortberatung" : "🎧 Beratung nach Termin"} · ${duration} Min · €${price}</div>
-      <form class="consult-form" id="consultForm" style="margin-top:12px">
-        <label>Name<input id="consultName" required autocomplete="name" value="${escapeHtml(state.user?.name || "")}" placeholder="Dein Name"></label>
-        <label>E-Mail-Adresse<input id="consultEmail" type="email" required autocomplete="email" value="${escapeHtml(state.user?.email || "")}" placeholder="name@beispiel.de"></label>
-        ${urgent ? `<label>Was beschäftigt dich gerade?<textarea id="consultMessage" maxlength="600" placeholder="Ein paar Worte helfen unserer Expertin, dich besser zu verstehen."></textarea></label>` : `<label>Wunschzeit<input id="consultTime" type="datetime-local" required></label>`}
-        <button class="consult-submit" type="submit">${urgent ? "Sofortberatung anfragen →" : "Beratung anfragen →"}</button>
-      </form>
-      <p class="consult-hint" style="margin-top:10px">Die Anfrage wird erst nach Verbindung des DEGAJA-Beratungssystems tatsächlich übermittelt. Es wird keine private Telefonnummer benötigt.</p>
-    `;
-
-    $("#consultForm")?.addEventListener("submit", async event => {
-      event.preventDefault();
-      const payload = {
-        type: urgent ? "urgent" : "scheduled",
-        duration: Number(duration),
-        name: $("#consultName")?.value.trim(),
-        email: $("#consultEmail")?.value.trim(),
-        message: $("#consultMessage")?.value.trim() || "",
-        requestedTime: $("#consultTime")?.value || ""
-      };
-
-      const button = $("#consultForm button");
-      if (button) {
-        button.disabled = true;
-        button.textContent = "Anfrage wird vorbereitet …";
-      }
-
-      try {
-        const response = await fetch("/api/consultation", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(payload)
-        });
-        const data = await response.json().catch(() => ({}));
-        if (!response.ok || data.ok === false) throw new Error(data.error || "Beratungssystem nicht verfügbar");
-
-        wrap.innerHTML = `<div class="success-box"><strong>Deine Anfrage ist angekommen.</strong><br>Wir melden uns mit den nächsten Schritten. Für die Audio-Beratung brauchst du keine private Telefonnummer.</div>`;
-      } catch (error) {
-        if (button) {
-          button.disabled = false;
-          button.textContent = urgent ? "Sofortberatung anfragen →" : "Beratung anfragen →";
-        }
-        const hint = document.createElement("div");
-        hint.className = "consult-hint";
-        hint.style.marginTop = "8px";
-        hint.style.color = "#8a6b32";
-        hint.textContent = "Die Oberfläche ist bereit. Die echte Übermittlung wird mit dem DEGAJA-Beratungssystem verbunden.";
-        wrap.appendChild(hint);
-      }
-    });
   }
 
   $("#aiBtn")?.addEventListener("click", async () => {
@@ -355,7 +378,15 @@
       button.textContent = "DEGAJA liest …";
     }
 
-    const text = await getOracle(question, topic, "free");
+    const drawnCards = Array.isArray(window.DEGAJA_DRAWN_CARDS) ? window.DEGAJA_DRAWN_CARDS : [];
+    const apiQuestion = drawnCards.length
+      ? `${question}\n\n(Gezogene Tarotkarten: ${drawnCards.join(", ")})`
+      : question;
+
+    state.conversationHistory = [];
+    const text = await getOracle(apiQuestion, topic, "free", state.conversationHistory);
+    state.conversationHistory.push({ role: "user", content: question });
+    state.conversationHistory.push({ role: "assistant", content: text });
     state.freeUsed = true;
     localStorage.setItem("degajaFreeUsed", "1");
     renderResult(text, question, topic, false);
@@ -367,11 +398,12 @@
   });
 
   $$('[data-buy]').forEach(btn => {
-    btn.addEventListener("click", () => startCheckout(btn.dataset.buy));
-  });
-
-  $$('[data-consult]').forEach(btn => {
-    btn.addEventListener("click", () => consultationView(btn.dataset.consult));
+    btn.addEventListener("click", () => {
+      const question = $("#aiQuestion")?.value.trim() || "";
+      const topic = $("#aiTopic")?.value || "";
+      stashPendingReading(question, topic);
+      startCheckout(btn.dataset.buy);
+    });
   });
 
   $("#loginBtn")?.addEventListener("click", () => {
@@ -388,4 +420,6 @@
   document.addEventListener("keydown", event => {
     if (event.key === "Escape") closeModal();
   });
+
+  verifyAiPayment();
 })();

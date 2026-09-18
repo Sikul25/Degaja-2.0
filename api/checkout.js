@@ -1,15 +1,12 @@
+import { VOICE_PRICES } from "./_data.js";
+
 export default async function handler(req, res) {
   if (req.method !== "POST") return res.status(405).json({ error: "Method not allowed" });
 
   const { product, duration, email, name, advisorId } = req.body || {};
-  const voicePrices = {
-    15: { name: "DEGAJA Live Audio – 15 Minuten", amount: 2999 },
-    30: { name: "DEGAJA Live Audio – 30 Minuten", amount: 5999 },
-    60: { name: "DEGAJA Live Audio – 60 Minuten", amount: 9999 }
-  };
   const products = {
-    single: { name: "DEGAJA AI – Einzelne Lesung", amount: 499, quantity: 1, type: "ai" },
-    pack: { name: "DEGAJA AI – 3 Lesungen", amount: 999, quantity: 1, type: "ai" }
+    single: { name: "DEGAJA AI – Einzelne Lesung", amount: 499, quantity: 1, type: "ai", credits: 1 },
+    pack: { name: "DEGAJA AI – 3 Lesungen", amount: 999, quantity: 1, type: "ai", credits: 3 }
   };
 
   let item = products[product];
@@ -17,7 +14,8 @@ export default async function handler(req, res) {
   let voiceDuration = null;
   if (product === "voice") {
     voiceDuration = Number(duration);
-    item = voicePrices[voiceDuration];
+    const price = VOICE_PRICES[voiceDuration];
+    item = price ? { name: `DEGAJA Live Audio – ${voiceDuration} Minuten`, amount: price.amount } : null;
     type = "voice";
   }
   if (!item) return res.status(400).json({ error: "Invalid product" });
@@ -28,6 +26,7 @@ export default async function handler(req, res) {
   const origin = req.headers.origin || `https://${req.headers.host}`;
   const body = new URLSearchParams();
   body.set("mode", "payment");
+  body.set("locale", "de");
   body.set("success_url", `${origin}/?payment=success&session_id={CHECKOUT_SESSION_ID}`);
   body.set("cancel_url", `${origin}/?payment=cancelled`);
   body.set("line_items[0][price_data][currency]", "eur");
@@ -36,6 +35,7 @@ export default async function handler(req, res) {
   body.set("line_items[0][quantity]", String(item.quantity || 1));
   body.set("metadata[type]", type);
   if (voiceDuration) body.set("metadata[duration]", String(voiceDuration));
+  if (item.credits) body.set("metadata[credits]", String(item.credits));
   if (advisorId) body.set("metadata[advisorId]", String(advisorId).slice(0, 100));
   if (email) body.set("customer_email", String(email));
   if (email) body.set("client_reference_id", String(email).slice(0, 200));
