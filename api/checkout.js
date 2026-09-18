@@ -26,6 +26,7 @@ export default async function handler(req, res) {
   const origin = req.headers.origin || `https://${req.headers.host}`;
   const body = new URLSearchParams();
   body.set("mode", "payment");
+  body.set("locale", "de");
   body.set("success_url", `${origin}/?payment=success&session_id={CHECKOUT_SESSION_ID}`);
   body.set("cancel_url", `${origin}/?payment=cancelled`);
   body.set("line_items[0][price_data][currency]", "eur");
