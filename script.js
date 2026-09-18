@@ -86,6 +86,7 @@
         <label>Passwort
           <input id="authPassword" type="password" required minlength="6" autocomplete="${isSignup ? "new-password" : "current-password"}" placeholder="Mindestens 6 Zeichen">
         </label>
+        ${!isSignup ? `<button type="button" id="forgotPasswordBtn" class="text-button" style="font-size:12px;margin:-6px 0 4px">Passwort vergessen?</button>` : ""}
         <button class="primary" type="submit">${isSignup ? "Konto erstellen" : "Anmelden"}</button>
       </form>
       <p id="authMessage" style="min-height:20px;color:#687384;font-size:13px"></p>
@@ -93,6 +94,11 @@
 
     $$('[data-auth]').forEach(btn => {
       btn.addEventListener("click", () => authView(btn.dataset.auth));
+    });
+
+    $("#forgotPasswordBtn")?.addEventListener("click", () => {
+      const message = $("#authMessage");
+      if (message) message.textContent = "Schreib uns an info@degaja.com — wir helfen dir persönlich weiter.";
     });
 
     $("#authForm")?.addEventListener("submit", event => {
