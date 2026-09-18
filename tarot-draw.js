@@ -110,13 +110,12 @@
     meaning: MINOR_MEANINGS[suit.name][i]
   })));
 
-  const MINOR_IMAGE_OVERRIDES = {
-    'Drei der Stäbe': 'assets/tarot/wands3.jpg',
-    'Drei der Kelche': 'assets/tarot/cups3.jpg',
-    'Sieben der Münzen': 'assets/tarot/pent7.jpg',
-    'Neun der Münzen': 'assets/tarot/pent9.jpg'
-  };
-  MINOR_ARCANA.forEach(c => { if (MINOR_IMAGE_OVERRIDES[c.name]) c.image = MINOR_IMAGE_OVERRIDES[c.name]; });
+  const SUIT_FILE_KEYS = { 'Stäbe': 'wands', 'Kelche': 'cups', 'Schwerter': 'swords', 'Münzen': 'pent' };
+  MINOR_ARCANA.forEach((c, idx) => {
+    const suit = SUITS[Math.floor(idx / RANKS.length)];
+    const rankNum = (idx % RANKS.length) + 1;
+    c.image = `assets/tarot/${SUIT_FILE_KEYS[suit.name]}${rankNum}.jpg`;
+  });
 
   const DECK = [...MAJOR_ARCANA, ...MINOR_ARCANA];
 
