@@ -36,7 +36,7 @@
   function style(){
     if($('#degajaLiveStyle')) return;
     const s=document.createElement('style'); s.id='degajaLiveStyle';
-    s.textContent=`.degaja-live{margin:28px auto 0;padding:24px;max-width:900px;text-align:left;background:rgba(255,255,255,.95);border:1px solid rgba(184,147,70,.28);border-radius:24px;box-shadow:0 16px 45px rgba(31,65,95,.08)}.degaja-live h3{margin:5px 0;color:#18334a;font-size:24px}.degaja-live-head{display:flex;justify-content:space-between;gap:15px;align-items:center;flex-wrap:wrap}.degaja-live-badge{padding:7px 11px;border-radius:999px;background:#f1f8f4;color:#3f7455;font-size:11px;font-weight:800}.degaja-live-copy{color:#687384;line-height:1.6;font-size:14px}.degaja-live-actions{display:flex;gap:10px;flex-wrap:wrap}.degaja-live button{border:0;border-radius:999px;padding:12px 18px;font-weight:800;cursor:pointer}.degaja-live .gold{background:#b88a32;color:#fff}.degaja-live .dark{background:#18334a;color:#fff}.degaja-live .soft{background:#f4f7f9;color:#18334a}.degaja-live-credit{font-size:12px;color:#7b8490;margin-top:12px}.degaja-call{margin-top:16px}.degaja-call-panel{padding:18px;border-radius:20px;background:#f6f9fb;border:1px solid rgba(24,51,74,.08)}.degaja-code{font-size:30px;letter-spacing:.18em;font-weight:900;text-align:center;color:#18334a;background:#fff;border:1px dashed rgba(184,147,70,.5);border-radius:16px;padding:14px;margin:12px 0}.degaja-status{font-size:13px;color:#687384;min-height:20px}.degaja-call audio{width:100%;margin-top:10px}.degaja-consult-options{display:grid;gap:9px;margin-top:12px}.degaja-consult-option{display:flex!important;align-items:center;justify-content:space-between;text-align:left!important;width:100%;background:#fbfeff;color:#18334a;border:1px solid #dfeef4!important}.degaja-consult-option small{display:block;color:#74808d;margin-top:3px}.degaja-consult-option b{color:#b88a32}.degaja-advisor{display:none;margin-top:15px;padding:18px;border-radius:18px;background:#fffdf8;border:1px solid rgba(184,147,70,.28)}.degaja-advisor.show{display:block}.degaja-advisor input{width:100%;box-sizing:border-box;padding:12px;border:1px solid #d7e0e6;border-radius:12px;margin:8px 0}.degaja-privacy{font-size:11px;color:#8a91a0;line-height:1.5;margin-top:12px}.degaja-advisor-picker{margin-top:16px}.degaja-advisor-picker label{display:block;font-size:12px;font-weight:800;color:#18334a;margin-bottom:7px}.degaja-advisor-picker select{width:100%;box-sizing:border-box;padding:13px 14px;border:1px solid #d7e0e6;border-radius:12px;background:#fff;color:#18334a;font-weight:700}@media(max-width:650px){.degaja-live{padding:18px;border-radius:20px}.degaja-code{font-size:25px}}`;
+    s.textContent=`.degaja-live{margin:28px auto 0;padding:24px;max-width:900px;text-align:left;background:rgba(255,255,255,.95);border:1px solid rgba(184,147,70,.28);border-radius:24px;box-shadow:0 16px 45px rgba(31,65,95,.08)}.degaja-live h3{margin:5px 0;color:#18334a;font-size:24px}.degaja-live-head{display:flex;justify-content:space-between;gap:15px;align-items:center;flex-wrap:wrap}.degaja-live-badge{padding:7px 11px;border-radius:999px;background:#f1f8f4;color:#3f7455;font-size:11px;font-weight:800}.degaja-live-copy{color:#687384;line-height:1.6;font-size:14px}.degaja-live-actions{display:flex;gap:10px;flex-wrap:wrap}.degaja-live button{border:0;border-radius:999px;padding:12px 18px;font-weight:800;cursor:pointer}.degaja-live .gold{background:#b88a32;color:#fff}.degaja-live .dark{background:#18334a;color:#fff}.degaja-live .soft{background:#f4f7f9;color:#18334a}.degaja-live-credit{font-size:12px;color:#7b8490;margin-top:12px}.degaja-call{margin-top:16px}.degaja-call-panel{padding:18px;border-radius:20px;background:#f6f9fb;border:1px solid rgba(24,51,74,.08)}.degaja-code{font-size:30px;letter-spacing:.18em;font-weight:900;text-align:center;color:#18334a;background:#fff;border:1px dashed rgba(184,147,70,.5);border-radius:16px;padding:14px;margin:12px 0}.degaja-status{font-size:13px;color:#687384;min-height:20px}.degaja-call audio{width:100%;margin-top:10px}.degaja-consult-options{display:grid;gap:9px;margin-top:12px}.degaja-consult-option{display:flex!important;align-items:center;justify-content:space-between;text-align:left!important;width:100%;background:#fbfeff;color:#18334a;border:1px solid #dfeef4!important}.degaja-consult-option small{display:block;color:#74808d;margin-top:3px}.degaja-consult-option b{color:#b88a32}.degaja-advisor{display:none;margin-top:15px;padding:18px;border-radius:18px;background:#fffdf8;border:1px solid rgba(184,147,70,.28)}.degaja-advisor.show{display:block}.degaja-advisor input{width:100%;box-sizing:border-box;padding:12px;border:1px solid #d7e0e6;border-radius:12px;margin:8px 0}.degaja-privacy{font-size:11px;color:#8a91a0;line-height:1.5;margin-top:12px}.degaja-advisor-picker{margin-top:16px}.degaja-advisor-picker label{display:block;font-size:12px;font-weight:800;color:#18334a;margin-bottom:7px}.degaja-advisor-picker select{width:100%;box-sizing:border-box;padding:13px 14px;border:1px solid #d7e0e6;border-radius:12px;background:#fff;color:#18334a;font-weight:700}.degaja-transcript{margin-top:14px;padding:14px;border-radius:16px;background:#fbfbf7;border:1px solid rgba(184,147,70,.25)}.degaja-transcript-head{display:flex;justify-content:space-between;align-items:center;font-size:12px;font-weight:800;color:#18334a;margin-bottom:8px}.degaja-transcript-note{font-weight:600;color:#8a91a0;font-size:11px}.degaja-transcript-lines{max-height:160px;overflow:auto;display:flex;flex-direction:column;gap:6px}.degaja-transcript-line{font-size:13px;line-height:1.5;color:#48566a;background:#fff;border:1px solid #eef1f4;border-radius:10px;padding:7px 10px}.degaja-transcript-line b{color:#18334a}@media(max-width:650px){.degaja-live{padding:18px;border-radius:20px}.degaja-code{font-size:25px}.degaja-transcript-lines{max-height:120px}}`;
     document.head.appendChild(s);
   }
 
@@ -44,12 +44,52 @@
     return getAdvisors().map(a=>`<option value="${esc(a.id)}">${esc(a.name)} — ${esc(a.title)}</option>`).join('');
   }
 
+  function getRecognitionCtor(){return window.SpeechRecognition||window.webkitSpeechRecognition||null}
+
+  function attachTranscript(container){
+    if(!container) return null;
+    container.style.display='block';
+    const linesId=container.id+'Lines';
+    container.innerHTML=`<div class="degaja-transcript-head"><span>📝 Live-Transkript</span><span class="degaja-transcript-note">wird nicht gespeichert</span></div><div class="degaja-transcript-lines" id="${linesId}"></div>`;
+    const lines=document.getElementById(linesId);
+    return {
+      addLine(label,text){
+        if(!lines||!text) return;
+        lines.insertAdjacentHTML('beforeend',`<div class="degaja-transcript-line"><b>${esc(label)}:</b> ${esc(text)}</div>`);
+        lines.scrollTop=lines.scrollHeight;
+      },
+      clear(){ if(lines) lines.innerHTML=''; }
+    };
+  }
+
+  function startRecognition(onFinal){
+    const Ctor=getRecognitionCtor();
+    if(!Ctor) return null;
+    const rec=new Ctor();
+    rec.lang='de-DE';
+    rec.continuous=true;
+    rec.interimResults=false;
+    let active=true;
+    rec.onresult=e=>{
+      for(let i=e.resultIndex;i<e.results.length;i++){
+        if(e.results[i].isFinal){
+          const text=e.results[i][0].transcript.trim();
+          if(text) onFinal(text);
+        }
+      }
+    };
+    rec.onend=()=>{ if(active){ try{rec.start()}catch(_){} } };
+    rec.onerror=()=>{};
+    try{ rec.start(); }catch(_){}
+    return { stop(){ active=false; try{rec.stop()}catch(_){} } };
+  }
+
   function card(){
     if($('#degajaLiveConsult')) return;
     const wrap=$('#human .human-wrap'); if(!wrap) return;
     const selected=getSelectedAdvisor();
     const el=document.createElement('div'); el.id='degajaLiveConsult'; el.className='degaja-live';
-    el.innerHTML=`<div class="degaja-live-head"><div><div class="eyebrow">✦ LIVE AUDIO ✦</div><h3>Direkt mit unserer Expertin sprechen</h3></div><span class="degaja-live-badge">🔒 Anonym · nur nach Zahlung</span></div><p class="degaja-live-copy">Wähle zuerst deine persönliche DEGAJA-Beraterin. Deine Beratung bleibt dieser Beraterin zugeordnet.</p><div class="degaja-advisor-picker"><label for="degajaAdvisorSelect">Deine Beraterin</label><select id="degajaAdvisorSelect">${advisorOptions()}</select></div><div class="degaja-live-actions" style="margin-top:12px"><button class="gold" id="degajaLiveStart">Live-Beratung starten</button><button class="soft" id="degajaAdvisorToggle">Berater-Zugang</button></div><div class="degaja-live-credit" id="degajaLiveCredit"></div><div class="degaja-call" id="degajaCall"></div><div class="degaja-advisor" id="degajaAdvisor"><h4 style="color:#18334a">Berater-Zugang</h4><p class="degaja-live-copy">Die Beraterin gibt den anonymen 6-stelligen Sitzungscode des Kunden ein.</p><input id="degajaAdvisorCode" maxlength="6" inputmode="numeric" placeholder="Sitzungscode"><button class="dark" id="degajaAdvisorJoin">Anruf annehmen</button><div class="degaja-status" id="degajaAdvisorStatus"></div><audio id="degajaAdvisorAudio" autoplay controls></audio></div><div class="degaja-privacy">Keine Telefonnummer · kein Video · Peer-to-peer Audio. Die Zahlung wird serverseitig über Stripe bestätigt, bevor der Live-Zugang geöffnet wird.</div>`;
+    el.innerHTML=`<div class="degaja-live-head"><div><div class="eyebrow">✦ LIVE AUDIO ✦</div><h3>Direkt mit unserer Expertin sprechen</h3></div><span class="degaja-live-badge">🔒 Anonym · nur nach Zahlung</span></div><p class="degaja-live-copy">Wähle zuerst deine persönliche DEGAJA-Beraterin. Deine Beratung bleibt dieser Beraterin zugeordnet.</p><div class="degaja-advisor-picker"><label for="degajaAdvisorSelect">Deine Beraterin</label><select id="degajaAdvisorSelect">${advisorOptions()}</select></div><div class="degaja-live-actions" style="margin-top:12px"><button class="gold" id="degajaLiveStart">Live-Beratung starten</button><button class="soft" id="degajaAdvisorToggle">Berater-Zugang</button></div><div class="degaja-live-credit" id="degajaLiveCredit"></div><div class="degaja-call" id="degajaCall"></div><div class="degaja-advisor" id="degajaAdvisor"><h4 style="color:#18334a">Berater-Zugang</h4><p class="degaja-live-copy">Die Beraterin gibt den anonymen 6-stelligen Sitzungscode des Kunden ein.</p><input id="degajaAdvisorCode" maxlength="6" inputmode="numeric" placeholder="Sitzungscode"><button class="dark" id="degajaAdvisorJoin">Anruf annehmen</button><div class="degaja-status" id="degajaAdvisorStatus"></div><audio id="degajaAdvisorAudio" autoplay controls></audio><div class="degaja-transcript" id="degajaAdvisorTranscript" style="display:none"></div></div><div class="degaja-privacy">Keine Telefonnummer · kein Video · Peer-to-peer Audio. Die Zahlung wird serverseitig über Stripe bestätigt, bevor der Live-Zugang geöffnet wird. Ein optionales Live-Transkript hilft beim Mitschreiben und wird nirgendwo gespeichert.</div>`;
     wrap.appendChild(el);
     const select=$('#degajaAdvisorSelect'); if(select)select.value=selected.id;
     select?.addEventListener('change',()=>setSelectedAdvisor(select.value));
@@ -85,16 +125,63 @@
 
   async function call(source,duration,advisor=getSelectedAdvisor()){
     const host=$('#degajaCall');if(!host)return;
-    host.innerHTML=`<div class="degaja-call-panel"><h4 style="color:#18334a">Live-Sprachverbindung mit ${esc(advisor.name)}</h4><div class="degaja-status">${esc(advisor.title)}</div><div class="degaja-code" id="degajaCode">------</div><div class="degaja-status" id="degajaStatus">Mikrofon wird vorbereitet …</div><div class="degaja-live-actions" style="margin-top:12px"><button class="dark" id="degajaMute">Mikrofon stummschalten</button><button style="background:#a34d4d;color:#fff" id="degajaEnd">Gespräch beenden</button></div><audio id="degajaRemoteAudio" autoplay controls></audio><div class="degaja-privacy">${duration} Minuten · ${source==='credit'?'Guthaben verwendet':'Zahlung bestätigt'} · Beraterin: ${esc(advisor.name)} · Teile nur den Sitzungscode mit deiner DEGAJA-Beraterin.</div></div>`;
-    try{await peerScript();const stream=await navigator.mediaDevices.getUserMedia({audio:true,video:false});const code=String(Math.floor(100000+Math.random()*900000));const peer=new Peer('degaja-'+code);window.__degajaPeer=peer;window.__degajaStream=stream;$('#degajaCode').textContent=code;$('#degajaStatus').textContent='Warte auf die Beraterin …';peer.on('call',c=>{c.answer(stream);c.on('stream',remote=>{$('#degajaRemoteAudio').srcObject=remote;$('#degajaStatus').textContent='Live verbunden.'})});peer.on('error',e=>$('#degajaStatus').textContent='Verbindung fehlgeschlagen: '+(e.type||'Fehler'));$('#degajaMute').onclick=()=>{const t=stream.getAudioTracks()[0];t.enabled=!t.enabled;$('#degajaMute').textContent=t.enabled?'Mikrofon stummschalten':'Mikrofon einschalten'};$('#degajaEnd').onclick=end}catch(_){$('#degajaStatus').textContent='Mikrofonzugriff oder Live-Verbindung nicht verfügbar.'}
+    host.innerHTML=`<div class="degaja-call-panel"><h4 style="color:#18334a">Live-Sprachverbindung mit ${esc(advisor.name)}</h4><div class="degaja-status">${esc(advisor.title)}</div><div class="degaja-code" id="degajaCode">------</div><div class="degaja-status" id="degajaStatus">Mikrofon wird vorbereitet …</div><div class="degaja-live-actions" style="margin-top:12px"><button class="dark" id="degajaMute">Mikrofon stummschalten</button><button style="background:#a34d4d;color:#fff" id="degajaEnd">Gespräch beenden</button></div><audio id="degajaRemoteAudio" autoplay controls></audio><div class="degaja-transcript" id="degajaTranscript" style="display:none"></div><div class="degaja-privacy">${duration} Minuten · ${source==='credit'?'Guthaben verwendet':'Zahlung bestätigt'} · Beraterin: ${esc(advisor.name)} · Teile nur den Sitzungscode mit deiner DEGAJA-Beraterin.</div></div>`;
+    try{
+      await peerScript();
+      const stream=await navigator.mediaDevices.getUserMedia({audio:true,video:false});
+      const code=String(Math.floor(100000+Math.random()*900000));
+      const peer=new Peer('degaja-'+code);
+      window.__degajaPeer=peer;window.__degajaStream=stream;
+      $('#degajaCode').textContent=code;
+      $('#degajaStatus').textContent='Warte auf die Beraterin …';
+      const transcript=attachTranscript($('#degajaTranscript'));
+      peer.on('call',c=>{c.answer(stream);c.on('stream',remote=>{$('#degajaRemoteAudio').srcObject=remote;$('#degajaStatus').textContent='Live verbunden.'})});
+      peer.on('connection',conn=>{
+        window.__degajaConn=conn;
+        conn.on('data',text=>transcript?.addLine(advisor.name,text));
+        conn.on('open',()=>{
+          window.__degajaRecognition=startRecognition(text=>{transcript?.addLine('Du',text);conn.send(text)});
+        });
+      });
+      peer.on('error',e=>$('#degajaStatus').textContent='Verbindung fehlgeschlagen: '+(e.type||'Fehler'));
+      $('#degajaMute').onclick=()=>{const t=stream.getAudioTracks()[0];t.enabled=!t.enabled;$('#degajaMute').textContent=t.enabled?'Mikrofon stummschalten':'Mikrofon einschalten'};
+      $('#degajaEnd').onclick=end
+    }catch(_){$('#degajaStatus').textContent='Mikrofonzugriff oder Live-Verbindung nicht verfügbar.'}
   }
 
   async function advisorJoin(){
     const code=$('#degajaAdvisorCode')?.value.trim(), status=$('#degajaAdvisorStatus'), audio=$('#degajaAdvisorAudio');if(!/^\d{6}$/.test(code)){status.textContent='Bitte einen 6-stelligen Sitzungscode eingeben.';return}
-    try{await peerScript();const stream=await navigator.mediaDevices.getUserMedia({audio:true,video:false});const peer=new Peer();window.__degajaAdvisorPeer=peer;window.__degajaAdvisorStream=stream;peer.on('open',()=>{const c=peer.call('degaja-'+code,stream);c?.on('stream',remote=>{audio.srcObject=remote;status.textContent='Live verbunden.'});c?.on('close',()=>status.textContent='Gespräch beendet.')});peer.on('error',e=>status.textContent='Verbindung fehlgeschlagen: '+(e.type||'Fehler'))}catch(_){status.textContent='Mikrofonzugriff nicht verfügbar.'}
+    try{
+      await peerScript();
+      const stream=await navigator.mediaDevices.getUserMedia({audio:true,video:false});
+      const peer=new Peer();
+      window.__degajaAdvisorPeer=peer;window.__degajaAdvisorStream=stream;
+      const transcript=attachTranscript($('#degajaAdvisorTranscript'));
+      peer.on('open',()=>{
+        const c=peer.call('degaja-'+code,stream);
+        c?.on('stream',remote=>{audio.srcObject=remote;status.textContent='Live verbunden.'});
+        c?.on('close',()=>{status.textContent='Gespräch beendet.';window.__degajaAdvisorRecognition?.stop();window.__degajaAdvisorConn?.close();const l=document.getElementById('degajaAdvisorTranscriptLines');if(l)l.innerHTML=''});
+        const conn=peer.connect('degaja-'+code);
+        window.__degajaAdvisorConn=conn;
+        conn.on('data',text=>transcript?.addLine('Kunde/in',text));
+        conn.on('open',()=>{
+          window.__degajaAdvisorRecognition=startRecognition(text=>{transcript?.addLine('Du',text);conn.send(text)});
+        });
+      });
+      peer.on('error',e=>status.textContent='Verbindung fehlgeschlagen: '+(e.type||'Fehler'))
+    }catch(_){status.textContent='Mikrofonzugriff nicht verfügbar.'}
   }
 
-  function end(){try{window.__degajaStream?.getTracks().forEach(t=>t.stop());window.__degajaPeer?.destroy()}catch(_){}const e=$('#degajaStatus');if(e)e.textContent='Gespräch beendet.';}
+  function end(){
+    try{
+      window.__degajaStream?.getTracks().forEach(t=>t.stop());
+      window.__degajaPeer?.destroy();
+      window.__degajaRecognition?.stop();
+      window.__degajaConn?.close();
+    }catch(_){}
+    const e=$('#degajaStatus');if(e)e.textContent='Gespräch beendet.';
+    const lines=$('#degajaTranscriptLines');if(lines)lines.innerHTML='';
+  }
   function init(){style();card();verify()}
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init();
 })();
