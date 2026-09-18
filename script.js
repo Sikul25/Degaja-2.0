@@ -378,8 +378,13 @@
       button.textContent = "DEGAJA liest …";
     }
 
+    const drawnCards = Array.isArray(window.DEGAJA_DRAWN_CARDS) ? window.DEGAJA_DRAWN_CARDS : [];
+    const apiQuestion = drawnCards.length
+      ? `${question}\n\n(Gezogene Tarotkarten: ${drawnCards.join(", ")})`
+      : question;
+
     state.conversationHistory = [];
-    const text = await getOracle(question, topic, "free", state.conversationHistory);
+    const text = await getOracle(apiQuestion, topic, "free", state.conversationHistory);
     state.conversationHistory.push({ role: "user", content: question });
     state.conversationHistory.push({ role: "assistant", content: text });
     state.freeUsed = true;

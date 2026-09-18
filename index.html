@@ -34,6 +34,7 @@
 <script src="script.js"></script>
 <script src="/pre-chat.js?v=2"></script>
 <script src="/live-consult.js?v=2"></script>
+<script src="/tarot-draw.js?v=1"></script>
 <script>
   document.querySelectorAll('.quick-topic').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('.quick-topic').forEach(x=>x.classList.remove('active'));b.classList.add('active');document.querySelector('#aiTopic').value=b.dataset.topic||'';document.querySelector('#oracle').scrollIntoView({behavior:'smooth',block:'center'});setTimeout(()=>document.querySelector('#aiQuestion')?.focus(),450)}));
   document.querySelector('#startBtn')?.addEventListener('click',()=>{document.querySelector('#oracle')?.scrollIntoView({behavior:'smooth',block:'center'});setTimeout(()=>document.querySelector('#aiQuestion')?.focus(),450)});
