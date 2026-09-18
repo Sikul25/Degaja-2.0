@@ -3,7 +3,7 @@
   const $ = (s, r = document) => r.querySelector(s);
   const esc = v => String(v ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' }[c]));
 
-  const DECK = [
+  const MAJOR_ARCANA = [
     { name: 'Der Narr', glyph: '🃏', meaning: 'Neuanfang und Unbekümmertheit – ein Sprung ins Unbekannte.' },
     { name: 'Der Magier', glyph: '⚡', meaning: 'Willenskraft – du hast bereits alles, was du brauchst.' },
     { name: 'Die Hohepriesterin', glyph: '🌙', meaning: 'Intuition – hör auf das, was du innerlich schon weißt.' },
@@ -27,6 +27,87 @@
     { name: 'Das Gericht', glyph: '📯', meaning: 'Erwachen – Zeit, ehrlich Bilanz zu ziehen.' },
     { name: 'Die Welt', glyph: '🌍', meaning: 'Vollendung – ein Kreis schließt sich stimmig.' }
   ];
+
+  const SUITS = [
+    { name: 'Stäbe', glyph: '🪄' },
+    { name: 'Kelche', glyph: '🍷' },
+    { name: 'Schwerter', glyph: '⚔️' },
+    { name: 'Münzen', glyph: '🪙' }
+  ];
+  const RANKS = ['Ass', 'Zwei', 'Drei', 'Vier', 'Fünf', 'Sechs', 'Sieben', 'Acht', 'Neun', 'Zehn', 'Bube', 'Ritter', 'Königin', 'König'];
+  const MINOR_MEANINGS = {
+    'Stäbe': [
+      'Neue Energie und Inspiration – ein frischer Funke will entfacht werden.',
+      'Planung – du blickst nach vorn und wägst deine Möglichkeiten ab.',
+      'Ausblick – erste Schritte zeigen Wirkung, mehr ist im Kommen.',
+      'Feier – ein Grund zur Freude, ein stabiles Fundament.',
+      'Wettstreit – unterschiedliche Kräfte messen sich aneinander.',
+      'Erfolg – Anerkennung für das, was du geleistet hast.',
+      'Behauptung – du verteidigst deinen Standpunkt mit Mut.',
+      'Schnelligkeit – die Dinge bewegen sich plötzlich sehr rasch.',
+      'Durchhaltevermögen – müde, aber fast am Ziel.',
+      'Last – du trägst viel Verantwortung auf deinen Schultern.',
+      'Entdeckerlust – eine neugierige, unternehmungslustige Energie.',
+      'Tatendrang – impulsiv und mutig nach vorn.',
+      'Selbstsicherheit – warme, strahlende Eigenständigkeit.',
+      'Führungsstärke – visionär und entschlossen.'
+    ],
+    'Kelche': [
+      'Neue Gefühle – ein Herz öffnet sich für etwas Besonderes.',
+      'Verbindung – eine gegenseitige, gleichwertige Anziehung.',
+      'Gemeinschaft – Freude, die man mit anderen teilt.',
+      'Nachdenklichkeit – Unzufriedenheit trotz vorhandener Möglichkeiten.',
+      'Enttäuschung – der Blick bleibt am Verlorenen hängen.',
+      'Erinnerung – Nostalgie und die Unschuld vergangener Zeiten.',
+      'Wahlmöglichkeiten – viele Optionen, aber nicht alle sind real.',
+      'Aufbruch – du lässt etwas hinter dir, das nicht mehr passt.',
+      'Zufriedenheit – ein Wunsch, der sich erfüllt hat.',
+      'Harmonie – emotionale Erfüllung im Kreis der Nächsten.',
+      'Sanftmut – eine verträumte, gefühlvolle Botschaft.',
+      'Romantik – ein Angebot, das dem Herzen folgt.',
+      'Einfühlungsvermögen – tiefe, intuitive Fürsorge.',
+      'Emotionale Reife – Ruhe trotz innerer Tiefe.'
+    ],
+    'Schwerter': [
+      'Klarheit – ein Durchbruch im Denken, eine klare Wahrheit.',
+      'Unentschlossenheit – ein Patt zwischen zwei Möglichkeiten.',
+      'Schmerz – eine schwere Wahrheit, die weh tut.',
+      'Ruhepause – bewusster Rückzug zur Erholung.',
+      'Konflikt – ein Sieg, der nichts wirklich löst.',
+      'Übergang – ein ruhigeres Fahrwasser liegt voraus.',
+      'Strategie – ein cleverer, vielleicht heimlicher Schachzug.',
+      'Gefangen – die Grenzen sind oft nur im Kopf.',
+      'Sorge – nächtliche Gedanken, die größer wirken als sie sind.',
+      'Abschluss – ein schmerzhaftes Ende, aber wirklich zu Ende.',
+      'Wachsamkeit – neugierig, aufmerksam, bereit zu lernen.',
+      'Entschlossenheit – direkt, schnell, geradeheraus.',
+      'Klarheit – scharfer Verstand mit ehrlicher Sprache.',
+      'Urteilsvermögen – Vernunft, die über Gefühle entscheidet.'
+    ],
+    'Münzen': [
+      'Neue Möglichkeit – ein greifbarer Anfang mit Potenzial.',
+      'Balance – Jonglieren zwischen mehreren Verpflichtungen.',
+      'Zusammenarbeit – gemeinsames Werk trägt Früchte.',
+      'Sicherheit – Festhalten an dem, was man hat.',
+      'Mangel – eine schwierige Phase, die vorübergeht.',
+      'Geben und Nehmen – ein faires Gleichgewicht im Austausch.',
+      'Geduld – die Ernte braucht noch etwas Zeit.',
+      'Hingabe – Fleiß, der sich mit der Zeit auszahlt.',
+      'Wohlstand – die Früchte eigener Unabhängigkeit.',
+      'Vermächtnis – langfristige Sicherheit und Familie.',
+      'Lernbereitschaft – ein praktischer, bodenständiger Anfang.',
+      'Beständigkeit – langsam, aber zuverlässig unterwegs.',
+      'Fürsorge – warme, praktische Bodenständigkeit.',
+      'Wohlstand – Sicherheit durch harte, kluge Arbeit.'
+    ]
+  };
+  const MINOR_ARCANA = SUITS.flatMap(suit => RANKS.map((rank, i) => ({
+    name: `${rank} der ${suit.name}`,
+    glyph: suit.glyph,
+    meaning: MINOR_MEANINGS[suit.name][i]
+  })));
+
+  const DECK = [...MAJOR_ARCANA, ...MINOR_ARCANA];
 
   const FAN_SIZE = 9;
   const MAX_PICKS = 3;
