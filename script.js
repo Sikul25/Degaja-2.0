@@ -19,7 +19,8 @@
     user: JSON.parse(localStorage.getItem("degajaUser") || "null"),
     authMode: "signin",
     freeUsed: localStorage.getItem("degajaFreeUsed") === "1",
-    paidAccess: localStorage.getItem("degajaPaidAccess") === "1"
+    paidAccess: localStorage.getItem("degajaPaidAccess") === "1",
+    conversationHistory: []
   };
 
   const modal = $("#modal");
@@ -147,12 +148,23 @@
     });
   }
 
-  async function getOracle(question, topic, mode = "free") {
+  const freeFallbackVariants = topicText => [
+    `Dein Thema ist **${topicText}**. Nimm dir einen Moment und höre auf das, was sich für dich wirklich stimmig anfühlt. Diese erste Deutung ist dein kostenloser Impuls. Für eine tiefere persönliche Lesung mit anschließender 24/7-Begleitung kannst du jederzeit freischalten.`,
+    `Bei **${topicText}** lohnt es sich, kurz innezuhalten. Was fühlt sich gerade am ehrlichsten an, wenn du an diese Frage denkst? Das ist dein kostenloser erster Impuls – für eine tiefere Lesung mit 24/7-Begleitung kannst du jederzeit weitermachen.`,
+    `Danke, dass du das mit mir teilst. Zu **${topicText}** gibt dir dieser erste Impuls schon eine Richtung – hör in dich hinein, was davon stimmt. Für mehr Tiefe und dauerhafte Begleitung ist die persönliche Lesung da.`
+  ];
+  const paidFallbackVariants = topicText => [
+    `DEGAJA ist für dich da. Wir betrachten dein Thema **${topicText}** Schritt für Schritt. Du kannst jederzeit weiterfragen.`,
+    `Ich bin bei dir. Lass uns bei **${topicText}** bleiben und genauer hinschauen – frag ruhig weiter, wenn dir noch etwas durch den Kopf geht.`,
+    `Gut, dass du weiterfragst. Bei **${topicText}** gibt es meist mehr als eine Ebene – erzähl mir gern noch etwas dazu.`
+  ];
+
+  async function getOracle(question, topic, mode = "free", history = []) {
     try {
       const response = await fetchWithTimeout("/api/oracle", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ question, topic, mode })
+        body: JSON.stringify({ question, topic, mode, history })
       }, 25000);
 
       if (!response.ok) throw new Error("API nicht verfügbar");
@@ -161,9 +173,8 @@
       return data.text;
     } catch (error) {
       const topicText = topic || "dein Anliegen";
-      return mode === "free"
-        ? `Dein Thema ist **${topicText}**. Nimm dir einen Moment und höre auf das, was sich für dich wirklich stimmig anfühlt. Deine Frage: „${question}“. Diese erste Deutung ist dein kostenloser Impuls. Für eine tiefere persönliche Lesung mit anschließender 24/7-Begleitung kannst du jederzeit freischalten.`
-        : `DEGAJA ist für dich da. Wir betrachten dein Thema „${topicText}“ Schritt für Schritt und bleiben bei deiner Frage: „${question}“. Du kannst jederzeit weiterfragen.`;
+      const variants = mode === "free" ? freeFallbackVariants(topicText) : paidFallbackVariants(topicText);
+      return variants[Math.floor(Math.random() * variants.length)];
     }
   }
 
@@ -256,9 +267,10 @@
     messages.insertAdjacentHTML("beforeend", `<div class="chat-msg ai" id="typing">DEGAJA denkt nach …</div>`);
     messages.scrollTop = messages.scrollHeight;
 
-    const question = $("#aiQuestion")?.value.trim() || "";
     const topic = $("#aiTopic")?.value || "";
-    const answer = await getOracle(`${question}\n\nFollow-up: ${text}`, topic, "paid");
+    state.conversationHistory.push({ role: "user", content: text });
+    const answer = await getOracle(text, topic, "paid", state.conversationHistory);
+    state.conversationHistory.push({ role: "assistant", content: answer });
 
     $("#typing")?.remove();
     messages.insertAdjacentHTML("beforeend", `<div class="chat-msg ai">${escapeHtml(answer).replace(/\n/g, "<br>")}</div>`);
@@ -366,7 +378,10 @@
       button.textContent = "DEGAJA liest …";
     }
 
-    const text = await getOracle(question, topic, "free");
+    state.conversationHistory = [];
+    const text = await getOracle(question, topic, "free", state.conversationHistory);
+    state.conversationHistory.push({ role: "user", content: question });
+    state.conversationHistory.push({ role: "assistant", content: text });
     state.freeUsed = true;
     localStorage.setItem("degajaFreeUsed", "1");
     renderResult(text, question, topic, false);
