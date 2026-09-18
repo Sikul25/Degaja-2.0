@@ -359,88 +359,6 @@
     messages.scrollTop = messages.scrollHeight;
   }
 
-  function consultationView(type = "scheduled") {
-    const urgent = type === "urgent";
-    openModal(`
-      <div class="consult-modal">
-        <div class="eyebrow">${urgent ? "🔥 SOFORTBERATUNG" : "🎧 PERSÖNLICHE BERATUNG"}</div>
-        <h2>${urgent ? "Du möchtest jetzt sprechen?" : "Wähle deine Beratung"}</h2>
-        <p style="color:#687384">${urgent ? "Sende deine Anfrage. Unsere Expertin prüft ihre aktuelle Verfügbarkeit und wir versuchen, den direkten Audio-Kontakt innerhalb von 10–30 Minuten herzustellen." : "Wähle deine Dauer und vereinbare einen Termin für ein vertrauliches Audio-Gespräch."}</p>
-        <div class="consult-options">
-          <button class="consult-option" data-duration="15"><span><strong>15 Minuten</strong><small>Persönliches Audio-Gespräch</small></span><b>€29,99</b></button>
-          <button class="consult-option" data-duration="30"><span><strong>30 Minuten</strong><small>Persönliches Audio-Gespräch</small></span><b>€59,99</b></button>
-          <button class="consult-option" data-duration="60"><span><strong>60 Minuten</strong><small>Persönliches Audio-Gespräch</small></span><b>€99,99</b></button>
-        </div>
-        <div id="consultFormWrap" style="display:none"></div>
-        <div class="consult-hint">Diskret & privat · Nur Audio · Keine Weitergabe deiner privaten Telefonnummer</div>
-      </div>
-    `);
-
-    $$(".consult-option").forEach(option => {
-      option.addEventListener("click", () => showConsultForm(urgent, option.dataset.duration));
-    });
-  }
-
-  function showConsultForm(urgent, duration) {
-    const wrap = $("#consultFormWrap");
-    if (!wrap) return;
-
-    const price = ({ "15": "29,99", "30": "59,99", "60": "99,99" }[duration] || "29,99");
-
-    wrap.style.display = "block";
-    wrap.innerHTML = `
-      <div class="selected-consult">${urgent ? "🔥 Sofortberatung" : "🎧 Beratung nach Termin"} · ${duration} Min · €${price}</div>
-      <form class="consult-form" id="consultForm" style="margin-top:12px">
-        <label>Name<input id="consultName" required autocomplete="name" value="${escapeHtml(state.user?.name || "")}" placeholder="Dein Name"></label>
-        <label>E-Mail-Adresse<input id="consultEmail" type="email" required autocomplete="email" value="${escapeHtml(state.user?.email || "")}" placeholder="name@beispiel.de"></label>
-        ${urgent ? `<label>Was beschäftigt dich gerade?<textarea id="consultMessage" maxlength="600" placeholder="Ein paar Worte helfen unserer Expertin, dich besser zu verstehen."></textarea></label>` : `<label>Wunschzeit<input id="consultTime" type="datetime-local" required></label>`}
-        <button class="consult-submit" type="submit">${urgent ? "Sofortberatung anfragen →" : "Beratung anfragen →"}</button>
-      </form>
-      <p class="consult-hint" style="margin-top:10px">Die Anfrage wird erst nach Verbindung des DEGAJA-Beratungssystems tatsächlich übermittelt. Es wird keine private Telefonnummer benötigt.</p>
-    `;
-
-    $("#consultForm")?.addEventListener("submit", async event => {
-      event.preventDefault();
-      const payload = {
-        type: urgent ? "urgent" : "scheduled",
-        duration: Number(duration),
-        name: $("#consultName")?.value.trim(),
-        email: $("#consultEmail")?.value.trim(),
-        message: $("#consultMessage")?.value.trim() || "",
-        requestedTime: $("#consultTime")?.value || ""
-      };
-
-      const button = $("#consultForm button");
-      if (button) {
-        button.disabled = true;
-        button.textContent = "Anfrage wird vorbereitet …";
-      }
-
-      try {
-        const response = await fetchWithTimeout("/api/consultation", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(payload)
-        }, 15000);
-        const data = await response.json().catch(() => ({}));
-        if (!response.ok || data.ok === false) throw new Error(data.error || "Beratungssystem nicht verfügbar");
-
-        wrap.innerHTML = `<div class="success-box"><strong>Deine Anfrage ist angekommen.</strong><br>Wir melden uns mit den nächsten Schritten. Für die Audio-Beratung brauchst du keine private Telefonnummer.</div>`;
-      } catch (error) {
-        if (button) {
-          button.disabled = false;
-          button.textContent = urgent ? "Sofortberatung anfragen →" : "Beratung anfragen →";
-        }
-        const hint = document.createElement("div");
-        hint.className = "consult-hint";
-        hint.style.marginTop = "8px";
-        hint.style.color = "#8a6b32";
-        hint.textContent = "Die Oberfläche ist bereit. Die echte Übermittlung wird mit dem DEGAJA-Beratungssystem verbunden.";
-        wrap.appendChild(hint);
-      }
-    });
-  }
-
   $("#aiBtn")?.addEventListener("click", async () => {
     const question = $("#aiQuestion")?.value.trim() || "";
     const topic = $("#aiTopic")?.value || "";
@@ -481,10 +399,6 @@
       stashPendingReading(question, topic);
       startCheckout(btn.dataset.buy);
     });
-  });
-
-  $$('[data-consult]').forEach(btn => {
-    btn.addEventListener("click", () => consultationView(btn.dataset.consult));
   });
 
   $("#loginBtn")?.addEventListener("click", () => {
