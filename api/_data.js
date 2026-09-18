@@ -9,7 +9,7 @@ export const ADVISOR_CAPACITY = 100;
 // Private contact info, keyed by advisor id — used only server-side to send
 // WhatsApp session-code notifications. Never exposed via api/advisors.js.
 export const ADVISOR_WHATSAPP = {
-  papuli: "" // fill in as "+49..." once known
+  papuli: "+491732960046"
 };
 
 export function getAdvisor(advisorId) {
