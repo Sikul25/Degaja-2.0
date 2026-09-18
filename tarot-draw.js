@@ -44,7 +44,7 @@
     if ($('#tarotDrawStyle')) return;
     const s = document.createElement('style');
     s.id = 'tarotDrawStyle';
-    s.textContent = `.tarot-draw{margin:0 0 26px;padding:22px;border-radius:22px;background:rgba(255,255,255,.9);border:1px solid rgba(184,147,70,.24);box-shadow:0 12px 35px rgba(31,65,95,.07);text-align:center}.tarot-draw-copy{color:#687384;font-size:14px;line-height:1.6;margin:0 0 16px}.tarot-start-btn{border:0;border-radius:999px;padding:13px 24px;background:#18334a;color:#fff;font-weight:800;cursor:pointer;font-size:15px}.tarot-fan{position:relative;height:150px;margin:18px auto 0;max-width:480px}.tarot-card{position:absolute;left:50%;top:22px;width:64px;height:96px;margin-left:-32px;border-radius:10px;cursor:pointer;transform-style:preserve-3d;transition:transform .5s cubic-bezier(.2,.8,.2,1),opacity .4s ease;transform-origin:50% 100%}.tarot-card:hover{z-index:50 !important}.tarot-card.tarot-fly-out{opacity:0;transform:translateY(-60px) scale(.6) !important}.tarot-card-face{position:absolute;inset:0;border-radius:10px;backface-visibility:hidden;display:flex;align-items:center;justify-content:center}.tarot-card-back{background:linear-gradient(135deg,#18334a,#20456b);border:1px solid rgba(216,170,82,.6)}.tarot-card-back:after{content:"✦";color:#d8aa52;font-size:20px}.tarot-card-front{background:#fffdf8;border:1px solid rgba(184,147,70,.55);transform:rotateY(180deg);font-size:26px}.tarot-card.revealed .tarot-card-inner{transform:rotateY(180deg)}.tarot-card-inner{position:relative;width:100%;height:100%;transform-style:preserve-3d;transition:transform .6s cubic-bezier(.3,.7,.3,1)}.tarot-reveal-row{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-top:10px;min-height:1px}.tarot-reveal-card{width:130px;background:#fffdf8;border:1px solid rgba(184,147,70,.35);border-radius:14px;padding:14px 10px;box-shadow:0 10px 26px rgba(31,65,95,.08);animation:tarotPopIn .4s ease both}@keyframes tarotPopIn{from{opacity:0;transform:translateY(14px) scale(.9)}to{opacity:1;transform:translateY(0) scale(1)}}.tarot-reveal-card .glyph{font-size:26px;display:block;margin-bottom:6px}.tarot-reveal-card h4{margin:0 0 6px;color:#18334a;font-size:14px}.tarot-reveal-card p{margin:0;color:#687384;font-size:12px;line-height:1.5}.tarot-cta{margin-top:18px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap}.tarot-cta button{border:0;border-radius:999px;padding:12px 20px;font-weight:800;cursor:pointer;font-size:14px}.tarot-cta .primary{background:#b88a32;color:#fff}.tarot-cta .soft{background:#f4f7f9;color:#18334a}.tarot-hint{margin-top:14px;color:#9299a5;font-size:12px}@media(max-width:480px){.tarot-card{width:52px;height:80px;margin-left:-26px}.tarot-reveal-card{width:100px}}`;
+    s.textContent = `.tarot-draw{position:relative;overflow:hidden;margin:0 0 26px;padding:22px;border-radius:22px;background:rgba(255,255,255,.9);border:1px solid rgba(184,147,70,.24);box-shadow:0 12px 35px rgba(31,65,95,.07);text-align:center}.tarot-draw-copy{color:#687384;font-size:14px;line-height:1.6;margin:0 0 16px;position:relative;z-index:2}.tarot-twinkle{position:absolute;color:#d8aa52;pointer-events:none;animation:tarotTwinkle 3.4s ease-in-out infinite}@keyframes tarotTwinkle{0%,100%{opacity:.15;transform:scale(.85)}50%{opacity:.85;transform:scale(1.1)}}.tarot-orbit-wrap{position:relative;display:inline-block;z-index:2}.tarot-orbit{position:absolute;inset:-46px;pointer-events:none;animation:tarotSpin 24s linear infinite}.tarot-orbit-star{position:absolute;top:50%;left:50%;color:#d8aa52;font-size:11px;line-height:1;opacity:.75}@keyframes tarotSpin{to{transform:rotate(360deg)}}.tarot-start-btn{position:relative;z-index:2;border:0;border-radius:999px;padding:13px 24px;background:#18334a;color:#fff;font-weight:800;cursor:pointer;font-size:15px}.tarot-fan{position:relative;height:150px;margin:18px auto 0;max-width:480px}.tarot-card{position:absolute;left:50%;top:22px;width:64px;height:96px;margin-left:-32px;border-radius:10px;cursor:pointer;transform-style:preserve-3d;transition:transform .5s cubic-bezier(.2,.8,.2,1),opacity .4s ease;transform-origin:50% 100%}.tarot-card:hover{z-index:50 !important}.tarot-card.tarot-fly-out{opacity:0;transform:translateY(-60px) scale(.6) !important}.tarot-card-face{position:absolute;inset:0;border-radius:10px;backface-visibility:hidden;display:flex;align-items:center;justify-content:center}.tarot-card-back{background:linear-gradient(135deg,#18334a,#20456b);border:1px solid rgba(216,170,82,.6)}.tarot-card-back:after{content:"✦";color:#d8aa52;font-size:20px}.tarot-card-front{background:#fffdf8;border:1px solid rgba(184,147,70,.55);transform:rotateY(180deg);font-size:26px}.tarot-card.revealed .tarot-card-inner{transform:rotateY(180deg)}.tarot-card-inner{position:relative;width:100%;height:100%;transform-style:preserve-3d;transition:transform .6s cubic-bezier(.3,.7,.3,1)}.tarot-reveal-row{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-top:10px;min-height:1px}.tarot-reveal-card{width:130px;background:#fffdf8;border:1px solid rgba(184,147,70,.35);border-radius:14px;padding:14px 10px;box-shadow:0 10px 26px rgba(31,65,95,.08);animation:tarotPopIn .4s ease both}@keyframes tarotPopIn{from{opacity:0;transform:translateY(14px) scale(.9)}to{opacity:1;transform:translateY(0) scale(1)}}.tarot-reveal-card .glyph{font-size:26px;display:block;margin-bottom:6px}.tarot-reveal-card h4{margin:0 0 6px;color:#18334a;font-size:14px}.tarot-reveal-card p{margin:0;color:#687384;font-size:12px;line-height:1.5}.tarot-cta{margin-top:18px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap}.tarot-cta button{border:0;border-radius:999px;padding:12px 20px;font-weight:800;cursor:pointer;font-size:14px}.tarot-cta .primary{background:#b88a32;color:#fff}.tarot-cta .soft{background:#f4f7f9;color:#18334a}.tarot-hint{margin-top:14px;color:#9299a5;font-size:12px}@media(max-width:480px){.tarot-card{width:52px;height:80px;margin-left:-26px}.tarot-reveal-card{width:100px}}`;
     document.head.appendChild(s);
   }
 
@@ -78,12 +78,34 @@
     const form = $('#oracle .oracle-form');
     if (!oracleCard || !form) return;
 
+    const orbitCount = 6;
+    const orbitStars = Array.from({ length: orbitCount }, (_, i) => {
+      const angle = (360 / orbitCount) * i;
+      const glyph = i % 2 === 0 ? '✦' : '✧';
+      return `<span class="tarot-orbit-star" style="transform:rotate(${angle}deg) translate(58px)">${glyph}</span>`;
+    }).join('');
+
+    const twinklePositions = [
+      { top: '10%', left: '8%', size: '12px', delay: '0s' },
+      { top: '18%', right: '10%', size: '9px', delay: '.8s' },
+      { bottom: '14%', left: '14%', size: '10px', delay: '1.6s' },
+      { bottom: '20%', right: '8%', size: '13px', delay: '2.2s' }
+    ];
+    const twinkleStars = twinklePositions.map(p => {
+      const pos = Object.entries(p).filter(([k]) => k !== 'size' && k !== 'delay').map(([k, v]) => `${k}:${v}`).join(';');
+      return `<span class="tarot-twinkle" style="${pos};font-size:${p.size};animation-delay:${p.delay}">✦</span>`;
+    }).join('');
+
     const el = document.createElement('div');
     el.id = 'tarotDraw';
     el.className = 'tarot-draw';
     el.innerHTML = `
+      ${twinkleStars}
       <p class="tarot-draw-copy">Möchtest du erst drei Karten ziehen, bevor du deine Frage stellst?</p>
-      <button class="tarot-start-btn" id="tarotStartBtn">🎴 Karten ziehen</button>
+      <div class="tarot-orbit-wrap">
+        <div class="tarot-orbit">${orbitStars}</div>
+        <button class="tarot-start-btn" id="tarotStartBtn">🎴 Karten ziehen</button>
+      </div>
       <div class="tarot-fan" id="tarotFan" style="display:none"></div>
       <div class="tarot-reveal-row" id="tarotRevealRow"></div>
       <div class="tarot-cta" id="tarotCta" style="display:none"></div>
@@ -140,7 +162,8 @@
     }
 
     function startDraw() {
-      $('#tarotStartBtn').style.display = 'none';
+      const orbitWrap = $('.tarot-orbit-wrap', el);
+      if (orbitWrap) orbitWrap.style.display = 'none';
       const fan = $('#tarotFan');
       deckForRound = shuffle(DECK).slice(0, FAN_SIZE);
       fan.innerHTML = deckForRound.map(c => card(c.name, c.glyph)).join('');
