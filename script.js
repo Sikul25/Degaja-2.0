@@ -23,6 +23,11 @@
     conversationHistory: []
   };
 
+  const AI_CREDIT_KEY = "degajaAiCredits";
+  const PENDING_READING_KEY = "degajaPendingReading";
+  const getAiCredits = () => Math.max(0, Number(localStorage.getItem(AI_CREDIT_KEY) || 0));
+  const setAiCredits = n => localStorage.setItem(AI_CREDIT_KEY, String(Math.max(0, n)));
+
   const modal = $("#modal");
   const modalContent = $("#modalContent");
 
@@ -178,7 +183,18 @@
     }
   }
 
-  function showPurchaseModal() {
+  function stashPendingReading(question, topic) {
+    if (question) localStorage.setItem(PENDING_READING_KEY, JSON.stringify({ question, topic: topic || "" }));
+    else localStorage.removeItem(PENDING_READING_KEY);
+  }
+
+  function showPurchaseModal(question = "", topic = "") {
+    if (getAiCredits() > 0) {
+      unlockDeepReading(question, topic);
+      return;
+    }
+
+    stashPendingReading(question, topic);
     openModal(`
       <div class="eyebrow">DEGAJA · 24/7</div>
       <h2>Geh tiefer</h2>
@@ -193,6 +209,72 @@
     $$('[data-checkout]').forEach(btn => {
       btn.addEventListener("click", () => startCheckout(btn.dataset.checkout));
     });
+  }
+
+  async function unlockDeepReading(question, topic) {
+    if (!question) {
+      document.querySelector("#oracle")?.scrollIntoView({ behavior: "smooth", block: "center" });
+      return;
+    }
+
+    const credits = getAiCredits();
+    if (credits > 0) setAiCredits(credits - 1);
+
+    const questionField = $("#aiQuestion");
+    const topicField = $("#aiTopic");
+    if (questionField) questionField.value = question;
+    if (topicField) topicField.value = topic || "";
+
+    const result = $("#aiResult");
+    if (result) {
+      result.innerHTML = `<strong>DEGAJA · Deine persönliche Lesung</strong><p style="margin:8px 0;color:#596273">DEGAJA liest tiefer …</p>`;
+      result.classList.add("show");
+      result.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    }
+
+    state.conversationHistory = [];
+    const text = await getOracle(question, topic, "paid", state.conversationHistory);
+    state.conversationHistory.push({ role: "user", content: question });
+    state.conversationHistory.push({ role: "assistant", content: text });
+    state.paidAccess = true;
+    localStorage.setItem("degajaPaidAccess", "1");
+    renderResult(text, question, topic, true);
+  }
+
+  async function verifyAiPayment() {
+    const params = new URLSearchParams(location.search);
+    const sessionId = params.get("session_id");
+    if (params.get("payment") !== "success" || !sessionId) return;
+
+    try {
+      const response = await fetchWithTimeout(`/api/verify-payment?session_id=${encodeURIComponent(sessionId)}`, {}, 15000);
+      const data = await response.json();
+      if (!response.ok || !data.paid || data.type !== "ai") return;
+
+      setAiCredits(getAiCredits() + (Number(data.credits) || 1));
+      state.paidAccess = true;
+      localStorage.setItem("degajaPaidAccess", "1");
+      history.replaceState({}, document.title, location.pathname + location.hash);
+
+      let pending = null;
+      try { pending = JSON.parse(localStorage.getItem(PENDING_READING_KEY) || "null"); } catch (_) { /* ignore */ }
+      localStorage.removeItem(PENDING_READING_KEY);
+
+      if (pending?.question) {
+        await unlockDeepReading(pending.question, pending.topic || "");
+        return;
+      }
+
+      const remaining = getAiCredits();
+      const result = $("#aiResult");
+      if (result) {
+        result.innerHTML = `<strong>Zahlung erfolgreich.</strong><p style="margin:8px 0;color:#596273">Du hast jetzt ${remaining} tiefere Lesung${remaining === 1 ? "" : "en"} verfügbar. Stell deine Frage oben, um sie zu nutzen.</p>`;
+        result.classList.add("show");
+      }
+      document.querySelector("#oracle")?.scrollIntoView({ behavior: "smooth", block: "center" });
+    } catch (error) {
+      // Payment already went through on Stripe's side; nothing to recover client-side here.
+    }
   }
 
   async function startCheckout(product) {
@@ -245,7 +327,7 @@
 
     result.classList.add("show");
     result.scrollIntoView({ behavior: "smooth", block: "nearest" });
-    $("#deepBtn")?.addEventListener("click", showPurchaseModal);
+    $("#deepBtn")?.addEventListener("click", () => showPurchaseModal(question, topic));
 
     if (paid) {
       $("#chatSend")?.addEventListener("click", sendChat);
@@ -393,7 +475,12 @@
   });
 
   $$('[data-buy]').forEach(btn => {
-    btn.addEventListener("click", () => startCheckout(btn.dataset.buy));
+    btn.addEventListener("click", () => {
+      const question = $("#aiQuestion")?.value.trim() || "";
+      const topic = $("#aiTopic")?.value || "";
+      stashPendingReading(question, topic);
+      startCheckout(btn.dataset.buy);
+    });
   });
 
   $$('[data-consult]').forEach(btn => {
@@ -414,4 +501,6 @@
   document.addEventListener("keydown", event => {
     if (event.key === "Escape") closeModal();
   });
+
+  verifyAiPayment();
 })();

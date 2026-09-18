@@ -5,8 +5,8 @@ export default async function handler(req, res) {
 
   const { product, duration, email, name, advisorId } = req.body || {};
   const products = {
-    single: { name: "DEGAJA AI – Einzelne Lesung", amount: 499, quantity: 1, type: "ai" },
-    pack: { name: "DEGAJA AI – 3 Lesungen", amount: 999, quantity: 1, type: "ai" }
+    single: { name: "DEGAJA AI – Einzelne Lesung", amount: 499, quantity: 1, type: "ai", credits: 1 },
+    pack: { name: "DEGAJA AI – 3 Lesungen", amount: 999, quantity: 1, type: "ai", credits: 3 }
   };
 
   let item = products[product];
@@ -34,6 +34,7 @@ export default async function handler(req, res) {
   body.set("line_items[0][quantity]", String(item.quantity || 1));
   body.set("metadata[type]", type);
   if (voiceDuration) body.set("metadata[duration]", String(voiceDuration));
+  if (item.credits) body.set("metadata[credits]", String(item.credits));
   if (advisorId) body.set("metadata[advisorId]", String(advisorId).slice(0, 100));
   if (email) body.set("customer_email", String(email));
   if (email) body.set("client_reference_id", String(email).slice(0, 200));
