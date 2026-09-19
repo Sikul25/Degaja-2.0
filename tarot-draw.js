@@ -2,6 +2,7 @@
   'use strict';
   const $ = (s, r = document) => r.querySelector(s);
   const esc = v => String(v ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' }[c]));
+  const t = key => (window.degajaI18n ? window.degajaI18n.t(key) : key);
 
   const MAJOR_ARCANA = [
     { name: 'Der Narr', glyph: '🃏', image: 'assets/tarot/fool.jpg', meaning: 'Neuanfang und Unbekümmertheit – ein Sprung ins Unbekannte.' },
@@ -194,15 +195,15 @@
     el.className = 'tarot-draw';
     el.innerHTML = `
       ${twinkleStars}
-      <p class="tarot-draw-copy">Möchtest du erst drei Karten ziehen, bevor du deine Frage stellst?</p>
+      <p class="tarot-draw-copy">${t('tarot.invite')}</p>
       <div class="tarot-orbit-wrap">
         <div class="tarot-orbit">${orbitStars}</div>
-        <button class="tarot-start-btn" id="tarotStartBtn">🎴 Karten ziehen</button>
+        <button class="tarot-start-btn" id="tarotStartBtn">${t('tarot.startBtn')}</button>
       </div>
       <div class="tarot-fan" id="tarotFan" style="display:none"></div>
       <div class="tarot-reveal-row" id="tarotRevealRow"></div>
       <div class="tarot-cta" id="tarotCta" style="display:none"></div>
-      <p class="tarot-hint" id="tarotHint" style="display:none">Wähle drei Karten, die dich ansprechen.</p>
+      <p class="tarot-hint" id="tarotHint" style="display:none">${t('tarot.hint')}</p>
     `;
     oracleCard.insertBefore(el, form);
 
@@ -265,7 +266,7 @@
           $('#tarotHint').style.display = 'none';
           const cta = $('#tarotCta');
           cta.style.display = 'flex';
-          cta.innerHTML = `<button class="primary" id="tarotAskBtn">Frage zu diesen Karten stellen →</button><button class="soft" id="tarotResetBtn">🔄 Neu ziehen</button>`;
+          cta.innerHTML = `<button class="primary" id="tarotAskBtn">${t('tarot.askBtn')}</button><button class="soft" id="tarotResetBtn">${t('tarot.resetBtn')}</button>`;
           $('#tarotAskBtn')?.addEventListener('click', () => {
             $('#oracle .oracle-form')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
             setTimeout(() => $('#aiQuestion')?.focus(), 400);
