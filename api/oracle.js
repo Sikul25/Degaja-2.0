@@ -20,7 +20,7 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: "Question required" });
   }
 
-  const apiKey = process.env.OPENAI_API_KEY;
+  const apiKey = process.env.ANTHROPIC_API_KEY;
   if (!apiKey) return res.status(503).json({ error: "AI service is not configured" });
 
   const advisor = getAdvisor(advisorId);
@@ -41,25 +41,28 @@ export default async function handler(req, res) {
   const input = `Themenbereich: ${topic || "Allgemein"}\nFrage: ${question}${conversationId ? `\nSession: ${String(conversationId).slice(0, 120)}` : ""}${historyText}`;
 
   try {
-    const response = await fetch("https://api.openai.com/v1/responses", {
+    const response = await fetch("https://api.anthropic.com/v1/messages", {
       method: "POST",
-      headers: { "Content-Type": "application/json", Authorization: `Bearer ${apiKey}` },
+      headers: {
+        "Content-Type": "application/json",
+        "x-api-key": apiKey,
+        "anthropic-version": "2023-06-01"
+      },
       body: JSON.stringify({
-        model: process.env.OPENAI_MODEL || "gpt-5.6-mini",
-        instructions,
-        input,
-        max_output_tokens: mode === "paid" ? 700 : 350,
-        temperature: 0.9
+        model: process.env.ANTHROPIC_MODEL || "claude-opus-5",
+        system: instructions,
+        messages: [{ role: "user", content: input }],
+        max_tokens: mode === "paid" ? 700 : 350,
+        output_config: { effort: "low" }
       })
     });
 
     const data = await response.json();
     if (!response.ok) return res.status(502).json({ error: "AI request failed" });
 
-    const text = data.output_text || data.output?.flatMap(item => item.content || [])
-      .filter(item => item.type === "output_text")
-      .map(item => item.text)
-      .join("\n") || {
+    const text = (Array.isArray(data.content)
+      ? data.content.filter(item => item.type === "text").map(item => item.text).join("\n")
+      : "") || {
         de: "DEGAJA konnte gerade keine Antwort erstellen.",
         en: "DEGAJA couldn't create an answer right now.",
         fr: "DEGAJA n'a pas pu générer de réponse pour le moment.",
