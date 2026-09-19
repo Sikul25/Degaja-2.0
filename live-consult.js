@@ -49,8 +49,14 @@
     document.head.appendChild(s);
   }
 
+  function advisorTitle(a){
+    const key = 'advisor.' + a.id + '.title';
+    const translated = t(key);
+    return translated === key ? a.title : translated;
+  }
+
   function advisorOptions(){
-    return getAdvisors().map(a=>`<option value="${esc(a.id)}">${esc(a.name)} — ${esc(a.title)}</option>`).join('');
+    return getAdvisors().map(a=>`<option value="${esc(a.id)}">${esc(a.name)} — ${esc(advisorTitle(a))}</option>`).join('');
   }
 
   function getRecognitionCtor(){return window.SpeechRecognition||window.webkitSpeechRecognition||null}
