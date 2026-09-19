@@ -9,8 +9,9 @@ export default async function handler(req, res) {
   }
 
   const advisor = getAdvisor(advisorId);
-  const toNumber = ADVISOR_WHATSAPP[advisor.id];
-  const { TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN, TWILIO_WHATSAPP_FROM, TWILIO_CONTENT_SID } = process.env;
+  const { TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN, TWILIO_WHATSAPP_FROM, TWILIO_CONTENT_SID, TEST_WHATSAPP_TO } = process.env;
+  // Optional override for end-to-end testing without touching real advisor numbers in code.
+  const toNumber = TEST_WHATSAPP_TO || ADVISOR_WHATSAPP[advisor.id];
 
   if (!toNumber || !TWILIO_ACCOUNT_SID || !TWILIO_AUTH_TOKEN || !TWILIO_WHATSAPP_FROM) {
     // Not configured yet (missing advisor number or Twilio credentials) —
@@ -45,7 +46,8 @@ export default async function handler(req, res) {
       }
     );
     if (!response.ok) {
-      return res.status(502).json({ sent: false, error: "Twilio request failed" });
+      const detail = await response.text().catch(() => "");
+      return res.status(502).json({ sent: false, error: "Twilio request failed", detail });
     }
     return res.status(200).json({ sent: true });
   } catch (error) {
