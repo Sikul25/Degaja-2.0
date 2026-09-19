@@ -305,6 +305,25 @@
     }
   }
 
+  function speakText(text, button) {
+    if (!window.speechSynthesis) return;
+    if (speechSynthesis.speaking) {
+      speechSynthesis.cancel();
+      if (button) button.textContent = "🔊 Antwort anhören";
+      return;
+    }
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = "de-DE";
+    const germanVoice = speechSynthesis.getVoices().find(v => v.lang.startsWith("de"));
+    if (germanVoice) utterance.voice = germanVoice;
+    utterance.rate = 0.95;
+    if (button) {
+      button.textContent = "⏸ Stoppen";
+      utterance.onend = () => { button.textContent = "🔊 Antwort anhören"; };
+    }
+    speechSynthesis.speak(utterance);
+  }
+
   function renderResult(text, question, topic, paid = false) {
     const result = $("#aiResult");
     if (!result) return;
@@ -315,6 +334,7 @@
 
     result.innerHTML = `
       <strong>${paid ? "DEGAJA · Deine persönliche Lesung" : "DEGAJA · Deine erste Antwort"}</strong>
+      <button type="button" id="speakBtn" class="text-button" style="display:block;margin:6px 0;font-size:13px">🔊 Antwort anhören</button>
       <p style="margin:8px 0;color:#596273">${safeText}</p>
       <div style="font-size:13px;color:#687384"><b>Deine Frage:</b> ${escapeHtml(question)}</div>
       ${paid ? `
@@ -334,6 +354,7 @@
     result.classList.add("show");
     result.scrollIntoView({ behavior: "smooth", block: "nearest" });
     $("#deepBtn")?.addEventListener("click", () => showPurchaseModal(question, topic));
+    $("#speakBtn")?.addEventListener("click", event => speakText(text, event.currentTarget));
 
     if (paid) {
       $("#chatSend")?.addEventListener("click", sendChat);
