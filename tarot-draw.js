@@ -116,9 +116,32 @@
     const suit = SUITS[Math.floor(idx / RANKS.length)];
     const rankNum = (idx % RANKS.length) + 1;
     c.image = `assets/tarot/${SUIT_FILE_KEYS[suit.name]}${rankNum}.jpg`;
+    c.suitKey = SUIT_FILE_KEYS[suit.name];
+    c.rankIndex = idx % RANKS.length;
+    c.id = `${c.suitKey}${rankNum}`;
   });
+  MAJOR_ARCANA.forEach(c => { c.id = c.image.match(/tarot\/(.+)\.jpg/)[1]; c.major = true; });
 
   const DECK = [...MAJOR_ARCANA, ...MINOR_ARCANA];
+
+  const MINOR_CONNECTOR = { en: 'of', fr: 'de', es: 'de', it: 'di', pt: 'de' };
+
+  function localize(cardData) {
+    const lang = window.degajaI18n ? window.degajaI18n.getLang() : 'de';
+    const fallback = { name: cardData.name, meaning: cardData.meaning };
+    if (lang === 'de') return fallback;
+    const table = window.DEGAJA_TAROT_I18N && window.DEGAJA_TAROT_I18N[lang];
+    if (!table) return fallback;
+    if (cardData.major) {
+      const entry = table.major[cardData.id];
+      return entry ? entry : fallback;
+    }
+    const suitName = table.suits[cardData.suitKey];
+    const rankName = table.ranks[cardData.rankIndex];
+    const meaning = table.minorMeanings[cardData.suitKey] && table.minorMeanings[cardData.suitKey][cardData.rankIndex];
+    if (!suitName || !rankName || !meaning) return fallback;
+    return { name: `${rankName} ${MINOR_CONNECTOR[lang] || 'of'} ${suitName}`, meaning };
+  }
 
   const FAN_SIZE = 9;
   const MAX_PICKS = 3;
@@ -140,10 +163,12 @@
     document.head.appendChild(s);
   }
 
-  function card(name, glyph, badge, image) {
+  function card(cardData) {
+    const { name } = localize(cardData);
+    const { glyph, badge, image } = cardData;
     const badgeHtml = badge ? `<span class="tarot-badge">${esc(badge)}</span>` : '';
     const frontContent = image ? `<img src="${esc(image)}" alt="${esc(name)}" loading="lazy">` : glyph;
-    return `<article class="tarot-card" data-name="${esc(name)}"><div class="tarot-card-inner"><div class="tarot-card-face tarot-card-back"></div><div class="tarot-card-face tarot-card-front">${frontContent}${badgeHtml}</div></div></article>`;
+    return `<article class="tarot-card" data-name="${esc(cardData.name)}"><div class="tarot-card-inner"><div class="tarot-card-face tarot-card-back"></div><div class="tarot-card-face tarot-card-front">${frontContent}${badgeHtml}</div></div></article>`;
   }
 
   function layoutFan(container) {
@@ -247,12 +272,13 @@
       setTimeout(() => {
         cardEl.classList.add('tarot-fly-out');
         const revealRow = $('#tarotRevealRow');
+        const localized = localize(data);
         const badgeHtml = data.badge ? `<b class="tarot-reveal-badge">${esc(data.badge)}</b>` : '';
         const glyphHtml = data.image
-          ? `<img src="${esc(data.image)}" alt="${esc(data.name)}" loading="lazy">`
+          ? `<img src="${esc(data.image)}" alt="${esc(localized.name)}" loading="lazy">`
           : `<span class="glyph">${data.glyph}${badgeHtml}</span>`;
         revealRow.insertAdjacentHTML('beforeend', `
-          <div class="tarot-reveal-card">${glyphHtml}<h4>${esc(data.name)}</h4><p>${esc(data.meaning)}</p></div>
+          <div class="tarot-reveal-card">${glyphHtml}<h4>${esc(localized.name)}</h4><p>${esc(localized.meaning)}</p></div>
         `);
       }, 550);
 
@@ -261,7 +287,7 @@
           c.classList.add('tarot-fly-out');
           c.removeEventListener('click', onCardClick);
         });
-        window.DEGAJA_DRAWN_CARDS = picked.map(c => c.name);
+        window.DEGAJA_DRAWN_CARDS = picked.map(c => localize(c).name);
         setTimeout(() => {
           $('#tarotHint').style.display = 'none';
           const cta = $('#tarotCta');
@@ -281,7 +307,7 @@
       if (orbitWrap) orbitWrap.style.display = 'none';
       const fan = $('#tarotFan');
       deckForRound = shuffle(DECK).slice(0, FAN_SIZE);
-      fan.innerHTML = deckForRound.map(c => card(c.name, c.glyph, c.badge, c.image)).join('');
+      fan.innerHTML = deckForRound.map(c => card(c)).join('');
       fan.style.display = 'block';
       $('#tarotHint').style.display = 'block';
       fan.querySelectorAll('.tarot-card').forEach(c => c.addEventListener('click', onCardClick));
