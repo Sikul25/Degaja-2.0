@@ -3,10 +3,24 @@ import { VOICE_PRICES } from "./_data.js";
 export default async function handler(req, res) {
   if (req.method !== "POST") return res.status(405).json({ error: "Method not allowed" });
 
-  const { product, duration, email, name, advisorId } = req.body || {};
+  const { product, duration, email, name, advisorId, lang = "de" } = req.body || {};
+  const CURRENCY_BY_LANG = { en: "gbp" };
+  const LOCALE_BY_LANG = { de: "de", en: "en-GB", fr: "fr", es: "es", it: "it", pt: "pt" };
+  const currency = CURRENCY_BY_LANG[lang] || "eur";
+  const stripeLocale = LOCALE_BY_LANG[lang] || "de";
+  const PRODUCT_NAMES = {
+    de: { single: "DEGAJA AI – Einzelne Lesung", pack: "DEGAJA AI – 3 Lesungen", voice: minutes => `DEGAJA Live Audio – ${minutes} Minuten` },
+    en: { single: "DEGAJA AI – Single Reading", pack: "DEGAJA AI – 3 Readings", voice: minutes => `DEGAJA Live Audio – ${minutes} Minutes` },
+    fr: { single: "DEGAJA AI – Lecture unique", pack: "DEGAJA AI – 3 Lectures", voice: minutes => `DEGAJA Live Audio – ${minutes} Minutes` },
+    es: { single: "DEGAJA AI – Lectura individual", pack: "DEGAJA AI – 3 Lecturas", voice: minutes => `DEGAJA Live Audio – ${minutes} Minutos` },
+    it: { single: "DEGAJA AI – Lettura singola", pack: "DEGAJA AI – 3 Letture", voice: minutes => `DEGAJA Live Audio – ${minutes} Minuti` },
+    pt: { single: "DEGAJA AI – Leitura única", pack: "DEGAJA AI – 3 Leituras", voice: minutes => `DEGAJA Live Audio – ${minutes} Minutos` }
+  };
+  const names = PRODUCT_NAMES[lang] || PRODUCT_NAMES.de;
+
   const products = {
-    single: { name: "DEGAJA AI – Einzelne Lesung", amount: 499, quantity: 1, type: "ai", credits: 1 },
-    pack: { name: "DEGAJA AI – 3 Lesungen", amount: 999, quantity: 1, type: "ai", credits: 3 }
+    single: { name: names.single, amount: 499, quantity: 1, type: "ai", credits: 1 },
+    pack: { name: names.pack, amount: 999, quantity: 1, type: "ai", credits: 3 }
   };
 
   let item = products[product];
@@ -15,7 +29,7 @@ export default async function handler(req, res) {
   if (product === "voice") {
     voiceDuration = Number(duration);
     const price = VOICE_PRICES[voiceDuration];
-    item = price ? { name: `DEGAJA Live Audio – ${voiceDuration} Minuten`, amount: price.amount } : null;
+    item = price ? { name: names.voice(voiceDuration), amount: price.amount } : null;
     type = "voice";
   }
   if (!item) return res.status(400).json({ error: "Invalid product" });
@@ -26,10 +40,10 @@ export default async function handler(req, res) {
   const origin = req.headers.origin || `https://${req.headers.host}`;
   const body = new URLSearchParams();
   body.set("mode", "payment");
-  body.set("locale", "de");
+  body.set("locale", stripeLocale);
   body.set("success_url", `${origin}/?payment=success&session_id={CHECKOUT_SESSION_ID}`);
   body.set("cancel_url", `${origin}/?payment=cancelled`);
-  body.set("line_items[0][price_data][currency]", "eur");
+  body.set("line_items[0][price_data][currency]", currency);
   body.set("line_items[0][price_data][product_data][name]", item.name);
   body.set("line_items[0][price_data][unit_amount]", String(item.amount));
   body.set("line_items[0][quantity]", String(item.quantity || 1));
