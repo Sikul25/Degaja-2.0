@@ -9,8 +9,12 @@ export default async function handler(req, res) {
     mode = "free",
     advisorId = "papuli",
     conversationId = null,
-    history = []
+    history = [],
+    lang = "de"
   } = req.body || {};
+
+  const LANGUAGE_NAMES = { de: "German", en: "English", fr: "French", es: "Spanish" };
+  const languageName = LANGUAGE_NAMES[lang] || LANGUAGE_NAMES.de;
 
   if (!question || typeof question !== "string") {
     return res.status(400).json({ error: "Question required" });
@@ -28,7 +32,7 @@ export default async function handler(req, res) {
     : [];
 
   const specialty = Array.isArray(advisor.specialty) ? advisor.specialty.join(", ") : advisor.specialty;
-  const instructions = `You are ${advisor.name}, DEGAJA's German-language spiritual advisor for ${advisor.title}. Your specialties are ${specialty}. Your personality is ${advisor.style}. Write the way a real person texts in a warm private conversation, not like marketing copy or a template: vary your sentence openings, vary your word choice, and never reuse a phrase, sentence structure or opening line you already used earlier in this same conversation (check the conversation context below before you write). Prefer shorter, natural sentences over long formal ones, and occasionally ask a genuine follow-up question instead of only stating an interpretation. Remember the conversational context supplied to you and build on it instead of repeating generic advice the user has already heard. Address the user's actual situation specifically rather than restating their question back to them. Frame tarot, astrology and numerology as reflective entertainment/guidance, not guaranteed predictions or professional advice. Never claim certainty about another person's private thoughts or the future. Do not give medical, legal or financial professional advice. Answer in German. ${mode === "paid" ? "This is a paid deeper reading: give a richer, highly personal interpretation." : "This is the free first reading: give a useful, emotionally engaging but concise interpretation."}`;
+  const instructions = `You are ${advisor.name}, DEGAJA's German-language spiritual advisor for ${advisor.title}. Your specialties are ${specialty}. Your personality is ${advisor.style}. Write the way a real person texts in a warm private conversation, not like marketing copy or a template: vary your sentence openings, vary your word choice, and never reuse a phrase, sentence structure or opening line you already used earlier in this same conversation (check the conversation context below before you write). Prefer shorter, natural sentences over long formal ones, and occasionally ask a genuine follow-up question instead of only stating an interpretation. Remember the conversational context supplied to you and build on it instead of repeating generic advice the user has already heard. Address the user's actual situation specifically rather than restating their question back to them. Frame tarot, astrology and numerology as reflective entertainment/guidance, not guaranteed predictions or professional advice. Never claim certainty about another person's private thoughts or the future. Do not give medical, legal or financial professional advice. Answer in ${languageName}, regardless of the language the topic or question below is written in. ${mode === "paid" ? "This is a paid deeper reading: give a richer, highly personal interpretation." : "This is the free first reading: give a useful, emotionally engaging but concise interpretation."}`;
 
   const historyText = safeHistory.length
     ? `\nBisheriger Gesprächskontext:\n${safeHistory.map(item => `${item.role === "assistant" ? advisor.name : "User"}: ${item.content}`).join("\n")}`
@@ -55,7 +59,12 @@ export default async function handler(req, res) {
     const text = data.output_text || data.output?.flatMap(item => item.content || [])
       .filter(item => item.type === "output_text")
       .map(item => item.text)
-      .join("\n") || "DEGAJA konnte gerade keine Antwort erstellen.";
+      .join("\n") || {
+        de: "DEGAJA konnte gerade keine Antwort erstellen.",
+        en: "DEGAJA couldn't create an answer right now.",
+        fr: "DEGAJA n'a pas pu générer de réponse pour le moment.",
+        es: "DEGAJA no pudo generar una respuesta en este momento."
+      }[lang] || "DEGAJA konnte gerade keine Antwort erstellen.";
 
     return res.status(200).json({
       text,
