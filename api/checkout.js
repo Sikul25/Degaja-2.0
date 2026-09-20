@@ -5,7 +5,7 @@ export default async function handler(req, res) {
 
   const { product, duration, email, name, advisorId, lang = "de" } = req.body || {};
   const CURRENCY_BY_LANG = { en: "gbp" };
-  const LOCALE_BY_LANG = { de: "de", en: "en-GB", fr: "fr", es: "es", it: "it", pt: "pt" };
+  const LOCALE_BY_LANG = { de: "de", en: "en-GB", fr: "fr", es: "es", it: "it", pt: "pt", ru: "ru", uk: "auto" };
   const currency = CURRENCY_BY_LANG[lang] || "eur";
   const stripeLocale = LOCALE_BY_LANG[lang] || "de";
   const PRODUCT_NAMES = {
@@ -14,7 +14,9 @@ export default async function handler(req, res) {
     fr: { single: "DEGAJA AI – Lecture unique", pack: "DEGAJA AI – 3 Lectures", voice: minutes => `DEGAJA Live Audio – ${minutes} Minutes` },
     es: { single: "DEGAJA AI – Lectura individual", pack: "DEGAJA AI – 3 Lecturas", voice: minutes => `DEGAJA Live Audio – ${minutes} Minutos` },
     it: { single: "DEGAJA AI – Lettura singola", pack: "DEGAJA AI – 3 Letture", voice: minutes => `DEGAJA Live Audio – ${minutes} Minuti` },
-    pt: { single: "DEGAJA AI – Leitura única", pack: "DEGAJA AI – 3 Leituras", voice: minutes => `DEGAJA Live Audio – ${minutes} Minutos` }
+    pt: { single: "DEGAJA AI – Leitura única", pack: "DEGAJA AI – 3 Leituras", voice: minutes => `DEGAJA Live Audio – ${minutes} Minutos` },
+    ru: { single: "DEGAJA AI – Разовый расклад", pack: "DEGAJA AI – 3 расклада", voice: minutes => `DEGAJA Live Audio – ${minutes} минут` },
+    uk: { single: "DEGAJA AI – Одноразовий розклад", pack: "DEGAJA AI – 3 розклади", voice: minutes => `DEGAJA Live Audio – ${minutes} хвилин` }
   };
   const names = PRODUCT_NAMES[lang] || PRODUCT_NAMES.de;
 
