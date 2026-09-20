@@ -13,7 +13,7 @@ export default async function handler(req, res) {
     lang = "de"
   } = req.body || {};
 
-  const LANGUAGE_NAMES = { de: "German", en: "English", fr: "French", es: "Spanish", it: "Italian", pt: "Portuguese" };
+  const LANGUAGE_NAMES = { de: "German", en: "English", fr: "French", es: "Spanish", it: "Italian", pt: "Portuguese", ru: "Russian", uk: "Ukrainian" };
   const languageName = LANGUAGE_NAMES[lang] || LANGUAGE_NAMES.de;
 
   if (!question || typeof question !== "string") {
@@ -68,7 +68,9 @@ export default async function handler(req, res) {
         fr: "DEGAJA n'a pas pu générer de réponse pour le moment.",
         es: "DEGAJA no pudo generar una respuesta en este momento.",
         it: "DEGAJA non è riuscita a creare una risposta in questo momento.",
-        pt: "A DEGAJA não conseguiu criar uma resposta neste momento."
+        pt: "A DEGAJA não conseguiu criar uma resposta neste momento.",
+        ru: "DEGAJA сейчас не смогла подготовить ответ.",
+        uk: "DEGAJA зараз не змогла підготувати відповідь."
       }[lang] || "DEGAJA konnte gerade keine Antwort erstellen.";
 
     return res.status(200).json({

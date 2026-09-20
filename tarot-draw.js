@@ -124,7 +124,7 @@
 
   const DECK = [...MAJOR_ARCANA, ...MINOR_ARCANA];
 
-  const MINOR_CONNECTOR = { en: 'of', fr: 'de', es: 'de', it: 'di', pt: 'de' };
+  const MINOR_CONNECTOR = { en: 'of', fr: 'de', es: 'de', it: 'di', pt: 'de', ru: '', uk: '' };
 
   function localize(cardData) {
     const lang = window.degajaI18n ? window.degajaI18n.getLang() : 'de';
@@ -140,7 +140,9 @@
     const rankName = table.ranks[cardData.rankIndex];
     const meaning = table.minorMeanings[cardData.suitKey] && table.minorMeanings[cardData.suitKey][cardData.rankIndex];
     if (!suitName || !rankName || !meaning) return fallback;
-    return { name: `${rankName} ${MINOR_CONNECTOR[lang] || 'of'} ${suitName}`, meaning };
+    const connector = lang in MINOR_CONNECTOR ? MINOR_CONNECTOR[lang] : 'of';
+    const name = [rankName, connector, suitName].filter(Boolean).join(' ');
+    return { name, meaning };
   }
 
   const FAN_SIZE = 9;
