@@ -124,7 +124,7 @@
 
   const DECK = [...MAJOR_ARCANA, ...MINOR_ARCANA];
 
-  const MINOR_CONNECTOR = { en: 'of', fr: 'de', es: 'de', it: 'di', pt: 'de', ru: '', uk: '' };
+  const MINOR_CONNECTOR = { en: 'of', fr: 'de', es: 'de', it: 'di', pt: 'de', ru: '', uk: '', br: 'de' };
 
   function localize(cardData) {
     const lang = window.degajaI18n ? window.degajaI18n.getLang() : 'de';

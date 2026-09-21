@@ -24,7 +24,8 @@
 
   async function loadRemoteData(){
     try{
-      const r = await doFetch('/api/advisors', {}, 8000);
+      const currency = lang() === 'br' ? 'brl' : '';
+      const r = await doFetch('/api/advisors' + (currency ? `?currency=${currency}` : ''), {}, 8000);
       if(!r.ok) return;
       const d = await r.json();
       if(Array.isArray(d.advisors) && d.advisors.length) remoteAdvisors = d.advisors.filter(a=>a&&a.active!==false);
