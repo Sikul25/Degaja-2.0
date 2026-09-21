@@ -1152,6 +1152,14 @@
     const metaDesc = document.querySelector('meta[name="description"]');
     const descVal = t("meta.description");
     if (metaDesc && descVal && !descVal.startsWith("meta.")) metaDesc.setAttribute("content", descVal);
+
+    // Live consultation with a human advisor is only staffed in German for
+    // now, so hide that section and every link/button pointing to it on
+    // every other language.
+    const deOnly = getLang() === "de";
+    document.querySelectorAll("[data-de-only]").forEach(el => {
+      el.style.display = deOnly ? "" : "none";
+    });
   }
 
   function init() {
