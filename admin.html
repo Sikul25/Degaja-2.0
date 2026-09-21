@@ -1,10 +1,10 @@
 <!doctype html>
-<html lang="he" dir="rtl">
+<html lang="en" dir="ltr">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="robots" content="noindex,nofollow">
-<title>DEGAJA · ניהול</title>
+<title>DEGAJA · Admin</title>
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <style>
   :root{--navy:#17314a;--blue:#398fc2;--gold:#d8a33d;--mist:#eef8fc;--text:#28445b;--muted:#6e8799;--line:#dfeef4;--white:#fff;--red:#c0392b;--green:#1f8a5b}
@@ -43,7 +43,7 @@
   .lang-chip{background:#fff;border:1px solid var(--line);border-radius:999px;padding:7px 13px;font-size:13px;font-weight:700;color:var(--navy)}
 
   table{width:100%;border-collapse:collapse;background:#fff;border:1px solid var(--line);border-radius:16px;overflow:hidden;font-size:13px}
-  th,td{padding:10px 12px;text-align:right;border-bottom:1px solid var(--line)}
+  th,td{padding:10px 12px;text-align:left;border-bottom:1px solid var(--line)}
   th{background:var(--mist);color:var(--navy);font-size:11px;letter-spacing:.03em}
   tr:last-child td{border-bottom:0}
   td.mono{font-variant-numeric:tabular-nums}
@@ -56,29 +56,29 @@
 
 <div class="gate" id="gate">
   <div class="gate-card">
-    <h1>DEGAJA · ניהול</h1>
-    <p>הכנס את קוד הגישה כדי לצפות בתשלומים.</p>
-    <input type="password" id="tokenInput" placeholder="קוד גישה" autocomplete="off">
-    <button id="loginBtn">כניסה</button>
+    <h1>DEGAJA · Admin</h1>
+    <p>Enter the access code to view payments.</p>
+    <input type="password" id="tokenInput" placeholder="Access code" autocomplete="off">
+    <button id="loginBtn">Log in</button>
     <div class="gate-err" id="gateErr"></div>
   </div>
 </div>
 
 <div id="dash">
   <div class="dash-head">
-    <h1>תשלומים ורכישות</h1>
-    <button class="logout" id="logoutBtn">התנתק</button>
+    <h1>Payments & Purchases</h1>
+    <button class="logout" id="logoutBtn">Log out</button>
   </div>
 
   <div class="controls">
     <select id="daysSelect">
-      <option value="1">24 שעות אחרונות</option>
-      <option value="7" selected>7 ימים אחרונים</option>
-      <option value="30">30 ימים אחרונים</option>
-      <option value="90">90 ימים אחרונים</option>
+      <option value="1">Last 24 hours</option>
+      <option value="7" selected>Last 7 days</option>
+      <option value="30">Last 30 days</option>
+      <option value="90">Last 90 days</option>
     </select>
-    <button class="primary" id="refreshBtn">רענן עכשיו</button>
-    <label><input type="checkbox" id="liveToggle"><span class="live-dot" id="liveDot"></span> רענון חי (כל 30 שנ׳)</label>
+    <button class="primary" id="refreshBtn">Refresh now</button>
+    <label><input type="checkbox" id="liveToggle"><span class="live-dot" id="liveDot"></span> Live refresh (every 30s)</label>
   </div>
 
   <div class="cards" id="cards"></div>
@@ -88,19 +88,19 @@
     <table id="table" style="display:none">
       <thead>
         <tr>
-          <th>תאריך</th>
-          <th>אימייל</th>
-          <th>מוצר</th>
-          <th>שפה</th>
-          <th>ברוטו</th>
-          <th>עמלת סטריפ</th>
-          <th>נטו</th>
+          <th>Date</th>
+          <th>Email</th>
+          <th>Product</th>
+          <th>Language</th>
+          <th>Gross</th>
+          <th>Stripe Fee</th>
+          <th>Net</th>
         </tr>
       </thead>
       <tbody id="tbody"></tbody>
     </table>
-    <div class="loading" id="loadingMsg">טוען…</div>
-    <div class="empty" id="emptyMsg" style="display:none">אין רכישות בטווח הזמן הזה.</div>
+    <div class="loading" id="loadingMsg">Loading…</div>
+    <div class="empty" id="emptyMsg" style="display:none">No purchases in this time range.</div>
     <div class="err" id="errMsg" style="display:none"></div>
   </div>
 </div>
@@ -113,12 +113,12 @@
 
   const FLAGS = { de: '🇩🇪', en: '🇬🇧', fr: '🇫🇷', es: '🇪🇸', it: '🇮🇹', pt: '🇵🇹', ru: '🇷🇺', uk: '🇺🇦', br: '🇧🇷' };
   const PRODUCT_LABELS = {
-    single: 'קריאה בודדת',
-    pack: '3 קריאות',
+    single: 'Single reading',
+    pack: '3 readings',
   };
 
   function productLabel(row) {
-    if (row.type === 'voice') return `שיחה קולית · ${row.duration || '?'} דק׳`;
+    if (row.type === 'voice') return `Voice call · ${row.duration || '?'} min`;
     return PRODUCT_LABELS[row.product] || row.product || row.type || '—';
   }
 
@@ -130,7 +130,7 @@
 
   function fmtDate(unixSeconds) {
     const d = new Date(unixSeconds * 1000);
-    return d.toLocaleString('he-IL', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' });
+    return d.toLocaleString('en-GB', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' });
   }
 
   let liveTimer = null;
@@ -163,11 +163,11 @@
       });
       if (r.status === 401) {
         sessionStorage.removeItem(TOKEN_KEY);
-        showGate('קוד גישה שגוי.');
+        showGate('Wrong access code.');
         return;
       }
       const data = await r.json();
-      if (!r.ok) throw new Error(data.error || 'שגיאה בטעינת הנתונים');
+      if (!r.ok) throw new Error(data.error || 'Failed to load data');
 
       renderCards(data.summary);
       renderLangBreakdown(data.summary.byLang);
@@ -175,7 +175,7 @@
       $('#loadingMsg').style.display = 'none';
     } catch (e) {
       $('#loadingMsg').style.display = 'none';
-      $('#errMsg').textContent = e.message || 'שגיאה בטעינת הנתונים';
+      $('#errMsg').textContent = e.message || 'Failed to load data';
       $('#errMsg').style.display = 'block';
     }
   }
@@ -185,7 +185,7 @@
     cards.innerHTML = '';
     const countCard = document.createElement('div');
     countCard.className = 'card';
-    countCard.innerHTML = `<div class="label">סה״כ רכישות</div><div class="value">${summary.count}</div>`;
+    countCard.innerHTML = `<div class="label">Total purchases</div><div class="value">${summary.count}</div>`;
     cards.appendChild(countCard);
 
     const currencies = new Set([
@@ -200,17 +200,17 @@
       const net = summary.netByCurrency[cur] || 0;
       const grossCard = document.createElement('div');
       grossCard.className = 'card';
-      grossCard.innerHTML = `<div class="label">הכנסה ברוטו · ${cur.toUpperCase()}</div><div class="value">${money(gross, cur)}</div>`;
+      grossCard.innerHTML = `<div class="label">Gross revenue · ${cur.toUpperCase()}</div><div class="value">${money(gross, cur)}</div>`;
       cards.appendChild(grossCard);
 
       const feeCard = document.createElement('div');
       feeCard.className = 'card fee';
-      feeCard.innerHTML = `<div class="label">עמלת סטריפ · ${cur.toUpperCase()}</div><div class="value">${money(fee, cur)} <small>${gross ? ((fee / gross) * 100).toFixed(1) + '%' : ''}</small></div>`;
+      feeCard.innerHTML = `<div class="label">Stripe fee · ${cur.toUpperCase()}</div><div class="value">${money(fee, cur)} <small>${gross ? ((fee / gross) * 100).toFixed(1) + '%' : ''}</small></div>`;
       cards.appendChild(feeCard);
 
       const netCard = document.createElement('div');
       netCard.className = 'card net';
-      netCard.innerHTML = `<div class="label">נטו לך · ${cur.toUpperCase()}</div><div class="value">${money(net, cur)}</div>`;
+      netCard.innerHTML = `<div class="label">Net to you · ${cur.toUpperCase()}</div><div class="value">${money(net, cur)}</div>`;
       cards.appendChild(netCard);
     });
   }
