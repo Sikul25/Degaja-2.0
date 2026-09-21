@@ -4,13 +4,14 @@ export default async function handler(req, res) {
   if (req.method !== "POST") return res.status(405).json({ error: "Method not allowed" });
 
   const { product, duration, email, name, advisorId, lang = "de" } = req.body || {};
-  const CURRENCY_BY_LANG = { en: "gbp", br: "brl" };
-  const LOCALE_BY_LANG = { de: "de", en: "en-GB", fr: "fr", es: "es", it: "it", pt: "pt", ru: "ru", uk: "auto", br: "pt-BR" };
+  const CURRENCY_BY_LANG = { en: "gbp", us: "usd", br: "brl" };
+  const LOCALE_BY_LANG = { de: "de", en: "en-GB", us: "en", fr: "fr", es: "es", it: "it", pt: "pt", ru: "ru", uk: "auto", br: "pt-BR" };
   const currency = CURRENCY_BY_LANG[lang] || "eur";
   const stripeLocale = LOCALE_BY_LANG[lang] || "de";
   const PRODUCT_NAMES = {
     de: { single: "DEGAJA AI – Einzelne Lesung", pack: "DEGAJA AI – 3 Lesungen", voice: minutes => `DEGAJA Live Audio – ${minutes} Minuten` },
     en: { single: "DEGAJA AI – Single Reading", pack: "DEGAJA AI – 3 Readings", voice: minutes => `DEGAJA Live Audio – ${minutes} Minutes` },
+    us: { single: "DEGAJA AI – Single Reading", pack: "DEGAJA AI – 3 Readings", voice: minutes => `DEGAJA Live Audio – ${minutes} Minutes` },
     fr: { single: "DEGAJA AI – Lecture unique", pack: "DEGAJA AI – 3 Lectures", voice: minutes => `DEGAJA Live Audio – ${minutes} Minutes` },
     es: { single: "DEGAJA AI – Lectura individual", pack: "DEGAJA AI – 3 Lecturas", voice: minutes => `DEGAJA Live Audio – ${minutes} Minutos` },
     it: { single: "DEGAJA AI – Lettura singola", pack: "DEGAJA AI – 3 Letture", voice: minutes => `DEGAJA Live Audio – ${minutes} Minuti` },

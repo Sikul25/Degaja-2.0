@@ -2,7 +2,7 @@
   "use strict";
 
   const LANG_KEY = "degajaLang";
-  const SUPPORTED = ["de", "uk", "ru", "en", "fr", "es", "it", "pt", "br"];
+  const SUPPORTED = ["de", "uk", "ru", "en", "us", "fr", "es", "it", "pt", "br"];
   // Languages the live human advisor (Papuli) actually speaks. The live
   // audio consultation is only shown for these.
   const ADVISOR_LANGS = ["de", "ru", "uk"];
@@ -1117,6 +1117,22 @@
     "speech.langCode": "pt-BR"
   });
 
+  // US English reuses every en string except the currency symbol (USD is a
+  // same-digit swap, like GBP) and a stronger disclaimer: several US states
+  // only permit paid fortune-telling/tarot when explicitly framed as
+  // entertainment, so the footer must say exactly that.
+  T.us = Object.assign({}, T.en, {
+    "currency.symbol": "$",
+    "prices.single.btn": "Get it for $4.99",
+    "prices.single.priceLabel": "$4.99",
+    "prices.pack.priceLabel": "$9.99",
+    "purchase.single": "One reading · $4.99",
+    "purchase.pack": "3 readings · $9.99",
+    "result.deepBtn": "✨ Go deeper · $4.99",
+    "footer.disclaimer": "DEGAJA is for entertainment purposes only. It offers personal guidance and does not replace professional advice.",
+    "speech.langCode": "en-US"
+  });
+
   function getLang() {
     const saved = localStorage.getItem(LANG_KEY);
     return SUPPORTED.includes(saved) ? saved : "de";
@@ -1137,7 +1153,7 @@
 
   window.degajaI18n = { getLang, setLang, t, SUPPORTED, hasLiveAdvisor };
 
-  const FLAGS = { de: "🇩🇪", en: "🇬🇧", fr: "🇫🇷", es: "🇪🇸", it: "🇮🇹", pt: "🇵🇹", ru: "🇷🇺", uk: "🇺🇦", br: "🇧🇷" };
+  const FLAGS = { de: "🇩🇪", en: "🇬🇧", us: "🇺🇸", fr: "🇫🇷", es: "🇪🇸", it: "🇮🇹", pt: "🇵🇹", ru: "🇷🇺", uk: "🇺🇦", br: "🇧🇷" };
 
   function buildSwitcher() {
     const wrap = document.createElement("div");

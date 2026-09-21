@@ -38,8 +38,8 @@
 <div class="modal" id="modal" aria-hidden="true"><div class="modal-card"><button class="close" id="closeModal">×</button><div id="modalContent"></div></div></div>
 <script defer src="/_vercel/insights/script.js?v=2"></script>
 <script src="/entropy-bg.js?v=1"></script>
-<script src="/i18n.js?v=11"></script>
-<script src="/tarot-i18n.js?v=3"></script>
+<script src="/i18n.js?v=12"></script>
+<script src="/tarot-i18n.js?v=4"></script>
 <script src="script.js?v=4"></script>
 <script src="/pre-chat.js?v=7"></script>
 <script>
@@ -52,7 +52,7 @@
     document.currentScript.after(s);
   }
 </script>
-<script src="/tarot-draw.js?v=5"></script>
+<script src="/tarot-draw.js?v=6"></script>
 <script>
   document.querySelectorAll('.quick-topic').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('.quick-topic').forEach(x=>x.classList.remove('active'));b.classList.add('active');document.querySelector('#aiTopic').value=b.dataset.topic||'';document.querySelector('#oracle').scrollIntoView({behavior:'smooth',block:'center'});setTimeout(()=>document.querySelector('#aiQuestion')?.focus(),450)}));
   document.querySelector('#startBtn')?.addEventListener('click',()=>{document.querySelector('#oracle')?.scrollIntoView({behavior:'smooth',block:'center'});setTimeout(()=>document.querySelector('#aiQuestion')?.focus(),450)});

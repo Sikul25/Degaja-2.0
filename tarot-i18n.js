@@ -661,3 +661,5 @@ window.DEGAJA_TAROT_I18N = {
 
 // Brazilian Portuguese uses the same card names/meanings as European Portuguese.
 window.DEGAJA_TAROT_I18N.br = window.DEGAJA_TAROT_I18N.pt;
+// US English uses the same card names/meanings as British English.
+window.DEGAJA_TAROT_I18N.us = window.DEGAJA_TAROT_I18N.en;
