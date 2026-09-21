@@ -57,6 +57,8 @@ export default async function handler(req, res) {
   body.set("line_items[0][price_data][unit_amount]", String(item.amount));
   body.set("line_items[0][quantity]", String(item.quantity || 1));
   body.set("metadata[type]", type);
+  body.set("metadata[product]", String(product));
+  body.set("metadata[lang]", String(lang));
   if (voiceDuration) body.set("metadata[duration]", String(voiceDuration));
   if (item.credits) body.set("metadata[credits]", String(item.credits));
   if (advisorId) body.set("metadata[advisorId]", String(advisorId).slice(0, 100));
