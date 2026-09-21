@@ -26,11 +26,13 @@
       "dpc.badge": "💬 VORAB-CHAT · ANONYM",
       "dpc.title": "Erzähl uns zuerst, was dich bewegt.",
       "dpc.desc": "Du kannst dein Thema hier anonym vorab schildern. DEGAJA hilft dir, deine Gedanken zu ordnen. Wenn du danach persönlich sprechen möchtest, kannst du direkt zur bezahlten Live-Beratung wechseln.",
+      "dpc.descAuto": "Du kannst dein Thema hier anonym schildern. DEGAJA hilft dir, deine Gedanken zu ordnen.",
       "dpc.topicLove": "❤️ Liebe", "dpc.topicCareer": "💼 Beruf", "dpc.topicFuture": "✨ Zukunft", "dpc.topicOther": "🌙 Etwas anderes",
       "dpc.topicOtherValue": "Etwas anderes",
       "dpc.placeholder": "Schreib hier ganz offen …", "dpc.send": "Senden",
       "dpc.voiceBtn": "Persönlich weitergehen", "dpc.clearBtn": "Chat zurücksetzen",
       "dpc.note": "Dieser Vorab-Chat ist kein Telefonat. Für die Live-Sprachberatung wird eine Zahlung bzw. ein vorhandenes Live-Guthaben benötigt. Deine private Telefonnummer wird nicht angezeigt.",
+      "dpc.noteAuto": "Dieser Vorab-Chat ist kein Telefonat. Deine private Telefonnummer wird nicht angezeigt.",
       "dpc.greeting": "Hallo. Ich bin DEGAJA. Was beschäftigt dich gerade? Du kannst hier anonym anfangen.",
       "dpc.thinking": "DEGAJA denkt nach …",
       "dpc.fallbackAnswer": "Ich höre dir zu. Beschreibe gern noch etwas genauer, was dich beschäftigt.",
@@ -160,11 +162,13 @@
       "dpc.badge": "💬 PRE-CHAT · ANONYMOUS",
       "dpc.title": "First, tell us what's on your mind.",
       "dpc.desc": "You can describe your topic here anonymously beforehand. DEGAJA will help you sort out your thoughts. If you'd like to talk personally afterwards, you can go straight to the paid live consultation.",
+      "dpc.descAuto": "You can describe your topic here anonymously. DEGAJA will help you sort out your thoughts.",
       "dpc.topicLove": "❤️ Love", "dpc.topicCareer": "💼 Career", "dpc.topicFuture": "✨ Future", "dpc.topicOther": "🌙 Something else",
       "dpc.topicOtherValue": "Something else",
       "dpc.placeholder": "Write freely here …", "dpc.send": "Send",
       "dpc.voiceBtn": "Continue in person", "dpc.clearBtn": "Reset chat",
       "dpc.note": "This pre-chat is not a phone call. A payment or existing live credit is required for live voice consultation. Your private phone number is never shown.",
+      "dpc.noteAuto": "This pre-chat is not a phone call. Your private phone number is never shown.",
       "dpc.greeting": "Hi, I'm DEGAJA. What's on your mind right now? You can start anonymously here.",
       "dpc.thinking": "DEGAJA is thinking …",
       "dpc.fallbackAnswer": "I'm listening. Feel free to describe what's on your mind in a bit more detail.",
@@ -294,11 +298,13 @@
       "dpc.badge": "💬 CHAT PRÉALABLE · ANONYME",
       "dpc.title": "Raconte-nous d'abord ce qui t'habite.",
       "dpc.desc": "Tu peux décrire ton sujet ici anonymement au préalable. DEGAJA t'aide à mettre de l'ordre dans tes pensées. Si tu souhaites ensuite parler personnellement, tu peux passer directement à la consultation live payante.",
+      "dpc.descAuto": "Tu peux décrire ton sujet ici anonymement. DEGAJA t'aide à mettre de l'ordre dans tes pensées.",
       "dpc.topicLove": "❤️ Amour", "dpc.topicCareer": "💼 Carrière", "dpc.topicFuture": "✨ Avenir", "dpc.topicOther": "🌙 Autre chose",
       "dpc.topicOtherValue": "Autre chose",
       "dpc.placeholder": "Écris librement ici …", "dpc.send": "Envoyer",
       "dpc.voiceBtn": "Continuer en personne", "dpc.clearBtn": "Réinitialiser le chat",
       "dpc.note": "Ce chat préalable n'est pas un appel téléphonique. Un paiement ou un crédit live existant est nécessaire pour la consultation vocale en direct. Ton numéro de téléphone personnel n'est jamais affiché.",
+      "dpc.noteAuto": "Ce chat préalable n'est pas un appel téléphonique. Ton numéro de téléphone personnel n'est jamais affiché.",
       "dpc.greeting": "Bonjour, je suis DEGAJA. Qu'est-ce qui te préoccupe en ce moment ? Tu peux commencer ici anonymement.",
       "dpc.thinking": "DEGAJA réfléchit …",
       "dpc.fallbackAnswer": "Je t'écoute. N'hésite pas à décrire un peu plus précisément ce qui te préoccupe.",
@@ -428,11 +434,13 @@
       "dpc.badge": "💬 CHAT PREVIO · ANÓNIMO",
       "dpc.title": "Cuéntanos primero qué te preocupa.",
       "dpc.desc": "Puedes describir tu tema aquí de forma anónima de antemano. DEGAJA te ayuda a ordenar tus pensamientos. Si después quieres hablar personalmente, puedes pasar directamente a la consulta en vivo de pago.",
+      "dpc.descAuto": "Puedes describir tu tema aquí de forma anónima. DEGAJA te ayuda a ordenar tus pensamientos.",
       "dpc.topicLove": "❤️ Amor", "dpc.topicCareer": "💼 Carrera", "dpc.topicFuture": "✨ Futuro", "dpc.topicOther": "🌙 Otra cosa",
       "dpc.topicOtherValue": "Otra cosa",
       "dpc.placeholder": "Escribe libremente aquí …", "dpc.send": "Enviar",
       "dpc.voiceBtn": "Continuar en persona", "dpc.clearBtn": "Reiniciar chat",
       "dpc.note": "Este chat previo no es una llamada telefónica. Para la consulta de voz en vivo se necesita un pago o un crédito en vivo existente. Tu número de teléfono personal nunca se muestra.",
+      "dpc.noteAuto": "Este chat previo no es una llamada telefónica. Tu número de teléfono personal nunca se muestra.",
       "dpc.greeting": "Hola, soy DEGAJA. ¿Qué te preocupa ahora mismo? Puedes empezar aquí de forma anónima.",
       "dpc.thinking": "DEGAJA está pensando …",
       "dpc.fallbackAnswer": "Te escucho. Describe con un poco más de detalle qué te preocupa.",
@@ -562,11 +570,13 @@
       "dpc.badge": "💬 CHAT PRELIMINARE · ANONIMA",
       "dpc.title": "Raccontaci prima cosa ti preoccupa.",
       "dpc.desc": "Puoi descrivere qui il tuo argomento in anonimo. DEGAJA ti aiuta a mettere ordine nei tuoi pensieri. Se dopo vuoi parlare di persona, puoi passare direttamente alla consulenza dal vivo a pagamento.",
+      "dpc.descAuto": "Puoi descrivere qui il tuo argomento in anonimo. DEGAJA ti aiuta a mettere ordine nei tuoi pensieri.",
       "dpc.topicLove": "❤️ Amore", "dpc.topicCareer": "💼 Carriera", "dpc.topicFuture": "✨ Futuro", "dpc.topicOther": "🌙 Altro",
       "dpc.topicOtherValue": "Altro",
       "dpc.placeholder": "Scrivi liberamente qui …", "dpc.send": "Invia",
       "dpc.voiceBtn": "Continua di persona", "dpc.clearBtn": "Reimposta chat",
       "dpc.note": "Questa chat preliminare non è una telefonata. Per la consulenza vocale dal vivo è necessario un pagamento o un credito live esistente. Il tuo numero di telefono personale non viene mai mostrato.",
+      "dpc.noteAuto": "Questa chat preliminare non è una telefonata. Il tuo numero di telefono personale non viene mai mostrato.",
       "dpc.greeting": "Ciao, sono DEGAJA. Cosa ti preoccupa in questo momento? Puoi iniziare qui in modo anonimo.",
       "dpc.thinking": "DEGAJA sta riflettendo …",
       "dpc.fallbackAnswer": "Ti ascolto. Descrivi con un po' più di dettaglio cosa ti preoccupa.",
@@ -696,11 +706,13 @@
       "dpc.badge": "💬 CONVERSA PRÉVIA · ANÓNIMA",
       "dpc.title": "Conta-nos primeiro o que te preocupa.",
       "dpc.desc": "Podes descrever aqui o teu tema de forma anónima e antecipada. A DEGAJA ajuda-te a organizar os teus pensamentos. Se depois quiseres falar pessoalmente, podes passar diretamente para a consulta ao vivo paga.",
+      "dpc.descAuto": "Podes descrever aqui o teu tema de forma anónima. A DEGAJA ajuda-te a organizar os teus pensamentos.",
       "dpc.topicLove": "❤️ Amor", "dpc.topicCareer": "💼 Carreira", "dpc.topicFuture": "✨ Futuro", "dpc.topicOther": "🌙 Outra coisa",
       "dpc.topicOtherValue": "Outra coisa",
       "dpc.placeholder": "Escreve livremente aqui …", "dpc.send": "Enviar",
       "dpc.voiceBtn": "Continuar pessoalmente", "dpc.clearBtn": "Repor conversa",
       "dpc.note": "Esta conversa prévia não é uma chamada telefónica. Para a consulta de voz ao vivo é necessário um pagamento ou um crédito live existente. O teu número de telefone pessoal nunca é mostrado.",
+      "dpc.noteAuto": "Esta conversa prévia não é uma chamada telefónica. O teu número de telefone pessoal nunca é mostrado.",
       "dpc.greeting": "Olá, sou a DEGAJA. O que te preocupa agora? Podes começar aqui de forma anónima.",
       "dpc.thinking": "A DEGAJA está a pensar …",
       "dpc.fallbackAnswer": "Estou a ouvir-te. Descreve com um pouco mais de detalhe o que te preocupa.",
@@ -830,11 +842,13 @@
       "dpc.badge": "💬 ПРЕДВАРИТЕЛЬНЫЙ ЧАТ · АНОНИМНО",
       "dpc.title": "Сначала расскажи, что тебя волнует.",
       "dpc.desc": "Здесь ты можешь анонимно заранее описать свою тему. DEGAJA поможет тебе разобраться в мыслях. Если после этого захочешь поговорить лично, можешь сразу перейти к платной живой консультации.",
+      "dpc.descAuto": "Здесь ты можешь анонимно описать свою тему. DEGAJA поможет тебе разобраться в мыслях.",
       "dpc.topicLove": "❤️ Любовь", "dpc.topicCareer": "💼 Карьера", "dpc.topicFuture": "✨ Будущее", "dpc.topicOther": "🌙 Другое",
       "dpc.topicOtherValue": "Другое",
       "dpc.placeholder": "Пиши свободно здесь …", "dpc.send": "Отправить",
       "dpc.voiceBtn": "Продолжить лично", "dpc.clearBtn": "Сбросить чат",
       "dpc.note": "Этот предварительный чат — не телефонный звонок. Для живой голосовой консультации нужна оплата или имеющийся кредит. Твой личный номер телефона никогда не показывается.",
+      "dpc.noteAuto": "Этот предварительный чат — не телефонный звонок. Твой личный номер телефона никогда не показывается.",
       "dpc.greeting": "Привет, я DEGAJA. Что тебя сейчас волнует? Здесь можно начать анонимно.",
       "dpc.thinking": "DEGAJA думает …",
       "dpc.fallbackAnswer": "Я тебя слушаю. Опиши, пожалуйста, немного подробнее, что тебя беспокоит.",
@@ -964,11 +978,13 @@
       "dpc.badge": "💬 ПОПЕРЕДНІЙ ЧАТ · АНОНІМНО",
       "dpc.title": "Спочатку розкажи, що тебе хвилює.",
       "dpc.desc": "Тут ти можеш анонімно заздалегідь описати свою тему. DEGAJA допоможе тобі розібратися в думках. Якщо після цього захочеш поговорити особисто, можеш одразу перейти до платної живої консультації.",
+      "dpc.descAuto": "Тут ти можеш анонімно описати свою тему. DEGAJA допоможе тобі розібратися в думках.",
       "dpc.topicLove": "❤️ Кохання", "dpc.topicCareer": "💼 Кар'єра", "dpc.topicFuture": "✨ Майбутнє", "dpc.topicOther": "🌙 Інше",
       "dpc.topicOtherValue": "Інше",
       "dpc.placeholder": "Пиши вільно тут …", "dpc.send": "Надіслати",
       "dpc.voiceBtn": "Продовжити особисто", "dpc.clearBtn": "Скинути чат",
       "dpc.note": "Цей попередній чат — не телефонний дзвінок. Для живої голосової консультації потрібна оплата або наявний кредит. Твій особистий номер телефону ніколи не показується.",
+      "dpc.noteAuto": "Цей попередній чат — не телефонний дзвінок. Твій особистий номер телефону ніколи не показується.",
       "dpc.greeting": "Привіт, я DEGAJA. Що тебе зараз хвилює? Тут можна почати анонімно.",
       "dpc.thinking": "DEGAJA думає …",
       "dpc.fallbackAnswer": "Я тебе слухаю. Опиши, будь ласка, трохи детальніше, що тебе турбує.",
@@ -1158,11 +1174,13 @@
     const descVal = t("meta.description");
     if (metaDesc && descVal && !descVal.startsWith("meta.")) metaDesc.setAttribute("content", descVal);
 
-    // The live human advisor only speaks German, Russian and Ukrainian, so
-    // hide that section and every link/button pointing to it on every
-    // other language.
+    // Anything that requires talking to the live human advisor (the live
+    // call itself, and the rituals, which are only arranged through a
+    // conversation with her) only makes sense where she's actually
+    // available — German, Russian and Ukrainian for now. Never advertise
+    // a feature we can't actually deliver in a given language.
     const showAdvisor = hasLiveAdvisor();
-    document.querySelectorAll("[data-de-only]").forEach(el => {
+    document.querySelectorAll("[data-advisor-only]").forEach(el => {
       el.style.display = showAdvisor ? "" : "none";
     });
   }
