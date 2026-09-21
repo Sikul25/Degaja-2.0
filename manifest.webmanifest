@@ -1,0 +1,18 @@
+{
+  "name": "DEGAJA – Dein Moment der Klarheit",
+  "short_name": "DEGAJA",
+  "description": "Tarot, Astrologie und Numerologie – persönliche Orientierung mit KI und echten Beraterinnen.",
+  "start_url": "/?source=pwa",
+  "scope": "/",
+  "id": "/",
+  "display": "standalone",
+  "background_color": "#eef8fc",
+  "theme_color": "#17314a",
+  "orientation": "portrait",
+  "lang": "de",
+  "icons": [
+    { "src": "/icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "/icons/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

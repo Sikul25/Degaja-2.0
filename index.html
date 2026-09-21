@@ -8,6 +8,11 @@
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
   <link rel="icon" href="favicon.ico" sizes="any">
   <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="manifest" href="/manifest.webmanifest">
+  <meta name="theme-color" content="#17314a">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="DEGAJA">
   <link rel="stylesheet" href="style.css">
   <style>
     .personal-hero{min-height:calc(100svh - 78px);display:flex;align-items:center;justify-content:center;padding:30px 20px 56px;position:relative;overflow:hidden}.personal-wrap{width:min(760px,100%);text-align:center;position:relative;z-index:2}.personal-wrap .eyebrow{margin-bottom:16px}.personal-wrap h1{font-size:clamp(42px,8vw,72px);line-height:.98;margin:0 auto 16px;color:#18334a;letter-spacing:-.035em}.personal-wrap h1 em{color:#b88a32;font-family:Georgia,serif;font-weight:400}.personal-intro{max-width:560px;margin:0 auto 28px;color:#687384;font-size:16px;line-height:1.65}.personal-orb{width:154px;height:154px;margin:0 auto 25px;border-radius:50%;background:radial-gradient(circle at 42% 35%,#fff 0,#eef5fa 34%,#d9e7f0 64%,#fff 100%);box-shadow:0 0 0 1px rgba(184,138,50,.15),0 18px 55px rgba(24,51,74,.13),inset 0 0 35px rgba(255,255,255,.9);display:grid;place-items:center;position:relative}.personal-orb:before{content:"";position:absolute;inset:-13px;border:1px solid rgba(184,138,50,.38);border-radius:50%;transform:rotate(-18deg)}.personal-orb:after{content:"✦";color:#b88a32;font-size:25px}.topic-choice{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;max-width:620px;margin:0 auto 18px}.topic-choice button{appearance:none;border:1px solid rgba(24,51,74,.1);background:rgba(255,255,255,.78);border-radius:20px;padding:16px 10px;color:#18334a;font-size:15px;font-weight:700;box-shadow:0 8px 28px rgba(24,51,74,.06);cursor:pointer;transition:.2s}.topic-choice button:hover,.topic-choice button.active{transform:translateY(-2px);border-color:rgba(184,138,50,.55);box-shadow:0 12px 32px rgba(184,138,50,.13);background:#fff}.topic-choice span{display:block;font-size:25px;margin-bottom:6px}.personal-cta{display:inline-flex;align-items:center;justify-content:center;border:0;border-radius:999px;background:#18334a;color:#fff;padding:14px 27px;font-weight:800;font-size:15px;cursor:pointer;box-shadow:0 12px 30px rgba(24,51,74,.16)}.personal-note{margin:13px 0 0;color:#9299a5;font-size:11px}.personal-star{position:absolute;color:#c4a15a;opacity:.55}.ps1{left:12%;top:18%;font-size:13px}.ps2{right:13%;top:28%;font-size:18px}.ps3{left:18%;bottom:18%;font-size:9px}.ps4{right:19%;bottom:16%;font-size:11px}
@@ -44,6 +49,9 @@
   document.querySelector('#startBtn')?.addEventListener('click',()=>{document.querySelector('#oracle')?.scrollIntoView({behavior:'smooth',block:'center'});setTimeout(()=>document.querySelector('#aiQuestion')?.focus(),450)});
   const ritualKeys={love:'rituale.love.title',success:'rituale.success.title',balance:'rituale.balance.title'};
   document.querySelectorAll('[data-ritual]').forEach(btn=>btn.addEventListener('click',()=>{const t=window.degajaI18n?.t||(k=>k);const name=t(ritualKeys[btn.dataset.ritual]||'rituale.love.title');const modal=document.querySelector('#modal');const content=document.querySelector('#modalContent');if(!modal||!content)return;content.innerHTML=`<div class="ritual-modal"><div class="eyebrow">${t('ritual.modalEyebrow')}</div><h2>${name}</h2><p>${t('ritual.modalDesc')}</p><div class="ritual-pay">${t('ritual.modalPay')}</div><p style="font-size:12px;color:#8a91a0">${t('ritual.modalNote')}</p><button class="primary" id="ritualContact">${t('ritual.modalBtn')}</button></div>`;modal.classList.add('show');modal.setAttribute('aria-hidden','false');document.querySelector('#ritualContact')?.addEventListener('click',()=>{modal.classList.remove('show');modal.setAttribute('aria-hidden','true');document.querySelector('#human')?.scrollIntoView({behavior:'smooth',block:'start'});})}));
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => navigator.serviceWorker.register('/sw.js').catch(() => {}));
+  }
 </script>
 </body>
 </html>
