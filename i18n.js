@@ -283,7 +283,7 @@
     fr: {
       "nav.start": "Accueil", "nav.oracle": "Oracle", "nav.prices": "Tarifs", "nav.human": "Conseil", "nav.rituale": "Rituels", "nav.login": "Connexion",
       "hero.eyebrow": "✧ TON MOMENT DE CLARTÉ ✧",
-      "hero.title1": "Qu'est-ce qui", "hero.title2": "t'habite ?",
+      "hero.title1": "Qu'est-ce qui te", "hero.title2": "préoccupe ?",
       "hero.intro": "Parfois, il suffit d'un petit moment pour y voir plus clair. Raconte à DEGAJA ce qui te préoccupe en ce moment.",
       "hero.topicLove": "Amour", "hero.topicCareer": "Carrière", "hero.topicFuture": "Avenir",
       "hero.cta": "✨ Commencer mon moment",
