@@ -4,8 +4,8 @@ export default async function handler(req, res) {
   if (req.method !== "POST") return res.status(405).json({ error: "Method not allowed" });
 
   const { product, duration, email, name, advisorId, lang = "de" } = req.body || {};
-  const CURRENCY_BY_LANG = { en: "gbp" };
-  const LOCALE_BY_LANG = { de: "de", en: "en-GB", fr: "fr", es: "es", it: "it", pt: "pt", ru: "ru", uk: "auto" };
+  const CURRENCY_BY_LANG = { en: "gbp", br: "brl" };
+  const LOCALE_BY_LANG = { de: "de", en: "en-GB", fr: "fr", es: "es", it: "it", pt: "pt", ru: "ru", uk: "auto", br: "pt-BR" };
   const currency = CURRENCY_BY_LANG[lang] || "eur";
   const stripeLocale = LOCALE_BY_LANG[lang] || "de";
   const PRODUCT_NAMES = {
@@ -16,13 +16,19 @@ export default async function handler(req, res) {
     it: { single: "DEGAJA AI – Lettura singola", pack: "DEGAJA AI – 3 Letture", voice: minutes => `DEGAJA Live Audio – ${minutes} Minuti` },
     pt: { single: "DEGAJA AI – Leitura única", pack: "DEGAJA AI – 3 Leituras", voice: minutes => `DEGAJA Live Audio – ${minutes} Minutos` },
     ru: { single: "DEGAJA AI – Разовый расклад", pack: "DEGAJA AI – 3 расклада", voice: minutes => `DEGAJA Live Audio – ${minutes} минут` },
-    uk: { single: "DEGAJA AI – Одноразовий розклад", pack: "DEGAJA AI – 3 розклади", voice: minutes => `DEGAJA Live Audio – ${minutes} хвилин` }
+    uk: { single: "DEGAJA AI – Одноразовий розклад", pack: "DEGAJA AI – 3 розклади", voice: minutes => `DEGAJA Live Audio – ${minutes} хвилин` },
+    br: { single: "DEGAJA AI – Leitura única", pack: "DEGAJA AI – 3 Leituras", voice: minutes => `DEGAJA Live Audio – ${minutes} Minutos` }
   };
   const names = PRODUCT_NAMES[lang] || PRODUCT_NAMES.de;
 
+  // BRL is priced as a fair converted value, not a same-digits symbol swap
+  // like GBP, so it needs its own amounts (in centavos) here and for voice
+  // durations below.
+  const AI_AMOUNTS_BY_CURRENCY = { brl: { single: 2499, pack: 4999 } };
+  const aiAmounts = AI_AMOUNTS_BY_CURRENCY[currency] || { single: 499, pack: 999 };
   const products = {
-    single: { name: names.single, amount: 499, quantity: 1, type: "ai", credits: 1 },
-    pack: { name: names.pack, amount: 999, quantity: 1, type: "ai", credits: 3 }
+    single: { name: names.single, amount: aiAmounts.single, quantity: 1, type: "ai", credits: 1 },
+    pack: { name: names.pack, amount: aiAmounts.pack, quantity: 1, type: "ai", credits: 3 }
   };
 
   let item = products[product];
@@ -31,7 +37,8 @@ export default async function handler(req, res) {
   if (product === "voice") {
     voiceDuration = Number(duration);
     const price = VOICE_PRICES[voiceDuration];
-    item = price ? { name: names.voice(voiceDuration), amount: price.amount } : null;
+    const priceForCurrency = price && currency === "brl" && price.brl ? price.brl : price;
+    item = priceForCurrency ? { name: names.voice(voiceDuration), amount: priceForCurrency.amount } : null;
     type = "voice";
   }
   if (!item) return res.status(400).json({ error: "Invalid product" });

@@ -2,7 +2,7 @@
   "use strict";
 
   const LANG_KEY = "degajaLang";
-  const SUPPORTED = ["de", "en", "fr", "es", "it", "pt", "ru", "uk"];
+  const SUPPORTED = ["de", "en", "fr", "es", "it", "pt", "ru", "uk", "br"];
 
   const T = {
     de: {
@@ -1079,6 +1079,25 @@
     }
   };
 
+  // Brazilian Portuguese reuses every pt string except currency-specific
+  // text: BRL prices are a fair converted value, not a symbol swap of the
+  // EUR digits (unlike GBP, whose numeric price points stay the same).
+  T.br = Object.assign({}, T.pt, {
+    "currency.symbol": "R$",
+    "prices.single.btn": "Por R$24,99",
+    "prices.single.priceLabel": "R$24,99",
+    "prices.pack.priceLabel": "R$49,99",
+    "rituale.love.price": "A partir de R$249",
+    "rituale.success.price": "A partir de R$299",
+    "rituale.balance.price": "A partir de R$249",
+    "rituale.note2": "O pagamento dos rituais é feito separadamente em reais e não através de tokens DEGAJA.",
+    "ritual.modalPay": "Pagamento separado em reais · não através de tokens",
+    "purchase.single": "Uma leitura · R$24,99",
+    "purchase.pack": "3 leituras · R$49,99",
+    "result.deepBtn": "✨ Aprofundar · R$24,99",
+    "speech.langCode": "pt-BR"
+  });
+
   function getLang() {
     const saved = localStorage.getItem(LANG_KEY);
     return SUPPORTED.includes(saved) ? saved : "de";
@@ -1097,7 +1116,7 @@
 
   window.degajaI18n = { getLang, setLang, t, SUPPORTED };
 
-  const FLAGS = { de: "🇩🇪", en: "🇬🇧", fr: "🇫🇷", es: "🇪🇸", it: "🇮🇹", pt: "🇵🇹", ru: "🇷🇺", uk: "🇺🇦" };
+  const FLAGS = { de: "🇩🇪", en: "🇬🇧", fr: "🇫🇷", es: "🇪🇸", it: "🇮🇹", pt: "🇵🇹", ru: "🇷🇺", uk: "🇺🇦", br: "🇧🇷" };
 
   function buildSwitcher() {
     const wrap = document.createElement("div");
