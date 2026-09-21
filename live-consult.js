@@ -204,6 +204,8 @@
     const lines=$('#degajaTranscriptLines');if(lines)lines.innerHTML='';
   }
   function init(){
+    // Live human advisor consultation is only staffed in German for now.
+    if(lang()!=='de') return;
     style();card();verify();
     loadRemoteData().then(()=>{
       const select=document.getElementById('degajaAdvisorSelect');
