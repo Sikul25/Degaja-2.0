@@ -2,7 +2,7 @@
   "use strict";
 
   const LANG_KEY = "degajaLang";
-  const SUPPORTED = ["de", "ru", "uk", "en", "fr", "es", "it", "pt", "br"];
+  const SUPPORTED = ["de", "uk", "ru", "en", "fr", "es", "it", "pt", "br"];
   // Languages the live human advisor (Papuli) actually speaks. The live
   // audio consultation is only shown for these.
   const ADVISOR_LANGS = ["de", "ru", "uk"];
