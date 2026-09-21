@@ -1,0 +1,13 @@
+{
+  "rewrites": [
+    { "source": "/en", "destination": "/index.html" },
+    { "source": "/us", "destination": "/index.html" },
+    { "source": "/fr", "destination": "/index.html" },
+    { "source": "/es", "destination": "/index.html" },
+    { "source": "/it", "destination": "/index.html" },
+    { "source": "/pt", "destination": "/index.html" },
+    { "source": "/ru", "destination": "/index.html" },
+    { "source": "/uk", "destination": "/index.html" },
+    { "source": "/br", "destination": "/index.html" }
+  ]
+}

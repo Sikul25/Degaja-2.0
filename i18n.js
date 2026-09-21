@@ -1547,10 +1547,37 @@
     return SUPPORTED.includes(saved) ? saved : "de";
   }
 
+  // Languages with their own crawlable URL (/en, /fr, ... via vercel.json
+  // rewrites to this same index.html). German has none — "/" already is
+  // the German homepage, so a separate "/de" would just be duplicate
+  // content with nothing to distinguish it.
+  const PATH_LANGS = SUPPORTED.filter(l => l !== "de");
+  const homePathFor = lang => (lang === "de" ? "/" : "/" + lang);
+  const isHomeLikePath = path => path === "/" || path === "/index.html" || PATH_LANGS.some(l => path === "/" + l);
+
+  // A crawler (or a fresh visitor) landing on /fr should see French even
+  // if localStorage says otherwise — the URL is the source of truth for a
+  // language-specific page. Sync it into localStorage once on load so
+  // every existing getLang()/t() call downstream just works unchanged.
+  function syncLangFromPath() {
+    const seg = location.pathname.replace(/\/+$/, "").split("/")[1] || "";
+    if (PATH_LANGS.includes(seg) && localStorage.getItem(LANG_KEY) !== seg) {
+      localStorage.setItem(LANG_KEY, seg);
+    }
+  }
+
   function setLang(lang) {
     if (!SUPPORTED.includes(lang)) return;
     localStorage.setItem(LANG_KEY, lang);
-    location.reload();
+    // Only the homepage has a dedicated URL per language; everywhere else
+    // (e.g. werde-beraterin.html) just re-renders in place, as before.
+    if (isHomeLikePath(location.pathname)) {
+      const target = homePathFor(lang);
+      if (target === location.pathname) location.reload();
+      else location.href = target;
+    } else {
+      location.reload();
+    }
   }
 
   function t(key) {
@@ -1599,6 +1626,12 @@
     const descVal = t("meta.description");
     if (metaDesc && descVal && !descVal.startsWith("meta.")) metaDesc.setAttribute("content", descVal);
 
+    // Self-referencing canonical: /fr should canonicalize to itself, not
+    // to "/", or Google would fold every language variant into the German
+    // homepage and never index the others separately.
+    const canonical = document.querySelector('link[rel="canonical"]');
+    if (canonical) canonical.setAttribute("href", location.origin + location.pathname);
+
     // Anything that requires talking to the live human advisor (the live
     // call itself, and the rituals, which are only arranged through a
     // conversation with her) only makes sense where she's actually
@@ -1611,6 +1644,7 @@
   }
 
   function init() {
+    syncLangFromPath();
     const header = document.querySelector(".site-header");
     if (header && !header.querySelector(".lang-switch")) {
       header.insertBefore(buildSwitcher(), header.querySelector(".login-btn"));
