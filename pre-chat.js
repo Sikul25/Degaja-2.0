@@ -25,9 +25,9 @@
     const el = document.createElement('div');
     el.id = 'degajaPreChat';
     el.className = 'degaja-prechat';
-    // "Continue in person" hands off to the live human-advisor call, which
-    // is only staffed in German for now.
-    const voiceBtnHtml = lang() === 'de'
+    // "Continue in person" hands off to the live human-advisor call. The
+    // advisor only speaks German, Russian and Ukrainian.
+    const voiceBtnHtml = (window.degajaI18n ? window.degajaI18n.hasLiveAdvisor() : lang() === 'de')
       ? `<button class="dpc-action gold" id="dpcVoice"><svg class="dpc-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 13v-1a8 8 0 0 1 16 0v1" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><rect x="2" y="13" width="5" height="7" rx="2" fill="currentColor"/><rect x="17" y="13" width="5" height="7" rx="2" fill="currentColor"/></svg>${t('dpc.voiceBtn')}</button>`
       : '';
     el.innerHTML = `<span class="dpc-badge">${t('dpc.badge')}</span><h3>${t('dpc.title')}</h3><p>${t('dpc.desc')}</p><div class="dpc-topic"><button data-topic="Liebe & Beziehung">${t('dpc.topicLove')}</button><button data-topic="Beruf & Karriere">${t('dpc.topicCareer')}</button><button data-topic="Zukunft">${t('dpc.topicFuture')}</button><button data-topic="${t('dpc.topicOtherValue')}">${t('dpc.topicOther')}</button></div><div class="dpc-messages" id="dpcMessages"></div><div class="dpc-row"><input id="dpcInput" maxlength="600" placeholder="${t('dpc.placeholder')}"><button id="dpcSend">${t('dpc.send')}</button></div><div class="dpc-actions"><button class="dpc-action" id="dpcClear">${t('dpc.clearBtn')}</button>${voiceBtnHtml}</div><p class="dpc-note">${t('dpc.note')}</p>`;

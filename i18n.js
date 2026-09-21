@@ -3,6 +3,9 @@
 
   const LANG_KEY = "degajaLang";
   const SUPPORTED = ["de", "en", "fr", "es", "it", "pt", "ru", "uk", "br"];
+  // Languages the live human advisor (Papuli) actually speaks. The live
+  // audio consultation is only shown for these.
+  const ADVISOR_LANGS = ["de", "ru", "uk"];
 
   const T = {
     de: {
@@ -1114,7 +1117,9 @@
     return (T[lang] && T[lang][key]) ?? (T.de[key] ?? key);
   }
 
-  window.degajaI18n = { getLang, setLang, t, SUPPORTED };
+  const hasLiveAdvisor = (lang = getLang()) => ADVISOR_LANGS.includes(lang);
+
+  window.degajaI18n = { getLang, setLang, t, SUPPORTED, hasLiveAdvisor };
 
   const FLAGS = { de: "🇩🇪", en: "🇬🇧", fr: "🇫🇷", es: "🇪🇸", it: "🇮🇹", pt: "🇵🇹", ru: "🇷🇺", uk: "🇺🇦", br: "🇧🇷" };
 
@@ -1153,12 +1158,12 @@
     const descVal = t("meta.description");
     if (metaDesc && descVal && !descVal.startsWith("meta.")) metaDesc.setAttribute("content", descVal);
 
-    // Live consultation with a human advisor is only staffed in German for
-    // now, so hide that section and every link/button pointing to it on
-    // every other language.
-    const deOnly = getLang() === "de";
+    // The live human advisor only speaks German, Russian and Ukrainian, so
+    // hide that section and every link/button pointing to it on every
+    // other language.
+    const showAdvisor = hasLiveAdvisor();
     document.querySelectorAll("[data-de-only]").forEach(el => {
-      el.style.display = deOnly ? "" : "none";
+      el.style.display = showAdvisor ? "" : "none";
     });
   }
 
