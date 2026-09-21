@@ -1592,10 +1592,25 @@
   const FLAGS = { de: "🇩🇪", en: "🇬🇧", us: "🇺🇸", fr: "🇫🇷", es: "🇪🇸", it: "🇮🇹", pt: "🇵🇹", ru: "🇷🇺", uk: "🇺🇦", br: "🇧🇷" };
 
   function buildSwitcher() {
+    const outer = document.createElement("div");
+    outer.className = "lang-switch-wrap";
+
+    const current = getLang();
+    // On narrow screens the full flag row doesn't fit next to the header's
+    // other elements without shrinking flags to the point of being unusable
+    // or silently clipping some of them. Instead: a single compact button
+    // showing the active flag, which opens a dropdown with the rest — stays
+    // minimal at rest, never hides a language without a visible way to it.
+    const toggle = document.createElement("button");
+    toggle.type = "button";
+    toggle.className = "lang-current";
+    toggle.textContent = FLAGS[current];
+    toggle.setAttribute("aria-label", "Sprache wählen / Language");
+    outer.appendChild(toggle);
+
     const wrap = document.createElement("div");
     wrap.className = "lang-switch";
     wrap.setAttribute("aria-label", "Sprache wählen / Language");
-    const current = getLang();
     SUPPORTED.forEach(lang => {
       const btn = document.createElement("button");
       btn.type = "button";
@@ -1605,7 +1620,17 @@
       btn.addEventListener("click", () => setLang(lang));
       wrap.appendChild(btn);
     });
-    return wrap;
+    outer.appendChild(wrap);
+
+    toggle.addEventListener("click", e => {
+      e.stopPropagation();
+      wrap.classList.toggle("open");
+    });
+    document.addEventListener("click", e => {
+      if (!outer.contains(e.target)) wrap.classList.remove("open");
+    });
+
+    return outer;
   }
 
   function applyTranslations() {
