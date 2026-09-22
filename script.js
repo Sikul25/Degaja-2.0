@@ -299,18 +299,22 @@
   let currentTtsAudio = null;
 
   function speakTextBrowser(text, button) {
-    if (!window.speechSynthesis) return;
-    const utterance = new SpeechSynthesisUtterance(text);
-    const langCode = t("speech.langCode");
-    utterance.lang = langCode;
-    const voice = speechSynthesis.getVoices().find(v => v.lang.startsWith(langCode.slice(0, 2)));
-    if (voice) utterance.voice = voice;
-    utterance.rate = 0.95;
-    if (button) {
-      button.textContent = t("result.speakStop");
-      utterance.onend = () => { button.textContent = t("result.speak"); };
+    try {
+      if (!window.speechSynthesis) return;
+      const utterance = new SpeechSynthesisUtterance(text);
+      const langCode = t("speech.langCode");
+      utterance.lang = langCode;
+      const voice = speechSynthesis.getVoices().find(v => v.lang.startsWith(langCode.slice(0, 2)));
+      if (voice) utterance.voice = voice;
+      utterance.rate = 0.95;
+      if (button) {
+        button.textContent = t("result.speakStop");
+        utterance.onend = () => { button.textContent = t("result.speak"); };
+      }
+      speechSynthesis.speak(utterance);
+    } catch (error) {
+      if (button) button.textContent = t("result.speak");
     }
-    speechSynthesis.speak(utterance);
   }
 
   async function speakText(text, button) {
@@ -332,16 +336,18 @@
     }
 
     // iOS Safari only allows audio/speech playback triggered synchronously
-    // within a user gesture. Priming an <audio> element (and speechSynthesis)
-    // right here — before the async fetch below — "unlocks" them so a later
-    // .play()/.speak() call still works instead of silently doing nothing.
-    const audio = new Audio();
-    audio.play().catch(() => {});
-    audio.pause();
-    if (window.speechSynthesis) {
-      const primer = new SpeechSynthesisUtterance("");
-      primer.volume = 0;
-      speechSynthesis.speak(primer);
+    // within a user gesture. Priming an <audio> element right here — before
+    // the async fetch below — "unlocks" it so a later .play() call (once the
+    // ElevenLabs response arrives) still works instead of silently doing
+    // nothing. Wrapped defensively: if priming itself throws on some device,
+    // it must never take down the rest of the function with it.
+    let audio;
+    try {
+      audio = new Audio();
+      audio.play().catch(() => {});
+      audio.pause();
+    } catch (error) {
+      audio = null;
     }
 
     try {
@@ -354,6 +360,7 @@
 
       const blob = await response.blob();
       if (!blob.size || !blob.type.startsWith("audio")) throw new Error("invalid audio response");
+      if (!audio) throw new Error("audio element unavailable");
 
       const blobUrl = URL.createObjectURL(blob);
       audio.src = blobUrl;
