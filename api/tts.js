@@ -9,7 +9,8 @@ const VOICE_NAME_BY_LANG = {
   br: "raquel",
   pt: "barbara",
   de: "zen",
-  it: "rossana"
+  it: "rossana",
+  us: "natasha"
 };
 const DEFAULT_VOICE_NAME = "zen";
 
