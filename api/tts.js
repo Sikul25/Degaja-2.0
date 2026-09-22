@@ -1,4 +1,25 @@
-const VOICE_ID = "21m00Tcm4TlvDq8ikWAM"; // Rachel — works well with the multilingual model
+// Cached briefly per warm serverless instance so we don't call /v1/voices on every request.
+let cachedVoiceId = null;
+let cachedAt = 0;
+const VOICE_CACHE_MS = 10 * 60 * 1000;
+
+async function resolveVoiceId(apiKey) {
+  if (cachedVoiceId && Date.now() - cachedAt < VOICE_CACHE_MS) return cachedVoiceId;
+
+  const response = await fetch("https://api.elevenlabs.io/v1/voices", {
+    headers: { "xi-api-key": apiKey }
+  });
+  if (!response.ok) return null;
+
+  const data = await response.json().catch(() => null);
+  const voices = data?.voices || [];
+  if (!voices.length) return null;
+
+  const preferred = voices.find(v => /rachel|bella|sarah|alice/i.test(v.name || ""));
+  cachedVoiceId = (preferred || voices[0]).voice_id;
+  cachedAt = Date.now();
+  return cachedVoiceId;
+}
 
 export default async function handler(req, res) {
   if (req.method !== "POST") return res.status(405).json({ error: "Method not allowed" });
@@ -14,7 +35,12 @@ export default async function handler(req, res) {
   }
 
   try {
-    const response = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${VOICE_ID}`, {
+    const voiceId = await resolveVoiceId(ELEVENLABS_API_KEY);
+    if (!voiceId) {
+      return res.status(503).json({ error: "No voice available in ElevenLabs account" });
+    }
+
+    const response = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${voiceId}`, {
       method: "POST",
       headers: {
         "xi-api-key": ELEVENLABS_API_KEY,
