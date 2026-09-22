@@ -317,7 +317,10 @@
     }
   }
 
-  async function speakText(text, button) {
+  async function speakText(rawText, button) {
+    // Strip markdown formatting (e.g. **bold**) before sending to TTS —
+    // otherwise the voice literally reads the asterisks out loud.
+    const text = rawText.replace(/\*\*(.*?)\*\*/g, "$1").replace(/\*/g, "");
     if (currentTtsAudio) {
       currentTtsAudio.pause();
       currentTtsAudio = null;
