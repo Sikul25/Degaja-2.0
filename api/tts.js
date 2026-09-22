@@ -49,7 +49,14 @@ export default async function handler(req, res) {
       },
       body: JSON.stringify({
         text: text.slice(0, 2000),
-        model_id: "eleven_multilingual_v2"
+        model_id: "eleven_multilingual_v2",
+        voice_settings: {
+          stability: 0.55,
+          similarity_boost: 0.75,
+          style: 0.35,
+          use_speaker_boost: true,
+          speed: 0.9
+        }
       })
     });
 
