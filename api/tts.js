@@ -7,7 +7,8 @@ const VOICE_NAME_BY_LANG = {
   es: "cristina",
   uk: "kateryna",
   br: "raquel",
-  pt: "barbara"
+  pt: "barbara",
+  de: "zen"
 };
 const DEFAULT_VOICE_NAME = "victoria";
 
