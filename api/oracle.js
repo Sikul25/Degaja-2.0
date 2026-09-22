@@ -52,7 +52,7 @@ export default async function handler(req, res) {
         model: process.env.ANTHROPIC_MODEL || "claude-opus-5",
         system: instructions,
         messages: [{ role: "user", content: input }],
-        max_tokens: mode === "paid" ? 700 : 600,
+        max_tokens: mode === "paid" ? 1100 : 900,
         output_config: { effort: "low" }
       })
     });
