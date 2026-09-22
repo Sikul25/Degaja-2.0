@@ -341,17 +341,17 @@
 
       const blobUrl = URL.createObjectURL(await response.blob());
       const audio = new Audio(blobUrl);
-      currentTtsAudio = audio;
-      if (button) {
-        button.disabled = false;
-        button.textContent = t("result.speakStop");
-      }
       audio.onended = () => {
         if (button) button.textContent = t("result.speak");
         currentTtsAudio = null;
         URL.revokeObjectURL(blobUrl);
       };
-      audio.play();
+      await audio.play();
+      currentTtsAudio = audio;
+      if (button) {
+        button.disabled = false;
+        button.textContent = t("result.speakStop");
+      }
     } catch (error) {
       if (button) button.disabled = false;
       speakTextBrowser(text, button);
