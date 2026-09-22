@@ -15,7 +15,9 @@ async function resolveVoiceId(apiKey) {
   const voices = data?.voices || [];
   if (!voices.length) return null;
 
-  const preferred = voices.find(v => /rachel|bella|sarah|alice/i.test(v.name || ""));
+  const preferred =
+    voices.find(v => /victoria/i.test(v.name || "")) ||
+    voices.find(v => /rachel|bella|sarah|alice/i.test(v.name || ""));
   cachedVoiceId = (preferred || voices[0]).voice_id;
   cachedAt = Date.now();
   return cachedVoiceId;
