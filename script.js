@@ -521,73 +521,16 @@
   $("#datenschutzLink")?.addEventListener("click", event => {
     event.preventDefault();
     openModal(`
-      <h2>Datenschutzerklärung</h2>
-      <p style="color:#687384;font-size:14px;line-height:1.6">
-        <strong>1. Verantwortlicher</strong><br>
-        Sagacitas Ltd, 136 Capel Street, Dublin, Irland (Handelsregisternummer: wird nach Abschluss der Eintragung ergänzt). Kontakt: <a href="mailto:info@degaja.com">info@degaja.com</a>
-        <br><br>
-        <strong>2. Welche Daten wir verarbeiten</strong><br>
-        Angaben bei der Kontoerstellung (Name, E-Mail); deine Fragen und die von DEGAJA erstellten Antworten, zur Bereitstellung des Dienstes; Zahlungsdaten (ausschließlich verarbeitet durch unseren Zahlungsdienstleister — wir speichern keine Kartendaten); technische Angaben wie deine Spracheinstellung, lokal in deinem Browser gespeichert.
-        <br><br>
-        <strong>3. Rechtsgrundlagen</strong><br>
-        Vertragserfüllung (Art. 6(1)(b) DSGVO), berechtigtes Interesse (Art. 6(1)(f) DSGVO, z. B. Betrugsprävention), sowie Einwilligung (Art. 6(1)(a) DSGVO) für optionale Funktionen wie die Sprachausgabe.
-        <br><br>
-        <strong>4. Externe Dienstleister (Auftragsverarbeiter)</strong><br>
-        Stripe (Zahlungsabwicklung), Anthropic (KI-Antwortgenerierung), ElevenLabs (optionale Sprachsynthese), Twilio (interne WhatsApp-Benachrichtigung an unsere Beraterin) und Vercel (Hosting). Einige dieser Anbieter sitzen außerhalb der EU (v. a. USA); die Übermittlung erfolgt auf Grundlage von Standardvertragsklauseln der EU-Kommission.
-        <br><br>
-        <strong>5. Speicherdauer</strong><br>
-        Wir speichern Daten nur so lange, wie es für die genannten Zwecke erforderlich ist oder gesetzliche Aufbewahrungspflichten bestehen.
-        <br><br>
-        <strong>6. Deine Rechte</strong><br>
-        Du hast das Recht auf Auskunft, Berichtigung, Löschung, Einschränkung der Verarbeitung, Datenübertragbarkeit und Widerspruch. Wende dich dazu an <a href="mailto:info@degaja.com">info@degaja.com</a>. Du hast zudem das Recht auf Beschwerde bei einer Datenschutzaufsichtsbehörde (in Irland: Data Protection Commission).
-        <br><br>
-        <strong>7. Cookies / lokaler Speicher</strong><br>
-        Wir verwenden localStorage in deinem Browser, u. a. für deine Spracheinstellung. Es werden keine Tracking-Cookies zu Werbezwecken eingesetzt.
-        <br><br>
-        <strong>8. Altersgrenze</strong><br>
-        DEGAJA richtet sich ausschließlich an Personen ab 18 Jahren.
-        <br><br>
-        <strong>9. Änderungen</strong><br>
-        Wir können diese Datenschutzerklärung bei Bedarf aktualisieren. Die aktuelle Version ist stets auf dieser Seite verfügbar.
-      </p>
+      <h2>${t("legal.datenschutzTitle")}</h2>
+      <p style="color:#687384;font-size:14px;line-height:1.6">${t("legal.datenschutz")}</p>
     `);
   });
 
   $("#agbLink")?.addEventListener("click", event => {
     event.preventDefault();
     openModal(`
-      <h2>Allgemeine Geschäftsbedingungen (AGB)</h2>
-      <p style="color:#687384;font-size:14px;line-height:1.6">
-        <strong>1. Geltungsbereich</strong><br>
-        Diese AGB gelten für die Nutzung der Website und der Dienste von DEGAJA, betrieben von Sagacitas Ltd, Dublin, Irland.
-        <br><br>
-        <strong>2. Art des Angebots</strong><br>
-        DEGAJA bietet persönliche Orientierung durch Tarot, Astrologie und Numerologie zu Unterhaltungszwecken. Unsere Inhalte ersetzen keine professionelle medizinische, rechtliche, finanzielle oder psychologische Beratung und stellen keine garantierte Vorhersage zukünftiger Ereignisse dar.
-        <br><br>
-        <strong>3. Altersbeschränkung</strong><br>
-        Die Nutzung ist ausschließlich Personen ab 18 Jahren gestattet.
-        <br><br>
-        <strong>4. Vertragsschluss und Leistungen</strong><br>
-        Mit dem Kauf einer Lesung oder eines Pakets kommt ein Vertrag über die Bereitstellung der jeweiligen digitalen Leistung zustande. Der Umfang ergibt sich aus der Beschreibung auf der Website zum Zeitpunkt der Bestellung.
-        <br><br>
-        <strong>5. Preise und Zahlung</strong><br>
-        Alle Preise verstehen sich inklusive der jeweils geltenden Steuern, sofern nicht anders angegeben. Die Zahlung erfolgt über unseren Zahlungsdienstleister.
-        <br><br>
-        <strong>6. Widerrufsrecht bei digitalen Inhalten</strong><br>
-        Da es sich um digitale Inhalte handelt, die sofort nach dem Kauf bereitgestellt werden, erlischt dein gesetzliches Widerrufsrecht, sobald du der sofortigen Ausführung ausdrücklich zustimmst und bestätigst, dass du dadurch dein Widerrufsrecht verlierst (gemäß EU-Richtlinie 2011/83/EU über die Rechte der Verbraucher).
-        <br><br>
-        <strong>7. Haftungsbeschränkung</strong><br>
-        Wir haften nicht für Entscheidungen, die auf Grundlage der über DEGAJA erhaltenen Inhalte getroffen werden. Die Nutzung erfolgt auf eigene Verantwortung.
-        <br><br>
-        <strong>8. Änderungen der AGB</strong><br>
-        Wir behalten uns vor, diese AGB bei Bedarf anzupassen. Es gilt die zum Zeitpunkt der Nutzung veröffentlichte Fassung.
-        <br><br>
-        <strong>9. Anwendbares Recht und Gerichtsstand</strong><br>
-        Es gilt irisches Recht. Gerichtsstand ist Dublin, Irland, soweit gesetzlich zulässig.
-        <br><br>
-        <strong>10. Kontakt</strong><br>
-        Bei Fragen zu diesen AGB: <a href="mailto:info@degaja.com">info@degaja.com</a>
-      </p>
+      <h2>${t("legal.agbTitle")}</h2>
+      <p style="color:#687384;font-size:14px;line-height:1.6">${t("legal.agb")}</p>
     `);
   });
 
