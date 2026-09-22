@@ -37,13 +37,21 @@ async function getVoices(apiKey) {
   return voices;
 }
 
+function findByName(voices, name) {
+  const needle = name.toLowerCase();
+  return (
+    voices.find(v => (v.name || "").toLowerCase() === needle) ||
+    voices.find(v => (v.name || "").toLowerCase().includes(needle))
+  );
+}
+
 async function resolveVoiceId(apiKey, lang) {
   const voices = await getVoices(apiKey);
   if (!voices) return null;
 
   const wantedName = VOICE_NAME_BY_LANG[lang] || DEFAULT_VOICE_NAME;
-  const byWantedName = voices.find(v => (v.name || "").toLowerCase() === wantedName.toLowerCase());
-  const byDefaultName = voices.find(v => (v.name || "").toLowerCase() === DEFAULT_VOICE_NAME.toLowerCase());
+  const byWantedName = findByName(voices, wantedName);
+  const byDefaultName = findByName(voices, DEFAULT_VOICE_NAME);
 
   return (byWantedName || byDefaultName || voices[0]).voice_id;
 }
