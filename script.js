@@ -296,13 +296,10 @@
     }
   }
 
-  function speakText(text, button) {
+  let currentTtsAudio = null;
+
+  function speakTextBrowser(text, button) {
     if (!window.speechSynthesis) return;
-    if (speechSynthesis.speaking) {
-      speechSynthesis.cancel();
-      if (button) button.textContent = t("result.speak");
-      return;
-    }
     const utterance = new SpeechSynthesisUtterance(text);
     const langCode = t("speech.langCode");
     utterance.lang = langCode;
@@ -314,6 +311,51 @@
       utterance.onend = () => { button.textContent = t("result.speak"); };
     }
     speechSynthesis.speak(utterance);
+  }
+
+  async function speakText(text, button) {
+    if (currentTtsAudio) {
+      currentTtsAudio.pause();
+      currentTtsAudio = null;
+      if (button) button.textContent = t("result.speak");
+      return;
+    }
+    if (window.speechSynthesis?.speaking) {
+      speechSynthesis.cancel();
+      if (button) button.textContent = t("result.speak");
+      return;
+    }
+
+    if (button) {
+      button.disabled = true;
+      button.textContent = "…";
+    }
+
+    try {
+      const response = await fetchWithTimeout("/api/tts", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ text })
+      }, 20000);
+      if (!response.ok) throw new Error("tts unavailable");
+
+      const blobUrl = URL.createObjectURL(await response.blob());
+      const audio = new Audio(blobUrl);
+      currentTtsAudio = audio;
+      if (button) {
+        button.disabled = false;
+        button.textContent = t("result.speakStop");
+      }
+      audio.onended = () => {
+        if (button) button.textContent = t("result.speak");
+        currentTtsAudio = null;
+        URL.revokeObjectURL(blobUrl);
+      };
+      audio.play();
+    } catch (error) {
+      if (button) button.disabled = false;
+      speakTextBrowser(text, button);
+    }
   }
 
   function renderResult(text, question, topic, paid = false) {
