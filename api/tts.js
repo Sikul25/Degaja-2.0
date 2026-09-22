@@ -10,7 +10,7 @@ const VOICE_NAME_BY_LANG = {
   pt: "barbara",
   de: "zen"
 };
-const DEFAULT_VOICE_NAME = "victoria";
+const DEFAULT_VOICE_NAME = "zen";
 
 // Cached briefly per warm serverless instance so we don't call /v1/voices on every request.
 let cachedVoices = null;
