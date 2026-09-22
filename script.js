@@ -331,6 +331,19 @@
       button.textContent = "…";
     }
 
+    // iOS Safari only allows audio/speech playback triggered synchronously
+    // within a user gesture. Priming an <audio> element (and speechSynthesis)
+    // right here — before the async fetch below — "unlocks" them so a later
+    // .play()/.speak() call still works instead of silently doing nothing.
+    const audio = new Audio();
+    audio.play().catch(() => {});
+    audio.pause();
+    if (window.speechSynthesis) {
+      const primer = new SpeechSynthesisUtterance("");
+      primer.volume = 0;
+      speechSynthesis.speak(primer);
+    }
+
     try {
       const response = await fetchWithTimeout("/api/tts", {
         method: "POST",
@@ -343,7 +356,7 @@
       if (!blob.size || !blob.type.startsWith("audio")) throw new Error("invalid audio response");
 
       const blobUrl = URL.createObjectURL(blob);
-      const audio = new Audio(blobUrl);
+      audio.src = blobUrl;
       audio.onended = () => {
         if (button) button.textContent = t("result.speak");
         currentTtsAudio = null;
