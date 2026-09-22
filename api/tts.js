@@ -3,7 +3,8 @@
 // per language; "fr" is set first as that's the one already chosen.
 const VOICE_NAME_BY_LANG = {
   fr: "manon",
-  ru: "ariana"
+  ru: "ariana",
+  es: "cristina"
 };
 const DEFAULT_VOICE_NAME = "victoria";
 
