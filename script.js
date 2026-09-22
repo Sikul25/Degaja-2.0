@@ -339,14 +339,25 @@
       }, 20000);
       if (!response.ok) throw new Error("tts unavailable");
 
-      const blobUrl = URL.createObjectURL(await response.blob());
+      const blob = await response.blob();
+      if (!blob.size || !blob.type.startsWith("audio")) throw new Error("invalid audio response");
+
+      const blobUrl = URL.createObjectURL(blob);
       const audio = new Audio(blobUrl);
       audio.onended = () => {
         if (button) button.textContent = t("result.speak");
         currentTtsAudio = null;
         URL.revokeObjectURL(blobUrl);
       };
-      await audio.play();
+
+      // play() can resolve even if the audio then fails to actually decode/play
+      // (a separate "error" event fires instead) — race both so a real
+      // playback failure still falls through to the browser-voice fallback.
+      await new Promise((resolve, reject) => {
+        audio.addEventListener("error", () => reject(new Error("audio playback error")), { once: true });
+        audio.play().then(resolve, reject);
+      });
+
       currentTtsAudio = audio;
       if (button) {
         button.disabled = false;
