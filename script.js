@@ -432,6 +432,16 @@
   $("#accountBtn")?.addEventListener("click", accountView);
   $("#closeModal")?.addEventListener("click", closeModal);
 
+  $("#impressumLink")?.addEventListener("click", event => {
+    event.preventDefault();
+    openModal(`
+      <h2>Impressum</h2>
+      <p><strong>Sagacitas Ltd</strong><br>136 Capel Street<br>Dublin, Irland</p>
+      <p>Handelsregisternummer: wird nach Abschluss der Eintragung ergänzt (Firmengründung derzeit in Bearbeitung)</p>
+      <p>Kontakt: <a href="mailto:info@degaja.com">info@degaja.com</a></p>
+    `);
+  });
+
   modal?.addEventListener("click", event => {
     if (event.target === modal) closeModal();
   });
