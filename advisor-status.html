@@ -67,7 +67,7 @@
       .then(function (r) { return r.json(); })
       .then(function (d) {
         if (d.ok) { render(available); msg.textContent = 'Gespeichert.'; }
-        else { msg.textContent = 'Fehler: ' + (d.error || ''); }
+        else { msg.textContent = 'Fehler: ' + (d.error || '') + (d.detail ? ' (' + d.detail + ')' : ''); }
       })
       .catch(function () { msg.textContent = 'Netzwerkfehler.'; });
   }

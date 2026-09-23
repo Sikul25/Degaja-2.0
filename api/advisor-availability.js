@@ -19,6 +19,7 @@ export default async function handler(req, res) {
       await setAvailable(advisorId, !!available);
       return res.status(200).json({ ok: true, available: !!available });
     } catch (error) {
+      console.error("advisor-availability POST failed:", error);
       return res.status(500).json({ error: "Could not update status", detail: String(error.message || error) });
     }
   }
