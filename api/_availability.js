@@ -16,11 +16,14 @@ let cachedAt = 0;
 
 function edgeConfigParts() {
   const raw = process.env.GLOBAL_CONFIG || process.env.EDGE_CONFIG || "";
-  const match = raw.match(/^https:\/\/edge-config\.vercel\.com\/([^?]+)\?token=([^&]+)/);
+  // Vercel renamed Edge Config to Global Config, which also changed the
+  // connection string's host from edge-config.vercel.com to
+  // global-config.vercel.com. Accept either so this keeps working regardless.
+  const match = raw.match(/^https:\/\/(global-config|edge-config)\.vercel\.com\/([^?]+)\?token=([^&]+)/);
   if (!match && raw) {
     console.error("GLOBAL_CONFIG is set but didn't match the expected format. Starts with:", raw.slice(0, 40));
   }
-  return match ? { id: match[1], readToken: match[2] } : null;
+  return match ? { host: match[1], id: match[2], readToken: match[3] } : null;
 }
 
 async function readAll() {
@@ -33,7 +36,7 @@ async function readAll() {
     return cache;
   }
   try {
-    const r = await fetch(`https://edge-config.vercel.com/${parts.id}/item/advisorStatus?token=${parts.readToken}`);
+    const r = await fetch(`https://${parts.host}.vercel.com/${parts.id}/item/advisorStatus?token=${parts.readToken}`);
     cache = r.ok ? (await r.json()) || {} : {};
   } catch (_) {
     cache = cache || {};
