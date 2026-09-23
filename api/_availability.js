@@ -1,8 +1,9 @@
 // Advisor "available now" status, shared across all serverless invocations via
-// Vercel Edge Config (a small key-value store read at request time — no
-// redeploy needed when an advisor toggles her own status). Requires two
-// one-time project settings: an Edge Config store connected to this project
-// (gives EDGE_CONFIG) and a Vercel API token with write access (VERCEL_API_TOKEN).
+// Vercel's Global Config store (formerly "Edge Config" — a small key-value
+// store read at request time, no redeploy needed when an advisor toggles her
+// own status). Requires two one-time project settings: a Global Config store
+// connected to this project (gives GLOBAL_CONFIG, still named EDGE_CONFIG on
+// older projects) and a Vercel API token with write access (VERCEL_API_TOKEN).
 // If either is missing, every advisor reads as unavailable rather than the
 // site claiming she's online when we can't actually confirm it.
 
@@ -14,7 +15,7 @@ let cache = null;
 let cachedAt = 0;
 
 function edgeConfigParts() {
-  const raw = process.env.EDGE_CONFIG || "";
+  const raw = process.env.GLOBAL_CONFIG || process.env.EDGE_CONFIG || "";
   const match = raw.match(/^https:\/\/edge-config\.vercel\.com\/([^?]+)\?token=([^&]+)/);
   return match ? { id: match[1], readToken: match[2] } : null;
 }
