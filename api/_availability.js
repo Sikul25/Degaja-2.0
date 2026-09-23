@@ -17,6 +17,9 @@ let cachedAt = 0;
 function edgeConfigParts() {
   const raw = process.env.GLOBAL_CONFIG || process.env.EDGE_CONFIG || "";
   const match = raw.match(/^https:\/\/edge-config\.vercel\.com\/([^?]+)\?token=([^&]+)/);
+  if (!match && raw) {
+    console.error("GLOBAL_CONFIG is set but didn't match the expected format. Starts with:", raw.slice(0, 40));
+  }
   return match ? { id: match[1], readToken: match[2] } : null;
 }
 
@@ -54,7 +57,10 @@ export async function setAvailable(advisorId, available) {
   const parts = edgeConfigParts();
   const token = process.env.VERCEL_API_TOKEN;
   if (!parts || !token) {
-    throw new Error("Not configured: missing EDGE_CONFIG or VERCEL_API_TOKEN");
+    const missing = [!parts && "GLOBAL_CONFIG/EDGE_CONFIG (missing or wrong format)", !token && "VERCEL_API_TOKEN"]
+      .filter(Boolean)
+      .join(", ");
+    throw new Error(`Not configured: missing ${missing}`);
   }
   const current = await readAll();
   const next = { ...current, [advisorId]: { available: !!available, since: Date.now() } };
