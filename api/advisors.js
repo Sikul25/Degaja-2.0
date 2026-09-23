@@ -1,6 +1,7 @@
 import { ADVISORS, ADVISOR_CAPACITY, VOICE_PRICES } from "./_data.js";
+import { getAvailability } from "./_availability.js";
 
-export default function handler(req, res) {
+export default async function handler(req, res) {
   if (req.method !== "GET") return res.status(405).json({ error: "Method not allowed" });
 
   const currency = String(req.query.currency || "").toLowerCase();
@@ -11,5 +12,8 @@ export default function handler(req, res) {
     })
   );
 
-  return res.status(200).json({ advisors: ADVISORS, capacity: ADVISOR_CAPACITY, prices });
+  const status = await getAvailability();
+  const advisors = ADVISORS.map(a => ({ ...a, available: !!status[a.id] }));
+
+  return res.status(200).json({ advisors, capacity: ADVISOR_CAPACITY, prices });
 }
