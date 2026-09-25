@@ -279,7 +279,7 @@
       const response = await fetchWithTimeout("/api/checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ product, lang: currentLang() })
+        body: JSON.stringify({ product, lang: currentLang(), ref: window.degajaI18n ? window.degajaI18n.getRef() : "" })
       }, 15000);
 
       const data = await response.json();

@@ -158,7 +158,7 @@
 
   async function checkout(duration,advisor){
     const u=getUser(); if(!u||!advisor)return;
-    try{const r=await doFetch('/api/checkout',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({product:'voice',duration,email:u.email,name:u.name||'',advisorId:advisor.id,lang:lang()})},15000);const d=await r.json();if(!r.ok||!d.url)throw new Error(d.error||'Checkout');localStorage.setItem(SESSION_KEY,JSON.stringify({type:'voice',duration,advisorId:advisor.id}));location.href=d.url}catch(_){const e=$('#degajaCall');if(e)e.innerHTML=`<div class="degaja-call-panel"><b>${t('live.checkoutFailTitle')}</b><p class="degaja-live-copy">${t('live.checkoutFailDesc')}</p></div>`;}
+    try{const r=await doFetch('/api/checkout',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({product:'voice',duration,email:u.email,name:u.name||'',advisorId:advisor.id,lang:lang(),ref:window.degajaI18n?window.degajaI18n.getRef():''})},15000);const d=await r.json();if(!r.ok||!d.url)throw new Error(d.error||'Checkout');localStorage.setItem(SESSION_KEY,JSON.stringify({type:'voice',duration,advisorId:advisor.id}));location.href=d.url}catch(_){const e=$('#degajaCall');if(e)e.innerHTML=`<div class="degaja-call-panel"><b>${t('live.checkoutFailTitle')}</b><p class="degaja-live-copy">${t('live.checkoutFailDesc')}</p></div>`;}
   }
 
   async function verify(){

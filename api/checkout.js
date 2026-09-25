@@ -3,7 +3,7 @@ import { VOICE_PRICES } from "./_data.js";
 export default async function handler(req, res) {
   if (req.method !== "POST") return res.status(405).json({ error: "Method not allowed" });
 
-  const { product, duration, email, name, advisorId, lang = "de" } = req.body || {};
+  const { product, duration, email, name, advisorId, ref, lang = "de" } = req.body || {};
   const CURRENCY_BY_LANG = { en: "gbp", us: "usd", br: "brl" };
   const LOCALE_BY_LANG = { de: "de", en: "en-GB", us: "en", fr: "fr", es: "es", it: "it", pt: "pt", ru: "ru", uk: "auto", br: "pt-BR" };
   const currency = CURRENCY_BY_LANG[lang] || "eur";
@@ -63,6 +63,7 @@ export default async function handler(req, res) {
   if (voiceDuration) body.set("metadata[duration]", String(voiceDuration));
   if (item.credits) body.set("metadata[credits]", String(item.credits));
   if (advisorId) body.set("metadata[advisorId]", String(advisorId).slice(0, 100));
+  if (ref) body.set("metadata[ref]", String(ref).slice(0, 40));
   if (email) body.set("customer_email", String(email));
   if (email) body.set("client_reference_id", String(email).slice(0, 200));
   if (name) body.set("metadata[name]", String(name).slice(0, 200));
