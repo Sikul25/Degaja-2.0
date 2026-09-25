@@ -265,7 +265,12 @@
       const result = $("#aiResult");
       if (result) {
         const template = remaining === 1 ? t("result.remainingSingular") : t("result.remainingPlural");
-        result.innerHTML = `<strong>${t("result.paymentSuccess")}</strong><p style="margin:8px 0;color:#596273">${template.replace("{n}", remaining)}</p>`;
+        result.innerHTML = `<strong>${t("result.paymentSuccess")}</strong><p style="margin:8px 0;color:#596273">${template.replace("{n}", remaining)}</p>
+          <div style="margin-top:16px;padding:16px;background:#f6edda;border:1px solid rgba(184,147,70,.3);border-radius:16px">
+            <p style="margin:0 0 6px;font-weight:800;color:#18334a">${t("partner.nudge.title")}</p>
+            <p style="margin:0 0 10px;color:#687384;font-size:13px">${t("partner.nudge.desc")}</p>
+            <a href="werde-partner.html" style="display:inline-block;border:2px solid #398fc2;border-radius:999px;padding:8px 16px;color:#18334a;font-weight:800;font-size:13px;text-decoration:none">${t("partner.nudge.cta")}</a>
+          </div>`;
         result.classList.add("show");
       }
       document.querySelector("#oracle")?.scrollIntoView({ behavior: "smooth", block: "center" });

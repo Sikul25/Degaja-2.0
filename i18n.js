@@ -273,7 +273,10 @@
       "partner.result.copyBtn": "Link kopieren",
       "partner.result.copied": "Kopiert!",
       "partner.result.ftcNote": "Wichtig: Kennzeichne jede Empfehlung klar als Werbung/Partnerschaft (z. B. „Werbung“ oder „#ad“) — das ist gesetzlich vorgeschrieben.",
-      "partner.mail.code": "Code:"
+      "partner.mail.code": "Code:",
+      "partner.nudge.title": "Gefällt dir DEGAJA?",
+      "partner.nudge.desc": "Verdiene 40 % Provision, wenn du DEGAJA weiterempfiehlst.",
+      "partner.nudge.cta": "Jetzt Partner werden →"
     },
     en: {
       "nav.start": "Home", "nav.oracle": "Oracle", "nav.prices": "Pricing", "nav.human": "Advisors", "nav.rituale": "Rituals", "nav.login": "Sign in",
@@ -540,7 +543,10 @@
       "partner.result.copyBtn": "Copy link",
       "partner.result.copied": "Copied!",
       "partner.result.ftcNote": "Important: clearly label every recommendation as an ad/partnership (e.g. \"ad\" or \"#ad\") — this is a legal requirement.",
-      "partner.mail.code": "Code:"
+      "partner.mail.code": "Code:",
+      "partner.nudge.title": "Enjoying DEGAJA?",
+      "partner.nudge.desc": "Earn 40% commission when you recommend DEGAJA to others.",
+      "partner.nudge.cta": "Become a partner →"
     },
     fr: {
       "nav.start": "Accueil", "nav.oracle": "Oracle", "nav.prices": "Tarifs", "nav.human": "Conseil", "nav.rituale": "Rituels", "nav.login": "Connexion",
@@ -807,7 +813,10 @@
       "partner.result.copyBtn": "Copier le lien",
       "partner.result.copied": "Copié !",
       "partner.result.ftcNote": "Important : indiquez clairement chaque recommandation comme une publicité/un partenariat (ex. « publicité » ou « #ad ») — c'est une obligation légale.",
-      "partner.mail.code": "Code :"
+      "partner.mail.code": "Code :",
+      "partner.nudge.title": "Vous aimez DEGAJA ?",
+      "partner.nudge.desc": "Gagnez 40 % de commission en recommandant DEGAJA.",
+      "partner.nudge.cta": "Devenir partenaire →"
     },
     es: {
       "nav.start": "Inicio", "nav.oracle": "Oráculo", "nav.prices": "Precios", "nav.human": "Asesoría", "nav.rituale": "Rituales", "nav.login": "Acceder",
@@ -1074,7 +1083,10 @@
       "partner.result.copyBtn": "Copiar enlace",
       "partner.result.copied": "¡Copiado!",
       "partner.result.ftcNote": "Importante: indica claramente cada recomendación como publicidad/asociación (p. ej. «publicidad» o «#ad») — es un requisito legal.",
-      "partner.mail.code": "Código:"
+      "partner.mail.code": "Código:",
+      "partner.nudge.title": "¿Te gusta DEGAJA?",
+      "partner.nudge.desc": "Gana un 40 % de comisión recomendando DEGAJA.",
+      "partner.nudge.cta": "Convertirme en socio/a →"
     },
     it: {
       "nav.start": "Home", "nav.oracle": "Oracolo", "nav.prices": "Prezzi", "nav.human": "Consulenza", "nav.rituale": "Rituali", "nav.login": "Accedi",
@@ -1341,7 +1353,10 @@
       "partner.result.copyBtn": "Copia link",
       "partner.result.copied": "Copiato!",
       "partner.result.ftcNote": "Importante: indica chiaramente ogni raccomandazione come pubblicità/collaborazione (es. \"pubblicità\" o \"#ad\") — è un obbligo di legge.",
-      "partner.mail.code": "Codice:"
+      "partner.mail.code": "Codice:",
+      "partner.nudge.title": "Ti piace DEGAJA?",
+      "partner.nudge.desc": "Guadagna il 40% di commissione consigliando DEGAJA.",
+      "partner.nudge.cta": "Diventa partner →"
     },
     pt: {
       "nav.start": "Início", "nav.oracle": "Oráculo", "nav.prices": "Preços", "nav.human": "Aconselhamento", "nav.rituale": "Rituais", "nav.login": "Entrar",
@@ -1608,7 +1623,10 @@
       "partner.result.copyBtn": "Copiar link",
       "partner.result.copied": "Copiado!",
       "partner.result.ftcNote": "Importante: identifica claramente cada recomendação como publicidade/parceria (ex. \"publicidade\" ou \"#ad\") — é uma exigência legal.",
-      "partner.mail.code": "Código:"
+      "partner.mail.code": "Código:",
+      "partner.nudge.title": "Gostas da DEGAJA?",
+      "partner.nudge.desc": "Ganha 40% de comissão ao recomendares a DEGAJA.",
+      "partner.nudge.cta": "Tornar-me parceiro/a →"
     },
     ru: {
       "nav.start": "Главная", "nav.oracle": "Оракул", "nav.prices": "Цены", "nav.human": "Консультанты", "nav.rituale": "Ритуалы", "nav.login": "Войти",
@@ -1875,7 +1893,10 @@
       "partner.result.copyBtn": "Скопировать ссылку",
       "partner.result.copied": "Скопировано!",
       "partner.result.ftcNote": "Важно: чётко помечайте каждую рекомендацию как рекламу/партнёрство (например, «реклама» или «#ad») — это требование закона.",
-      "partner.mail.code": "Код:"
+      "partner.mail.code": "Код:",
+      "partner.nudge.title": "Нравится DEGAJA?",
+      "partner.nudge.desc": "Получайте 40% комиссии, рекомендуя DEGAJA другим.",
+      "partner.nudge.cta": "Стать партнёром →"
     },
     uk: {
       "nav.start": "Головна", "nav.oracle": "Оракул", "nav.prices": "Ціни", "nav.human": "Консультантки", "nav.rituale": "Ритуали", "nav.login": "Увійти",
@@ -2142,7 +2163,10 @@
       "partner.result.copyBtn": "Скопіювати посилання",
       "partner.result.copied": "Скопійовано!",
       "partner.result.ftcNote": "Важливо: чітко позначайте кожну рекомендацію як рекламу/партнерство (наприклад, «реклама» або «#ad») — цього вимагає закон.",
-      "partner.mail.code": "Код:"
+      "partner.mail.code": "Код:",
+      "partner.nudge.title": "Подобається DEGAJA?",
+      "partner.nudge.desc": "Отримуйте 40% комісії, рекомендуючи DEGAJA іншим.",
+      "partner.nudge.cta": "Стати партнером →"
     }
   };
 
