@@ -30,6 +30,39 @@
   const getAiCredits = () => Math.max(0, Number(localStorage.getItem(AI_CREDIT_KEY) || 0));
   const setAiCredits = n => localStorage.setItem(AI_CREDIT_KEY, String(Math.max(0, n)));
 
+  // Manual "free trial" links for outreach (e.g. creator/partner recruitment
+  // DMs): degaja.com/?promo=<anything> grants a few free AI credits once
+  // per browser. No backend involved — same one-time-capture pattern as the
+  // ?ref= affiliate links. Each distinct code can only be redeemed once per
+  // browser, but nothing stops a link from being reused across browsers, so
+  // treat these as low-value, personal-outreach links, not a coupon system.
+  const PROMO_CREDITS = 3;
+  const PROMO_REDEEMED_KEY = "degajaPromoRedeemed";
+
+  function showPromoToast(n) {
+    const el = document.createElement("div");
+    el.setAttribute("role", "status");
+    el.style.cssText = "position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#18334a;color:#fff;padding:14px 22px;border-radius:999px;font-weight:800;font-size:14px;box-shadow:0 12px 30px rgba(0,0,0,.25);z-index:9999;max-width:90vw;text-align:center";
+    el.textContent = t("promo.creditsAdded").replace("{n}", n);
+    document.body.appendChild(el);
+    setTimeout(() => el.remove(), 6000);
+  }
+
+  function redeemPromoCredits() {
+    try {
+      const promo = new URLSearchParams(location.search).get("promo");
+      if (!promo) return;
+      let redeemed = [];
+      try { redeemed = JSON.parse(localStorage.getItem(PROMO_REDEEMED_KEY) || "[]"); } catch (_) { redeemed = []; }
+      if (redeemed.includes(promo)) return;
+      setAiCredits(getAiCredits() + PROMO_CREDITS);
+      redeemed.push(promo);
+      localStorage.setItem(PROMO_REDEEMED_KEY, JSON.stringify(redeemed.slice(-50)));
+      history.replaceState({}, document.title, location.pathname + location.hash);
+      showPromoToast(PROMO_CREDITS);
+    } catch (_) { /* ignore */ }
+  }
+
   const modal = $("#modal");
   const modalContent = $("#modalContent");
 
@@ -547,5 +580,6 @@
     if (event.key === "Escape") closeModal();
   });
 
+  redeemPromoCredits();
   verifyAiPayment();
 })();
