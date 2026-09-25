@@ -4,8 +4,8 @@ export default async function handler(req, res) {
   if (req.method !== "POST") return res.status(405).json({ error: "Method not allowed" });
 
   const { product, duration, email, name, advisorId, ref, lang = "de" } = req.body || {};
-  const CURRENCY_BY_LANG = { en: "gbp", us: "usd", br: "brl" };
-  const LOCALE_BY_LANG = { de: "de", en: "en-GB", us: "en", fr: "fr", es: "es", it: "it", pt: "pt", ru: "ru", uk: "auto", br: "pt-BR" };
+  const CURRENCY_BY_LANG = { en: "gbp", us: "usd", br: "brl", mx: "mxn" };
+  const LOCALE_BY_LANG = { de: "de", en: "en-GB", us: "en", fr: "fr", es: "es", it: "it", pt: "pt", ru: "ru", uk: "auto", br: "pt-BR", mx: "es" };
   const currency = CURRENCY_BY_LANG[lang] || "eur";
   const stripeLocale = LOCALE_BY_LANG[lang] || "de";
   const PRODUCT_NAMES = {
@@ -18,14 +18,15 @@ export default async function handler(req, res) {
     pt: { single: "DEGAJA AI – Leitura única", pack: "DEGAJA AI – 3 Leituras", voice: minutes => `DEGAJA Live Audio – ${minutes} Minutos` },
     ru: { single: "DEGAJA AI – Разовый расклад", pack: "DEGAJA AI – 3 расклада", voice: minutes => `DEGAJA Live Audio – ${minutes} минут` },
     uk: { single: "DEGAJA AI – Одноразовий розклад", pack: "DEGAJA AI – 3 розклади", voice: minutes => `DEGAJA Live Audio – ${minutes} хвилин` },
-    br: { single: "DEGAJA AI – Leitura única", pack: "DEGAJA AI – 3 Leituras", voice: minutes => `DEGAJA Live Audio – ${minutes} Minutos` }
+    br: { single: "DEGAJA AI – Leitura única", pack: "DEGAJA AI – 3 Leituras", voice: minutes => `DEGAJA Live Audio – ${minutes} Minutos` },
+    mx: { single: "DEGAJA AI – Lectura individual", pack: "DEGAJA AI – 3 Lecturas", voice: minutes => `DEGAJA Live Audio – ${minutes} Minutos` }
   };
   const names = PRODUCT_NAMES[lang] || PRODUCT_NAMES.de;
 
-  // BRL is priced as a fair converted value, not a same-digits symbol swap
-  // like GBP, so it needs its own amounts (in centavos) here and for voice
-  // durations below.
-  const AI_AMOUNTS_BY_CURRENCY = { brl: { single: 2499, pack: 4999 } };
+  // BRL and MXN are priced as fair converted values, not a same-digits
+  // symbol swap like GBP, so they need their own amounts (in cents/centavos)
+  // here and for voice durations below.
+  const AI_AMOUNTS_BY_CURRENCY = { brl: { single: 2499, pack: 4999 }, mxn: { single: 8900, pack: 17900 } };
   const aiAmounts = AI_AMOUNTS_BY_CURRENCY[currency] || { single: 499, pack: 999 };
   const products = {
     single: { name: names.single, amount: aiAmounts.single, quantity: 1, type: "ai", credits: 1 },
