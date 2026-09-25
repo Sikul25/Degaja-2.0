@@ -2,7 +2,7 @@
   "use strict";
 
   const LANG_KEY = "degajaLang";
-  const SUPPORTED = ["de", "uk", "ru", "en", "us", "fr", "es", "it", "pt", "br"];
+  const SUPPORTED = ["de", "uk", "ru", "en", "us", "fr", "es", "it", "pt", "br", "mx"];
   // Languages the live human advisor (Papuli) actually speaks. The live
   // audio consultation is only shown for these.
   const ADVISOR_LANGS = ["de", "ru", "uk"];
@@ -2223,6 +2223,21 @@
     "speech.langCode": "en-US"
   });
 
+  // Mexican Spanish reuses every es string except pricing (Mexican peso,
+  // priced independently rather than a same-digit currency swap) and the
+  // speech/locale code.
+  T.mx = Object.assign({}, T.es, {
+    "currency.symbol": "MX$",
+    "prices.single.btn": "Por MX$89",
+    "prices.single.priceLabel": "MX$89",
+    "prices.pack.priceLabel": "MX$179",
+    "rituale.note2": "El pago de los rituales se realiza por separado en pesos mexicanos y no mediante tokens de DEGAJA.",
+    "purchase.single": "Una lectura · MX$89",
+    "purchase.pack": "3 lecturas · MX$179",
+    "result.deepBtn": "✨ Profundizar · MX$89",
+    "speech.langCode": "es-MX"
+  });
+
   // First-time visitors (no saved preference yet) get matched to a
   // supported language/currency from their browser/OS locale instead of
   // always defaulting to German — e.g. en-US -> "us" (USD), pt-BR -> "br"
@@ -2235,7 +2250,8 @@
       const region = (parts[1] || "").toUpperCase();
       if (primary === "en") return region === "US" ? "us" : "en";
       if (primary === "pt") return region === "BR" ? "br" : "pt";
-      if (["de", "fr", "es", "it", "ru", "uk"].includes(primary)) return primary;
+      if (primary === "es") return region === "MX" ? "mx" : "es";
+      if (["de", "fr", "it", "ru", "uk"].includes(primary)) return primary;
     }
     return "de";
   }
@@ -2319,7 +2335,7 @@
 
   window.degajaI18n = { getLang, setLang, t, SUPPORTED, hasLiveAdvisor, getRef };
 
-  const FLAGS = { de: "🇩🇪", en: "🇬🇧", us: "🇺🇸", fr: "🇫🇷", es: "🇪🇸", it: "🇮🇹", pt: "🇵🇹", ru: "🇷🇺", uk: "🇺🇦", br: "🇧🇷" };
+  const FLAGS = { de: "🇩🇪", en: "🇬🇧", us: "🇺🇸", fr: "🇫🇷", es: "🇪🇸", it: "🇮🇹", pt: "🇵🇹", ru: "🇷🇺", uk: "🇺🇦", br: "🇧🇷", mx: "🇲🇽" };
 
   function buildSwitcher() {
     const wrap = document.createElement("div");
@@ -2385,9 +2401,10 @@
   const COUNTRY_LANG = {
     DE: "de", AT: "de", CH: "de", LI: "de",
     FR: "fr", MC: "fr",
-    ES: "es", MX: "es", AR: "es", CO: "es", CL: "es", PE: "es", VE: "es",
+    ES: "es", AR: "es", CO: "es", CL: "es", PE: "es", VE: "es",
     UY: "es", EC: "es", GT: "es", CR: "es", DO: "es", PA: "es", BO: "es",
     PY: "es", SV: "es", HN: "es", NI: "es",
+    MX: "mx",
     IT: "it", SM: "it",
     PT: "pt",
     BR: "br",

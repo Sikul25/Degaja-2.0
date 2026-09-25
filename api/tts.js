@@ -8,6 +8,7 @@ const VOICE_NAME_BY_LANG = {
   uk: "kateryna",
   br: "raquel",
   pt: "barbara",
+  mx: "cristina",
   de: "zen",
   it: "rossana",
   us: "natasha",

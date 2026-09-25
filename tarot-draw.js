@@ -124,13 +124,15 @@
 
   const DECK = [...MAJOR_ARCANA, ...MINOR_ARCANA];
 
-  const MINOR_CONNECTOR = { en: 'of', us: 'of', fr: 'de', es: 'de', it: 'di', pt: 'de', ru: '', uk: '', br: 'de' };
+  const MINOR_CONNECTOR = { en: 'of', us: 'of', fr: 'de', es: 'de', it: 'di', pt: 'de', ru: '', uk: '', br: 'de', mx: 'de' };
 
   function localize(cardData) {
     const lang = window.degajaI18n ? window.degajaI18n.getLang() : 'de';
     const fallback = { name: cardData.name, meaning: cardData.meaning };
     if (lang === 'de') return fallback;
-    const table = window.DEGAJA_TAROT_I18N && window.DEGAJA_TAROT_I18N[lang];
+    // Mexican Spanish reuses the "es" tarot text — same language, only the
+    // storefront currency/pricing differs.
+    const table = window.DEGAJA_TAROT_I18N && window.DEGAJA_TAROT_I18N[lang === 'mx' ? 'es' : lang];
     if (!table) return fallback;
     if (cardData.major) {
       const entry = table.major[cardData.id];
