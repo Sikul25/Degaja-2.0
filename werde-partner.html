@@ -1,0 +1,251 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="description" content="Werde DEGAJA-Partner: teile deinen persönlichen Link und verdiene 40 % Provision auf jede Bestellung, die über dich kommt – ganz ohne eigene Website oder technischen Aufwand.">
+  <title>Werde Partner – DEGAJA</title>
+  <link rel="canonical" href="https://www.degaja.com/werde-partner.html">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="favicon.ico" sizes="any">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .apply-hero{padding:48px 20px 20px;text-align:center;max-width:820px;margin:auto}
+    .apply-hero h1{font-family:Georgia,"Times New Roman",serif;font-weight:500;font-size:clamp(34px,6vw,54px);color:#18334a;line-height:1.05;margin:14px 0 16px}
+    .apply-hero p{max-width:600px;margin:0 auto;color:#687384;font-size:16px;line-height:1.65}
+    .apply-cta{display:inline-flex;margin-top:24px;border:0;border-radius:999px;background:#18334a;color:#fff;padding:14px 30px;font-weight:800;font-size:15px;box-shadow:0 12px 30px rgba(24,51,74,.16)}
+    .apply-section{max-width:900px;margin:0 auto;padding:30px 20px}
+    .apply-section h2{font-family:Georgia,"Times New Roman",serif;font-weight:500;color:#18334a;font-size:clamp(26px,4vw,34px);text-align:center;margin:0 0 24px}
+    .apply-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+    .apply-card{background:rgba(255,255,255,.9);border:1px solid rgba(184,147,70,.22);border-radius:22px;padding:22px;box-shadow:0 12px 35px rgba(31,65,95,.06)}
+    .apply-card .apply-icon{font-size:26px;margin-bottom:8px}
+    .apply-card h3{margin:0 0 8px;color:#18334a;font-size:17px}
+    .apply-card p{margin:0;color:#687384;font-size:13px;line-height:1.55}
+    .apply-steps{display:grid;gap:14px;max-width:640px;margin:0 auto}
+    .apply-step{display:flex;gap:14px;align-items:flex-start}
+    .apply-step-num{flex:0 0 auto;width:32px;height:32px;border-radius:50%;background:#f6edda;color:#8a6827;font-weight:800;display:grid;place-items:center;font-size:14px}
+    .apply-step p{margin:2px 0 0;color:#687384;font-size:14px;line-height:1.55}
+    .apply-step strong{color:#18334a}
+    .apply-list{max-width:560px;margin:0 auto;color:#687384;font-size:14px;line-height:1.9;padding-left:20px}
+    .apply-form-wrap{max-width:620px;margin:0 auto;background:rgba(255,255,255,.9);border:1px solid var(--line);border-radius:26px;padding:30px;box-shadow:0 18px 60px rgba(54,139,189,.10)}
+    .apply-form label{display:block;font-weight:800;color:#18334a;font-size:13px;margin-bottom:6px}
+    .apply-form input,.apply-form textarea{width:100%;box-sizing:border-box;padding:13px;border:1px solid #cfe2eb;border-radius:14px;outline:0;margin-bottom:16px;font-size:15px;background:#fbfeff;color:#28445b}
+    .apply-form textarea{min-height:100px;resize:vertical}
+    .apply-form input:focus,.apply-form textarea:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(57,143,194,.12)}
+    .apply-submit{width:100%;border:0;border-radius:14px;padding:15px 20px;background:#3f96c6;color:#fff;font-weight:800;font-size:15px}
+    .apply-note{text-align:center;color:#8a91a0;font-size:12px;margin-top:14px;line-height:1.6}
+    .apply-back{display:block;text-align:center;margin:8px 0 40px;color:#315b7d;font-weight:700;font-size:14px}
+    .apply-checkbox{display:flex;align-items:flex-start;gap:10px;margin:0 0 18px}
+    .apply-checkbox input{width:auto;margin:3px 0 0;flex:0 0 auto}
+    .apply-checkbox label{font-weight:400;color:#687384;font-size:12.5px;line-height:1.55;margin:0}
+    .partner-result{display:none;max-width:620px;margin:0 auto 24px;background:#f6edda;border:1px solid rgba(184,147,70,.35);border-radius:22px;padding:24px;text-align:center}
+    .partner-result.show{display:block}
+    .partner-result h3{margin:0 0 10px;color:#18334a;font-family:Georgia,"Times New Roman",serif;font-size:22px}
+    .partner-result-link{display:flex;gap:8px;align-items:center;justify-content:center;flex-wrap:wrap;margin:12px 0}
+    .partner-result-link code{background:#fff;border:1px solid #cfe2eb;border-radius:10px;padding:10px 14px;font-size:14px;color:#18334a;word-break:break-all}
+    .partner-result-copy{border:0;border-radius:10px;padding:10px 16px;background:#3f96c6;color:#fff;font-weight:800;font-size:13px;cursor:pointer}
+    .partner-result-ftc{color:#8a6827;font-size:12px;margin:10px 0 0;line-height:1.6}
+    .calc-wrap{max-width:520px;margin:0 auto;background:rgba(255,255,255,.9);border:1px solid rgba(184,147,70,.25);border-radius:26px;padding:30px;box-shadow:0 18px 60px rgba(54,139,189,.10)}
+    .calc-row{margin-bottom:22px}
+    .calc-row label{display:flex;justify-content:space-between;font-weight:800;color:#18334a;font-size:14px;margin-bottom:10px}
+    .calc-row label span{color:#b88a32}
+    .calc-row input[type=range]{width:100%;accent-color:#b88a32}
+    .calc-result{text-align:center;padding:18px 10px;border-top:1px dashed #cfe2eb;margin-top:6px}
+    .calc-result span{display:block;color:#687384;font-size:13px;margin-bottom:4px}
+    .calc-result strong{font-family:Georgia,"Times New Roman",serif;font-size:clamp(30px,6vw,40px);color:#18334a}
+    .calc-disclaimer{text-align:center;color:#8a91a0;font-size:11px;margin-top:14px;line-height:1.6}
+    @media(max-width:700px){.apply-grid{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+<div class="page-glow"></div>
+<header class="site-header"><a class="brand" href="index.html" aria-label="DEGAJA"><img src="assets/degaja-logo.png" alt="DEGAJA" class="site-logo"></a><nav class="nav"><a href="index.html" data-i18n="nav.start">Start</a><a href="index.html#oracle" data-i18n="nav.oracle">Orakel</a><a href="index.html#human" data-i18n="nav.human">Beratung</a></nav><a class="login-btn" href="index.html" data-i18n="apply.toHome">Zur Startseite</a></header>
+<main>
+  <section class="apply-hero">
+    <div class="eyebrow" data-i18n="partner.eyebrow">✦ FÜR PARTNER ✦</div>
+    <h1><span data-i18n="partner.h1.line1">Werde Partner</span><br><span data-i18n="partner.h1.line2">bei DEGAJA.</span></h1>
+    <p data-i18n="partner.hero.intro">Hast du eine Reichweite auf Social Media, einen Blog oder eine Community, die sich für Tarot, Astrologie oder spirituelle Beratung interessiert?</p>
+    <p><strong data-i18n="partner.hero.tagline">Teile deinen Link — DEGAJA übernimmt den Rest.</strong></p>
+    <p><strong data-i18n="partner.hero.commission" style="color:#b88a32">40 % Provision auf jede Bestellung über deinen Link.</strong></p>
+    <p data-i18n="partner.hero.talktous">Erzähl uns von dir und deinem Kanal.</p>
+    <a href="#apply" class="apply-cta" data-i18n="partner.cta">Jetzt Partner werden →</a>
+  </section>
+
+  <section class="apply-section">
+    <h2 data-i18n="partner.calc.title">Wie viel kannst du verdienen?</h2>
+    <div class="calc-wrap">
+      <div class="calc-row">
+        <label for="calcOrders"><span data-i18n="partner.calc.ordersLabel">Bestellungen pro Monat über deinen Link</span> <span id="calcOrdersVal">10</span></label>
+        <input type="range" id="calcOrders" min="0" max="50" value="10" step="1">
+      </div>
+      <div class="calc-row">
+        <label for="calcAvgOrder"><span data-i18n="partner.calc.avgOrderLabel">Durchschnittlicher Bestellwert</span> <span>€<span id="calcAvgOrderVal">20</span></span></label>
+        <input type="range" id="calcAvgOrder" min="5" max="60" value="20" step="1">
+      </div>
+      <div class="calc-result">
+        <span data-i18n="partner.calc.resultLabel">Deine geschätzte monatliche Provision (40 %)</span>
+        <strong id="calcResult">€80</strong>
+      </div>
+    </div>
+    <p class="calc-disclaimer" data-i18n="partner.calc.disclaimer">Nur ein Beispiel zur Orientierung – die tatsächlichen Ergebnisse hängen von deiner Reichweite und deinem Publikum ab.</p>
+  </section>
+
+  <section class="apply-section">
+    <h2 data-i18n="partner.why.title">Warum DEGAJA-Partner werden?</h2>
+    <div class="apply-grid">
+      <article class="apply-card"><div class="apply-icon">🔗</div><h3 data-i18n="partner.card1.title">Persönlicher Link in Sekunden</h3><p data-i18n="partner.card1.desc">Nach deiner Anmeldung bekommst du deinen eigenen Tracking-Link – keine Technik, keine Einrichtung nötig.</p></article>
+      <article class="apply-card"><div class="apply-icon">💶</div><h3 data-i18n="partner.card2.title">Transparente Auszahlung</h3><p data-i18n="partner.card2.desc">Jede Bestellung über deinen Link wird nachverfolgt. Deine Provision wird regelmäßig und transparent ausgezahlt.</p></article>
+      <article class="apply-card"><div class="apply-icon">🕊️</div><h3 data-i18n="partner.card3.title">Keine Verpflichtung</h3><p data-i18n="partner.card3.desc">Teile deinen Link, wann und wo du willst. Kein Mindestumsatz, keine festen Vorgaben.</p></article>
+    </div>
+  </section>
+
+  <section class="apply-section">
+    <h2 data-i18n="partner.who.title">Wer kann Partner werden?</h2>
+    <ul class="apply-list">
+      <li data-i18n="partner.who.item1">Content Creator, Blogger:innen oder Betreiber:innen von Social-Media-Kanälen</li>
+      <li data-i18n="partner.who.item2">Communities oder Newsletter mit Interesse an Tarot, Astrologie oder spiritueller Beratung</li>
+      <li data-i18n="partner.who.item3">Bestehende DEGAJA-Kund:innen, die die Erfahrung weiterempfehlen möchten</li>
+      <li data-i18n="partner.who.item4">Keine Mindest-Reichweite erforderlich</li>
+    </ul>
+  </section>
+
+  <section class="apply-section">
+    <h2 data-i18n="partner.how.title">So funktioniert es</h2>
+    <div class="apply-steps">
+      <div class="apply-step"><div class="apply-step-num">1</div><p><strong data-i18n="partner.step1.strong">Bewerbung senden</strong> <span data-i18n="partner.step1.rest">– Formular unten ausfüllen, wir melden uns persönlich.</span></p></div>
+      <div class="apply-step"><div class="apply-step-num">2</div><p><strong data-i18n="partner.step2.strong">Persönlichen Link erhalten</strong> <span data-i18n="partner.step2.rest">– du bekommst deinen eigenen Tracking-Link für DEGAJA.</span></p></div>
+      <div class="apply-step"><div class="apply-step-num">3</div><p><strong data-i18n="partner.step3.strong">Teilen & verdienen</strong> <span data-i18n="partner.step3.rest">– du erhältst 40 % Provision auf jede Bestellung, die über deinen Link kommt.</span></p></div>
+    </div>
+  </section>
+
+  <section class="apply-section" id="apply">
+    <h2 data-i18n="partner.form.title">Partner-Bewerbung</h2>
+    <div class="apply-form-wrap">
+      <div class="partner-result" id="partnerResult">
+        <h3 data-i18n="partner.result.title">Dein persönlicher Link ist bereit!</h3>
+        <p data-i18n="partner.result.linkNote">Teile diesen Link — jede Bestellung darüber wird dir automatisch zugeordnet.</p>
+        <div class="partner-result-link">
+          <code id="partnerLink"></code>
+          <button type="button" class="partner-result-copy" id="partnerCopyBtn" data-i18n="partner.result.copyBtn">Link kopieren</button>
+        </div>
+        <p class="partner-result-ftc" data-i18n="partner.result.ftcNote">Wichtig: Kennzeichne jede Empfehlung klar als Werbung/Partnerschaft (z. B. „Werbung“ oder „#ad“) — das ist gesetzlich vorgeschrieben.</p>
+      </div>
+      <form class="apply-form" id="partnerApplyForm">
+        <label for="partnerName" data-i18n="partner.form.name">Vor- und Nachname</label>
+        <input id="partnerName" required placeholder="Dein Name" data-i18n-placeholder="partner.form.namePlaceholder">
+        <label for="partnerEmail" data-i18n="partner.form.email">E-Mail-Adresse</label>
+        <input id="partnerEmail" type="email" required placeholder="name@beispiel.de" data-i18n-placeholder="partner.form.emailPlaceholder">
+        <label for="partnerChannel" data-i18n="partner.form.channel">Wo teilst du deinen Link?</label>
+        <input id="partnerChannel" placeholder="z. B. Instagram, TikTok, Blog, YouTube, Newsletter" data-i18n-placeholder="partner.form.channelPlaceholder">
+        <label for="partnerAudience" data-i18n="partner.form.audience">Reichweite (optional)</label>
+        <input id="partnerAudience" placeholder="z. B. 5.000 Follower" data-i18n-placeholder="partner.form.audiencePlaceholder">
+        <label for="partnerMessage" data-i18n="partner.form.message">Kurze Nachricht an uns</label>
+        <textarea id="partnerMessage" placeholder="Erzähl uns kurz von dir und deinem Kanal." data-i18n-placeholder="partner.form.messagePlaceholder"></textarea>
+        <div class="apply-checkbox">
+          <input type="checkbox" id="partnerFtcConsent" required>
+          <label for="partnerFtcConsent" data-i18n="partner.form.ftcLabel">Ich bestätige, dass ich meine Partnerschaft mit DEGAJA bei jeder Empfehlung klar offenlege (z. B. „Werbung“ oder „#ad“), wie es die FTC (USA) und vergleichbare Gesetze in meinem Land verlangen.</label>
+        </div>
+        <button type="submit" class="apply-submit" data-i18n="partner.form.submit">Bewerbung senden →</button>
+      </form>
+      <p class="apply-note" id="partnerNote" data-i18n="partner.form.note">Deine Angaben werden nur zur Bearbeitung deiner Bewerbung verwendet. Beim Klick öffnet sich dein E-Mail-Programm mit einer vorausgefüllten Nachricht an uns.</p>
+    </div>
+  </section>
+  <a class="apply-back" href="index.html" data-i18n="partner.back">← Zurück zur Startseite</a>
+</main>
+<footer><div class="footer-brand"><img src="assets/degaja-logo.png" alt="DEGAJA" class="footer-logo"></div><p data-i18n="footer.tagline">Deine Frage. Dein Weg.</p><div class="footer-links"><a href="index.html#" data-i18n="footer.impressum">Impressum</a><a href="index.html#" data-i18n="footer.datenschutz">Datenschutz</a><a href="index.html#" data-i18n="footer.agb">AGB</a><a href="mailto:info@degaja.com" data-i18n="footer.kontakt">Kontakt</a></div></footer>
+<script defer src="/_vercel/insights/script.js?v=2"></script>
+<script src="/i18n.js?v=21"></script>
+<script>
+  // i18n.js's own applyTranslations() sets document.title/meta description
+  // from the homepage's meta.title/meta.description keys. Override them
+  // here with this page's own partner.meta.* keys once i18n has run.
+  document.addEventListener('DOMContentLoaded', () => {
+    if (!window.degajaI18n) return;
+    const t = window.degajaI18n.t;
+    const title = t('partner.meta.title');
+    if (title && !title.startsWith('partner.')) document.title = title;
+    const desc = document.querySelector('meta[name="description"]');
+    const descVal = t('partner.meta.description');
+    if (desc && descVal && !descVal.startsWith('partner.')) desc.setAttribute('content', descVal);
+  });
+
+  (function initCalc() {
+    const ordersEl = document.getElementById('calcOrders');
+    const avgEl = document.getElementById('calcAvgOrder');
+    const ordersVal = document.getElementById('calcOrdersVal');
+    const avgVal = document.getElementById('calcAvgOrderVal');
+    const result = document.getElementById('calcResult');
+    if (!ordersEl || !avgEl || !result) return;
+    function update() {
+      const orders = Number(ordersEl.value);
+      const avg = Number(avgEl.value);
+      ordersVal.textContent = orders;
+      avgVal.textContent = avg;
+      const commission = Math.round(orders * avg * 0.4);
+      result.textContent = '€' + commission.toLocaleString('de-DE');
+    }
+    ordersEl.addEventListener('input', update);
+    avgEl.addEventListener('input', update);
+    update();
+  })();
+
+  function slugifyName(name) {
+    return (name || '')
+      .toLowerCase()
+      .normalize('NFD').replace(/[̀-ͯ]/g, '')
+      .replace(/[^a-z0-9]+/g, '')
+      .slice(0, 16) || 'partner';
+  }
+
+  function generateRefCode(name) {
+    return slugifyName(name) + Date.now().toString(36).slice(-4);
+  }
+
+  document.getElementById('partnerApplyForm')?.addEventListener('submit', e => {
+    e.preventDefault();
+    const t = window.degajaI18n ? window.degajaI18n.t : (k => k);
+    const val = id => document.getElementById(id)?.value.trim() || '';
+    const name = val('partnerName'), email = val('partnerEmail');
+    if (!name || !email) return;
+    if (!document.getElementById('partnerFtcConsent')?.checked) return;
+
+    const code = generateRefCode(name);
+    const link = `https://www.degaja.com/?ref=${code}`;
+
+    const body = [
+      `${t('partner.mail.name')} ${name}`,
+      `${t('partner.mail.email')} ${email}`,
+      `${t('partner.mail.channel')} ${val('partnerChannel') || '-'}`,
+      `${t('partner.mail.audience')} ${val('partnerAudience') || '-'}`,
+      `${t('partner.mail.code')} ${code}`,
+      '',
+      `${t('partner.mail.message')}`,
+      val('partnerMessage') || '-'
+    ].join('\n');
+    const mailto = `mailto:info@degaja.com?subject=${encodeURIComponent(t('partner.mail.subject') + name)}&body=${encodeURIComponent(body)}`;
+    window.location.href = mailto;
+
+    const linkEl = document.getElementById('partnerLink');
+    const resultEl = document.getElementById('partnerResult');
+    if (linkEl) linkEl.textContent = link;
+    if (resultEl) {
+      resultEl.classList.add('show');
+      resultEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  });
+
+  document.getElementById('partnerCopyBtn')?.addEventListener('click', () => {
+    const t = window.degajaI18n ? window.degajaI18n.t : (k => k);
+    const link = document.getElementById('partnerLink')?.textContent || '';
+    const btn = document.getElementById('partnerCopyBtn');
+    if (!link || !btn) return;
+    navigator.clipboard?.writeText(link).then(() => {
+      const original = btn.textContent;
+      btn.textContent = t('partner.result.copied');
+      setTimeout(() => { btn.textContent = original; }, 2000);
+    });
+  });
+</script>
+</body>
+</html>

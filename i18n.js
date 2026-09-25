@@ -103,7 +103,7 @@
       "rituale.note2": "Zahlung für Rituale erfolgt separat in Euro und nicht über DEGAJA-Tokens.",
       "chat.links": "Karten · Sterne · Zahlen", "chat.human": "Beratung", "chat.account": "Mein DEGAJA",
       "footer.tagline": "Deine Frage. Dein Weg.",
-      "footer.impressum": "Impressum", "footer.datenschutz": "Datenschutz", "footer.agb": "AGB", "footer.kontakt": "Kontakt", "footer.werdeberaterin": "Werde Beraterin",
+      "footer.impressum": "Impressum", "footer.datenschutz": "Datenschutz", "footer.agb": "AGB", "footer.kontakt": "Kontakt", "footer.werdeberaterin": "Werde Beraterin", "footer.werdepartner": "Werde Partner",
       "footer.disclaimer": "DEGAJA dient der persönlichen Orientierung und Unterhaltung und ersetzt keine professionelle Beratung.",
       "footer.age18": "DEGAJA richtet sich ausschließlich an Personen ab 18 Jahren.",
       "legal.datenschutzTitle": "Datenschutzerklärung",
@@ -211,7 +211,69 @@
       "apply.mail.phone": "Telefon:",
       "apply.mail.specialty": "Erfahrung/Spezialgebiet:",
       "apply.mail.social": "Instagram/TikTok:",
-      "apply.mail.message": "Nachricht:"
+      "apply.mail.message": "Nachricht:",
+      "partner.meta.title": "Werde Partner – DEGAJA",
+      "partner.meta.description": "Werde DEGAJA-Partner: teile deinen persönlichen Link und verdiene 40 % Provision auf jede Bestellung, die über dich kommt – ganz ohne eigene Website oder technischen Aufwand.",
+      "partner.eyebrow": "✦ FÜR PARTNER ✦",
+      "partner.h1.line1": "Werde Partner",
+      "partner.h1.line2": "bei DEGAJA.",
+      "partner.hero.intro": "Hast du eine Reichweite auf Social Media, einen Blog oder eine Community, die sich für Tarot, Astrologie oder spirituelle Beratung interessiert?",
+      "partner.hero.tagline": "Teile deinen Link — DEGAJA übernimmt den Rest.",
+      "partner.hero.commission": "40 % Provision auf jede Bestellung über deinen Link.",
+      "partner.hero.talktous": "Erzähl uns von dir und deinem Kanal.",
+      "partner.cta": "Jetzt Partner werden →",
+      "partner.why.title": "Warum DEGAJA-Partner werden?",
+      "partner.card1.title": "Persönlicher Link in Sekunden",
+      "partner.card1.desc": "Nach deiner Anmeldung bekommst du deinen eigenen Tracking-Link – keine Technik, keine Einrichtung nötig.",
+      "partner.card2.title": "Transparente Auszahlung",
+      "partner.card2.desc": "Jede Bestellung über deinen Link wird nachverfolgt. Deine Provision wird regelmäßig und transparent ausgezahlt.",
+      "partner.card3.title": "Keine Verpflichtung",
+      "partner.card3.desc": "Teile deinen Link, wann und wo du willst. Kein Mindestumsatz, keine festen Vorgaben.",
+      "partner.who.title": "Wer kann Partner werden?",
+      "partner.who.item1": "Content Creator, Blogger:innen oder Betreiber:innen von Social-Media-Kanälen",
+      "partner.who.item2": "Communities oder Newsletter mit Interesse an Tarot, Astrologie oder spiritueller Beratung",
+      "partner.who.item3": "Bestehende DEGAJA-Kund:innen, die die Erfahrung weiterempfehlen möchten",
+      "partner.who.item4": "Keine Mindest-Reichweite erforderlich",
+      "partner.how.title": "So funktioniert es",
+      "partner.step1.strong": "Bewerbung senden",
+      "partner.step1.rest": "– Formular unten ausfüllen, wir melden uns persönlich.",
+      "partner.step2.strong": "Persönlichen Link erhalten",
+      "partner.step2.rest": "– du bekommst deinen eigenen Tracking-Link für DEGAJA.",
+      "partner.step3.strong": "Teilen & verdienen",
+      "partner.step3.rest": "– du erhältst 40 % Provision auf jede Bestellung, die über deinen Link kommt.",
+      "partner.form.title": "Partner-Bewerbung",
+      "partner.form.name": "Vor- und Nachname",
+      "partner.form.namePlaceholder": "Dein Name",
+      "partner.form.email": "E-Mail-Adresse",
+      "partner.form.emailPlaceholder": "name@beispiel.de",
+      "partner.form.channel": "Wo teilst du deinen Link?",
+      "partner.form.channelPlaceholder": "z. B. Instagram, TikTok, Blog, YouTube, Newsletter",
+      "partner.form.audience": "Reichweite (optional)",
+      "partner.form.audiencePlaceholder": "z. B. 5.000 Follower",
+      "partner.form.message": "Kurze Nachricht an uns",
+      "partner.form.messagePlaceholder": "Erzähl uns kurz von dir und deinem Kanal.",
+      "partner.form.submit": "Bewerbung senden →",
+      "partner.form.note": "Deine Angaben werden nur zur Bearbeitung deiner Bewerbung verwendet. Beim Klick öffnet sich dein E-Mail-Programm mit einer vorausgefüllten Nachricht an uns.",
+      "partner.back": "← Zurück zur Startseite",
+      "partner.toHome": "Zur Startseite",
+      "partner.mail.subject": "Partner-Bewerbung – ",
+      "partner.mail.name": "Name:",
+      "partner.mail.email": "E-Mail:",
+      "partner.mail.channel": "Kanal:",
+      "partner.mail.audience": "Reichweite:",
+      "partner.mail.message": "Nachricht:",
+      "partner.calc.title": "Wie viel kannst du verdienen?",
+      "partner.calc.ordersLabel": "Bestellungen pro Monat über deinen Link",
+      "partner.calc.avgOrderLabel": "Durchschnittlicher Bestellwert",
+      "partner.calc.resultLabel": "Deine geschätzte monatliche Provision (40 %)",
+      "partner.calc.disclaimer": "Nur ein Beispiel zur Orientierung – die tatsächlichen Ergebnisse hängen von deiner Reichweite und deinem Publikum ab.",
+      "partner.form.ftcLabel": "Ich bestätige, dass ich meine Partnerschaft mit DEGAJA bei jeder Empfehlung klar offenlege (z. B. „Werbung“ oder „#ad“), wie es die FTC (USA) und vergleichbare Gesetze in meinem Land verlangen.",
+      "partner.result.title": "Dein persönlicher Link ist bereit!",
+      "partner.result.linkNote": "Teile diesen Link — jede Bestellung darüber wird dir automatisch zugeordnet.",
+      "partner.result.copyBtn": "Link kopieren",
+      "partner.result.copied": "Kopiert!",
+      "partner.result.ftcNote": "Wichtig: Kennzeichne jede Empfehlung klar als Werbung/Partnerschaft (z. B. „Werbung“ oder „#ad“) — das ist gesetzlich vorgeschrieben.",
+      "partner.mail.code": "Code:"
     },
     en: {
       "nav.start": "Home", "nav.oracle": "Oracle", "nav.prices": "Pricing", "nav.human": "Advisors", "nav.rituale": "Rituals", "nav.login": "Sign in",
@@ -308,7 +370,7 @@
       "rituale.note2": "Payment for rituals is made separately in pounds and not via DEGAJA tokens.",
       "chat.links": "Cards · Stars · Numbers", "chat.human": "Advisors", "chat.account": "My DEGAJA",
       "footer.tagline": "Your question. Your path.",
-      "footer.impressum": "Legal notice", "footer.datenschutz": "Privacy", "footer.agb": "Terms", "footer.kontakt": "Contact", "footer.werdeberaterin": "Become an advisor",
+      "footer.impressum": "Legal notice", "footer.datenschutz": "Privacy", "footer.agb": "Terms", "footer.kontakt": "Contact", "footer.werdeberaterin": "Become an advisor", "footer.werdepartner": "Become a partner",
       "footer.disclaimer": "DEGAJA is for personal guidance and entertainment purposes and does not replace professional advice.",
       "footer.age18": "DEGAJA is intended exclusively for users aged 18 and over.",
       "legal.datenschutzTitle": "Privacy Policy",
@@ -416,7 +478,69 @@
       "apply.mail.phone": "Phone:",
       "apply.mail.specialty": "Experience/Specialty:",
       "apply.mail.social": "Instagram/TikTok:",
-      "apply.mail.message": "Message:"
+      "apply.mail.message": "Message:",
+      "partner.meta.title": "Become a Partner – DEGAJA",
+      "partner.meta.description": "Become a DEGAJA partner: share your personal link and earn 40% commission on every order that comes through you – no website or technical setup required.",
+      "partner.eyebrow": "✦ FOR PARTNERS ✦",
+      "partner.h1.line1": "Become a Partner",
+      "partner.h1.line2": "with DEGAJA.",
+      "partner.hero.intro": "Do you have a social media following, a blog, or a community interested in tarot, astrology or spiritual guidance?",
+      "partner.hero.tagline": "Share your link — DEGAJA takes care of the rest.",
+      "partner.hero.commission": "40% commission on every order through your link.",
+      "partner.hero.talktous": "Tell us about yourself and your channel.",
+      "partner.cta": "Become a partner →",
+      "partner.why.title": "Why become a DEGAJA partner?",
+      "partner.card1.title": "Personal link in seconds",
+      "partner.card1.desc": "Once approved, you get your own tracking link — no technical setup required.",
+      "partner.card2.title": "Transparent payouts",
+      "partner.card2.desc": "Every order through your link is tracked. Your commission is paid out regularly and transparently.",
+      "partner.card3.title": "No commitment",
+      "partner.card3.desc": "Share your link whenever and wherever you like. No minimum sales, no fixed requirements.",
+      "partner.who.title": "Who can become a partner?",
+      "partner.who.item1": "Content creators, bloggers or social media accounts",
+      "partner.who.item2": "Communities or newsletters interested in tarot, astrology or spiritual guidance",
+      "partner.who.item3": "Existing DEGAJA customers who want to recommend the experience",
+      "partner.who.item4": "No minimum audience size required",
+      "partner.how.title": "How it works",
+      "partner.step1.strong": "Send your application",
+      "partner.step1.rest": "– fill out the form below, we'll get back to you personally.",
+      "partner.step2.strong": "Get your personal link",
+      "partner.step2.rest": "– you'll receive your own DEGAJA tracking link.",
+      "partner.step3.strong": "Share & earn",
+      "partner.step3.rest": "– you earn 40% commission on every order that comes through your link.",
+      "partner.form.title": "Partner application",
+      "partner.form.name": "First and last name",
+      "partner.form.namePlaceholder": "Your name",
+      "partner.form.email": "Email address",
+      "partner.form.emailPlaceholder": "name@example.com",
+      "partner.form.channel": "Where will you share your link?",
+      "partner.form.channelPlaceholder": "e.g. Instagram, TikTok, blog, YouTube, newsletter",
+      "partner.form.audience": "Audience size (optional)",
+      "partner.form.audiencePlaceholder": "e.g. 5,000 followers",
+      "partner.form.message": "A short message to us",
+      "partner.form.messagePlaceholder": "Tell us briefly about yourself and your channel.",
+      "partner.form.submit": "Send application →",
+      "partner.form.note": "Your details are only used to process your application. Clicking the button opens your email app with a pre-filled message to us.",
+      "partner.back": "← Back to homepage",
+      "partner.toHome": "Back to homepage",
+      "partner.mail.subject": "Partner application – ",
+      "partner.mail.name": "Name:",
+      "partner.mail.email": "Email:",
+      "partner.mail.channel": "Channel:",
+      "partner.mail.audience": "Audience:",
+      "partner.mail.message": "Message:",
+      "partner.calc.title": "How much could you earn?",
+      "partner.calc.ordersLabel": "Orders per month through your link",
+      "partner.calc.avgOrderLabel": "Average order value",
+      "partner.calc.resultLabel": "Your estimated monthly commission (40%)",
+      "partner.calc.disclaimer": "Just an illustrative example – actual results depend on your reach and audience.",
+      "partner.form.ftcLabel": "I confirm I will clearly disclose my partnership with DEGAJA on every recommendation (e.g. \"ad\" or \"#ad\"), as required by the FTC (US) and equivalent laws in my country.",
+      "partner.result.title": "Your personal link is ready!",
+      "partner.result.linkNote": "Share this link — every order through it is automatically credited to you.",
+      "partner.result.copyBtn": "Copy link",
+      "partner.result.copied": "Copied!",
+      "partner.result.ftcNote": "Important: clearly label every recommendation as an ad/partnership (e.g. \"ad\" or \"#ad\") — this is a legal requirement.",
+      "partner.mail.code": "Code:"
     },
     fr: {
       "nav.start": "Accueil", "nav.oracle": "Oracle", "nav.prices": "Tarifs", "nav.human": "Conseil", "nav.rituale": "Rituels", "nav.login": "Connexion",
@@ -513,7 +637,7 @@
       "rituale.note2": "Le paiement des rituels s'effectue séparément en euros et non via les jetons DEGAJA.",
       "chat.links": "Cartes · Étoiles · Nombres", "chat.human": "Conseil", "chat.account": "Mon DEGAJA",
       "footer.tagline": "Ta question. Ton chemin.",
-      "footer.impressum": "Mentions légales", "footer.datenschutz": "Confidentialité", "footer.agb": "CGV", "footer.kontakt": "Contact", "footer.werdeberaterin": "Devenir conseillère",
+      "footer.impressum": "Mentions légales", "footer.datenschutz": "Confidentialité", "footer.agb": "CGV", "footer.kontakt": "Contact", "footer.werdeberaterin": "Devenir conseillère", "footer.werdepartner": "Devenir partenaire",
       "footer.disclaimer": "DEGAJA sert à l'orientation personnelle et au divertissement et ne remplace pas un conseil professionnel.",
       "footer.age18": "DEGAJA s'adresse exclusivement aux personnes de 18 ans et plus.",
       "legal.datenschutzTitle": "Politique de confidentialité",
@@ -621,7 +745,69 @@
       "apply.mail.phone": "Téléphone :",
       "apply.mail.specialty": "Expérience/Spécialité :",
       "apply.mail.social": "Instagram/TikTok :",
-      "apply.mail.message": "Message :"
+      "apply.mail.message": "Message :",
+      "partner.meta.title": "Devenir partenaire – DEGAJA",
+      "partner.meta.description": "Devenez partenaire DEGAJA : partagez votre lien personnel et gagnez 40 % de commission sur chaque commande passée grâce à vous – sans site web ni configuration technique.",
+      "partner.eyebrow": "✦ POUR LES PARTENAIRES ✦",
+      "partner.h1.line1": "Devenez partenaire",
+      "partner.h1.line2": "de DEGAJA.",
+      "partner.hero.intro": "Avez-vous une audience sur les réseaux sociaux, un blog ou une communauté intéressée par le tarot, l'astrologie ou l'accompagnement spirituel ?",
+      "partner.hero.tagline": "Partagez votre lien — DEGAJA s'occupe du reste.",
+      "partner.hero.commission": "40 % de commission sur chaque commande via votre lien.",
+      "partner.hero.talktous": "Parlez-nous de vous et de votre chaîne.",
+      "partner.cta": "Devenir partenaire →",
+      "partner.why.title": "Pourquoi devenir partenaire DEGAJA ?",
+      "partner.card1.title": "Lien personnel en quelques secondes",
+      "partner.card1.desc": "Une fois accepté(e), vous recevez votre propre lien de suivi — aucune configuration technique nécessaire.",
+      "partner.card2.title": "Paiements transparents",
+      "partner.card2.desc": "Chaque commande via votre lien est suivie. Votre commission est versée régulièrement et en toute transparence.",
+      "partner.card3.title": "Aucun engagement",
+      "partner.card3.desc": "Partagez votre lien quand et où vous voulez. Pas de minimum de ventes, pas d'obligations fixes.",
+      "partner.who.title": "Qui peut devenir partenaire ?",
+      "partner.who.item1": "Créateurs/créatrices de contenu, blogueurs/blogueuses ou comptes de réseaux sociaux",
+      "partner.who.item2": "Communautés ou newsletters intéressées par le tarot, l'astrologie ou l'accompagnement spirituel",
+      "partner.who.item3": "Client(e)s DEGAJA existant(e)s qui souhaitent recommander l'expérience",
+      "partner.who.item4": "Aucune taille d'audience minimale requise",
+      "partner.how.title": "Comment ça marche",
+      "partner.step1.strong": "Envoyez votre candidature",
+      "partner.step1.rest": "– remplissez le formulaire ci-dessous, nous vous répondrons personnellement.",
+      "partner.step2.strong": "Recevez votre lien personnel",
+      "partner.step2.rest": "– vous obtenez votre propre lien de suivi DEGAJA.",
+      "partner.step3.strong": "Partagez & gagnez",
+      "partner.step3.rest": "– vous gagnez 40 % de commission sur chaque commande passée via votre lien.",
+      "partner.form.title": "Candidature de partenaire",
+      "partner.form.name": "Prénom et nom",
+      "partner.form.namePlaceholder": "Votre nom",
+      "partner.form.email": "Adresse e-mail",
+      "partner.form.emailPlaceholder": "nom@exemple.fr",
+      "partner.form.channel": "Où allez-vous partager votre lien ?",
+      "partner.form.channelPlaceholder": "ex. Instagram, TikTok, blog, YouTube, newsletter",
+      "partner.form.audience": "Taille d'audience (optionnel)",
+      "partner.form.audiencePlaceholder": "ex. 5 000 abonné(e)s",
+      "partner.form.message": "Un court message pour nous",
+      "partner.form.messagePlaceholder": "Parlez-nous brièvement de vous et de votre chaîne.",
+      "partner.form.submit": "Envoyer la candidature →",
+      "partner.form.note": "Vos informations ne sont utilisées que pour traiter votre candidature. En cliquant, votre application e-mail s'ouvre avec un message pré-rempli à notre attention.",
+      "partner.back": "← Retour à l'accueil",
+      "partner.toHome": "Retour à l'accueil",
+      "partner.mail.subject": "Candidature de partenaire – ",
+      "partner.mail.name": "Nom :",
+      "partner.mail.email": "E-mail :",
+      "partner.mail.channel": "Canal :",
+      "partner.mail.audience": "Audience :",
+      "partner.mail.message": "Message :",
+      "partner.calc.title": "Combien pourriez-vous gagner ?",
+      "partner.calc.ordersLabel": "Commandes par mois via votre lien",
+      "partner.calc.avgOrderLabel": "Valeur moyenne de la commande",
+      "partner.calc.resultLabel": "Votre commission mensuelle estimée (40 %)",
+      "partner.calc.disclaimer": "Un exemple illustratif seulement – les résultats réels dépendent de votre audience et de votre portée.",
+      "partner.form.ftcLabel": "Je confirme que je révélerai clairement mon partenariat avec DEGAJA à chaque recommandation (ex. « publicité » ou « #ad »), comme l'exige la FTC (États-Unis) et les lois équivalentes dans mon pays.",
+      "partner.result.title": "Votre lien personnel est prêt !",
+      "partner.result.linkNote": "Partagez ce lien — chaque commande passée via celui-ci vous est automatiquement attribuée.",
+      "partner.result.copyBtn": "Copier le lien",
+      "partner.result.copied": "Copié !",
+      "partner.result.ftcNote": "Important : indiquez clairement chaque recommandation comme une publicité/un partenariat (ex. « publicité » ou « #ad ») — c'est une obligation légale.",
+      "partner.mail.code": "Code :"
     },
     es: {
       "nav.start": "Inicio", "nav.oracle": "Oráculo", "nav.prices": "Precios", "nav.human": "Asesoría", "nav.rituale": "Rituales", "nav.login": "Acceder",
@@ -718,7 +904,7 @@
       "rituale.note2": "El pago de los rituales se realiza por separado en euros y no mediante tokens de DEGAJA.",
       "chat.links": "Cartas · Estrellas · Números", "chat.human": "Asesoría", "chat.account": "Mi DEGAJA",
       "footer.tagline": "Tu pregunta. Tu camino.",
-      "footer.impressum": "Aviso legal", "footer.datenschutz": "Privacidad", "footer.agb": "Términos", "footer.kontakt": "Contacto", "footer.werdeberaterin": "Sé asesora",
+      "footer.impressum": "Aviso legal", "footer.datenschutz": "Privacidad", "footer.agb": "Términos", "footer.kontakt": "Contacto", "footer.werdeberaterin": "Sé asesora", "footer.werdepartner": "Sé socio/a",
       "footer.disclaimer": "DEGAJA es para orientación personal y entretenimiento, y no sustituye el asesoramiento profesional.",
       "footer.age18": "DEGAJA está dirigido exclusivamente a personas mayores de 18 años.",
       "legal.datenschutzTitle": "Política de privacidad",
@@ -826,7 +1012,69 @@
       "apply.mail.phone": "Teléfono:",
       "apply.mail.specialty": "Experiencia/Especialidad:",
       "apply.mail.social": "Instagram/TikTok:",
-      "apply.mail.message": "Mensaje:"
+      "apply.mail.message": "Mensaje:",
+      "partner.meta.title": "Conviértete en socio/a – DEGAJA",
+      "partner.meta.description": "Conviértete en socio/a de DEGAJA: comparte tu enlace personal y gana un 40 % de comisión por cada pedido realizado a través de ti, sin sitio web ni configuración técnica.",
+      "partner.eyebrow": "✦ PARA SOCIOS/AS ✦",
+      "partner.h1.line1": "Conviértete en socio/a",
+      "partner.h1.line2": "de DEGAJA.",
+      "partner.hero.intro": "¿Tienes seguidores en redes sociales, un blog o una comunidad interesada en el tarot, la astrología o la orientación espiritual?",
+      "partner.hero.tagline": "Comparte tu enlace — DEGAJA se encarga del resto.",
+      "partner.hero.commission": "40 % de comisión por cada pedido a través de tu enlace.",
+      "partner.hero.talktous": "Cuéntanos sobre ti y tu canal.",
+      "partner.cta": "Convertirme en socio/a →",
+      "partner.why.title": "¿Por qué ser socio/a de DEGAJA?",
+      "partner.card1.title": "Enlace personal en segundos",
+      "partner.card1.desc": "Una vez aceptado/a, recibes tu propio enlace de seguimiento — sin necesidad de configuración técnica.",
+      "partner.card2.title": "Pagos transparentes",
+      "partner.card2.desc": "Cada pedido a través de tu enlace queda registrado. Tu comisión se paga de forma regular y transparente.",
+      "partner.card3.title": "Sin compromiso",
+      "partner.card3.desc": "Comparte tu enlace cuando y donde quieras. Sin ventas mínimas ni requisitos fijos.",
+      "partner.who.title": "¿Quién puede ser socio/a?",
+      "partner.who.item1": "Creadores/as de contenido, blogueros/as o cuentas de redes sociales",
+      "partner.who.item2": "Comunidades o boletines interesados en el tarot, la astrología o la orientación espiritual",
+      "partner.who.item3": "Clientes actuales de DEGAJA que quieran recomendar la experiencia",
+      "partner.who.item4": "No se requiere una audiencia mínima",
+      "partner.how.title": "Cómo funciona",
+      "partner.step1.strong": "Envía tu solicitud",
+      "partner.step1.rest": "– completa el formulario de abajo, te responderemos personalmente.",
+      "partner.step2.strong": "Recibe tu enlace personal",
+      "partner.step2.rest": "– obtienes tu propio enlace de seguimiento de DEGAJA.",
+      "partner.step3.strong": "Comparte y gana",
+      "partner.step3.rest": "– ganas un 40 % de comisión por cada pedido realizado a través de tu enlace.",
+      "partner.form.title": "Solicitud de socio/a",
+      "partner.form.name": "Nombre y apellidos",
+      "partner.form.namePlaceholder": "Tu nombre",
+      "partner.form.email": "Correo electrónico",
+      "partner.form.emailPlaceholder": "nombre@ejemplo.es",
+      "partner.form.channel": "¿Dónde compartirás tu enlace?",
+      "partner.form.channelPlaceholder": "p. ej. Instagram, TikTok, blog, YouTube, boletín",
+      "partner.form.audience": "Tamaño de audiencia (opcional)",
+      "partner.form.audiencePlaceholder": "p. ej. 5.000 seguidores",
+      "partner.form.message": "Un breve mensaje para nosotros",
+      "partner.form.messagePlaceholder": "Cuéntanos brevemente sobre ti y tu canal.",
+      "partner.form.submit": "Enviar solicitud →",
+      "partner.form.note": "Tus datos solo se usan para procesar tu solicitud. Al hacer clic se abrirá tu programa de correo con un mensaje prellenado para nosotros.",
+      "partner.back": "← Volver al inicio",
+      "partner.toHome": "Volver al inicio",
+      "partner.mail.subject": "Solicitud de socio/a – ",
+      "partner.mail.name": "Nombre:",
+      "partner.mail.email": "Correo:",
+      "partner.mail.channel": "Canal:",
+      "partner.mail.audience": "Audiencia:",
+      "partner.mail.message": "Mensaje:",
+      "partner.calc.title": "¿Cuánto podrías ganar?",
+      "partner.calc.ordersLabel": "Pedidos al mes a través de tu enlace",
+      "partner.calc.avgOrderLabel": "Valor medio del pedido",
+      "partner.calc.resultLabel": "Tu comisión mensual estimada (40 %)",
+      "partner.calc.disclaimer": "Solo un ejemplo ilustrativo – los resultados reales dependen de tu alcance y tu audiencia.",
+      "partner.form.ftcLabel": "Confirmo que revelaré claramente mi asociación con DEGAJA en cada recomendación (p. ej. «publicidad» o «#ad»), tal como exige la FTC (EE. UU.) y leyes equivalentes en mi país.",
+      "partner.result.title": "¡Tu enlace personal está listo!",
+      "partner.result.linkNote": "Comparte este enlace — cada pedido a través de él se te atribuye automáticamente.",
+      "partner.result.copyBtn": "Copiar enlace",
+      "partner.result.copied": "¡Copiado!",
+      "partner.result.ftcNote": "Importante: indica claramente cada recomendación como publicidad/asociación (p. ej. «publicidad» o «#ad») — es un requisito legal.",
+      "partner.mail.code": "Código:"
     },
     it: {
       "nav.start": "Home", "nav.oracle": "Oracolo", "nav.prices": "Prezzi", "nav.human": "Consulenza", "nav.rituale": "Rituali", "nav.login": "Accedi",
@@ -923,7 +1171,7 @@
       "rituale.note2": "Il pagamento dei rituali avviene separatamente in euro e non tramite i token DEGAJA.",
       "chat.links": "Carte · Stelle · Numeri", "chat.human": "Consulenza", "chat.account": "Il mio DEGAJA",
       "footer.tagline": "La tua domanda. Il tuo percorso.",
-      "footer.impressum": "Note legali", "footer.datenschutz": "Privacy", "footer.agb": "Termini", "footer.kontakt": "Contatto", "footer.werdeberaterin": "Diventa consulente",
+      "footer.impressum": "Note legali", "footer.datenschutz": "Privacy", "footer.agb": "Termini", "footer.kontakt": "Contatto", "footer.werdeberaterin": "Diventa consulente", "footer.werdepartner": "Diventa partner",
       "footer.disclaimer": "DEGAJA è destinato all'orientamento personale e all'intrattenimento e non sostituisce una consulenza professionale.",
       "footer.age18": "DEGAJA è destinato esclusivamente a persone di età pari o superiore a 18 anni.",
       "legal.datenschutzTitle": "Informativa sulla privacy",
@@ -1031,7 +1279,69 @@
       "apply.mail.phone": "Telefono:",
       "apply.mail.specialty": "Esperienza/Specializzazione:",
       "apply.mail.social": "Instagram/TikTok:",
-      "apply.mail.message": "Messaggio:"
+      "apply.mail.message": "Messaggio:",
+      "partner.meta.title": "Diventa partner – DEGAJA",
+      "partner.meta.description": "Diventa partner DEGAJA: condividi il tuo link personale e guadagna il 40% di commissione su ogni ordine generato tramite te – senza sito web né configurazione tecnica.",
+      "partner.eyebrow": "✦ PER I PARTNER ✦",
+      "partner.h1.line1": "Diventa partner",
+      "partner.h1.line2": "di DEGAJA.",
+      "partner.hero.intro": "Hai un seguito sui social media, un blog o una community interessata a tarocchi, astrologia o consulenza spirituale?",
+      "partner.hero.tagline": "Condividi il tuo link — al resto pensa DEGAJA.",
+      "partner.hero.commission": "40% di commissione su ogni ordine tramite il tuo link.",
+      "partner.hero.talktous": "Raccontaci di te e del tuo canale.",
+      "partner.cta": "Diventa partner →",
+      "partner.why.title": "Perché diventare partner DEGAJA?",
+      "partner.card1.title": "Link personale in pochi secondi",
+      "partner.card1.desc": "Una volta approvato/a, ricevi il tuo link di tracciamento personale — nessuna configurazione tecnica richiesta.",
+      "partner.card2.title": "Pagamenti trasparenti",
+      "partner.card2.desc": "Ogni ordine tramite il tuo link viene tracciato. La tua commissione viene pagata regolarmente e in modo trasparente.",
+      "partner.card3.title": "Nessun impegno",
+      "partner.card3.desc": "Condividi il tuo link quando e dove vuoi. Nessuna vendita minima, nessun obbligo fisso.",
+      "partner.who.title": "Chi può diventare partner?",
+      "partner.who.item1": "Content creator, blogger o account social",
+      "partner.who.item2": "Community o newsletter interessate a tarocchi, astrologia o consulenza spirituale",
+      "partner.who.item3": "Clienti DEGAJA già esistenti che vogliono consigliare l'esperienza",
+      "partner.who.item4": "Nessuna dimensione minima del pubblico richiesta",
+      "partner.how.title": "Come funziona",
+      "partner.step1.strong": "Invia la candidatura",
+      "partner.step1.rest": "– compila il modulo qui sotto, ti risponderemo personalmente.",
+      "partner.step2.strong": "Ricevi il tuo link personale",
+      "partner.step2.rest": "– ottieni il tuo link di tracciamento DEGAJA.",
+      "partner.step3.strong": "Condividi e guadagna",
+      "partner.step3.rest": "– guadagni il 40% di commissione su ogni ordine effettuato tramite il tuo link.",
+      "partner.form.title": "Candidatura partner",
+      "partner.form.name": "Nome e cognome",
+      "partner.form.namePlaceholder": "Il tuo nome",
+      "partner.form.email": "Indirizzo e-mail",
+      "partner.form.emailPlaceholder": "nome@esempio.it",
+      "partner.form.channel": "Dove condividerai il tuo link?",
+      "partner.form.channelPlaceholder": "es. Instagram, TikTok, blog, YouTube, newsletter",
+      "partner.form.audience": "Dimensione del pubblico (opzionale)",
+      "partner.form.audiencePlaceholder": "es. 5.000 follower",
+      "partner.form.message": "Un breve messaggio per noi",
+      "partner.form.messagePlaceholder": "Raccontaci brevemente di te e del tuo canale.",
+      "partner.form.submit": "Invia candidatura →",
+      "partner.form.note": "I tuoi dati vengono utilizzati solo per elaborare la tua candidatura. Cliccando si aprirà il tuo programma di posta con un messaggio precompilato per noi.",
+      "partner.back": "← Torna alla home",
+      "partner.toHome": "Torna alla home",
+      "partner.mail.subject": "Candidatura partner – ",
+      "partner.mail.name": "Nome:",
+      "partner.mail.email": "E-mail:",
+      "partner.mail.channel": "Canale:",
+      "partner.mail.audience": "Pubblico:",
+      "partner.mail.message": "Messaggio:",
+      "partner.calc.title": "Quanto potresti guadagnare?",
+      "partner.calc.ordersLabel": "Ordini al mese tramite il tuo link",
+      "partner.calc.avgOrderLabel": "Valore medio dell'ordine",
+      "partner.calc.resultLabel": "La tua commissione mensile stimata (40%)",
+      "partner.calc.disclaimer": "Solo un esempio illustrativo – i risultati reali dipendono dalla tua portata e dal tuo pubblico.",
+      "partner.form.ftcLabel": "Confermo che rivelerò chiaramente la mia collaborazione con DEGAJA in ogni raccomandazione (es. \"pubblicità\" o \"#ad\"), come richiesto dalla FTC (USA) e da leggi equivalenti nel mio paese.",
+      "partner.result.title": "Il tuo link personale è pronto!",
+      "partner.result.linkNote": "Condividi questo link — ogni ordine tramite esso ti viene attribuito automaticamente.",
+      "partner.result.copyBtn": "Copia link",
+      "partner.result.copied": "Copiato!",
+      "partner.result.ftcNote": "Importante: indica chiaramente ogni raccomandazione come pubblicità/collaborazione (es. \"pubblicità\" o \"#ad\") — è un obbligo di legge.",
+      "partner.mail.code": "Codice:"
     },
     pt: {
       "nav.start": "Início", "nav.oracle": "Oráculo", "nav.prices": "Preços", "nav.human": "Aconselhamento", "nav.rituale": "Rituais", "nav.login": "Entrar",
@@ -1128,7 +1438,7 @@
       "rituale.note2": "O pagamento dos rituais é feito separadamente em euros e não através de tokens DEGAJA.",
       "chat.links": "Cartas · Estrelas · Números", "chat.human": "Aconselhamento", "chat.account": "O meu DEGAJA",
       "footer.tagline": "A tua pergunta. O teu caminho.",
-      "footer.impressum": "Informação legal", "footer.datenschutz": "Privacidade", "footer.agb": "Termos", "footer.kontakt": "Contacto", "footer.werdeberaterin": "Sê conselheira",
+      "footer.impressum": "Informação legal", "footer.datenschutz": "Privacidade", "footer.agb": "Termos", "footer.kontakt": "Contacto", "footer.werdeberaterin": "Sê conselheira", "footer.werdepartner": "Sê parceiro/a",
       "footer.disclaimer": "A DEGAJA destina-se à orientação pessoal e ao entretenimento e não substitui aconselhamento profissional.",
       "footer.age18": "A DEGAJA destina-se exclusivamente a pessoas com 18 anos ou mais.",
       "legal.datenschutzTitle": "Política de Privacidade",
@@ -1236,7 +1546,69 @@
       "apply.mail.phone": "Telefone:",
       "apply.mail.specialty": "Experiência/Especialidade:",
       "apply.mail.social": "Instagram/TikTok:",
-      "apply.mail.message": "Mensagem:"
+      "apply.mail.message": "Mensagem:",
+      "partner.meta.title": "Torna-te parceiro/a – DEGAJA",
+      "partner.meta.description": "Torna-te parceiro/a DEGAJA: partilha o teu link pessoal e ganha 40% de comissão em cada encomenda feita através de ti – sem site nem configuração técnica.",
+      "partner.eyebrow": "✦ PARA PARCEIROS/AS ✦",
+      "partner.h1.line1": "Torna-te parceiro/a",
+      "partner.h1.line2": "da DEGAJA.",
+      "partner.hero.intro": "Tens seguidores nas redes sociais, um blog ou uma comunidade interessada em tarot, astrologia ou orientação espiritual?",
+      "partner.hero.tagline": "Partilha o teu link — a DEGAJA trata do resto.",
+      "partner.hero.commission": "40% de comissão em cada encomenda através do teu link.",
+      "partner.hero.talktous": "Conta-nos sobre ti e o teu canal.",
+      "partner.cta": "Tornar-me parceiro/a →",
+      "partner.why.title": "Porquê ser parceiro/a DEGAJA?",
+      "partner.card1.title": "Link pessoal em segundos",
+      "partner.card1.desc": "Depois de aprovado/a, recebes o teu próprio link de rastreio — sem necessidade de configuração técnica.",
+      "partner.card2.title": "Pagamentos transparentes",
+      "partner.card2.desc": "Cada encomenda através do teu link é registada. A tua comissão é paga regularmente e de forma transparente.",
+      "partner.card3.title": "Sem compromisso",
+      "partner.card3.desc": "Partilha o teu link quando e onde quiseres. Sem vendas mínimas, sem exigências fixas.",
+      "partner.who.title": "Quem pode ser parceiro/a?",
+      "partner.who.item1": "Criadores/as de conteúdo, blogueiros/as ou contas de redes sociais",
+      "partner.who.item2": "Comunidades ou newsletters interessadas em tarot, astrologia ou orientação espiritual",
+      "partner.who.item3": "Clientes DEGAJA já existentes que queiram recomendar a experiência",
+      "partner.who.item4": "Não é necessária uma audiência mínima",
+      "partner.how.title": "Como funciona",
+      "partner.step1.strong": "Envia a tua candidatura",
+      "partner.step1.rest": "– preenche o formulário abaixo, responderemos pessoalmente.",
+      "partner.step2.strong": "Recebe o teu link pessoal",
+      "partner.step2.rest": "– recebes o teu próprio link de rastreio DEGAJA.",
+      "partner.step3.strong": "Partilha e ganha",
+      "partner.step3.rest": "– ganhas 40% de comissão em cada encomenda feita através do teu link.",
+      "partner.form.title": "Candidatura de parceiro/a",
+      "partner.form.name": "Nome completo",
+      "partner.form.namePlaceholder": "O teu nome",
+      "partner.form.email": "Endereço de e-mail",
+      "partner.form.emailPlaceholder": "nome@exemplo.pt",
+      "partner.form.channel": "Onde vais partilhar o teu link?",
+      "partner.form.channelPlaceholder": "ex. Instagram, TikTok, blog, YouTube, newsletter",
+      "partner.form.audience": "Dimensão da audiência (opcional)",
+      "partner.form.audiencePlaceholder": "ex. 5.000 seguidores",
+      "partner.form.message": "Uma breve mensagem para nós",
+      "partner.form.messagePlaceholder": "Conta-nos brevemente sobre ti e o teu canal.",
+      "partner.form.submit": "Enviar candidatura →",
+      "partner.form.note": "Os teus dados são usados apenas para processar a tua candidatura. Ao clicar, abre-se o teu programa de e-mail com uma mensagem pré-preenchida para nós.",
+      "partner.back": "← Voltar ao início",
+      "partner.toHome": "Voltar ao início",
+      "partner.mail.subject": "Candidatura de parceiro/a – ",
+      "partner.mail.name": "Nome:",
+      "partner.mail.email": "E-mail:",
+      "partner.mail.channel": "Canal:",
+      "partner.mail.audience": "Audiência:",
+      "partner.mail.message": "Mensagem:",
+      "partner.calc.title": "Quanto podes ganhar?",
+      "partner.calc.ordersLabel": "Encomendas por mês através do teu link",
+      "partner.calc.avgOrderLabel": "Valor médio da encomenda",
+      "partner.calc.resultLabel": "A tua comissão mensal estimada (40%)",
+      "partner.calc.disclaimer": "Apenas um exemplo ilustrativo – os resultados reais dependem do teu alcance e da tua audiência.",
+      "partner.form.ftcLabel": "Confirmo que vou revelar claramente a minha parceria com a DEGAJA em cada recomendação (ex. \"publicidade\" ou \"#ad\"), conforme exigido pela FTC (EUA) e leis equivalentes no meu país.",
+      "partner.result.title": "O teu link pessoal está pronto!",
+      "partner.result.linkNote": "Partilha este link — cada encomenda através dele é atribuída automaticamente a ti.",
+      "partner.result.copyBtn": "Copiar link",
+      "partner.result.copied": "Copiado!",
+      "partner.result.ftcNote": "Importante: identifica claramente cada recomendação como publicidade/parceria (ex. \"publicidade\" ou \"#ad\") — é uma exigência legal.",
+      "partner.mail.code": "Código:"
     },
     ru: {
       "nav.start": "Главная", "nav.oracle": "Оракул", "nav.prices": "Цены", "nav.human": "Консультанты", "nav.rituale": "Ритуалы", "nav.login": "Войти",
@@ -1333,7 +1705,7 @@
       "rituale.note2": "Оплата ритуалов производится отдельно в евро, а не через токены DEGAJA.",
       "chat.links": "Карты · Звёзды · Числа", "chat.human": "Консультанты", "chat.account": "Мой DEGAJA",
       "footer.tagline": "Твой вопрос. Твой путь.",
-      "footer.impressum": "Юридическая информация", "footer.datenschutz": "Конфиденциальность", "footer.agb": "Условия", "footer.kontakt": "Контакты", "footer.werdeberaterin": "Стать консультанткой",
+      "footer.impressum": "Юридическая информация", "footer.datenschutz": "Конфиденциальность", "footer.agb": "Условия", "footer.kontakt": "Контакты", "footer.werdeberaterin": "Стать консультанткой", "footer.werdepartner": "Стать партнёром",
       "footer.disclaimer": "DEGAJA предназначена для личного ориентира и развлечения и не заменяет профессиональную консультацию.",
       "footer.age18": "DEGAJA предназначена исключительно для лиц старше 18 лет.",
       "legal.datenschutzTitle": "Политика конфиденциальности",
@@ -1441,7 +1813,69 @@
       "apply.mail.phone": "Телефон:",
       "apply.mail.specialty": "Опыт/Специализация:",
       "apply.mail.social": "Instagram/TikTok:",
-      "apply.mail.message": "Сообщение:"
+      "apply.mail.message": "Сообщение:",
+      "partner.meta.title": "Стать партнёром – DEGAJA",
+      "partner.meta.description": "Станьте партнёром DEGAJA: делитесь своей персональной ссылкой и получайте 40% комиссии с каждого заказа, оформленного через вас — без сайта и технических настроек.",
+      "partner.eyebrow": "✦ ДЛЯ ПАРТНЁРОВ ✦",
+      "partner.h1.line1": "Станьте партнёром",
+      "partner.h1.line2": "DEGAJA.",
+      "partner.hero.intro": "У вас есть аудитория в соцсетях, блог или сообщество, которое интересуется картами таро, астрологией или духовными консультациями?",
+      "partner.hero.tagline": "Делитесь своей ссылкой — остальное берёт на себя DEGAJA.",
+      "partner.hero.commission": "40% комиссии с каждого заказа по вашей ссылке.",
+      "partner.hero.talktous": "Расскажите нам о себе и своём канале.",
+      "partner.cta": "Стать партнёром →",
+      "partner.why.title": "Почему стоит стать партнёром DEGAJA?",
+      "partner.card1.title": "Персональная ссылка за секунды",
+      "partner.card1.desc": "После одобрения вы получаете собственную ссылку для отслеживания — никаких технических настроек не требуется.",
+      "partner.card2.title": "Прозрачные выплаты",
+      "partner.card2.desc": "Каждый заказ по вашей ссылке отслеживается. Комиссия выплачивается регулярно и прозрачно.",
+      "partner.card3.title": "Никаких обязательств",
+      "partner.card3.desc": "Делитесь ссылкой когда и где хотите. Без минимальных продаж и жёстких требований.",
+      "partner.who.title": "Кто может стать партнёром?",
+      "partner.who.item1": "Авторы контента, блогеры или владельцы аккаунтов в соцсетях",
+      "partner.who.item2": "Сообщества или рассылки, интересующиеся таро, астрологией или духовными консультациями",
+      "partner.who.item3": "Действующие клиенты DEGAJA, которые хотят порекомендовать сервис",
+      "partner.who.item4": "Минимальный размер аудитории не требуется",
+      "partner.how.title": "Как это работает",
+      "partner.step1.strong": "Отправьте заявку",
+      "partner.step1.rest": "– заполните форму ниже, мы свяжемся с вами лично.",
+      "partner.step2.strong": "Получите свою персональную ссылку",
+      "partner.step2.rest": "– вы получите собственную ссылку для отслеживания DEGAJA.",
+      "partner.step3.strong": "Делитесь и зарабатывайте",
+      "partner.step3.rest": "– вы получаете 40% комиссии с каждого заказа по вашей ссылке.",
+      "partner.form.title": "Заявка партнёра",
+      "partner.form.name": "Имя и фамилия",
+      "partner.form.namePlaceholder": "Ваше имя",
+      "partner.form.email": "Адрес электронной почты",
+      "partner.form.emailPlaceholder": "name@example.ru",
+      "partner.form.channel": "Где вы будете делиться ссылкой?",
+      "partner.form.channelPlaceholder": "напр. Instagram, TikTok, блог, YouTube, рассылка",
+      "partner.form.audience": "Размер аудитории (необязательно)",
+      "partner.form.audiencePlaceholder": "напр. 5000 подписчиков",
+      "partner.form.message": "Короткое сообщение для нас",
+      "partner.form.messagePlaceholder": "Расскажите вкратце о себе и своём канале.",
+      "partner.form.submit": "Отправить заявку →",
+      "partner.form.note": "Ваши данные используются только для обработки заявки. При нажатии откроется ваша почтовая программа с готовым письмом для нас.",
+      "partner.back": "← Назад на главную",
+      "partner.toHome": "На главную",
+      "partner.mail.subject": "Заявка партнёра – ",
+      "partner.mail.name": "Имя:",
+      "partner.mail.email": "Email:",
+      "partner.mail.channel": "Канал:",
+      "partner.mail.audience": "Аудитория:",
+      "partner.mail.message": "Сообщение:",
+      "partner.calc.title": "Сколько вы можете заработать?",
+      "partner.calc.ordersLabel": "Заказов в месяц по вашей ссылке",
+      "partner.calc.avgOrderLabel": "Средняя стоимость заказа",
+      "partner.calc.resultLabel": "Ваша примерная ежемесячная комиссия (40%)",
+      "partner.calc.disclaimer": "Это лишь иллюстративный пример — реальные результаты зависят от вашего охвата и аудитории.",
+      "partner.form.ftcLabel": "Подтверждаю, что буду чётко раскрывать своё партнёрство с DEGAJA при каждой рекомендации (например, «реклама» или «#ad»), как того требует FTC (США) и аналогичные законы в моей стране.",
+      "partner.result.title": "Ваша персональная ссылка готова!",
+      "partner.result.linkNote": "Поделитесь этой ссылкой — каждый заказ по ней автоматически засчитывается вам.",
+      "partner.result.copyBtn": "Скопировать ссылку",
+      "partner.result.copied": "Скопировано!",
+      "partner.result.ftcNote": "Важно: чётко помечайте каждую рекомендацию как рекламу/партнёрство (например, «реклама» или «#ad») — это требование закона.",
+      "partner.mail.code": "Код:"
     },
     uk: {
       "nav.start": "Головна", "nav.oracle": "Оракул", "nav.prices": "Ціни", "nav.human": "Консультантки", "nav.rituale": "Ритуали", "nav.login": "Увійти",
@@ -1538,7 +1972,7 @@
       "rituale.note2": "Оплата ритуалів здійснюється окремо в євро, а не через токени DEGAJA.",
       "chat.links": "Карти · Зірки · Числа", "chat.human": "Консультантки", "chat.account": "Мій DEGAJA",
       "footer.tagline": "Твоє питання. Твій шлях.",
-      "footer.impressum": "Юридична інформація", "footer.datenschutz": "Конфіденційність", "footer.agb": "Умови", "footer.kontakt": "Контакти", "footer.werdeberaterin": "Стати консультанткою",
+      "footer.impressum": "Юридична інформація", "footer.datenschutz": "Конфіденційність", "footer.agb": "Умови", "footer.kontakt": "Контакти", "footer.werdeberaterin": "Стати консультанткою", "footer.werdepartner": "Стати партнером",
       "footer.disclaimer": "DEGAJA призначена для особистого орієнтиру та розваги і не замінює професійну консультацію.",
       "footer.age18": "DEGAJA призначена виключно для осіб старше 18 років.",
       "legal.datenschutzTitle": "Політика конфіденційності",
@@ -1646,7 +2080,69 @@
       "apply.mail.phone": "Телефон:",
       "apply.mail.specialty": "Досвід/Спеціалізація:",
       "apply.mail.social": "Instagram/TikTok:",
-      "apply.mail.message": "Повідомлення:"
+      "apply.mail.message": "Повідомлення:",
+      "partner.meta.title": "Стати партнером – DEGAJA",
+      "partner.meta.description": "Станьте партнером DEGAJA: діліться своїм персональним посиланням і отримуйте 40% комісії з кожного замовлення, оформленого через вас — без сайту й технічних налаштувань.",
+      "partner.eyebrow": "✦ ДЛЯ ПАРТНЕРІВ ✦",
+      "partner.h1.line1": "Станьте партнером",
+      "partner.h1.line2": "DEGAJA.",
+      "partner.hero.intro": "Маєте аудиторію в соцмережах, блог чи спільноту, яка цікавиться таро, астрологією або духовними консультаціями?",
+      "partner.hero.tagline": "Діліться своїм посиланням — решту бере на себе DEGAJA.",
+      "partner.hero.commission": "40% комісії з кожного замовлення за вашим посиланням.",
+      "partner.hero.talktous": "Розкажіть нам про себе та свій канал.",
+      "partner.cta": "Стати партнером →",
+      "partner.why.title": "Чому варто стати партнером DEGAJA?",
+      "partner.card1.title": "Персональне посилання за секунди",
+      "partner.card1.desc": "Після схвалення ви отримуєте власне посилання для відстеження — жодних технічних налаштувань не потрібно.",
+      "partner.card2.title": "Прозорі виплати",
+      "partner.card2.desc": "Кожне замовлення за вашим посиланням відстежується. Комісія виплачується регулярно й прозоро.",
+      "partner.card3.title": "Жодних зобов'язань",
+      "partner.card3.desc": "Діліться посиланням коли і де завгодно. Без мінімальних продажів і жорстких вимог.",
+      "partner.who.title": "Хто може стати партнером?",
+      "partner.who.item1": "Автори контенту, блогери або власники акаунтів у соцмережах",
+      "partner.who.item2": "Спільноти або розсилки, які цікавляться таро, астрологією або духовними консультаціями",
+      "partner.who.item3": "Наявні клієнти DEGAJA, які хочуть порекомендувати сервіс",
+      "partner.who.item4": "Мінімальний розмір аудиторії не потрібен",
+      "partner.how.title": "Як це працює",
+      "partner.step1.strong": "Надішліть заявку",
+      "partner.step1.rest": "– заповніть форму нижче, ми зв'яжемося з вами особисто.",
+      "partner.step2.strong": "Отримайте своє персональне посилання",
+      "partner.step2.rest": "– ви отримаєте власне посилання для відстеження DEGAJA.",
+      "partner.step3.strong": "Діліться та заробляйте",
+      "partner.step3.rest": "– ви отримуєте 40% комісії з кожного замовлення за вашим посиланням.",
+      "partner.form.title": "Заявка партнера",
+      "partner.form.name": "Ім'я та прізвище",
+      "partner.form.namePlaceholder": "Ваше ім'я",
+      "partner.form.email": "Електронна адреса",
+      "partner.form.emailPlaceholder": "name@example.ua",
+      "partner.form.channel": "Де ви ділитиметеся посиланням?",
+      "partner.form.channelPlaceholder": "напр. Instagram, TikTok, блог, YouTube, розсилка",
+      "partner.form.audience": "Розмір аудиторії (необов'язково)",
+      "partner.form.audiencePlaceholder": "напр. 5000 підписників",
+      "partner.form.message": "Коротке повідомлення для нас",
+      "partner.form.messagePlaceholder": "Розкажіть коротко про себе та свій канал.",
+      "partner.form.submit": "Надіслати заявку →",
+      "partner.form.note": "Ваші дані використовуються лише для обробки заявки. При натисканні відкриється ваша поштова програма з готовим листом для нас.",
+      "partner.back": "← Назад на головну",
+      "partner.toHome": "На головну",
+      "partner.mail.subject": "Заявка партнера – ",
+      "partner.mail.name": "Ім'я:",
+      "partner.mail.email": "Email:",
+      "partner.mail.channel": "Канал:",
+      "partner.mail.audience": "Аудиторія:",
+      "partner.mail.message": "Повідомлення:",
+      "partner.calc.title": "Скільки ви можете заробити?",
+      "partner.calc.ordersLabel": "Замовлень на місяць за вашим посиланням",
+      "partner.calc.avgOrderLabel": "Середня вартість замовлення",
+      "partner.calc.resultLabel": "Ваша орієнтовна щомісячна комісія (40%)",
+      "partner.calc.disclaimer": "Це лише ілюстративний приклад — реальні результати залежать від вашого охоплення та аудиторії.",
+      "partner.form.ftcLabel": "Підтверджую, що чітко розкриватиму своє партнерство з DEGAJA у кожній рекомендації (наприклад, «реклама» або «#ad»), як того вимагає FTC (США) та аналогічні закони в моїй країні.",
+      "partner.result.title": "Ваше персональне посилання готове!",
+      "partner.result.linkNote": "Поділіться цим посиланням — кожне замовлення за ним автоматично зараховується вам.",
+      "partner.result.copyBtn": "Скопіювати посилання",
+      "partner.result.copied": "Скопійовано!",
+      "partner.result.ftcNote": "Важливо: чітко позначайте кожну рекомендацію як рекламу/партнерство (наприклад, «реклама» або «#ad») — цього вимагає закон.",
+      "partner.mail.code": "Код:"
     }
   };
 
@@ -1695,9 +2191,42 @@
     "speech.langCode": "en-US"
   });
 
+  // First-time visitors (no saved preference yet) get matched to a
+  // supported language/currency from their browser/OS locale instead of
+  // always defaulting to German — e.g. en-US -> "us" (USD), pt-BR -> "br"
+  // (BRL). This never overrides an explicit choice already in localStorage.
+  function detectBrowserLang() {
+    const langs = (navigator.languages && navigator.languages.length) ? navigator.languages : [navigator.language || ""];
+    for (const raw of langs) {
+      const parts = String(raw).toLowerCase().split("-");
+      const primary = parts[0];
+      const region = (parts[1] || "").toUpperCase();
+      if (primary === "en") return region === "US" ? "us" : "en";
+      if (primary === "pt") return region === "BR" ? "br" : "pt";
+      if (["de", "fr", "es", "it", "ru", "uk"].includes(primary)) return primary;
+    }
+    return "de";
+  }
+
+  // Tracks WHY the current language is set, so a real IP-geolocation
+  // result (see applyGeoLangIfEligible below) knows whether it's still
+  // allowed to refine the default. It must never override a language the
+  // visitor explicitly picked via the flag switcher ("explicit") or one
+  // implied by the URL itself, e.g. /fr ("url") — but it should still be
+  // free to upgrade a plain browser-locale guess ("browser") once, or a
+  // previous geo result ("geo") is left alone on later page loads so we
+  // don't re-fetch /api/geo on every navigation.
+  const LANG_SOURCE_KEY = "degajaLangSource";
+
   function getLang() {
     const saved = localStorage.getItem(LANG_KEY);
-    return SUPPORTED.includes(saved) ? saved : "de";
+    if (SUPPORTED.includes(saved)) return saved;
+    const detected = detectBrowserLang();
+    try {
+      localStorage.setItem(LANG_KEY, detected);
+      if (!localStorage.getItem(LANG_SOURCE_KEY)) localStorage.setItem(LANG_SOURCE_KEY, "browser");
+    } catch (_) {}
+    return detected;
   }
 
   // Languages with their own crawlable URL (/en, /fr, ... via vercel.json
@@ -1716,12 +2245,14 @@
     const seg = location.pathname.replace(/\/+$/, "").split("/")[1] || "";
     if (PATH_LANGS.includes(seg) && localStorage.getItem(LANG_KEY) !== seg) {
       localStorage.setItem(LANG_KEY, seg);
+      try { localStorage.setItem(LANG_SOURCE_KEY, "url"); } catch (_) {}
     }
   }
 
   function setLang(lang) {
     if (!SUPPORTED.includes(lang)) return;
     localStorage.setItem(LANG_KEY, lang);
+    try { localStorage.setItem(LANG_SOURCE_KEY, "explicit"); } catch (_) {}
     // Only the homepage has a dedicated URL per language; everywhere else
     // (e.g. werde-beraterin.html) just re-renders in place, as before.
     if (isHomeLikePath(location.pathname)) {
@@ -1810,6 +2341,62 @@
     });
   }
 
+  // Real IP-geolocation (via Vercel's edge, see /api/geo.js) refines the
+  // default further than the browser-locale guess above: a German browser
+  // visiting from Spain should see Spanish by default (matches where the
+  // visitor actually is, which is what matters for a local audience), an
+  // American browsing from Italy should see Italian — while the flag
+  // switcher always lets anyone pick their own language regardless. This
+  // never overrides an explicit flag pick or a language-specific URL, and
+  // it only ever runs once per browser (a "geo" source is left alone on
+  // later page loads, so we don't re-fetch on every navigation).
+  const COUNTRY_LANG = {
+    DE: "de", AT: "de", CH: "de", LI: "de",
+    FR: "fr", MC: "fr",
+    ES: "es", MX: "es", AR: "es", CO: "es", CL: "es", PE: "es", VE: "es",
+    UY: "es", EC: "es", GT: "es", CR: "es", DO: "es", PA: "es", BO: "es",
+    PY: "es", SV: "es", HN: "es", NI: "es",
+    IT: "it", SM: "it",
+    PT: "pt",
+    BR: "br",
+    RU: "ru", BY: "ru", KZ: "ru",
+    UA: "uk",
+    GB: "en", IE: "en", AU: "en", NZ: "en", ZA: "en", IN: "en", SG: "en",
+    US: "us", CA: "us"
+  };
+
+  function applyGeoLangIfEligible() {
+    let source;
+    try { source = localStorage.getItem(LANG_SOURCE_KEY); } catch (_) { source = null; }
+    if (source === "explicit" || source === "url" || source === "geo") return;
+
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 2500);
+    fetch("/api/geo", { signal: controller.signal })
+      .then(r => (r.ok ? r.json() : null))
+      .then(data => {
+        const lang = data && COUNTRY_LANG[String(data.country || "").toUpperCase()];
+        if (!lang || !SUPPORTED.includes(lang)) return;
+        // Re-check right before writing — a flag click may have landed
+        // while the request was in flight.
+        let latestSource;
+        try { latestSource = localStorage.getItem(LANG_SOURCE_KEY); } catch (_) { latestSource = null; }
+        if (latestSource === "explicit" || latestSource === "url") return;
+        const changed = lang !== getLang();
+        try {
+          localStorage.setItem(LANG_KEY, lang);
+          localStorage.setItem(LANG_SOURCE_KEY, "geo");
+        } catch (_) { return; }
+        if (!changed) return;
+        applyTranslations();
+        document.querySelectorAll(".lang-switch .lang-flag").forEach((btn, i) => {
+          btn.classList.toggle("active", SUPPORTED[i] === lang);
+        });
+      })
+      .catch(() => {})
+      .finally(() => clearTimeout(timeout));
+  }
+
   function init() {
     syncLangFromPath();
     const header = document.querySelector(".site-header");
@@ -1817,6 +2404,7 @@
       header.insertBefore(buildSwitcher(), header.querySelector(".login-btn"));
     }
     applyTranslations();
+    applyGeoLangIfEligible();
   }
 
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init, { once: true });
