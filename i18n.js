@@ -2208,11 +2208,24 @@
     return "de";
   }
 
+  // Tracks WHY the current language is set, so a real IP-geolocation
+  // result (see applyGeoLangIfEligible below) knows whether it's still
+  // allowed to refine the default. It must never override a language the
+  // visitor explicitly picked via the flag switcher ("explicit") or one
+  // implied by the URL itself, e.g. /fr ("url") — but it should still be
+  // free to upgrade a plain browser-locale guess ("browser") once, or a
+  // previous geo result ("geo") is left alone on later page loads so we
+  // don't re-fetch /api/geo on every navigation.
+  const LANG_SOURCE_KEY = "degajaLangSource";
+
   function getLang() {
     const saved = localStorage.getItem(LANG_KEY);
     if (SUPPORTED.includes(saved)) return saved;
     const detected = detectBrowserLang();
-    try { localStorage.setItem(LANG_KEY, detected); } catch (_) {}
+    try {
+      localStorage.setItem(LANG_KEY, detected);
+      if (!localStorage.getItem(LANG_SOURCE_KEY)) localStorage.setItem(LANG_SOURCE_KEY, "browser");
+    } catch (_) {}
     return detected;
   }
 
@@ -2232,12 +2245,14 @@
     const seg = location.pathname.replace(/\/+$/, "").split("/")[1] || "";
     if (PATH_LANGS.includes(seg) && localStorage.getItem(LANG_KEY) !== seg) {
       localStorage.setItem(LANG_KEY, seg);
+      try { localStorage.setItem(LANG_SOURCE_KEY, "url"); } catch (_) {}
     }
   }
 
   function setLang(lang) {
     if (!SUPPORTED.includes(lang)) return;
     localStorage.setItem(LANG_KEY, lang);
+    try { localStorage.setItem(LANG_SOURCE_KEY, "explicit"); } catch (_) {}
     // Only the homepage has a dedicated URL per language; everywhere else
     // (e.g. werde-beraterin.html) just re-renders in place, as before.
     if (isHomeLikePath(location.pathname)) {
@@ -2326,6 +2341,62 @@
     });
   }
 
+  // Real IP-geolocation (via Vercel's edge, see /api/geo.js) refines the
+  // default further than the browser-locale guess above: a German browser
+  // visiting from Spain should see Spanish by default (matches where the
+  // visitor actually is, which is what matters for a local audience), an
+  // American browsing from Italy should see Italian — while the flag
+  // switcher always lets anyone pick their own language regardless. This
+  // never overrides an explicit flag pick or a language-specific URL, and
+  // it only ever runs once per browser (a "geo" source is left alone on
+  // later page loads, so we don't re-fetch on every navigation).
+  const COUNTRY_LANG = {
+    DE: "de", AT: "de", CH: "de", LI: "de",
+    FR: "fr", MC: "fr",
+    ES: "es", MX: "es", AR: "es", CO: "es", CL: "es", PE: "es", VE: "es",
+    UY: "es", EC: "es", GT: "es", CR: "es", DO: "es", PA: "es", BO: "es",
+    PY: "es", SV: "es", HN: "es", NI: "es",
+    IT: "it", SM: "it",
+    PT: "pt",
+    BR: "br",
+    RU: "ru", BY: "ru", KZ: "ru",
+    UA: "uk",
+    GB: "en", IE: "en", AU: "en", NZ: "en", ZA: "en", IN: "en", SG: "en",
+    US: "us", CA: "us"
+  };
+
+  function applyGeoLangIfEligible() {
+    let source;
+    try { source = localStorage.getItem(LANG_SOURCE_KEY); } catch (_) { source = null; }
+    if (source === "explicit" || source === "url" || source === "geo") return;
+
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 2500);
+    fetch("/api/geo", { signal: controller.signal })
+      .then(r => (r.ok ? r.json() : null))
+      .then(data => {
+        const lang = data && COUNTRY_LANG[String(data.country || "").toUpperCase()];
+        if (!lang || !SUPPORTED.includes(lang)) return;
+        // Re-check right before writing — a flag click may have landed
+        // while the request was in flight.
+        let latestSource;
+        try { latestSource = localStorage.getItem(LANG_SOURCE_KEY); } catch (_) { latestSource = null; }
+        if (latestSource === "explicit" || latestSource === "url") return;
+        const changed = lang !== getLang();
+        try {
+          localStorage.setItem(LANG_KEY, lang);
+          localStorage.setItem(LANG_SOURCE_KEY, "geo");
+        } catch (_) { return; }
+        if (!changed) return;
+        applyTranslations();
+        document.querySelectorAll(".lang-switch .lang-flag").forEach((btn, i) => {
+          btn.classList.toggle("active", SUPPORTED[i] === lang);
+        });
+      })
+      .catch(() => {})
+      .finally(() => clearTimeout(timeout));
+  }
+
   function init() {
     syncLangFromPath();
     const header = document.querySelector(".site-header");
@@ -2333,6 +2404,7 @@
       header.insertBefore(buildSwitcher(), header.querySelector(".login-btn"));
     }
     applyTranslations();
+    applyGeoLangIfEligible();
   }
 
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init, { once: true });
