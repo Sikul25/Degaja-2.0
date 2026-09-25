@@ -36,6 +36,16 @@
     .apply-submit{width:100%;border:0;border-radius:14px;padding:15px 20px;background:#3f96c6;color:#fff;font-weight:800;font-size:15px}
     .apply-note{text-align:center;color:#8a91a0;font-size:12px;margin-top:14px;line-height:1.6}
     .apply-back{display:block;text-align:center;margin:8px 0 40px;color:#315b7d;font-weight:700;font-size:14px}
+    .apply-checkbox{display:flex;align-items:flex-start;gap:10px;margin:0 0 18px}
+    .apply-checkbox input{width:auto;margin:3px 0 0;flex:0 0 auto}
+    .apply-checkbox label{font-weight:400;color:#687384;font-size:12.5px;line-height:1.55;margin:0}
+    .partner-result{display:none;max-width:620px;margin:0 auto 24px;background:#f6edda;border:1px solid rgba(184,147,70,.35);border-radius:22px;padding:24px;text-align:center}
+    .partner-result.show{display:block}
+    .partner-result h3{margin:0 0 10px;color:#18334a;font-family:Georgia,"Times New Roman",serif;font-size:22px}
+    .partner-result-link{display:flex;gap:8px;align-items:center;justify-content:center;flex-wrap:wrap;margin:12px 0}
+    .partner-result-link code{background:#fff;border:1px solid #cfe2eb;border-radius:10px;padding:10px 14px;font-size:14px;color:#18334a;word-break:break-all}
+    .partner-result-copy{border:0;border-radius:10px;padding:10px 16px;background:#3f96c6;color:#fff;font-weight:800;font-size:13px;cursor:pointer}
+    .partner-result-ftc{color:#8a6827;font-size:12px;margin:10px 0 0;line-height:1.6}
     .calc-wrap{max-width:520px;margin:0 auto;background:rgba(255,255,255,.9);border:1px solid rgba(184,147,70,.25);border-radius:26px;padding:30px;box-shadow:0 18px 60px rgba(54,139,189,.10)}
     .calc-row{margin-bottom:22px}
     .calc-row label{display:flex;justify-content:space-between;font-weight:800;color:#18334a;font-size:14px;margin-bottom:10px}
@@ -112,6 +122,15 @@
   <section class="apply-section" id="apply">
     <h2 data-i18n="partner.form.title">Partner-Bewerbung</h2>
     <div class="apply-form-wrap">
+      <div class="partner-result" id="partnerResult">
+        <h3 data-i18n="partner.result.title">Dein persönlicher Link ist bereit!</h3>
+        <p data-i18n="partner.result.linkNote">Teile diesen Link — jede Bestellung darüber wird dir automatisch zugeordnet.</p>
+        <div class="partner-result-link">
+          <code id="partnerLink"></code>
+          <button type="button" class="partner-result-copy" id="partnerCopyBtn" data-i18n="partner.result.copyBtn">Link kopieren</button>
+        </div>
+        <p class="partner-result-ftc" data-i18n="partner.result.ftcNote">Wichtig: Kennzeichne jede Empfehlung klar als Werbung/Partnerschaft (z. B. „Werbung“ oder „#ad“) — das ist gesetzlich vorgeschrieben.</p>
+      </div>
       <form class="apply-form" id="partnerApplyForm">
         <label for="partnerName" data-i18n="partner.form.name">Vor- und Nachname</label>
         <input id="partnerName" required placeholder="Dein Name" data-i18n-placeholder="partner.form.namePlaceholder">
@@ -123,6 +142,10 @@
         <input id="partnerAudience" placeholder="z. B. 5.000 Follower" data-i18n-placeholder="partner.form.audiencePlaceholder">
         <label for="partnerMessage" data-i18n="partner.form.message">Kurze Nachricht an uns</label>
         <textarea id="partnerMessage" placeholder="Erzähl uns kurz von dir und deinem Kanal." data-i18n-placeholder="partner.form.messagePlaceholder"></textarea>
+        <div class="apply-checkbox">
+          <input type="checkbox" id="partnerFtcConsent" required>
+          <label for="partnerFtcConsent" data-i18n="partner.form.ftcLabel">Ich bestätige, dass ich meine Partnerschaft mit DEGAJA bei jeder Empfehlung klar offenlege (z. B. „Werbung“ oder „#ad“), wie es die FTC (USA) und vergleichbare Gesetze in meinem Land verlangen.</label>
+        </div>
         <button type="submit" class="apply-submit" data-i18n="partner.form.submit">Bewerbung senden →</button>
       </form>
       <p class="apply-note" id="partnerNote" data-i18n="partner.form.note">Deine Angaben werden nur zur Bearbeitung deiner Bewerbung verwendet. Beim Klick öffnet sich dein E-Mail-Programm mit einer vorausgefüllten Nachricht an uns.</p>
@@ -167,23 +190,61 @@
     update();
   })();
 
+  function slugifyName(name) {
+    return (name || '')
+      .toLowerCase()
+      .normalize('NFD').replace(/[̀-ͯ]/g, '')
+      .replace(/[^a-z0-9]+/g, '')
+      .slice(0, 16) || 'partner';
+  }
+
+  function generateRefCode(name) {
+    return slugifyName(name) + Date.now().toString(36).slice(-4);
+  }
+
   document.getElementById('partnerApplyForm')?.addEventListener('submit', e => {
     e.preventDefault();
     const t = window.degajaI18n ? window.degajaI18n.t : (k => k);
     const val = id => document.getElementById(id)?.value.trim() || '';
     const name = val('partnerName'), email = val('partnerEmail');
     if (!name || !email) return;
+    if (!document.getElementById('partnerFtcConsent')?.checked) return;
+
+    const code = generateRefCode(name);
+    const link = `https://www.degaja.com/?ref=${code}`;
+
     const body = [
       `${t('partner.mail.name')} ${name}`,
       `${t('partner.mail.email')} ${email}`,
       `${t('partner.mail.channel')} ${val('partnerChannel') || '-'}`,
       `${t('partner.mail.audience')} ${val('partnerAudience') || '-'}`,
+      `${t('partner.mail.code')} ${code}`,
       '',
       `${t('partner.mail.message')}`,
       val('partnerMessage') || '-'
     ].join('\n');
     const mailto = `mailto:info@degaja.com?subject=${encodeURIComponent(t('partner.mail.subject') + name)}&body=${encodeURIComponent(body)}`;
     window.location.href = mailto;
+
+    const linkEl = document.getElementById('partnerLink');
+    const resultEl = document.getElementById('partnerResult');
+    if (linkEl) linkEl.textContent = link;
+    if (resultEl) {
+      resultEl.classList.add('show');
+      resultEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  });
+
+  document.getElementById('partnerCopyBtn')?.addEventListener('click', () => {
+    const t = window.degajaI18n ? window.degajaI18n.t : (k => k);
+    const link = document.getElementById('partnerLink')?.textContent || '';
+    const btn = document.getElementById('partnerCopyBtn');
+    if (!link || !btn) return;
+    navigator.clipboard?.writeText(link).then(() => {
+      const original = btn.textContent;
+      btn.textContent = t('partner.result.copied');
+      setTimeout(() => { btn.textContent = original; }, 2000);
+    });
   });
 </script>
 </body>

@@ -266,7 +266,14 @@
       "partner.calc.ordersLabel": "Bestellungen pro Monat über deinen Link",
       "partner.calc.avgOrderLabel": "Durchschnittlicher Bestellwert",
       "partner.calc.resultLabel": "Deine geschätzte monatliche Provision (40 %)",
-      "partner.calc.disclaimer": "Nur ein Beispiel zur Orientierung – die tatsächlichen Ergebnisse hängen von deiner Reichweite und deinem Publikum ab."
+      "partner.calc.disclaimer": "Nur ein Beispiel zur Orientierung – die tatsächlichen Ergebnisse hängen von deiner Reichweite und deinem Publikum ab.",
+      "partner.form.ftcLabel": "Ich bestätige, dass ich meine Partnerschaft mit DEGAJA bei jeder Empfehlung klar offenlege (z. B. „Werbung“ oder „#ad“), wie es die FTC (USA) und vergleichbare Gesetze in meinem Land verlangen.",
+      "partner.result.title": "Dein persönlicher Link ist bereit!",
+      "partner.result.linkNote": "Teile diesen Link — jede Bestellung darüber wird dir automatisch zugeordnet.",
+      "partner.result.copyBtn": "Link kopieren",
+      "partner.result.copied": "Kopiert!",
+      "partner.result.ftcNote": "Wichtig: Kennzeichne jede Empfehlung klar als Werbung/Partnerschaft (z. B. „Werbung“ oder „#ad“) — das ist gesetzlich vorgeschrieben.",
+      "partner.mail.code": "Code:"
     },
     en: {
       "nav.start": "Home", "nav.oracle": "Oracle", "nav.prices": "Pricing", "nav.human": "Advisors", "nav.rituale": "Rituals", "nav.login": "Sign in",
@@ -526,7 +533,14 @@
       "partner.calc.ordersLabel": "Orders per month through your link",
       "partner.calc.avgOrderLabel": "Average order value",
       "partner.calc.resultLabel": "Your estimated monthly commission (40%)",
-      "partner.calc.disclaimer": "Just an illustrative example – actual results depend on your reach and audience."
+      "partner.calc.disclaimer": "Just an illustrative example – actual results depend on your reach and audience.",
+      "partner.form.ftcLabel": "I confirm I will clearly disclose my partnership with DEGAJA on every recommendation (e.g. \"ad\" or \"#ad\"), as required by the FTC (US) and equivalent laws in my country.",
+      "partner.result.title": "Your personal link is ready!",
+      "partner.result.linkNote": "Share this link — every order through it is automatically credited to you.",
+      "partner.result.copyBtn": "Copy link",
+      "partner.result.copied": "Copied!",
+      "partner.result.ftcNote": "Important: clearly label every recommendation as an ad/partnership (e.g. \"ad\" or \"#ad\") — this is a legal requirement.",
+      "partner.mail.code": "Code:"
     },
     fr: {
       "nav.start": "Accueil", "nav.oracle": "Oracle", "nav.prices": "Tarifs", "nav.human": "Conseil", "nav.rituale": "Rituels", "nav.login": "Connexion",
@@ -786,7 +800,14 @@
       "partner.calc.ordersLabel": "Commandes par mois via votre lien",
       "partner.calc.avgOrderLabel": "Valeur moyenne de la commande",
       "partner.calc.resultLabel": "Votre commission mensuelle estimée (40 %)",
-      "partner.calc.disclaimer": "Un exemple illustratif seulement – les résultats réels dépendent de votre audience et de votre portée."
+      "partner.calc.disclaimer": "Un exemple illustratif seulement – les résultats réels dépendent de votre audience et de votre portée.",
+      "partner.form.ftcLabel": "Je confirme que je révélerai clairement mon partenariat avec DEGAJA à chaque recommandation (ex. « publicité » ou « #ad »), comme l'exige la FTC (États-Unis) et les lois équivalentes dans mon pays.",
+      "partner.result.title": "Votre lien personnel est prêt !",
+      "partner.result.linkNote": "Partagez ce lien — chaque commande passée via celui-ci vous est automatiquement attribuée.",
+      "partner.result.copyBtn": "Copier le lien",
+      "partner.result.copied": "Copié !",
+      "partner.result.ftcNote": "Important : indiquez clairement chaque recommandation comme une publicité/un partenariat (ex. « publicité » ou « #ad ») — c'est une obligation légale.",
+      "partner.mail.code": "Code :"
     },
     es: {
       "nav.start": "Inicio", "nav.oracle": "Oráculo", "nav.prices": "Precios", "nav.human": "Asesoría", "nav.rituale": "Rituales", "nav.login": "Acceder",
@@ -1046,7 +1067,14 @@
       "partner.calc.ordersLabel": "Pedidos al mes a través de tu enlace",
       "partner.calc.avgOrderLabel": "Valor medio del pedido",
       "partner.calc.resultLabel": "Tu comisión mensual estimada (40 %)",
-      "partner.calc.disclaimer": "Solo un ejemplo ilustrativo – los resultados reales dependen de tu alcance y tu audiencia."
+      "partner.calc.disclaimer": "Solo un ejemplo ilustrativo – los resultados reales dependen de tu alcance y tu audiencia.",
+      "partner.form.ftcLabel": "Confirmo que revelaré claramente mi asociación con DEGAJA en cada recomendación (p. ej. «publicidad» o «#ad»), tal como exige la FTC (EE. UU.) y leyes equivalentes en mi país.",
+      "partner.result.title": "¡Tu enlace personal está listo!",
+      "partner.result.linkNote": "Comparte este enlace — cada pedido a través de él se te atribuye automáticamente.",
+      "partner.result.copyBtn": "Copiar enlace",
+      "partner.result.copied": "¡Copiado!",
+      "partner.result.ftcNote": "Importante: indica claramente cada recomendación como publicidad/asociación (p. ej. «publicidad» o «#ad») — es un requisito legal.",
+      "partner.mail.code": "Código:"
     },
     it: {
       "nav.start": "Home", "nav.oracle": "Oracolo", "nav.prices": "Prezzi", "nav.human": "Consulenza", "nav.rituale": "Rituali", "nav.login": "Accedi",
@@ -1306,7 +1334,14 @@
       "partner.calc.ordersLabel": "Ordini al mese tramite il tuo link",
       "partner.calc.avgOrderLabel": "Valore medio dell'ordine",
       "partner.calc.resultLabel": "La tua commissione mensile stimata (40%)",
-      "partner.calc.disclaimer": "Solo un esempio illustrativo – i risultati reali dipendono dalla tua portata e dal tuo pubblico."
+      "partner.calc.disclaimer": "Solo un esempio illustrativo – i risultati reali dipendono dalla tua portata e dal tuo pubblico.",
+      "partner.form.ftcLabel": "Confermo che rivelerò chiaramente la mia collaborazione con DEGAJA in ogni raccomandazione (es. \"pubblicità\" o \"#ad\"), come richiesto dalla FTC (USA) e da leggi equivalenti nel mio paese.",
+      "partner.result.title": "Il tuo link personale è pronto!",
+      "partner.result.linkNote": "Condividi questo link — ogni ordine tramite esso ti viene attribuito automaticamente.",
+      "partner.result.copyBtn": "Copia link",
+      "partner.result.copied": "Copiato!",
+      "partner.result.ftcNote": "Importante: indica chiaramente ogni raccomandazione come pubblicità/collaborazione (es. \"pubblicità\" o \"#ad\") — è un obbligo di legge.",
+      "partner.mail.code": "Codice:"
     },
     pt: {
       "nav.start": "Início", "nav.oracle": "Oráculo", "nav.prices": "Preços", "nav.human": "Aconselhamento", "nav.rituale": "Rituais", "nav.login": "Entrar",
@@ -1566,7 +1601,14 @@
       "partner.calc.ordersLabel": "Encomendas por mês através do teu link",
       "partner.calc.avgOrderLabel": "Valor médio da encomenda",
       "partner.calc.resultLabel": "A tua comissão mensal estimada (40%)",
-      "partner.calc.disclaimer": "Apenas um exemplo ilustrativo – os resultados reais dependem do teu alcance e da tua audiência."
+      "partner.calc.disclaimer": "Apenas um exemplo ilustrativo – os resultados reais dependem do teu alcance e da tua audiência.",
+      "partner.form.ftcLabel": "Confirmo que vou revelar claramente a minha parceria com a DEGAJA em cada recomendação (ex. \"publicidade\" ou \"#ad\"), conforme exigido pela FTC (EUA) e leis equivalentes no meu país.",
+      "partner.result.title": "O teu link pessoal está pronto!",
+      "partner.result.linkNote": "Partilha este link — cada encomenda através dele é atribuída automaticamente a ti.",
+      "partner.result.copyBtn": "Copiar link",
+      "partner.result.copied": "Copiado!",
+      "partner.result.ftcNote": "Importante: identifica claramente cada recomendação como publicidade/parceria (ex. \"publicidade\" ou \"#ad\") — é uma exigência legal.",
+      "partner.mail.code": "Código:"
     },
     ru: {
       "nav.start": "Главная", "nav.oracle": "Оракул", "nav.prices": "Цены", "nav.human": "Консультанты", "nav.rituale": "Ритуалы", "nav.login": "Войти",
@@ -1826,7 +1868,14 @@
       "partner.calc.ordersLabel": "Заказов в месяц по вашей ссылке",
       "partner.calc.avgOrderLabel": "Средняя стоимость заказа",
       "partner.calc.resultLabel": "Ваша примерная ежемесячная комиссия (40%)",
-      "partner.calc.disclaimer": "Это лишь иллюстративный пример — реальные результаты зависят от вашего охвата и аудитории."
+      "partner.calc.disclaimer": "Это лишь иллюстративный пример — реальные результаты зависят от вашего охвата и аудитории.",
+      "partner.form.ftcLabel": "Подтверждаю, что буду чётко раскрывать своё партнёрство с DEGAJA при каждой рекомендации (например, «реклама» или «#ad»), как того требует FTC (США) и аналогичные законы в моей стране.",
+      "partner.result.title": "Ваша персональная ссылка готова!",
+      "partner.result.linkNote": "Поделитесь этой ссылкой — каждый заказ по ней автоматически засчитывается вам.",
+      "partner.result.copyBtn": "Скопировать ссылку",
+      "partner.result.copied": "Скопировано!",
+      "partner.result.ftcNote": "Важно: чётко помечайте каждую рекомендацию как рекламу/партнёрство (например, «реклама» или «#ad») — это требование закона.",
+      "partner.mail.code": "Код:"
     },
     uk: {
       "nav.start": "Головна", "nav.oracle": "Оракул", "nav.prices": "Ціни", "nav.human": "Консультантки", "nav.rituale": "Ритуали", "nav.login": "Увійти",
@@ -2086,7 +2135,14 @@
       "partner.calc.ordersLabel": "Замовлень на місяць за вашим посиланням",
       "partner.calc.avgOrderLabel": "Середня вартість замовлення",
       "partner.calc.resultLabel": "Ваша орієнтовна щомісячна комісія (40%)",
-      "partner.calc.disclaimer": "Це лише ілюстративний приклад — реальні результати залежать від вашого охоплення та аудиторії."
+      "partner.calc.disclaimer": "Це лише ілюстративний приклад — реальні результати залежать від вашого охоплення та аудиторії.",
+      "partner.form.ftcLabel": "Підтверджую, що чітко розкриватиму своє партнерство з DEGAJA у кожній рекомендації (наприклад, «реклама» або «#ad»), як того вимагає FTC (США) та аналогічні закони в моїй країні.",
+      "partner.result.title": "Ваше персональне посилання готове!",
+      "partner.result.linkNote": "Поділіться цим посиланням — кожне замовлення за ним автоматично зараховується вам.",
+      "partner.result.copyBtn": "Скопіювати посилання",
+      "partner.result.copied": "Скопійовано!",
+      "partner.result.ftcNote": "Важливо: чітко позначайте кожну рекомендацію як рекламу/партнерство (наприклад, «реклама» або «#ad») — цього вимагає закон.",
+      "partner.mail.code": "Код:"
     }
   };
 
