@@ -36,6 +36,15 @@
     .apply-submit{width:100%;border:0;border-radius:14px;padding:15px 20px;background:#3f96c6;color:#fff;font-weight:800;font-size:15px}
     .apply-note{text-align:center;color:#8a91a0;font-size:12px;margin-top:14px;line-height:1.6}
     .apply-back{display:block;text-align:center;margin:8px 0 40px;color:#315b7d;font-weight:700;font-size:14px}
+    .calc-wrap{max-width:520px;margin:0 auto;background:rgba(255,255,255,.9);border:1px solid rgba(184,147,70,.25);border-radius:26px;padding:30px;box-shadow:0 18px 60px rgba(54,139,189,.10)}
+    .calc-row{margin-bottom:22px}
+    .calc-row label{display:flex;justify-content:space-between;font-weight:800;color:#18334a;font-size:14px;margin-bottom:10px}
+    .calc-row label span{color:#b88a32}
+    .calc-row input[type=range]{width:100%;accent-color:#b88a32}
+    .calc-result{text-align:center;padding:18px 10px;border-top:1px dashed #cfe2eb;margin-top:6px}
+    .calc-result span{display:block;color:#687384;font-size:13px;margin-bottom:4px}
+    .calc-result strong{font-family:Georgia,"Times New Roman",serif;font-size:clamp(30px,6vw,40px);color:#18334a}
+    .calc-disclaimer{text-align:center;color:#8a91a0;font-size:11px;margin-top:14px;line-height:1.6}
     @media(max-width:700px){.apply-grid{grid-template-columns:1fr}}
   </style>
 </head>
@@ -51,6 +60,25 @@
     <p><strong data-i18n="partner.hero.commission" style="color:#b88a32">40 % Provision auf jede Bestellung über deinen Link.</strong></p>
     <p data-i18n="partner.hero.talktous">Erzähl uns von dir und deinem Kanal.</p>
     <a href="#apply" class="apply-cta" data-i18n="partner.cta">Jetzt Partner werden →</a>
+  </section>
+
+  <section class="apply-section">
+    <h2 data-i18n="partner.calc.title">Wie viel kannst du verdienen?</h2>
+    <div class="calc-wrap">
+      <div class="calc-row">
+        <label for="calcOrders"><span data-i18n="partner.calc.ordersLabel">Bestellungen pro Monat über deinen Link</span> <span id="calcOrdersVal">10</span></label>
+        <input type="range" id="calcOrders" min="0" max="50" value="10" step="1">
+      </div>
+      <div class="calc-row">
+        <label for="calcAvgOrder"><span data-i18n="partner.calc.avgOrderLabel">Durchschnittlicher Bestellwert</span> <span>€<span id="calcAvgOrderVal">20</span></span></label>
+        <input type="range" id="calcAvgOrder" min="5" max="60" value="20" step="1">
+      </div>
+      <div class="calc-result">
+        <span data-i18n="partner.calc.resultLabel">Deine geschätzte monatliche Provision (40 %)</span>
+        <strong id="calcResult">€80</strong>
+      </div>
+    </div>
+    <p class="calc-disclaimer" data-i18n="partner.calc.disclaimer">Nur ein Beispiel zur Orientierung – die tatsächlichen Ergebnisse hängen von deiner Reichweite und deinem Publikum ab.</p>
   </section>
 
   <section class="apply-section">
@@ -118,6 +146,26 @@
     const descVal = t('partner.meta.description');
     if (desc && descVal && !descVal.startsWith('partner.')) desc.setAttribute('content', descVal);
   });
+
+  (function initCalc() {
+    const ordersEl = document.getElementById('calcOrders');
+    const avgEl = document.getElementById('calcAvgOrder');
+    const ordersVal = document.getElementById('calcOrdersVal');
+    const avgVal = document.getElementById('calcAvgOrderVal');
+    const result = document.getElementById('calcResult');
+    if (!ordersEl || !avgEl || !result) return;
+    function update() {
+      const orders = Number(ordersEl.value);
+      const avg = Number(avgEl.value);
+      ordersVal.textContent = orders;
+      avgVal.textContent = avg;
+      const commission = Math.round(orders * avg * 0.4);
+      result.textContent = '€' + commission.toLocaleString('de-DE');
+    }
+    ordersEl.addEventListener('input', update);
+    avgEl.addEventListener('input', update);
+    update();
+  })();
 
   document.getElementById('partnerApplyForm')?.addEventListener('submit', e => {
     e.preventDefault();

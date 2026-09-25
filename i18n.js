@@ -261,7 +261,12 @@
       "partner.mail.email": "E-Mail:",
       "partner.mail.channel": "Kanal:",
       "partner.mail.audience": "Reichweite:",
-      "partner.mail.message": "Nachricht:"
+      "partner.mail.message": "Nachricht:",
+      "partner.calc.title": "Wie viel kannst du verdienen?",
+      "partner.calc.ordersLabel": "Bestellungen pro Monat über deinen Link",
+      "partner.calc.avgOrderLabel": "Durchschnittlicher Bestellwert",
+      "partner.calc.resultLabel": "Deine geschätzte monatliche Provision (40 %)",
+      "partner.calc.disclaimer": "Nur ein Beispiel zur Orientierung – die tatsächlichen Ergebnisse hängen von deiner Reichweite und deinem Publikum ab."
     },
     en: {
       "nav.start": "Home", "nav.oracle": "Oracle", "nav.prices": "Pricing", "nav.human": "Advisors", "nav.rituale": "Rituals", "nav.login": "Sign in",
@@ -516,7 +521,12 @@
       "partner.mail.email": "Email:",
       "partner.mail.channel": "Channel:",
       "partner.mail.audience": "Audience:",
-      "partner.mail.message": "Message:"
+      "partner.mail.message": "Message:",
+      "partner.calc.title": "How much could you earn?",
+      "partner.calc.ordersLabel": "Orders per month through your link",
+      "partner.calc.avgOrderLabel": "Average order value",
+      "partner.calc.resultLabel": "Your estimated monthly commission (40%)",
+      "partner.calc.disclaimer": "Just an illustrative example – actual results depend on your reach and audience."
     },
     fr: {
       "nav.start": "Accueil", "nav.oracle": "Oracle", "nav.prices": "Tarifs", "nav.human": "Conseil", "nav.rituale": "Rituels", "nav.login": "Connexion",
@@ -771,7 +781,12 @@
       "partner.mail.email": "E-mail :",
       "partner.mail.channel": "Canal :",
       "partner.mail.audience": "Audience :",
-      "partner.mail.message": "Message :"
+      "partner.mail.message": "Message :",
+      "partner.calc.title": "Combien pourriez-vous gagner ?",
+      "partner.calc.ordersLabel": "Commandes par mois via votre lien",
+      "partner.calc.avgOrderLabel": "Valeur moyenne de la commande",
+      "partner.calc.resultLabel": "Votre commission mensuelle estimée (40 %)",
+      "partner.calc.disclaimer": "Un exemple illustratif seulement – les résultats réels dépendent de votre audience et de votre portée."
     },
     es: {
       "nav.start": "Inicio", "nav.oracle": "Oráculo", "nav.prices": "Precios", "nav.human": "Asesoría", "nav.rituale": "Rituales", "nav.login": "Acceder",
@@ -1026,7 +1041,12 @@
       "partner.mail.email": "Correo:",
       "partner.mail.channel": "Canal:",
       "partner.mail.audience": "Audiencia:",
-      "partner.mail.message": "Mensaje:"
+      "partner.mail.message": "Mensaje:",
+      "partner.calc.title": "¿Cuánto podrías ganar?",
+      "partner.calc.ordersLabel": "Pedidos al mes a través de tu enlace",
+      "partner.calc.avgOrderLabel": "Valor medio del pedido",
+      "partner.calc.resultLabel": "Tu comisión mensual estimada (40 %)",
+      "partner.calc.disclaimer": "Solo un ejemplo ilustrativo – los resultados reales dependen de tu alcance y tu audiencia."
     },
     it: {
       "nav.start": "Home", "nav.oracle": "Oracolo", "nav.prices": "Prezzi", "nav.human": "Consulenza", "nav.rituale": "Rituali", "nav.login": "Accedi",
@@ -1281,7 +1301,12 @@
       "partner.mail.email": "E-mail:",
       "partner.mail.channel": "Canale:",
       "partner.mail.audience": "Pubblico:",
-      "partner.mail.message": "Messaggio:"
+      "partner.mail.message": "Messaggio:",
+      "partner.calc.title": "Quanto potresti guadagnare?",
+      "partner.calc.ordersLabel": "Ordini al mese tramite il tuo link",
+      "partner.calc.avgOrderLabel": "Valore medio dell'ordine",
+      "partner.calc.resultLabel": "La tua commissione mensile stimata (40%)",
+      "partner.calc.disclaimer": "Solo un esempio illustrativo – i risultati reali dipendono dalla tua portata e dal tuo pubblico."
     },
     pt: {
       "nav.start": "Início", "nav.oracle": "Oráculo", "nav.prices": "Preços", "nav.human": "Aconselhamento", "nav.rituale": "Rituais", "nav.login": "Entrar",
@@ -1536,7 +1561,12 @@
       "partner.mail.email": "E-mail:",
       "partner.mail.channel": "Canal:",
       "partner.mail.audience": "Audiência:",
-      "partner.mail.message": "Mensagem:"
+      "partner.mail.message": "Mensagem:",
+      "partner.calc.title": "Quanto podes ganhar?",
+      "partner.calc.ordersLabel": "Encomendas por mês através do teu link",
+      "partner.calc.avgOrderLabel": "Valor médio da encomenda",
+      "partner.calc.resultLabel": "A tua comissão mensal estimada (40%)",
+      "partner.calc.disclaimer": "Apenas um exemplo ilustrativo – os resultados reais dependem do teu alcance e da tua audiência."
     },
     ru: {
       "nav.start": "Главная", "nav.oracle": "Оракул", "nav.prices": "Цены", "nav.human": "Консультанты", "nav.rituale": "Ритуалы", "nav.login": "Войти",
@@ -1791,7 +1821,12 @@
       "partner.mail.email": "Email:",
       "partner.mail.channel": "Канал:",
       "partner.mail.audience": "Аудитория:",
-      "partner.mail.message": "Сообщение:"
+      "partner.mail.message": "Сообщение:",
+      "partner.calc.title": "Сколько вы можете заработать?",
+      "partner.calc.ordersLabel": "Заказов в месяц по вашей ссылке",
+      "partner.calc.avgOrderLabel": "Средняя стоимость заказа",
+      "partner.calc.resultLabel": "Ваша примерная ежемесячная комиссия (40%)",
+      "partner.calc.disclaimer": "Это лишь иллюстративный пример — реальные результаты зависят от вашего охвата и аудитории."
     },
     uk: {
       "nav.start": "Головна", "nav.oracle": "Оракул", "nav.prices": "Ціни", "nav.human": "Консультантки", "nav.rituale": "Ритуали", "nav.login": "Увійти",
@@ -2046,7 +2081,12 @@
       "partner.mail.email": "Email:",
       "partner.mail.channel": "Канал:",
       "partner.mail.audience": "Аудиторія:",
-      "partner.mail.message": "Повідомлення:"
+      "partner.mail.message": "Повідомлення:",
+      "partner.calc.title": "Скільки ви можете заробити?",
+      "partner.calc.ordersLabel": "Замовлень на місяць за вашим посиланням",
+      "partner.calc.avgOrderLabel": "Середня вартість замовлення",
+      "partner.calc.resultLabel": "Ваша орієнтовна щомісячна комісія (40%)",
+      "partner.calc.disclaimer": "Це лише ілюстративний приклад — реальні результати залежать від вашого охоплення та аудиторії."
     }
   };
 
@@ -2095,9 +2135,29 @@
     "speech.langCode": "en-US"
   });
 
+  // First-time visitors (no saved preference yet) get matched to a
+  // supported language/currency from their browser/OS locale instead of
+  // always defaulting to German — e.g. en-US -> "us" (USD), pt-BR -> "br"
+  // (BRL). This never overrides an explicit choice already in localStorage.
+  function detectBrowserLang() {
+    const langs = (navigator.languages && navigator.languages.length) ? navigator.languages : [navigator.language || ""];
+    for (const raw of langs) {
+      const parts = String(raw).toLowerCase().split("-");
+      const primary = parts[0];
+      const region = (parts[1] || "").toUpperCase();
+      if (primary === "en") return region === "US" ? "us" : "en";
+      if (primary === "pt") return region === "BR" ? "br" : "pt";
+      if (["de", "fr", "es", "it", "ru", "uk"].includes(primary)) return primary;
+    }
+    return "de";
+  }
+
   function getLang() {
     const saved = localStorage.getItem(LANG_KEY);
-    return SUPPORTED.includes(saved) ? saved : "de";
+    if (SUPPORTED.includes(saved)) return saved;
+    const detected = detectBrowserLang();
+    try { localStorage.setItem(LANG_KEY, detected); } catch (_) {}
+    return detected;
   }
 
   // Languages with their own crawlable URL (/en, /fr, ... via vercel.json
