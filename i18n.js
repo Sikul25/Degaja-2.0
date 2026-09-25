@@ -1740,7 +1740,21 @@
 
   const hasLiveAdvisor = (lang = getLang()) => ADVISOR_LANGS.includes(lang);
 
-  window.degajaI18n = { getLang, setLang, t, SUPPORTED, hasLiveAdvisor };
+  // Lightweight affiliate/referral tracking: ?ref=<code> in the URL is
+  // captured once and remembered, so a partner's link keeps crediting them
+  // even if the visitor browses several pages before buying. No backend or
+  // database involved — the code just rides along in the Stripe checkout
+  // metadata so it shows up in the Stripe dashboard for manual payout.
+  const REF_KEY = "degajaRef";
+  (function captureRef() {
+    try {
+      const ref = new URLSearchParams(location.search).get("ref");
+      if (ref) localStorage.setItem(REF_KEY, ref.slice(0, 40));
+    } catch (_) {}
+  })();
+  const getRef = () => { try { return localStorage.getItem(REF_KEY) || ""; } catch (_) { return ""; } };
+
+  window.degajaI18n = { getLang, setLang, t, SUPPORTED, hasLiveAdvisor, getRef };
 
   const FLAGS = { de: "🇩🇪", en: "🇬🇧", us: "🇺🇸", fr: "🇫🇷", es: "🇪🇸", it: "🇮🇹", pt: "🇵🇹", ru: "🇷🇺", uk: "🇺🇦", br: "🇧🇷" };
 
