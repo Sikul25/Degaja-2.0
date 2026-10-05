@@ -9,7 +9,7 @@
 
   const T = {
     de: {
-      "nav.start": "Start", "nav.oracle": "Orakel", "nav.prices": "Preise", "nav.human": "Beratung", "nav.rituale": "Rituale", "nav.login": "Anmelden",
+      "nav.start": "Start", "nav.oracle": "Orakel", "nav.palm": "Handlesen", "nav.prices": "Preise", "nav.human": "Beratung", "nav.rituale": "Rituale", "nav.login": "Anmelden",
       "hero.eyebrow": "✧ DEIN MOMENT DER KLARHEIT ✧",
       "hero.title1": "Was bewegt", "hero.title2": "dich?",
       "hero.intro": "Manchmal braucht es nur einen kleinen Moment, um wieder klarer zu sehen. Erzähl DEGAJA, was dich gerade beschäftigt.",
@@ -22,6 +22,17 @@
       "oracle.placeholder": "Zum Beispiel: Kommt er zurück?",
       "oracle.button": "Meine Antwort erhalten →",
       "oracle.drawnCards": "Gezogene Tarotkarten",
+      "palm.eyebrow": "✦ DEGAJA HANDLESEN ✦",
+      "palm.title": "Deine Hand. Dein Weg.",
+      "palm.intro": "Mach ein klares Foto deiner geöffneten Handfläche bei gutem Licht – DEGAJA liest deine Linien.",
+      "palm.captureBtn": "📷 Foto meiner Handfläche aufnehmen",
+      "palm.retakeBtn": "📷 Neues Foto aufnehmen",
+      "palm.analyzeBtn": "Hand analysieren →",
+      "palm.analyzing": "DEGAJA liest deine Hand …",
+      "palm.readError": "Deine Hand konnte gerade nicht gelesen werden. Versuch es mit einem klareren Foto erneut.",
+      "palm.disclaimer": "Handlesen dient der persönlichen Unterhaltung und Reflexion und ersetzt keine professionelle Beratung.",
+      "palm.syntheticQuestion": "Was zeigt meine Handfläche über mich?",
+      "palm.topic": "Handlesen",
       "advisor.papuli.title": "Tarot, Astrologie & Zukunft",
       "dpc.badge": "💬 VORAB-CHAT · ANONYM",
       "dpc.title": "Erzähl uns zuerst, was dich bewegt.",
