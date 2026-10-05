@@ -648,6 +648,7 @@
 
     const button = $("#palmAnalyzeBtn");
     const result = $("#palmResult");
+    const previewWrap = $("#palmPreviewWrap");
     if (button) {
       button.disabled = true;
       button.textContent = t("palm.analyzing");
@@ -656,6 +657,7 @@
       result.innerHTML = `<strong>${t("palm.analyzing")}</strong>`;
       result.classList.add("show");
     }
+    previewWrap?.classList.add("scanning");
 
     try {
       const response = await fetchWithTimeout("/api/palm", {
@@ -676,6 +678,8 @@
         result.innerHTML = `<strong>${t("palm.readError")}</strong>`;
         result.classList.add("show");
       }
+    } finally {
+      previewWrap?.classList.remove("scanning");
     }
 
     if (button) {
