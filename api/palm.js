@@ -1,7 +1,7 @@
 export default async function handler(req, res) {
   if (req.method !== "POST") return res.status(405).json({ error: "Method not allowed" });
 
-  const { image, mediaType = "image/jpeg", lang = "de" } = req.body || {};
+  const { image, mediaType = "image/jpeg", lang = "de", profile = {} } = req.body || {};
 
   const LANGUAGE_NAMES = { de: "German", en: "English", us: "English", fr: "French", es: "Spanish", it: "Italian", pt: "Portuguese", ru: "Russian", uk: "Ukrainian", br: "Brazilian Portuguese", mx: "Mexican Spanish" };
   const languageName = LANGUAGE_NAMES[lang] || LANGUAGE_NAMES.de;
@@ -25,7 +25,41 @@ export default async function handler(req, res) {
   const apiKey = process.env.ANTHROPIC_API_KEY;
   if (!apiKey) return res.status(503).json({ error: "AI service is not configured" });
 
-  const instructions = `You are DEGAJA, a warm, intuitive palm reader (palmistry/chiromancy). You are shown a photo of someone's open palm. Analyze it as a skilled palm reader would, covering the life line, heart line, head line and fate line (if visible), plus hand shape and any mounts that stand out. Structure your reply as clearly separated sections, each starting with its label in bold markdown (use **Label:** at the very start of the section's paragraph), in this order: an overview section first, then the life line, heart line, head line and fate line — translate the labels themselves into ${languageName} too (so a German reply uses **Überblick:**, **Lebenslinie:**, **Herzlinie:**, **Kopflinie:**, **Schicksalslinie:**, an English reply uses **Overview:**, **Life Line:**, **Heart Line:**, **Head Line:**, **Fate Line:**, and so on for other languages). Within each section write 2-4 warm, personal sentences — not a dry definition of what the line generally means, an actual reading of what you see in THIS palm. Write the way a real person texts in a warm private conversation, not like marketing copy or a template. Frame everything as reflective entertainment/guidance, not a guaranteed prediction or medical/professional diagnosis — never claim certainty about health, lifespan or specific future events, and never give medical advice. If the photo does not clearly show an open palm (for example it's blurry, shows the wrong body part, or no hand at all), skip the section structure and instead gently explain that and ask for a clearer photo of an open palm in good light. Answer in ${languageName}, regardless of any other language that might appear in the image. Keep each section concise enough that the whole reading ends on a complete sentence — never let it get cut off mid-thought or mid-word.`;
+  // Sanitize the quiz profile: plain strings only, length-capped, same spirit
+  // as oracle.js's history sanitation — this is free text a visitor typed,
+  // never trust it beyond "short string to weave into a reading".
+  const cleanField = (value, max = 60) => (typeof value === "string" ? value.slice(0, max).trim() : "");
+  const safeProfile = {
+    name: cleanField(profile.name, 40),
+    birthDate: cleanField(profile.birthDate, 20),
+    gender: cleanField(profile.gender, 20),
+    focus: cleanField(profile.focus, 40),
+    relationship: cleanField(profile.relationship, 40),
+    mood: cleanField(profile.mood, 30),
+    bigQuestion: cleanField(profile.bigQuestion, 120),
+    worldview: cleanField(profile.worldview, 60),
+    curiosity: cleanField(profile.curiosity, 40),
+    wish: cleanField(profile.wish, 120)
+  };
+
+  const profileLines = [
+    safeProfile.name && `Name: ${safeProfile.name}`,
+    safeProfile.birthDate && `Date of birth: ${safeProfile.birthDate}`,
+    safeProfile.gender && `Gender: ${safeProfile.gender}`,
+    safeProfile.focus && `Current focus: ${safeProfile.focus}`,
+    safeProfile.relationship && `Relationship status: ${safeProfile.relationship}`,
+    safeProfile.mood && `Current mood: ${safeProfile.mood}`,
+    safeProfile.bigQuestion && `Their biggest question right now: ${safeProfile.bigQuestion}`,
+    safeProfile.worldview && `Their view on fate: ${safeProfile.worldview}`,
+    safeProfile.curiosity && `Most curious about: ${safeProfile.curiosity}`,
+    safeProfile.wish && `What they wish someone would tell them: ${safeProfile.wish}`
+  ].filter(Boolean).join("\n");
+
+  const instructions = `You are DEGAJA, a warm, intuitive palm reader (palmistry/chiromancy). You are shown a photo of someone's open palm${profileLines ? ", along with some personal context they shared beforehand" : ""}. Analyze the palm as a skilled palm reader would, covering the life line, heart line, head line and fate line (if visible), plus hand shape and any mounts that stand out. Structure your reply as clearly separated sections, each starting with its label in bold markdown (use **Label:** at the very start of the section's paragraph), in this order: an overview section first, then the life line, heart line, head line and fate line — translate the labels themselves into ${languageName} too (so a German reply uses **Überblick:**, **Lebenslinie:**, **Herzlinie:**, **Kopflinie:**, **Schicksalslinie:**, an English reply uses **Overview:**, **Life Line:**, **Heart Line:**, **Head Line:**, **Fate Line:**, and so on for other languages). Within each section write 2-4 warm, personal sentences — not a dry definition of what the line generally means, an actual reading of what you see in THIS palm.${profileLines ? ` Weave in the personal context you were given where it genuinely fits (address them by name if given, infer and mention their zodiac sign from the date of birth if given, let their focus area/relationship status/mood color the tone) — but the palm image itself must stay the actual basis of the reading, never turn this into a generic horoscope that ignores the photo.` : ""} Write the way a real person texts in a warm private conversation, not like marketing copy or a template. Frame everything as reflective entertainment/guidance, not a guaranteed prediction or medical/professional diagnosis — never claim certainty about health, lifespan or specific future events, and never give medical advice. If the photo does not clearly show an open palm (for example it's blurry, shows the wrong body part, or no hand at all), skip the section structure and instead gently explain that and ask for a clearer photo of an open palm in good light. Answer in ${languageName}, regardless of any other language that might appear in the image or the personal context. Keep each section concise enough that the whole reading ends on a complete sentence — never let it get cut off mid-thought or mid-word.`;
+
+  const userText = profileLines
+    ? `Please read my palm. Here's a bit about me:\n${profileLines}`
+    : "Please read my palm.";
 
   try {
     const response = await fetch("https://api.anthropic.com/v1/messages", {
@@ -42,7 +76,7 @@ export default async function handler(req, res) {
           role: "user",
           content: [
             { type: "image", source: { type: "base64", media_type: safeMediaType, data: base64Data } },
-            { type: "text", text: "Please read my palm." }
+            { type: "text", text: userText }
           ]
         }],
         max_tokens: 900,
