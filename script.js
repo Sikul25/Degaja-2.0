@@ -637,13 +637,29 @@
     btn.addEventListener("click", () => {
       const step = btn.closest(".palm-quiz-step");
       const input = step?.querySelector(".palm-quiz-input");
-      advancePalmQuiz(step?.dataset.key, input?.value.trim() || "");
+      const value = input?.value.trim() || "";
+      const error = step?.querySelector(".palm-quiz-error");
+      if (!value) {
+        input?.classList.remove("invalid");
+        void input?.offsetWidth; // restart the shake animation on repeat empty submits
+        input?.classList.add("invalid");
+        error?.classList.add("show");
+        input?.focus();
+        return;
+      }
+      input?.classList.remove("invalid");
+      error?.classList.remove("show");
+      advancePalmQuiz(step?.dataset.key, value);
     });
   });
 
   $$("#palmQuiz .palm-quiz-input").forEach(input => {
     input.addEventListener("keydown", event => {
       if (event.key === "Enter") input.closest(".palm-quiz-step")?.querySelector(".palm-quiz-next")?.click();
+    });
+    input.addEventListener("input", () => {
+      input.classList.remove("invalid");
+      input.closest(".palm-quiz-step")?.querySelector(".palm-quiz-error")?.classList.remove("show");
     });
   });
 
