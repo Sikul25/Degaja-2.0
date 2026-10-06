@@ -12,6 +12,7 @@ html{scroll-behavior:smooth}body{margin:0;color:var(--text);font-family:Arial,"H
 .palm-quiz{max-width:480px;margin:0 auto}
 .palm-quiz-progress{width:100%;height:6px;border-radius:999px;background:#e6f2f8;overflow:hidden;margin-bottom:10px}
 .palm-quiz-progress-fill{display:block;height:100%;width:10%;background:linear-gradient(90deg,var(--blue),var(--blue2));border-radius:999px;transition:width .35s ease}
+.palm-quiz-notice{text-align:center;color:#e02020;font-size:14px;font-weight:800;margin-bottom:12px}
 .palm-quiz-step-label{text-align:center;color:var(--muted);font-size:13px;font-weight:700;margin-bottom:18px}
 .palm-quiz-title{font-weight:800;color:var(--navy);font-size:19px;text-align:center;margin-bottom:18px;line-height:1.4}
 .palm-quiz-input{width:100%;padding:14px 16px;border:1px solid #cfe2eb;border-radius:14px;outline:0;background:#fbfeff;color:var(--text);font-size:16px;margin-bottom:12px}
