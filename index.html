@@ -40,10 +40,105 @@
 </head>
 <body>
 <div class="page-glow"></div>
-<header class="site-header"><a class="brand" href="#home" aria-label="DEGAJA"><img src="assets/degaja-logo.png" alt="DEGAJA" class="site-logo"></a><nav class="nav"><a href="#home" data-i18n="nav.start">Start</a><a href="#oracle" data-i18n="nav.oracle">Orakel</a><a href="#prices" data-i18n="nav.prices">Preise</a><a href="#human" data-i18n="nav.human">Beratung</a><a href="#rituale" data-i18n="nav.rituale" data-advisor-only>Rituale</a></nav><button class="login-btn" id="loginBtn" data-i18n="nav.login">Anmelden</button></header>
+<header class="site-header"><a class="brand" href="#home" aria-label="DEGAJA"><img src="assets/degaja-logo.png" alt="DEGAJA" class="site-logo"></a><nav class="nav"><a href="#home" data-i18n="nav.start">Start</a><a href="#oracle" data-i18n="nav.oracle">Orakel</a><a href="#palm" data-i18n="nav.palm">Handlesen</a><a href="#prices" data-i18n="nav.prices">Preise</a><a href="#human" data-i18n="nav.human">Beratung</a><a href="#rituale" data-i18n="nav.rituale" data-advisor-only>Rituale</a></nav><button class="login-btn" id="loginBtn" data-i18n="nav.login">Anmelden</button></header>
 <main>
 <section id="home" class="personal-hero"><span class="personal-star ps1">✦</span><span class="personal-star ps2">✧</span><span class="personal-star ps3">✦</span><span class="personal-star ps4">✧</span><div class="personal-wrap"><div class="personal-orb" aria-hidden="true"></div><div class="eyebrow" data-i18n="hero.eyebrow">✧ DEIN MOMENT DER KLARHEIT ✧</div><h1><span data-i18n="hero.title1">Was bewegt</span><br><em data-i18n="hero.title2">dich?</em></h1><p class="personal-intro" data-i18n="hero.intro">Manchmal braucht es nur einen kleinen Moment, um wieder klarer zu sehen. Erzähl DEGAJA, was dich gerade beschäftigt.</p><div class="topic-choice" aria-label="Thema auswählen"><button class="quick-topic" data-topic="Liebe & Beziehung"><span>❤️</span><span data-i18n="hero.topicLove">Liebe</span></button><button class="quick-topic" data-topic="Beruf & Karriere"><span>💼</span><span data-i18n="hero.topicCareer">Beruf</span></button><button class="quick-topic" data-topic="Zukunft"><span>✨</span><span data-i18n="hero.topicFuture">Zukunft</span></button></div><button class="personal-cta" id="startBtn" data-i18n="hero.cta">✨ Meinen Moment beginnen</button><div class="personal-note" data-i18n="hero.note">Deine erste persönliche Antwort ist kostenlos.</div></div></section>
 <section id="oracle" class="oracle-section compact-oracle"><div class="oracle-card"><div class="eyebrow" data-i18n="oracle.eyebrow">✦ DEGAJA ORAKEL ✦</div><h2 data-i18n="oracle.title">Deine Frage. Dein Moment.</h2><div class="oracle-form"><label for="aiQuestion" data-i18n="oracle.label">Was möchtest du wissen?</label><textarea id="aiQuestion" maxlength="800" placeholder="Zum Beispiel: Kommt er zurück?" data-i18n-placeholder="oracle.placeholder"></textarea><input type="hidden" id="aiTopic" value=""><button class="primary-btn" id="aiBtn" data-i18n="oracle.button">Meine Antwort erhalten →</button><div class="legal-note"><strong data-i18n="footer.disclaimer">DEGAJA dient der persönlichen Orientierung und Unterhaltung und ersetzt keine professionelle Beratung.</strong> <strong data-i18n="footer.age18">DEGAJA richtet sich ausschließlich an Personen ab 18 Jahren.</strong></div><div id="aiResult" class="ai-result"></div></div></div></section>
+<section id="palm" class="oracle-section compact-oracle"><div class="oracle-card"><div class="eyebrow" data-i18n="palm.eyebrow">✦ DEGAJA HANDLESEN ✦</div><h2 data-i18n="palm.title">Deine Hand. Dein Weg.</h2><p class="palm-intro" data-i18n="palm.intro">Bevor DEGAJA deine Handfläche liest, ein paar persönliche Fragen.</p>
+
+<div id="palmQuiz" class="palm-quiz">
+  <div class="palm-quiz-progress"><span id="palmQuizProgressFill" class="palm-quiz-progress-fill"></span></div>
+  <div class="palm-quiz-step-label" id="palmQuizStepLabel">1 / 10</div>
+
+  <div class="palm-quiz-step" data-step="1" data-key="name">
+    <div class="palm-quiz-title" data-i18n="palm.quiz.s1.title">Wie dürfen wir dich nennen?</div>
+    <input type="text" class="palm-quiz-input" id="palmQuizInput1" maxlength="40" data-i18n-placeholder="palm.quiz.s1.placeholder" placeholder="Dein Vorname">
+    <button type="button" class="primary-btn palm-quiz-next" data-i18n="palm.quiz.next">Weiter →</button>
+  </div>
+
+  <div class="palm-quiz-step" data-step="2" data-key="birthDate" style="display:none">
+    <div class="palm-quiz-title" data-i18n="palm.quiz.s2.title">Wann bist du geboren?</div>
+    <input type="date" class="palm-quiz-input" id="palmQuizInput2">
+    <button type="button" class="primary-btn palm-quiz-next" data-i18n="palm.quiz.next">Weiter →</button>
+  </div>
+
+  <div class="palm-quiz-step" data-step="3" data-key="gender" style="display:none">
+    <div class="palm-quiz-title" data-i18n="palm.quiz.s3.title">Was beschreibt dich am besten?</div>
+    <div class="palm-quiz-choices">
+      <button type="button" class="palm-choice" data-value="Weiblich" data-i18n="palm.quiz.s3.a">Weiblich</button>
+      <button type="button" class="palm-choice" data-value="Männlich" data-i18n="palm.quiz.s3.b">Männlich</button>
+      <button type="button" class="palm-choice" data-value="Divers" data-i18n="palm.quiz.s3.c">Divers</button>
+    </div>
+  </div>
+
+  <div class="palm-quiz-step" data-step="4" data-key="focus" style="display:none">
+    <div class="palm-quiz-title" data-i18n="palm.quiz.s4.title">Worauf liegt dein Fokus gerade?</div>
+    <div class="palm-quiz-choices">
+      <button type="button" class="palm-choice" data-value="Liebe" data-i18n="palm.quiz.s4.a">❤️ Liebe</button>
+      <button type="button" class="palm-choice" data-value="Karriere" data-i18n="palm.quiz.s4.b">💼 Karriere</button>
+      <button type="button" class="palm-choice" data-value="Geld" data-i18n="palm.quiz.s4.c">💰 Geld</button>
+      <button type="button" class="palm-choice" data-value="Persönliches Wachstum" data-i18n="palm.quiz.s4.d">🌱 Persönliches Wachstum</button>
+    </div>
+  </div>
+
+  <div class="palm-quiz-step" data-step="5" data-key="relationship" style="display:none">
+    <div class="palm-quiz-title" data-i18n="palm.quiz.s5.title">Wie ist dein Beziehungsstatus?</div>
+    <div class="palm-quiz-choices">
+      <button type="button" class="palm-choice" data-value="Single" data-i18n="palm.quiz.s5.a">Single</button>
+      <button type="button" class="palm-choice" data-value="In einer Beziehung" data-i18n="palm.quiz.s5.b">In einer Beziehung</button>
+      <button type="button" class="palm-choice" data-value="Verheiratet" data-i18n="palm.quiz.s5.c">Verheiratet</button>
+      <button type="button" class="palm-choice" data-value="Kompliziert" data-i18n="palm.quiz.s5.d">Es ist kompliziert</button>
+    </div>
+  </div>
+
+  <div class="palm-quiz-step" data-step="6" data-key="mood" style="display:none">
+    <div class="palm-quiz-title" data-i18n="palm.quiz.s6.title">Wie fühlst du dich gerade, wenn du ehrlich bist?</div>
+    <div class="palm-quiz-choices">
+      <button type="button" class="palm-choice" data-value="Hoffnungsvoll" data-i18n="palm.quiz.s6.a">Hoffnungsvoll</button>
+      <button type="button" class="palm-choice" data-value="Ängstlich" data-i18n="palm.quiz.s6.b">Ängstlich</button>
+      <button type="button" class="palm-choice" data-value="Verloren" data-i18n="palm.quiz.s6.c">Etwas verloren</button>
+      <button type="button" class="palm-choice" data-value="Aufgeregt" data-i18n="palm.quiz.s6.d">Aufgeregt</button>
+      <button type="button" class="palm-choice" data-value="Müde" data-i18n="palm.quiz.s6.e">Erschöpft</button>
+    </div>
+  </div>
+
+  <div class="palm-quiz-step" data-step="7" data-key="bigQuestion" style="display:none">
+    <div class="palm-quiz-title" data-i18n="palm.quiz.s7.title">Was ist deine größte Frage gerade?</div>
+    <input type="text" class="palm-quiz-input" id="palmQuizInput7" maxlength="120" data-i18n-placeholder="palm.quiz.s7.placeholder" placeholder="Schreib es hier auf …">
+    <button type="button" class="primary-btn palm-quiz-next" data-i18n="palm.quiz.next">Weiter →</button>
+  </div>
+
+  <div class="palm-quiz-step" data-step="8" data-key="worldview" style="display:none">
+    <div class="palm-quiz-title" data-i18n="palm.quiz.s8.title">Glaubst du, dein Schicksal ist bereits geschrieben?</div>
+    <div class="palm-quiz-choices">
+      <button type="button" class="palm-choice" data-value="Es ist vorbestimmt" data-i18n="palm.quiz.s8.a">Es ist vorbestimmt</button>
+      <button type="button" class="palm-choice" data-value="Ich gestalte meinen Weg selbst" data-i18n="palm.quiz.s8.b">Ich gestalte meinen Weg selbst</button>
+      <button type="button" class="palm-choice" data-value="Ein bisschen von beidem" data-i18n="palm.quiz.s8.c">Ein bisschen von beidem</button>
+    </div>
+  </div>
+
+  <div class="palm-quiz-step" data-step="9" data-key="curiosity" style="display:none">
+    <div class="palm-quiz-title" data-i18n="palm.quiz.s9.title">Was möchtest du in deiner Hand am meisten entdecken?</div>
+    <div class="palm-quiz-choices">
+      <button type="button" class="palm-choice" data-value="Liebe" data-i18n="palm.quiz.s9.a">❤️ Liebe</button>
+      <button type="button" class="palm-choice" data-value="Erfolg & Karriere" data-i18n="palm.quiz.s9.b">💼 Erfolg & Karriere</button>
+      <button type="button" class="palm-choice" data-value="Lebensweg" data-i18n="palm.quiz.s9.c">🌙 Lebensweg</button>
+      <button type="button" class="palm-choice" data-value="Alles" data-i18n="palm.quiz.s9.d">✨ Alles</button>
+    </div>
+  </div>
+
+  <div class="palm-quiz-step" data-step="10" data-key="wish" style="display:none">
+    <div class="palm-quiz-title" data-i18n="palm.quiz.s10.title">Was wünschst du dir, dass dir jemand jetzt sagen würde?</div>
+    <input type="text" class="palm-quiz-input" id="palmQuizInput10" maxlength="120" data-i18n-placeholder="palm.quiz.s10.placeholder" placeholder="…">
+    <button type="button" class="primary-btn palm-quiz-next" id="palmQuizFinishBtn" data-i18n="palm.quiz.finish">Bereit →</button>
+  </div>
+
+  <button type="button" class="palm-quiz-back" id="palmQuizBack" data-i18n="palm.quiz.back" style="display:none">← Zurück</button>
+</div>
+
+<div id="palmQuizDone" class="palm-quiz-done" style="display:none"><div class="palm-quiz-title" id="palmQuizDoneTitle"></div><p data-i18n="palm.quiz.done.desc">DEGAJA ist jetzt bereit, deine Handfläche zu lesen.</p></div>
+
+<div class="oracle-form palm-form" id="palmForm" style="display:none"><div id="palmPreviewWrap" class="palm-preview-wrap" style="display:none"><img id="palmPreviewImg" alt="" class="palm-preview-img"></div><input type="file" accept="image/*" capture="environment" id="palmFileInput" style="display:none"><button type="button" class="primary-btn" id="palmCaptureBtn" data-i18n="palm.captureBtn">📷 Foto meiner Handfläche aufnehmen</button><button type="button" class="primary-btn" id="palmAnalyzeBtn" data-i18n="palm.analyzeBtn" style="display:none">Hand analysieren →</button><div class="legal-note"><strong data-i18n="palm.disclaimer">Handlesen dient der persönlichen Unterhaltung und Reflexion und ersetzt keine professionelle Beratung.</strong> <strong data-i18n="footer.age18">DEGAJA richtet sich ausschließlich an Personen ab 18 Jahren.</strong></div><div id="palmResult" class="ai-result"></div></div></div></section>
 <section id="prices" class="pricing-strip"><div class="eyebrow" style="text-align:center" data-i18n="prices.eyebrow">✦ DEGAJA ✦</div><div class="pricing-grid"><article class="price-card featured"><span class="badge" data-i18n="prices.badge">BELIEBT</span><h3 data-i18n="prices.single.title">Einzelne Lesung</h3><div class="price" data-i18n="prices.single.priceLabel">€4,99</div><p data-i18n="prices.single.desc">Eine tiefere persönliche Lesung + 24/7 Begleitung für diese Session.</p><button class="price-btn" data-buy="single" data-i18n="prices.single.btn">Jetzt für €4,99</button></article><article class="price-card"><h3 data-i18n="prices.pack.title">3 Lesungen</h3><div class="price" data-i18n="prices.pack.priceLabel">€9,99</div><p data-i18n="prices.pack.desc">Drei persönliche Lesungen mit anschließender 24/7 Begleitung.</p><button class="price-btn" data-buy="pack" data-i18n="prices.pack.btn">3 Lesungen kaufen</button></article></div><div class="pay-note" data-i18n="prices.note">Sichere Zahlung wird über den Zahlungsanbieter abgewickelt.</div></section>
 <section id="human" class="human-section"><div class="human-wrap"><div class="eyebrow" data-i18n="human.eyebrow" data-advisor-only>✦ PERSÖNLICH & DISKRET ✦</div><h2 data-advisor-only><span data-i18n="human.title1">Manchmal möchtest du</span><br><span data-i18n="human.title2">mit einem Menschen sprechen.</span></h2><p class="human-intro" data-i18n="human.intro" data-advisor-only>Sprich direkt und vertraulich mit unserer Expertin – nur per Audio, ohne Video und ohne Weitergabe deiner privaten Telefonnummer.</p></div></section>
 <section id="rituale" class="ritual-section" data-advisor-only><div class="ritual-wrap"><div class="eyebrow" data-i18n="rituale.eyebrow">✦ PERSÖNLICHE RITUALE ✦</div><h2 data-i18n="rituale.title">Ein persönlicher Weg zur Orientierung.</h2><p class="ritual-intro" data-i18n="rituale.intro">Wenn du nach deiner Beratung weitergehen möchtest, kann unsere Expertin dir ein persönliches Ritual mit passenden Materialien empfehlen – als bewussten Moment für deine eigene Ausrichtung.</p><div class="ritual-grid"><article class="ritual-card"><div class="human-icon">❤️</div><h3 data-i18n="rituale.love.title">Liebe & Beziehung</h3><p data-i18n="rituale.love.desc">Ein persönliches Ritual für Klarheit, innere Ausrichtung und deine eigenen Wünsche.</p><div class="ritual-price" data-i18n="rituale.love.price">Ab €49</div><button data-ritual="love" data-i18n="rituale.btn">Mehr erfahren →</button></article><article class="ritual-card"><div class="human-icon">✨</div><h3 data-i18n="rituale.success.title">Erfolg & Ausrichtung</h3><p data-i18n="rituale.success.desc">Ein Ritual, das dich dabei unterstützt, deine Aufmerksamkeit auf deine persönlichen Ziele zu richten.</p><div class="ritual-price" data-i18n="rituale.success.price">Ab €59</div><button data-ritual="success" data-i18n="rituale.btn">Mehr erfahren →</button></article><article class="ritual-card"><div class="human-icon">🌙</div><h3 data-i18n="rituale.balance.title">Persönliche Balance</h3><p data-i18n="rituale.balance.desc">Ein ruhiger, individueller Rahmen für Reflexion, Intention und deinen nächsten Schritt.</p><div class="ritual-price" data-i18n="rituale.balance.price">Ab €49</div><button data-ritual="balance" data-i18n="rituale.btn">Mehr erfahren →</button></article></div><div class="ritual-note"><span data-i18n="rituale.note1">Rituale sind persönliche/spirituelle Angebote zur Orientierung und Reflexion. Sie sind keine Garantie für eine bestimmte Wirkung oder ein bestimmtes Ergebnis.</span> <strong data-i18n="rituale.note2">Zahlung für Rituale erfolgt separat in Euro und nicht über DEGAJA-Tokens.</strong></div></div></section>

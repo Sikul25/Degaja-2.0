@@ -580,6 +580,185 @@
     if (event.key === "Escape") closeModal();
   });
 
+  // --- Palm reading quiz (Handlesen) ---
+  // Nebula-style personal quiz, one question at a time, before the camera
+  // unlocks — builds investment in the result and gives the AI real context
+  // (name, birth date, focus area, mood) to personalize the reading with.
+  const PALM_QUIZ_STEPS = 10;
+  let palmQuizStep = 1;
+  const palmQuizAnswers = {};
+
+  function updatePalmQuizProgress() {
+    const fill = $("#palmQuizProgressFill");
+    const label = $("#palmQuizStepLabel");
+    if (fill) fill.style.width = `${Math.round((palmQuizStep / PALM_QUIZ_STEPS) * 100)}%`;
+    if (label) label.textContent = `${palmQuizStep} / ${PALM_QUIZ_STEPS}`;
+    const back = $("#palmQuizBack");
+    if (back) back.style.display = palmQuizStep > 1 ? "block" : "none";
+  }
+
+  function showPalmQuizStep(n) {
+    $$(".palm-quiz-step").forEach(step => {
+      step.style.display = Number(step.dataset.step) === n ? "block" : "none";
+    });
+    palmQuizStep = n;
+    updatePalmQuizProgress();
+  }
+
+  function finishPalmQuiz() {
+    const quiz = $("#palmQuiz");
+    const done = $("#palmQuizDone");
+    const form = $("#palmForm");
+    const doneTitle = $("#palmQuizDoneTitle");
+    if (doneTitle) doneTitle.textContent = t("palm.quiz.done.title").replace("{name}", palmQuizAnswers.name || "");
+    if (quiz) quiz.style.display = "none";
+    if (done) done.style.display = "block";
+    setTimeout(() => {
+      if (done) done.style.display = "none";
+      if (form) form.style.display = "block";
+      form?.scrollIntoView({ behavior: "smooth", block: "center" });
+    }, 1400);
+  }
+
+  function advancePalmQuiz(key, value) {
+    if (key) palmQuizAnswers[key] = value;
+    if (palmQuizStep >= PALM_QUIZ_STEPS) finishPalmQuiz();
+    else showPalmQuizStep(palmQuizStep + 1);
+  }
+
+  $$("#palmQuiz .palm-choice").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const step = btn.closest(".palm-quiz-step");
+      advancePalmQuiz(step?.dataset.key, btn.dataset.value);
+    });
+  });
+
+  $$("#palmQuiz .palm-quiz-next").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const step = btn.closest(".palm-quiz-step");
+      const input = step?.querySelector(".palm-quiz-input");
+      advancePalmQuiz(step?.dataset.key, input?.value.trim() || "");
+    });
+  });
+
+  $$("#palmQuiz .palm-quiz-input").forEach(input => {
+    input.addEventListener("keydown", event => {
+      if (event.key === "Enter") input.closest(".palm-quiz-step")?.querySelector(".palm-quiz-next")?.click();
+    });
+  });
+
+  $("#palmQuizBack")?.addEventListener("click", () => {
+    if (palmQuizStep > 1) showPalmQuizStep(palmQuizStep - 1);
+  });
+
+  // --- Palm reading (Handlesen) ---
+  // Resize client-side before upload: keeps the request small/fast and
+  // normalizes whatever format the camera gave us (incl. HEIC-as-JPEG on iOS)
+  // down to a single consistent JPEG.
+  function resizeImageFile(file, maxDim = 1024, quality = 0.85) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onerror = () => reject(new Error("read failed"));
+      reader.onload = () => {
+        const img = new Image();
+        img.onerror = () => reject(new Error("decode failed"));
+        img.onload = () => {
+          let { width, height } = img;
+          if (width > maxDim || height > maxDim) {
+            if (width > height) { height = Math.round(height * (maxDim / width)); width = maxDim; }
+            else { width = Math.round(width * (maxDim / height)); height = maxDim; }
+          }
+          const canvas = document.createElement("canvas");
+          canvas.width = width;
+          canvas.height = height;
+          canvas.getContext("2d").drawImage(img, 0, 0, width, height);
+          resolve(canvas.toDataURL("image/jpeg", quality));
+        };
+        img.src = reader.result;
+      };
+      reader.readAsDataURL(file);
+    });
+  }
+
+  let palmImageDataUrl = null;
+
+  $("#palmCaptureBtn")?.addEventListener("click", () => {
+    $("#palmFileInput")?.click();
+  });
+
+  $("#palmFileInput")?.addEventListener("change", async event => {
+    const file = event.target.files?.[0];
+    event.target.value = "";
+    if (!file) return;
+
+    const analyzeBtn = $("#palmAnalyzeBtn");
+    const captureBtn = $("#palmCaptureBtn");
+    const previewWrap = $("#palmPreviewWrap");
+    const previewImg = $("#palmPreviewImg");
+    const result = $("#palmResult");
+
+    try {
+      const dataUrl = await resizeImageFile(file);
+      palmImageDataUrl = dataUrl;
+      if (previewImg) previewImg.src = dataUrl;
+      if (previewWrap) previewWrap.style.display = "block";
+      if (analyzeBtn) analyzeBtn.style.display = "block";
+      if (captureBtn) captureBtn.textContent = t("palm.retakeBtn");
+      if (result) { result.classList.remove("show"); result.innerHTML = ""; }
+    } catch (error) {
+      palmImageDataUrl = null;
+      if (result) {
+        result.innerHTML = `<strong>${t("palm.readError")}</strong>`;
+        result.classList.add("show");
+      }
+    }
+  });
+
+  $("#palmAnalyzeBtn")?.addEventListener("click", async () => {
+    if (!palmImageDataUrl) return;
+
+    const button = $("#palmAnalyzeBtn");
+    const result = $("#palmResult");
+    const previewWrap = $("#palmPreviewWrap");
+    if (button) {
+      button.disabled = true;
+      button.textContent = t("palm.analyzing");
+    }
+    if (result) {
+      result.innerHTML = `<strong>${t("palm.analyzing")}</strong>`;
+      result.classList.add("show");
+    }
+    previewWrap?.classList.add("scanning");
+
+    try {
+      const response = await fetchWithTimeout("/api/palm", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ image: palmImageDataUrl, mediaType: "image/jpeg", lang: currentLang(), profile: palmQuizAnswers })
+      }, 30000);
+
+      if (!response.ok) throw new Error("palm API failed");
+      const data = await response.json();
+      if (!data.text) throw new Error("no text");
+
+      if (result) { result.classList.remove("show"); result.innerHTML = ""; }
+      state.conversationHistory = [];
+      renderResult(data.text, t("palm.syntheticQuestion"), t("palm.topic"), false);
+    } catch (error) {
+      if (result) {
+        result.innerHTML = `<strong>${t("palm.readError")}</strong>`;
+        result.classList.add("show");
+      }
+    } finally {
+      previewWrap?.classList.remove("scanning");
+    }
+
+    if (button) {
+      button.disabled = false;
+      button.textContent = t("palm.analyzeBtn");
+    }
+  });
+
   redeemPromoCredits();
   verifyAiPayment();
 })();
