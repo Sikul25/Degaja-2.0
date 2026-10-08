@@ -2682,6 +2682,23 @@
     const canonical = document.querySelector('link[rel="canonical"]');
     if (canonical) canonical.setAttribute("href", location.origin + location.pathname);
 
+    // Keep Open Graph/Twitter preview tags (shown when the page is shared,
+    // and sometimes surfaced by Google itself) in sync with the same
+    // per-language title/description used above, instead of always
+    // showing the German fallback baked into the HTML.
+    const OG_LOCALES = { de: "de_DE", en: "en_GB", us: "en_US", fr: "fr_FR", es: "es_ES", it: "it_IT", pt: "pt_PT", ru: "ru_RU", uk: "uk_UA", br: "pt_BR", mx: "es_MX" };
+    const setMeta = (selector, attr, value) => { const el = document.querySelector(selector); if (el && value) el.setAttribute(attr, value); };
+    if (metaTitle && !metaTitle.startsWith("meta.")) {
+      setMeta('meta[property="og:title"]', "content", metaTitle);
+      setMeta('meta[name="twitter:title"]', "content", metaTitle);
+    }
+    if (descVal && !descVal.startsWith("meta.")) {
+      setMeta('meta[property="og:description"]', "content", descVal);
+      setMeta('meta[name="twitter:description"]', "content", descVal);
+    }
+    setMeta('meta[property="og:url"]', "content", location.origin + location.pathname);
+    setMeta('meta[property="og:locale"]', "content", OG_LOCALES[getLang()] || "de_DE");
+
     // Anything that requires talking to the live human advisor (the live
     // call itself, and the rituals, which are only arranged through a
     // conversation with her) only makes sense where she's actually
