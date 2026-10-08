@@ -3,8 +3,21 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-  <meta name="description" content="DEGAJA – persönliche Orientierung, Karten, Sterne, Zahlen und diskrete persönliche Beratung.">
-  <title>DEGAJA – Dein Moment der Klarheit</title>
+  <meta name="description" content="DEGAJA – Tarot-Orakel, Handlesen per KI und diskrete persönliche Beratung zu Liebe, Beruf und Zukunft.">
+  <title>DEGAJA – Tarot, Handlesen & Horoskop online</title>
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="DEGAJA">
+  <meta property="og:title" content="DEGAJA – Tarot, Handlesen & Horoskop online">
+  <meta property="og:description" content="DEGAJA – Tarot-Orakel, Handlesen per KI und diskrete persönliche Beratung zu Liebe, Beruf und Zukunft.">
+  <meta property="og:url" content="https://www.degaja.com/">
+  <meta property="og:image" content="https://www.degaja.com/assets/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:locale" content="de_DE">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="DEGAJA – Tarot, Handlesen & Horoskop online">
+  <meta name="twitter:description" content="DEGAJA – Tarot-Orakel, Handlesen per KI und diskrete persönliche Beratung zu Liebe, Beruf und Zukunft.">
+  <meta name="twitter:image" content="https://www.degaja.com/assets/og-image.png">
   <link rel="canonical" href="https://www.degaja.com/">
   <link rel="alternate" hreflang="de" href="https://www.degaja.com/">
   <link rel="alternate" hreflang="en-GB" href="https://www.degaja.com/en">
@@ -37,6 +50,39 @@
     .ritual-section{padding:38px 20px 52px;background:linear-gradient(180deg,rgba(250,248,242,.62),rgba(255,255,255,0));}.ritual-wrap{max-width:900px;margin:auto;text-align:center}.ritual-wrap h2{font-family:Georgia,"Times New Roman",serif;font-weight:500;color:#18334a;font-size:clamp(30px,5vw,44px);margin:8px 0 10px}.ritual-intro{max-width:650px;margin:0 auto 24px;color:#687384}.ritual-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;text-align:left}.ritual-card{background:rgba(255,255,255,.92);border:1px solid rgba(184,147,70,.22);border-radius:22px;padding:20px;box-shadow:0 12px 35px rgba(31,65,95,.06)}.ritual-card h3{margin:8px 0 6px;color:#18334a}.ritual-card p{margin:0 0 14px;color:#687384;font-size:13px;line-height:1.55}.ritual-price{font-size:21px;font-weight:800;color:#18334a;margin-bottom:13px}.ritual-card button{width:100%;border:0;border-radius:999px;padding:12px 15px;background:#b88a32;color:#fff;font-weight:800}.ritual-note{margin:18px auto 0;max-width:720px;font-size:11px;color:#8a91a0;line-height:1.55}.ritual-modal p{color:#687384;line-height:1.6}.ritual-modal .ritual-pay{padding:12px 14px;border-radius:14px;background:#f6edda;color:#7d6128;font-weight:700}
     @media(max-width:650px){.nav{display:none}.personal-hero{min-height:calc(100svh - 70px);padding-top:18px}.personal-orb{width:125px;height:125px;margin-bottom:20px}.topic-choice{gap:8px}.topic-choice button{padding:13px 7px;font-size:13px;border-radius:17px}.topic-choice span{font-size:22px}.personal-wrap h1{font-size:48px}.personal-intro{font-size:14px;margin-bottom:21px}.pricing-grid,.ritual-grid{grid-template-columns:1fr}.pricing-strip{padding-left:14px;padding-right:14px}.human-section,.ritual-section{padding-left:14px;padding-right:14px}}
   </style>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Organization",
+        "@id": "https://www.degaja.com/#organization",
+        "name": "DEGAJA",
+        "legalName": "Sagacitas Ltd",
+        "url": "https://www.degaja.com/",
+        "logo": "https://www.degaja.com/assets/degaja-logo.png",
+        "image": "https://www.degaja.com/assets/og-image.png",
+        "description": "DEGAJA – Tarot-Orakel, Handlesen per KI und diskrete persönliche Beratung zu Liebe, Beruf und Zukunft.",
+        "knowsAbout": ["Tarot", "Handlesen", "Chiromantie", "Horoskop", "Astrologie", "Numerologie"],
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "136 Capel Street",
+          "addressLocality": "Dublin",
+          "postalCode": "D01 T2C9",
+          "addressCountry": "IE"
+        }
+      },
+      {
+        "@type": "WebSite",
+        "@id": "https://www.degaja.com/#website",
+        "name": "DEGAJA",
+        "url": "https://www.degaja.com/",
+        "publisher": { "@id": "https://www.degaja.com/#organization" },
+        "inLanguage": ["de", "en", "fr", "es", "it", "pt", "ru", "uk"]
+      }
+    ]
+  }
+  </script>
 </head>
 <body>
 <div class="page-glow"></div>
@@ -47,18 +93,21 @@
 <section id="palm" class="oracle-section compact-oracle"><div class="oracle-card"><div class="eyebrow" data-i18n="palm.eyebrow">✦ DEGAJA HANDLESEN ✦</div><h2 data-i18n="palm.title">Deine Hand. Dein Weg.</h2><p class="palm-intro" data-i18n="palm.intro">Bevor DEGAJA deine Handfläche liest, ein paar persönliche Fragen.</p>
 
 <div id="palmQuiz" class="palm-quiz">
+  <div class="palm-quiz-notice" data-i18n="palm.quiz.mustAnswer">Du musst alle Fragen beantworten, um deine Antwort zu bekommen.</div>
   <div class="palm-quiz-progress"><span id="palmQuizProgressFill" class="palm-quiz-progress-fill"></span></div>
   <div class="palm-quiz-step-label" id="palmQuizStepLabel">1 / 10</div>
 
   <div class="palm-quiz-step" data-step="1" data-key="name">
     <div class="palm-quiz-title" data-i18n="palm.quiz.s1.title">Wie dürfen wir dich nennen?</div>
     <input type="text" class="palm-quiz-input" id="palmQuizInput1" maxlength="40" data-i18n-placeholder="palm.quiz.s1.placeholder" placeholder="Dein Vorname">
+    <div class="palm-quiz-error" data-i18n="palm.quiz.required">Bitte beantworte diese Frage.</div>
     <button type="button" class="primary-btn palm-quiz-next" data-i18n="palm.quiz.next">Weiter →</button>
   </div>
 
   <div class="palm-quiz-step" data-step="2" data-key="birthDate" style="display:none">
     <div class="palm-quiz-title" data-i18n="palm.quiz.s2.title">Wann bist du geboren?</div>
     <input type="date" class="palm-quiz-input" id="palmQuizInput2">
+    <div class="palm-quiz-error" data-i18n="palm.quiz.required">Bitte beantworte diese Frage.</div>
     <button type="button" class="primary-btn palm-quiz-next" data-i18n="palm.quiz.next">Weiter →</button>
   </div>
 
@@ -105,6 +154,7 @@
   <div class="palm-quiz-step" data-step="7" data-key="bigQuestion" style="display:none">
     <div class="palm-quiz-title" data-i18n="palm.quiz.s7.title">Was ist deine größte Frage gerade?</div>
     <input type="text" class="palm-quiz-input" id="palmQuizInput7" maxlength="120" data-i18n-placeholder="palm.quiz.s7.placeholder" placeholder="Schreib es hier auf …">
+    <div class="palm-quiz-error" data-i18n="palm.quiz.required">Bitte beantworte diese Frage.</div>
     <button type="button" class="primary-btn palm-quiz-next" data-i18n="palm.quiz.next">Weiter →</button>
   </div>
 
@@ -130,6 +180,7 @@
   <div class="palm-quiz-step" data-step="10" data-key="wish" style="display:none">
     <div class="palm-quiz-title" data-i18n="palm.quiz.s10.title">Was wünschst du dir, dass dir jemand jetzt sagen würde?</div>
     <input type="text" class="palm-quiz-input" id="palmQuizInput10" maxlength="120" data-i18n-placeholder="palm.quiz.s10.placeholder" placeholder="…">
+    <div class="palm-quiz-error" data-i18n="palm.quiz.required">Bitte beantworte diese Frage.</div>
     <button type="button" class="primary-btn palm-quiz-next" id="palmQuizFinishBtn" data-i18n="palm.quiz.finish">Bereit →</button>
   </div>
 
@@ -145,7 +196,7 @@
 <section id="chat" class="compact-after"><div class="mini-links"><a href="#oracle" data-i18n="chat.links">Karten · Sterne · Zahlen</a><span>·</span><a href="#human" data-i18n="chat.human">Beratung</a><span>·</span><button id="accountBtn" class="text-button" data-i18n="chat.account">Mein DEGAJA</button></div></section>
 <section id="join" class="join-section"><div class="join-wrap"><div class="eyebrow" data-i18n="join.eyebrow">✦ WERDE TEIL VON DEGAJA ✦</div><h2 data-i18n="join.title">Berätst du selbst, oder empfiehlst du uns weiter?</h2><p data-i18n="join.desc">Werde freiberufliche Beraterin bei DEGAJA, oder verdiene als Partner:in 40 % Provision, wenn du uns weiterempfiehlst.</p><div class="join-buttons"><a href="werde-beraterin.html" class="join-btn join-btn-advisor" data-i18n="join.advisorBtn">Werde Beraterin →</a><a href="werde-partner.html" class="join-btn join-btn-partner" data-i18n="join.partnerBtn">Werde Partner →</a></div></div></section>
 </main>
-<footer><div class="footer-brand"><img src="assets/degaja-logo.png" alt="DEGAJA" class="footer-logo"></div><p data-i18n="footer.tagline">Deine Frage. Dein Weg.</p><div class="footer-links"><a href="#" id="impressumLink" data-i18n="footer.impressum">Impressum</a><a href="#" id="datenschutzLink" data-i18n="footer.datenschutz">Datenschutz</a><a href="#" id="agbLink" data-i18n="footer.agb">AGB</a><a href="mailto:info@degaja.com" data-i18n="footer.kontakt">Kontakt</a></div><small><strong data-i18n="footer.disclaimer">DEGAJA dient der persönlichen Orientierung und Unterhaltung und ersetzt keine professionelle Beratung.</strong></small><br><small><strong data-i18n="footer.age18">DEGAJA richtet sich ausschließlich an Personen ab 18 Jahren.</strong></small><div class="advisor-cta"><a href="werde-beraterin.html" data-i18n="footer.werdeberaterin">Werde Beraterin</a></div><div class="advisor-cta" style="margin-top:10px"><a href="werde-partner.html" data-i18n="footer.werdepartner">Werde Partner</a></div></footer>
+<footer><div class="footer-brand"><img src="assets/degaja-logo.png" alt="DEGAJA" class="footer-logo"></div><p data-i18n="footer.tagline">Deine Frage. Dein Weg.</p><div class="footer-links"><a href="#" id="impressumLink" data-i18n="footer.impressum">Impressum</a><a href="#" id="datenschutzLink" data-i18n="footer.datenschutz">Datenschutz</a><a href="#" id="agbLink" data-i18n="footer.agb">AGB</a><a href="mailto:info@degaja.com" data-i18n="footer.kontakt">Kontakt</a></div><small><strong data-i18n="footer.disclaimer">DEGAJA dient der persönlichen Orientierung und Unterhaltung und ersetzt keine professionelle Beratung.</strong></small><br><small><strong data-i18n="footer.age18">DEGAJA richtet sich ausschließlich an Personen ab 18 Jahren.</strong></small><div class="advisor-cta"><a href="werde-beraterin.html" data-i18n="footer.werdeberaterin">Werde Beraterin</a></div><div class="advisor-cta" style="margin-top:10px"><a href="werde-partner.html" data-i18n="footer.werdepartner">Werde Partner</a></div><div class="footer-company">Operated by Sagacitas Ltd, 136 Capel Street, Dublin D01 T2C9, Ireland</div></footer>
 <div class="modal" id="modal" aria-hidden="true"><div class="modal-card"><button class="close" id="closeModal">×</button><div id="modalContent"></div></div></div>
 <script defer src="/_vercel/insights/script.js?v=2"></script>
 <script src="/entropy-bg.js?v=1"></script>

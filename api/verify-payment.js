@@ -16,14 +16,14 @@ export default async function handler(req, res) {
 
     const paid = session.payment_status === "paid" && session.status === "complete";
     const type = session.metadata?.type || "ai";
-    const duration = Number(session.metadata?.duration || 0);
+    const topics = Number(session.metadata?.topics || 0);
     const advisorId = session.metadata?.advisorId || null;
     const credits = Number(session.metadata?.credits || 0);
 
     return res.status(200).json({
       paid,
       type,
-      duration: duration || null,
+      topics: topics || null,
       advisorId,
       credits: credits || null,
       customerEmail: session.customer_details?.email || session.customer_email || null

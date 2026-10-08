@@ -3,29 +3,29 @@ import { VOICE_PRICES } from "./_data.js";
 export default async function handler(req, res) {
   if (req.method !== "POST") return res.status(405).json({ error: "Method not allowed" });
 
-  const { product, duration, email, name, advisorId, ref, lang = "de" } = req.body || {};
+  const { product, topics, email, name, advisorId, ref, lang = "de" } = req.body || {};
   const CURRENCY_BY_LANG = { en: "gbp", us: "usd", br: "brl", mx: "mxn" };
   const LOCALE_BY_LANG = { de: "de", en: "en-GB", us: "en", fr: "fr", es: "es", it: "it", pt: "pt", ru: "ru", uk: "auto", br: "pt-BR", mx: "es" };
   const currency = CURRENCY_BY_LANG[lang] || "eur";
   const stripeLocale = LOCALE_BY_LANG[lang] || "de";
   const PRODUCT_NAMES = {
-    de: { single: "DEGAJA AI – Einzelne Lesung", pack: "DEGAJA AI – 3 Lesungen", voice: minutes => `DEGAJA Live Audio – ${minutes} Minuten` },
-    en: { single: "DEGAJA AI – Single Reading", pack: "DEGAJA AI – 3 Readings", voice: minutes => `DEGAJA Live Audio – ${minutes} Minutes` },
-    us: { single: "DEGAJA AI – Single Reading", pack: "DEGAJA AI – 3 Readings", voice: minutes => `DEGAJA Live Audio – ${minutes} Minutes` },
-    fr: { single: "DEGAJA AI – Lecture unique", pack: "DEGAJA AI – 3 Lectures", voice: minutes => `DEGAJA Live Audio – ${minutes} Minutes` },
-    es: { single: "DEGAJA AI – Lectura individual", pack: "DEGAJA AI – 3 Lecturas", voice: minutes => `DEGAJA Live Audio – ${minutes} Minutos` },
-    it: { single: "DEGAJA AI – Lettura singola", pack: "DEGAJA AI – 3 Letture", voice: minutes => `DEGAJA Live Audio – ${minutes} Minuti` },
-    pt: { single: "DEGAJA AI – Leitura única", pack: "DEGAJA AI – 3 Leituras", voice: minutes => `DEGAJA Live Audio – ${minutes} Minutos` },
-    ru: { single: "DEGAJA AI – Разовый расклад", pack: "DEGAJA AI – 3 расклада", voice: minutes => `DEGAJA Live Audio – ${minutes} минут` },
-    uk: { single: "DEGAJA AI – Одноразовий розклад", pack: "DEGAJA AI – 3 розклади", voice: minutes => `DEGAJA Live Audio – ${minutes} хвилин` },
-    br: { single: "DEGAJA AI – Leitura única", pack: "DEGAJA AI – 3 Leituras", voice: minutes => `DEGAJA Live Audio – ${minutes} Minutos` },
-    mx: { single: "DEGAJA AI – Lectura individual", pack: "DEGAJA AI – 3 Lecturas", voice: minutes => `DEGAJA Live Audio – ${minutes} Minutos` }
+    de: { single: "DEGAJA AI – Einzelne Lesung", pack: "DEGAJA AI – 3 Lesungen", voice: n => `DEGAJA Live Audio – ${n} ${n === 1 ? "Thema" : "Themen"}` },
+    en: { single: "DEGAJA AI – Single Reading", pack: "DEGAJA AI – 3 Readings", voice: n => `DEGAJA Live Audio – ${n} ${n === 1 ? "Topic" : "Topics"}` },
+    us: { single: "DEGAJA AI – Single Reading", pack: "DEGAJA AI – 3 Readings", voice: n => `DEGAJA Live Audio – ${n} ${n === 1 ? "Topic" : "Topics"}` },
+    fr: { single: "DEGAJA AI – Lecture unique", pack: "DEGAJA AI – 3 Lectures", voice: n => `DEGAJA Live Audio – ${n} ${n === 1 ? "Sujet" : "Sujets"}` },
+    es: { single: "DEGAJA AI – Lectura individual", pack: "DEGAJA AI – 3 Lecturas", voice: n => `DEGAJA Live Audio – ${n} ${n === 1 ? "Tema" : "Temas"}` },
+    it: { single: "DEGAJA AI – Lettura singola", pack: "DEGAJA AI – 3 Letture", voice: n => `DEGAJA Live Audio – ${n} ${n === 1 ? "Argomento" : "Argomenti"}` },
+    pt: { single: "DEGAJA AI – Leitura única", pack: "DEGAJA AI – 3 Leituras", voice: n => `DEGAJA Live Audio – ${n} ${n === 1 ? "Tema" : "Temas"}` },
+    ru: { single: "DEGAJA AI – Разовый расклад", pack: "DEGAJA AI – 3 расклада", voice: n => `DEGAJA Live Audio – ${n} ${n === 1 ? "тема" : "темы"}` },
+    uk: { single: "DEGAJA AI – Одноразовий розклад", pack: "DEGAJA AI – 3 розклади", voice: n => `DEGAJA Live Audio – ${n} ${n === 1 ? "тема" : "теми"}` },
+    br: { single: "DEGAJA AI – Leitura única", pack: "DEGAJA AI – 3 Leituras", voice: n => `DEGAJA Live Audio – ${n} ${n === 1 ? "Tema" : "Temas"}` },
+    mx: { single: "DEGAJA AI – Lectura individual", pack: "DEGAJA AI – 3 Lecturas", voice: n => `DEGAJA Live Audio – ${n} ${n === 1 ? "Tema" : "Temas"}` }
   };
   const names = PRODUCT_NAMES[lang] || PRODUCT_NAMES.de;
 
   // BRL and MXN are priced as fair converted values, not a same-digits
   // symbol swap like GBP, so they need their own amounts (in cents/centavos)
-  // here and for voice durations below.
+  // here and for voice topic tiers below.
   const AI_AMOUNTS_BY_CURRENCY = { brl: { single: 2499, pack: 4999 }, mxn: { single: 8900, pack: 17900 } };
   const aiAmounts = AI_AMOUNTS_BY_CURRENCY[currency] || { single: 499, pack: 999 };
   const products = {
@@ -35,12 +35,12 @@ export default async function handler(req, res) {
 
   let item = products[product];
   let type = "ai";
-  let voiceDuration = null;
+  let voiceTopics = null;
   if (product === "voice") {
-    voiceDuration = Number(duration);
-    const price = VOICE_PRICES[voiceDuration];
+    voiceTopics = Number(topics);
+    const price = VOICE_PRICES[voiceTopics];
     const priceForCurrency = price && currency === "brl" && price.brl ? price.brl : price;
-    item = priceForCurrency ? { name: names.voice(voiceDuration), amount: priceForCurrency.amount } : null;
+    item = priceForCurrency ? { name: names.voice(voiceTopics), amount: priceForCurrency.amount } : null;
     type = "voice";
   }
   if (!item) return res.status(400).json({ error: "Invalid product" });
@@ -61,7 +61,7 @@ export default async function handler(req, res) {
   body.set("metadata[type]", type);
   body.set("metadata[product]", String(product));
   body.set("metadata[lang]", String(lang));
-  if (voiceDuration) body.set("metadata[duration]", String(voiceDuration));
+  if (voiceTopics) body.set("metadata[topics]", String(voiceTopics));
   if (item.credits) body.set("metadata[credits]", String(item.credits));
   if (advisorId) body.set("metadata[advisorId]", String(advisorId).slice(0, 100));
   if (ref) body.set("metadata[ref]", String(ref).slice(0, 40));

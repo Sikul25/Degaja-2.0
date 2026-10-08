@@ -52,7 +52,7 @@ export default async function handler(req, res) {
           currency: s.currency,
           type: s.metadata?.type || null,
           product: s.metadata?.product || null,
-          duration: s.metadata?.duration ? Number(s.metadata.duration) : null,
+          topics: s.metadata?.topics ? Number(s.metadata.topics) : null,
           advisorId: s.metadata?.advisorId || null,
           lang: s.metadata?.lang || null,
           stripeFee: bt ? bt.fee : null,
