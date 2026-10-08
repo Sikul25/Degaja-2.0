@@ -7,7 +7,7 @@
   // Fallback data only — the real source of truth is GET /api/advisors,
   // which shares its data with the checkout and oracle endpoints (api/_data.js).
   // Used only if that request fails (e.g. offline).
-  let prices = {15:'29,99',30:'59,99',60:'99,99'};
+  let prices = {1:'49,99',2:'89,90',3:'119,90'};
   const fallbackAdvisors = [
     {id:'papuli',name:'Papuli',title:'Tarot, Astrologie & Zukunft'}
   ];
@@ -151,27 +151,28 @@
     const c=getCredits();
     const liveAudioWith=fmt(t('live.liveAudioWith'),{name:esc(a.name)});
     const cur=t('currency.symbol');
-    host.innerHTML=`<div class="degaja-call-panel"><h4 style="color:#18334a">${fmt(t('live.withName'),{name:esc(a.name)})}</h4><p class="degaja-live-copy">${esc(a.title)} · ${c?t('live.hasCredit'):t('live.chooseDuration')}</p>${c?`<button class="gold" id="degajaUseCredit">${t('live.useCredit')}</button>`:''}<div class="degaja-consult-options"><button class="degaja-consult-option" data-duration="15"><span><strong>${t('live.duration15')}</strong><small>${liveAudioWith}</small></span><b>${cur}${prices[15]}</b></button><button class="degaja-consult-option" data-duration="30"><span><strong>${t('live.duration30')}</strong><small>${liveAudioWith}</small></span><b>${cur}${prices[30]}</b></button><button class="degaja-consult-option" data-duration="60"><span><strong>${t('live.duration60')}</strong><small>${liveAudioWith}</small></span><b>${cur}${prices[60]}</b></button></div><div class="degaja-status">${esc(u.name||u.email)}</div></div>`;
-    $('#degajaUseCredit')?.addEventListener('click',()=>{setCredits(getCredits()-1);creditText();call('credit',60,a)});
-    host.querySelectorAll('[data-duration]').forEach(b=>b.addEventListener('click',()=>checkout(Number(b.dataset.duration),a)));
+    host.innerHTML=`<div class="degaja-call-panel"><h4 style="color:#18334a">${fmt(t('live.withName'),{name:esc(a.name)})}</h4><p class="degaja-live-copy">${esc(a.title)} · ${c?t('live.hasCredit'):t('live.chooseTopics')}</p>${c?`<button class="gold" id="degajaUseCredit">${t('live.useCredit')}</button>`:''}<div class="degaja-consult-options"><button class="degaja-consult-option" data-topics="1"><span><strong>${t('live.topics1')}</strong><small>${liveAudioWith}</small></span><b>${cur}${prices[1]}</b></button><button class="degaja-consult-option" data-topics="2"><span><strong>${t('live.topics2')}</strong><small>${liveAudioWith}</small></span><b>${cur}${prices[2]}</b></button><button class="degaja-consult-option" data-topics="3"><span><strong>${t('live.topics3')}</strong><small>${liveAudioWith}</small></span><b>${cur}${prices[3]}</b></button></div><div class="degaja-status">${esc(u.name||u.email)}</div></div>`;
+    $('#degajaUseCredit')?.addEventListener('click',()=>{setCredits(getCredits()-1);creditText();call('credit',3,a)});
+    host.querySelectorAll('[data-topics]').forEach(b=>b.addEventListener('click',()=>checkout(Number(b.dataset.topics),a)));
   }
 
-  async function checkout(duration,advisor){
+  async function checkout(topics,advisor){
     const u=getUser(); if(!u||!advisor)return;
-    try{const r=await doFetch('/api/checkout',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({product:'voice',duration,email:u.email,name:u.name||'',advisorId:advisor.id,lang:lang(),ref:window.degajaI18n?window.degajaI18n.getRef():''})},15000);const d=await r.json();if(!r.ok||!d.url)throw new Error(d.error||'Checkout');localStorage.setItem(SESSION_KEY,JSON.stringify({type:'voice',duration,advisorId:advisor.id}));location.href=d.url}catch(_){const e=$('#degajaCall');if(e)e.innerHTML=`<div class="degaja-call-panel"><b>${t('live.checkoutFailTitle')}</b><p class="degaja-live-copy">${t('live.checkoutFailDesc')}</p></div>`;}
+    try{const r=await doFetch('/api/checkout',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({product:'voice',topics,email:u.email,name:u.name||'',advisorId:advisor.id,lang:lang(),ref:window.degajaI18n?window.degajaI18n.getRef():''})},15000);const d=await r.json();if(!r.ok||!d.url)throw new Error(d.error||'Checkout');localStorage.setItem(SESSION_KEY,JSON.stringify({type:'voice',topics,advisorId:advisor.id}));location.href=d.url}catch(_){const e=$('#degajaCall');if(e)e.innerHTML=`<div class="degaja-call-panel"><b>${t('live.checkoutFailTitle')}</b><p class="degaja-live-copy">${t('live.checkoutFailDesc')}</p></div>`;}
   }
 
   async function verify(){
     const p=new URLSearchParams(location.search), id=p.get('session_id'); if(p.get('payment')!=='success'||!id)return;
-    try{const r=await doFetch('/api/verify-payment?session_id='+encodeURIComponent(id),{},15000);const d=await r.json();if(!r.ok||!d.paid||d.type!=='voice')throw new Error('not paid');const advisor=d.advisorId?setSelectedAdvisor(d.advisorId):getSelectedAdvisor();localStorage.setItem('degajaPaidVoice','1');localStorage.setItem(SESSION_KEY,JSON.stringify({type:'voice',duration:d.duration||60,advisorId:advisor.id,sessionId:id,verifiedAt:Date.now()}));history.replaceState({},document.title,location.pathname+location.hash);call('paid',d.duration||60,advisor)}catch(_){console.warn('DEGAJA payment verification failed');}
+    try{const r=await doFetch('/api/verify-payment?session_id='+encodeURIComponent(id),{},15000);const d=await r.json();if(!r.ok||!d.paid||d.type!=='voice')throw new Error('not paid');const advisor=d.advisorId?setSelectedAdvisor(d.advisorId):getSelectedAdvisor();localStorage.setItem('degajaPaidVoice','1');localStorage.setItem(SESSION_KEY,JSON.stringify({type:'voice',topics:d.topics||1,advisorId:advisor.id,sessionId:id,verifiedAt:Date.now()}));history.replaceState({},document.title,location.pathname+location.hash);call('paid',d.topics||1,advisor)}catch(_){console.warn('DEGAJA payment verification failed');}
   }
 
   function peerScript(){return new Promise((ok,no)=>{if(window.Peer)return ok();const s=document.createElement('script');s.src='https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js';s.onload=ok;s.onerror=no;document.head.appendChild(s)})}
 
-  async function call(source,duration,advisor=getSelectedAdvisor()){
+  async function call(source,topics,advisor=getSelectedAdvisor()){
     const host=$('#degajaCall');if(!host)return;
     const sourceLabel=source==='credit'?t('live.creditUsedLabel'):t('live.paymentConfirmedLabel');
-    host.innerHTML=`<div class="degaja-call-panel"><h4 style="color:#18334a">${fmt(t('live.connectionTitle'),{name:esc(advisor.name)})}</h4><div class="degaja-status">${esc(advisor.title)}</div><div class="degaja-code" id="degajaCode">------</div><div class="degaja-status" id="degajaStatus">${t('live.micPreparing')}</div><div class="degaja-live-actions" style="margin-top:12px"><button class="dark" id="degajaMute">${t('live.muteBtn')}</button><button style="background:#a34d4d;color:#fff" id="degajaEnd">${t('live.endBtn')}</button></div><audio id="degajaRemoteAudio" autoplay controls></audio><div class="degaja-transcript" id="degajaTranscript" style="display:none"></div><div class="degaja-privacy">${fmt(t('live.privacyNote'),{duration,sourceLabel,name:esc(advisor.name)})}</div></div>`;
+    const topicsLabel=t('live.topics'+(Number(topics)||1));
+    host.innerHTML=`<div class="degaja-call-panel"><h4 style="color:#18334a">${fmt(t('live.connectionTitle'),{name:esc(advisor.name)})}</h4><div class="degaja-status">${esc(advisor.title)}</div><div class="degaja-code" id="degajaCode">------</div><div class="degaja-status" id="degajaStatus">${t('live.micPreparing')}</div><div class="degaja-live-actions" style="margin-top:12px"><button class="dark" id="degajaMute">${t('live.muteBtn')}</button><button style="background:#a34d4d;color:#fff" id="degajaEnd">${t('live.endBtn')}</button></div><audio id="degajaRemoteAudio" autoplay controls></audio><div class="degaja-transcript" id="degajaTranscript" style="display:none"></div><div class="degaja-privacy">${fmt(t('live.privacyNote'),{topicsLabel,sourceLabel,name:esc(advisor.name)})}</div></div>`;
     try{
       await peerScript();
       const stream=await navigator.mediaDevices.getUserMedia({audio:true,video:false});

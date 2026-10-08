@@ -118,7 +118,7 @@
   };
 
   function productLabel(row) {
-    if (row.type === 'voice') return `Voice call · ${row.duration || '?'} min`;
+    if (row.type === 'voice') return `Voice call · ${row.topics || '?'} topic${row.topics === 1 ? '' : 's'}`;
     return PRODUCT_LABELS[row.product] || row.product || row.type || '—';
   }
 
