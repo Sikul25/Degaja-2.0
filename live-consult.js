@@ -146,7 +146,7 @@
       const stream=await navigator.mediaDevices.getUserMedia({audio:true,video:false});
       const code=String(Math.floor(100000+Math.random()*900000));
       const peer=new Peer('degaja-'+code,PEER_CONFIG);
-      window.__degajaPeer=peer;window.__degajaStream=stream;
+      window.__degajaPeer=peer;window.__degajaStream=stream;window.__degajaManualEnd=false;
       $('#degajaCode').textContent=code;
       $('#degajaStatus').textContent=t('live.waitingAdvisor');
       const u=getUser();
@@ -155,7 +155,16 @@
       doFetch('/api/notify-advisor',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({advisorId:advisor.id,code,customerName:u?.name||u?.email||'',link:joinLink})},8000)
         .then(async r=>{const d=await r.json().catch(()=>({}));if(!d.sent){const s=$('#degajaStatus');if(s)s.textContent=t('live.waitingAdvisor')+' ('+t('live.notifyFailed')+')';}})
         .catch(()=>{const s=$('#degajaStatus');if(s)s.textContent=t('live.waitingAdvisor')+' ('+t('live.notifyFailed')+')';});
-      peer.on('call',c=>{c.answer(stream);c.on('stream',remote=>{$('#degajaRemoteAudio').srcObject=remote;$('#degajaStatus').textContent=t('live.liveConnected')})});
+      peer.on('call',c=>{
+        c.answer(stream);
+        c.on('stream',remote=>{$('#degajaRemoteAudio').srcObject=remote;$('#degajaStatus').textContent=t('live.liveConnected')});
+        c.on('close',()=>{ if(!window.__degajaManualEnd){const s=$('#degajaStatus');if(s)s.textContent=t('live.reconnecting')} });
+      });
+      peer.on('disconnected',()=>{
+        if(window.__degajaManualEnd) return;
+        const s=$('#degajaStatus');if(s)s.textContent=t('live.reconnecting');
+        peer.reconnect();
+      });
       peer.on('error',e=>$('#degajaStatus').textContent=t('live.connectionFailed')+(e.type||'Error'));
       $('#degajaMute').onclick=()=>{const track=stream.getAudioTracks()[0];track.enabled=!track.enabled;$('#degajaMute').textContent=track.enabled?t('live.muteBtn'):t('live.unmuteBtn')};
       $('#degajaEnd').onclick=end
@@ -168,17 +177,33 @@
       await peerScript();
       const stream=await navigator.mediaDevices.getUserMedia({audio:true,video:false});
       const peer=new Peer(undefined,PEER_CONFIG);
-      window.__degajaAdvisorPeer=peer;window.__degajaAdvisorStream=stream;
-      peer.on('open',()=>{
+      window.__degajaAdvisorPeer=peer;window.__degajaAdvisorStream=stream;window.__degajaAdvisorManualEnd=false;
+      let attempts=0;
+      const tryCall=()=>{
+        if(window.__degajaAdvisorManualEnd) return;
         const c=peer.call('degaja-'+code,stream);
-        c?.on('stream',remote=>{audio.srcObject=remote;status.textContent=t('live.liveConnected')});
-        c?.on('close',()=>{status.textContent=t('live.callEnded')});
+        if(!c) return;
+        c.on('stream',remote=>{audio.srcObject=remote;status.textContent=t('live.liveConnected');attempts=0});
+        c.on('close',()=>{
+          if(window.__degajaAdvisorManualEnd) return;
+          attempts++;
+          if(attempts>20){status.textContent=t('live.callEnded');return}
+          status.textContent=t('live.reconnecting');
+          setTimeout(tryCall,3000);
+        });
+      };
+      peer.on('open',tryCall);
+      peer.on('disconnected',()=>{
+        if(window.__degajaAdvisorManualEnd) return;
+        status.textContent=t('live.reconnecting');
+        peer.reconnect();
       });
       peer.on('error',e=>status.textContent=t('live.connectionFailed')+(e.type||'Error'))
     }catch(_){status.textContent=t('live.micUnavailableAdvisor')}
   }
 
   function end(){
+    window.__degajaManualEnd=true;
     try{
       window.__degajaStream?.getTracks().forEach(track=>track.stop());
       window.__degajaPeer?.destroy();
