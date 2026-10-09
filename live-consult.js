@@ -243,6 +243,33 @@
     const e=$('#degajaStatus');if(e)e.textContent=t('live.callEnded');
     const lines=$('#degajaTranscriptLines');if(lines)lines.innerHTML='';
   }
+  function playRingtone(){
+    try{
+      const Ctx=window.AudioContext||window.webkitAudioContext; if(!Ctx) return;
+      const ctx=new Ctx();
+      const ring=()=>{
+        const osc=ctx.createOscillator(), gain=ctx.createGain();
+        osc.type='sine'; osc.frequency.value=880;
+        gain.gain.setValueAtTime(0.5,ctx.currentTime);
+        osc.connect(gain); gain.connect(ctx.destination);
+        osc.start(); osc.stop(ctx.currentTime+0.35);
+      };
+      let count=0;
+      ring();
+      const interval=setInterval(()=>{ count++; if(count>=8){clearInterval(interval);return;} ring(); },600);
+      window.__degajaRingInterval=interval;
+      // iOS/Safari block audio before any tap on the page, so also arm it
+      // to fire on the very first touch if the immediate attempt was blocked.
+      const armOnTap=()=>{ ring(); document.removeEventListener('touchstart',armOnTap); document.removeEventListener('click',armOnTap); };
+      document.addEventListener('touchstart',armOnTap,{once:true});
+      document.addEventListener('click',armOnTap,{once:true});
+    }catch(_){}
+  }
+
+  function stopRingtone(){
+    if(window.__degajaRingInterval){ clearInterval(window.__degajaRingInterval); window.__degajaRingInterval=null; }
+  }
+
   function openAdvisorJoinLink(){
     const p=new URLSearchParams(location.search), code=p.get('advisor_join');
     if(!code || !/^\d{6}$/.test(code)) return;
@@ -255,6 +282,9 @@
     const input=$('#degajaAdvisorCode');
     if(input){ input.value=code; input.style.display='none'; }
     panel.scrollIntoView({behavior:'smooth',block:'center'});
+    playRingtone();
+    const joinBtn=$('#degajaAdvisorJoin');
+    if(joinBtn) joinBtn.addEventListener('click',stopRingtone,{once:true});
   }
 
   function init(){
