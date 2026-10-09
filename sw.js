@@ -1,4 +1,4 @@
-const CACHE_NAME = 'degaja-cache-v1';
+const CACHE_NAME = 'degaja-cache-v2';
 const PRECACHE_URLS = [
   '/',
   '/style.css',
@@ -47,18 +47,19 @@ self.addEventListener('fetch', event => {
     return;
   }
 
+  // Network-first: a stale cached script/style previously meant a deploy
+  // never reached a returning visitor until its URL's version query string
+  // was bumped. Falling back to cache only once the network fails keeps
+  // offline support without that trap.
   event.respondWith(
-    caches.match(req).then(cached => {
-      const network = fetch(req)
-        .then(res => {
-          if (res && res.ok) {
-            const copy = res.clone();
-            caches.open(CACHE_NAME).then(cache => cache.put(req, copy));
-          }
-          return res;
-        })
-        .catch(() => cached);
-      return cached || network;
-    })
+    fetch(req)
+      .then(res => {
+        if (res && res.ok) {
+          const copy = res.clone();
+          caches.open(CACHE_NAME).then(cache => cache.put(req, copy));
+        }
+        return res;
+      })
+      .catch(() => caches.match(req))
   );
 });
