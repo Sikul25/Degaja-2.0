@@ -133,7 +133,6 @@
       "live.advisorAccessTitle": "Berater-Zugang", "live.advisorAccessDesc": "Die Beraterin gibt den anonymen 6-stelligen Sitzungscode des Kunden ein.",
       "live.incomingCallDesc": "Eingehender Anruf von einer Kundin. Zum Starten antippen.",
       "live.notifyFailed": "Benachrichtigung an die Beraterin fehlgeschlagen",
-      "live.copyLinkBtn": "Link für die Beraterin kopieren", "live.linkCopied": "Link kopiert ✓",
       "live.sessionCodePlaceholder": "Sitzungscode", "live.acceptCallBtn": "Anruf annehmen",
       "live.enterCodePrompt": "Bitte einen 6-stelligen Sitzungscode eingeben.",
       "live.callEnded": "Gespräch beendet.", "live.micUnavailableAdvisor": "Mikrofonzugriff nicht verfügbar.",

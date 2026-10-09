@@ -181,7 +181,7 @@
     const host=$('#degajaCall');if(!host)return;
     const sourceLabel=source==='credit'?t('live.creditUsedLabel'):t('live.paymentConfirmedLabel');
     const topicsLabel=t('live.topics'+(Number(topics)||1));
-    host.innerHTML=`<div class="degaja-call-panel"><h4 style="color:#18334a">${fmt(t('live.connectionTitle'),{name:esc(advisor.name)})}</h4><div class="degaja-status">${esc(advisor.title)}</div><div class="degaja-code" id="degajaCode" style="display:none"></div><div class="degaja-status" id="degajaStatus">${t('live.micPreparing')}</div><button class="soft" id="degajaCopyLink" style="display:none;margin-top:8px">${t('live.copyLinkBtn')}</button><div class="degaja-live-actions" style="margin-top:12px"><button class="dark" id="degajaMute">${t('live.muteBtn')}</button><button style="background:#a34d4d;color:#fff" id="degajaEnd">${t('live.endBtn')}</button></div><audio id="degajaRemoteAudio" autoplay controls></audio><div class="degaja-transcript" id="degajaTranscript" style="display:none"></div><div class="degaja-privacy">${fmt(t('live.privacyNote'),{topicsLabel,sourceLabel,name:esc(advisor.name)})}</div></div>`;
+    host.innerHTML=`<div class="degaja-call-panel"><h4 style="color:#18334a">${fmt(t('live.connectionTitle'),{name:esc(advisor.name)})}</h4><div class="degaja-status">${esc(advisor.title)}</div><div class="degaja-code" id="degajaCode" style="display:none"></div><div class="degaja-status" id="degajaStatus">${t('live.micPreparing')}</div><div class="degaja-live-actions" style="margin-top:12px"><button class="dark" id="degajaMute">${t('live.muteBtn')}</button><button style="background:#a34d4d;color:#fff" id="degajaEnd">${t('live.endBtn')}</button></div><audio id="degajaRemoteAudio" autoplay controls></audio><div class="degaja-transcript" id="degajaTranscript" style="display:none"></div><div class="degaja-privacy">${fmt(t('live.privacyNote'),{topicsLabel,sourceLabel,name:esc(advisor.name)})}</div></div>`;
     try{
       await peerScript();
       const stream=await navigator.mediaDevices.getUserMedia({audio:true,video:false});
@@ -192,14 +192,6 @@
       $('#degajaStatus').textContent=t('live.waitingAdvisor');
       const u=getUser();
       const joinLink=`${location.origin}${location.pathname}?advisor_join=${code}#human`;
-      const copyBtn=$('#degajaCopyLink');
-      if(copyBtn){
-        copyBtn.style.display='inline-block';
-        copyBtn.onclick=async()=>{
-          try{await navigator.clipboard.writeText(joinLink);copyBtn.textContent=t('live.linkCopied')}
-          catch(_){copyBtn.textContent=joinLink}
-        };
-      }
       doFetch('/api/notify-advisor',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({advisorId:advisor.id,code,customerName:u?.name||u?.email||'',link:joinLink})},8000)
         .then(async r=>{const d=await r.json().catch(()=>({}));if(!d.sent){const s=$('#degajaStatus');if(s)s.textContent=t('live.waitingAdvisor')+' ('+t('live.notifyFailed')+')';}})
         .catch(()=>{const s=$('#degajaStatus');if(s)s.textContent=t('live.waitingAdvisor')+' ('+t('live.notifyFailed')+')';});
