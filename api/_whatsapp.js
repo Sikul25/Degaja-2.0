@@ -69,8 +69,11 @@ async function sendViaTwilio(to, body, contentSid, contentVariables) {
 // opts: { to, body, templateName, templateVars, contentSid, contentVariables, lang }
 export async function sendWhatsApp(opts) {
   const meta = await sendViaMeta(opts.to, opts.body, opts.templateName, opts.templateVars, opts.lang);
-  if (meta) return meta;
+  if (meta && meta.sent) return meta;
+  // Meta either isn't configured (null) or is configured but failed to send
+  // (e.g. an expired/invalid token) — either way, fall through to Twilio
+  // rather than silently dropping the notification.
   const twilio = await sendViaTwilio(opts.to, opts.body, opts.contentSid, opts.contentVariables);
-  if (twilio) return twilio;
-  return { sent: false, reason: "WhatsApp notifications not configured" };
+  if (twilio && twilio.sent) return twilio;
+  return twilio || meta || { sent: false, reason: "WhatsApp notifications not configured" };
 }
