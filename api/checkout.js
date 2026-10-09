@@ -54,6 +54,7 @@ export default async function handler(req, res) {
   body.set("locale", stripeLocale);
   body.set("success_url", `${origin}/?payment=success&session_id={CHECKOUT_SESSION_ID}`);
   body.set("cancel_url", `${origin}/?payment=cancelled`);
+  body.set("allow_promotion_codes", "true");
   body.set("line_items[0][price_data][currency]", currency);
   body.set("line_items[0][price_data][product_data][name]", item.name);
   body.set("line_items[0][price_data][unit_amount]", String(item.amount));
