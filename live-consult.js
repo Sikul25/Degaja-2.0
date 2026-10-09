@@ -119,7 +119,7 @@
       return;
     }
     const c=getCredits();
-    const liveAudioWith=fmt(t('live.liveAudioWith'),{name:esc(a.name)})+' · '+t('live.maxDurationShort');
+    const liveAudioWith=fmt(t('live.liveAudioWith'),{name:esc(a.name)})+' · <span style="color:#a34d4d;font-weight:800">'+t('live.maxDurationShort')+'</span>';
     const cur=t('currency.symbol');
     host.innerHTML=`<div class="degaja-call-panel"><h4 style="color:#18334a">${fmt(t('live.withName'),{name:esc(a.name)})}</h4><p class="degaja-live-copy">${esc(a.title)} · ${c?t('live.hasCredit'):t('live.chooseTopics')}</p>${c?`<button class="gold" id="degajaUseCredit">${t('live.useCredit')}</button>`:''}<div class="degaja-consult-options"><button class="degaja-consult-option" data-topics="1"><span><strong>${t('live.topics1')}</strong><small>${liveAudioWith}</small></span><b>${cur}${prices[1]}</b></button><button class="degaja-consult-option" data-topics="2"><span><strong>${t('live.topics2')}</strong><small>${liveAudioWith}</small></span><b>${cur}${prices[2]}</b></button><button class="degaja-consult-option" data-topics="3"><span><strong>${t('live.topics3')}</strong><small>${liveAudioWith}</small></span><b>${cur}${prices[3]}</b></button></div><div class="degaja-status">${esc(u.name||u.email)}</div></div>`;
     $('#degajaUseCredit')?.addEventListener('click',()=>{setCredits(getCredits()-1);creditText();call('credit',3,a)});
