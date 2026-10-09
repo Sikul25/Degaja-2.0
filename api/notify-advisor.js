@@ -21,9 +21,7 @@ export default async function handler(req, res) {
     to: toNumber,
     body: `DEGAJA: Neue Beratungsanfrage von ${name}. Sitzungscode: ${code}`,
     templateName: process.env.META_TEMPLATE_SESSION_CODE,
-    templateVars: [name, String(code)],
-    contentSid: process.env.TWILIO_CONTENT_SID,
-    contentVariables: { 1: name, 2: String(code) }
+    templateVars: [name, String(code)]
   });
 
   return res.status(result.sent === false && result.error ? 502 : 200).json(result);
