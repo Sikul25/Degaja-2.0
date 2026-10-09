@@ -12,11 +12,11 @@ export const ADVISOR_WHATSAPP = {
   papuli: "+491732960046"
 };
 
-// Private per-advisor secret that authorizes her own "available now" toggle
-// at /advisor-status.html#id=<id>&token=<value>. Never exposed via
-// api/advisors.js. Give each advisor her own link with her own token.
+// Private per-advisor PIN that authorizes her own "available now" toggle at
+// /berater.html. She types it once; the browser remembers it after that.
+// Never exposed via api/advisors.js.
 export const ADVISOR_TOKENS = {
-  papuli: "U1rxFma_Lkr_g8nml22FCKU2"
+  papuli: "583920"
 };
 
 export function getAdvisor(advisorId) {

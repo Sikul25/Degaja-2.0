@@ -1,6 +1,6 @@
 User-agent: *
 Allow: /
-Disallow: /advisor-status.html
+Disallow: /berater.html
 Disallow: /admin.html
 
 Sitemap: https://www.degaja.com/sitemap.xml
