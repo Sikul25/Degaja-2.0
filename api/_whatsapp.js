@@ -5,6 +5,9 @@ async function sendViaMeta(to, body, templateName, templateVars, lang) {
   const { META_WA_TOKEN, META_WA_PHONE_NUMBER_ID } = process.env;
   if (!META_WA_TOKEN || !META_WA_PHONE_NUMBER_ID) return null;
 
+  // Meta's Graph API expects digits only (country code + number), no "+".
+  to = String(to).replace(/[^\d]/g, "");
+
   const payload = templateName
     ? {
         messaging_product: "whatsapp",
@@ -24,11 +27,15 @@ async function sendViaMeta(to, body, templateName, templateVars, lang) {
       headers: { Authorization: `Bearer ${META_WA_TOKEN}`, "Content-Type": "application/json" },
       body: JSON.stringify(payload)
     });
+    const data = await response.json().catch(() => ({}));
     if (!response.ok) {
-      const detail = await response.text().catch(() => "");
-      console.error("Meta WhatsApp send failed:", response.status, detail);
-      return { sent: false, error: "Meta request failed", detail };
+      console.error("Meta WhatsApp send failed:", response.status, JSON.stringify(data));
+      return { sent: false, error: "Meta request failed", detail: JSON.stringify(data) };
     }
+    // Log the resolved WhatsApp ID and message id so a silent delivery
+    // failure (API accepts the request but never actually delivers) can be
+    // cross-checked against what number Meta actually resolved "to" into.
+    console.log("Meta WhatsApp accepted:", JSON.stringify(data));
     return { sent: true, via: "meta" };
   } catch (error) {
     console.error("Meta WhatsApp send threw:", error);
