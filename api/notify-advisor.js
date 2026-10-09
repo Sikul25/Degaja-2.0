@@ -13,6 +13,7 @@ export default async function handler(req, res) {
   // Optional override for end-to-end testing without touching real advisor numbers in code.
   const toNumber = process.env.TEST_WHATSAPP_TO || ADVISOR_WHATSAPP[advisor.id];
   if (!toNumber) {
+    console.error("notify-advisor: no WhatsApp number configured for", advisor.id);
     return res.status(200).json({ sent: false, reason: "No advisor number configured" });
   }
 
@@ -27,6 +28,7 @@ export default async function handler(req, res) {
     templateName: process.env.META_TEMPLATE_SESSION_CODE,
     templateVars: [name, String(code)]
   });
+  if (!result.sent) console.error("notify-advisor: WhatsApp not sent:", result);
 
   return res.status(result.sent === false && result.error ? 502 : 200).json(result);
 }
