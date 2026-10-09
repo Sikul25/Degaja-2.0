@@ -5,6 +5,7 @@
   const SESSION_KEY = 'degajaVoiceSession';
   const ADVISOR_KEY = 'degajaSelectedAdvisor';
   const MAX_CALL_MS = 30*60*1000;
+  const WARNING_MS = MAX_CALL_MS - 5*60*1000;
   // Fallback data only — the real source of truth is GET /api/advisors,
   // which shares its data with the checkout and oracle endpoints (api/_data.js).
   // Used only if that request fails (e.g. offline).
@@ -161,7 +162,11 @@
         c.answer(stream);
         c.on('stream',remote=>{
           $('#degajaRemoteAudio').srcObject=remote;$('#degajaStatus').textContent=t('live.liveConnected');
-          if(!timerStarted){ timerStarted=true; setTimeout(()=>{ if(!window.__degajaManualEnd) end(); },MAX_CALL_MS); }
+          if(!timerStarted){
+            timerStarted=true;
+            setTimeout(()=>{ if(!window.__degajaManualEnd){const s=$('#degajaStatus');if(s)s.textContent=t('live.fiveMinWarning');} },WARNING_MS);
+            setTimeout(()=>{ if(!window.__degajaManualEnd) end(); },MAX_CALL_MS);
+          }
         });
         c.on('close',()=>{ if(!window.__degajaManualEnd){const s=$('#degajaStatus');if(s)s.textContent=t('live.reconnecting')} });
       });
@@ -190,7 +195,11 @@
         if(!c) return;
         c.on('stream',remote=>{
           audio.srcObject=remote;status.textContent=t('live.liveConnected');attempts=0;
-          if(!timerStarted){ timerStarted=true; setTimeout(()=>{ if(!window.__degajaAdvisorManualEnd) advisorEnd(status); },MAX_CALL_MS); }
+          if(!timerStarted){
+            timerStarted=true;
+            setTimeout(()=>{ if(!window.__degajaAdvisorManualEnd) status.textContent=t('live.fiveMinWarning'); },WARNING_MS);
+            setTimeout(()=>{ if(!window.__degajaAdvisorManualEnd) advisorEnd(status); },MAX_CALL_MS);
+          }
         });
         c.on('close',()=>{
           if(window.__degajaAdvisorManualEnd) return;
