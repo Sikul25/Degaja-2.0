@@ -4,6 +4,7 @@
   const CREDIT_KEY = 'degajaVoiceCredits';
   const SESSION_KEY = 'degajaVoiceSession';
   const ADVISOR_KEY = 'degajaSelectedAdvisor';
+  const MAX_CALL_MS = 30*60*1000;
   // Fallback data only — the real source of truth is GET /api/advisors,
   // which shares its data with the checkout and oracle endpoints (api/_data.js).
   // Used only if that request fails (e.g. offline).
@@ -155,9 +156,13 @@
       doFetch('/api/notify-advisor',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({advisorId:advisor.id,code,customerName:u?.name||u?.email||'',link:joinLink})},8000)
         .then(async r=>{const d=await r.json().catch(()=>({}));if(!d.sent){const s=$('#degajaStatus');if(s)s.textContent=t('live.waitingAdvisor')+' ('+t('live.notifyFailed')+')';}})
         .catch(()=>{const s=$('#degajaStatus');if(s)s.textContent=t('live.waitingAdvisor')+' ('+t('live.notifyFailed')+')';});
+      let timerStarted=false;
       peer.on('call',c=>{
         c.answer(stream);
-        c.on('stream',remote=>{$('#degajaRemoteAudio').srcObject=remote;$('#degajaStatus').textContent=t('live.liveConnected')});
+        c.on('stream',remote=>{
+          $('#degajaRemoteAudio').srcObject=remote;$('#degajaStatus').textContent=t('live.liveConnected');
+          if(!timerStarted){ timerStarted=true; setTimeout(()=>{ if(!window.__degajaManualEnd) end(); },MAX_CALL_MS); }
+        });
         c.on('close',()=>{ if(!window.__degajaManualEnd){const s=$('#degajaStatus');if(s)s.textContent=t('live.reconnecting')} });
       });
       peer.on('disconnected',()=>{
@@ -178,12 +183,15 @@
       const stream=await navigator.mediaDevices.getUserMedia({audio:true,video:false});
       const peer=new Peer(undefined,PEER_CONFIG);
       window.__degajaAdvisorPeer=peer;window.__degajaAdvisorStream=stream;window.__degajaAdvisorManualEnd=false;
-      let attempts=0;
+      let attempts=0, timerStarted=false;
       const tryCall=()=>{
         if(window.__degajaAdvisorManualEnd) return;
         const c=peer.call('degaja-'+code,stream);
         if(!c) return;
-        c.on('stream',remote=>{audio.srcObject=remote;status.textContent=t('live.liveConnected');attempts=0});
+        c.on('stream',remote=>{
+          audio.srcObject=remote;status.textContent=t('live.liveConnected');attempts=0;
+          if(!timerStarted){ timerStarted=true; setTimeout(()=>{ if(!window.__degajaAdvisorManualEnd) advisorEnd(status); },MAX_CALL_MS); }
+        });
         c.on('close',()=>{
           if(window.__degajaAdvisorManualEnd) return;
           attempts++;
@@ -209,6 +217,15 @@
       window.__degajaPeer?.destroy();
     }catch(_){}
     const e=$('#degajaStatus');if(e)e.textContent=t('live.callEnded');
+  }
+
+  function advisorEnd(status){
+    window.__degajaAdvisorManualEnd=true;
+    try{
+      window.__degajaAdvisorStream?.getTracks().forEach(track=>track.stop());
+      window.__degajaAdvisorPeer?.destroy();
+    }catch(_){}
+    if(status) status.textContent=t('live.callEnded');
   }
   function playRingtone(){
     try{
