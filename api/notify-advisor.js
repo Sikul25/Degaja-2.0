@@ -4,7 +4,7 @@ import { sendWhatsApp } from "./_whatsapp.js";
 export default async function handler(req, res) {
   if (req.method !== "POST") return res.status(405).json({ error: "Method not allowed" });
 
-  const { advisorId, code, customerName } = req.body || {};
+  const { advisorId, code, customerName, link } = req.body || {};
   if (!code || !/^\d{6}$/.test(String(code))) {
     return res.status(400).json({ error: "Valid 6-digit code required" });
   }
@@ -17,9 +17,13 @@ export default async function handler(req, res) {
   }
 
   const name = String(customerName || "Ein Kunde").slice(0, 60);
+  const safeLink = typeof link === "string" && /^https:\/\/[\w.-]*degaja\.com\//.test(link) ? link.slice(0, 200) : "";
+  const body = safeLink
+    ? `DEGAJA: Neue Beratungsanfrage von ${name}. Zum Annehmen antippen: ${safeLink}`
+    : `DEGAJA: Neue Beratungsanfrage von ${name}. Sitzungscode: ${code}`;
   const result = await sendWhatsApp({
     to: toNumber,
-    body: `DEGAJA: Neue Beratungsanfrage von ${name}. Sitzungscode: ${code}`,
+    body,
     templateName: process.env.META_TEMPLATE_SESSION_CODE,
     templateVars: [name, String(code)]
   });

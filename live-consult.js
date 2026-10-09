@@ -191,7 +191,8 @@
       $('#degajaCode').textContent=code;
       $('#degajaStatus').textContent=t('live.waitingAdvisor');
       const u=getUser();
-      doFetch('/api/notify-advisor',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({advisorId:advisor.id,code,customerName:u?.name||u?.email||''})},8000).catch(()=>{});
+      const joinLink=`${location.origin}${location.pathname}?advisor_join=${code}#human`;
+      doFetch('/api/notify-advisor',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({advisorId:advisor.id,code,customerName:u?.name||u?.email||'',link:joinLink})},8000).catch(()=>{});
       const transcript=attachTranscript($('#degajaTranscript'));
       peer.on('call',c=>{c.answer(stream);c.on('stream',remote=>{$('#degajaRemoteAudio').srcObject=remote;$('#degajaStatus').textContent=t('live.liveConnected')})});
       peer.on('connection',conn=>{
@@ -240,10 +241,20 @@
     const e=$('#degajaStatus');if(e)e.textContent=t('live.callEnded');
     const lines=$('#degajaTranscriptLines');if(lines)lines.innerHTML='';
   }
+  function openAdvisorJoinLink(){
+    const p=new URLSearchParams(location.search), code=p.get('advisor_join');
+    if(!code || !/^\d{6}$/.test(code)) return;
+    $('#degajaAdvisor')?.classList.add('show');
+    const input=$('#degajaAdvisorCode');
+    if(input) input.value=code;
+    history.replaceState({},document.title,location.pathname+location.hash);
+    $('#degajaAdvisor')?.scrollIntoView({behavior:'smooth',block:'center'});
+  }
+
   function init(){
     // The live human advisor only speaks German, Russian and Ukrainian.
     if(window.degajaI18n && !window.degajaI18n.hasLiveAdvisor()) return;
-    style();card();verify();
+    style();card();verify();openAdvisorJoinLink();
     loadRemoteData().then(()=>{
       const select=document.getElementById('degajaAdvisorSelect');
       if(select){ select.innerHTML=advisorOptions(); select.value=getSelectedAdvisor().id; }
