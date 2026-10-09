@@ -29,6 +29,7 @@ export default async function handler(req, res) {
     templateVars: [name, String(code)]
   });
   if (!result.sent) console.error("notify-advisor: WhatsApp not sent:", result);
+  else console.log("notify-advisor: WhatsApp sent to", toNumber.slice(-4));
 
   return res.status(result.sent === false && result.error ? 502 : 200).json(result);
 }
