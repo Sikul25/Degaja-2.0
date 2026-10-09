@@ -192,6 +192,7 @@
       $('#degajaStatus').textContent=t('live.waitingAdvisor');
       const u=getUser();
       const joinLink=`${location.origin}${location.pathname}?advisor_join=${code}#human`;
+      doFetch('/api/pending-session',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({advisorId:advisor.id,code,customerName:u?.name||u?.email||'',link:joinLink})},8000).catch(()=>{});
       doFetch('/api/notify-advisor',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({advisorId:advisor.id,code,customerName:u?.name||u?.email||'',link:joinLink})},8000)
         .then(async r=>{const d=await r.json().catch(()=>({}));if(!d.sent){const s=$('#degajaStatus');if(s)s.textContent=t('live.waitingAdvisor')+' ('+t('live.notifyFailed')+')';}})
         .catch(()=>{const s=$('#degajaStatus');if(s)s.textContent=t('live.waitingAdvisor')+' ('+t('live.notifyFailed')+')';});
