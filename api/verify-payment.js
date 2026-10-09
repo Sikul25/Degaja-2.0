@@ -14,7 +14,9 @@ export default async function handler(req, res) {
     const session = await response.json();
     if (!response.ok) return res.status(502).json({ error: "Unable to verify payment" });
 
-    const paid = session.payment_status === "paid" && session.status === "complete";
+    const paid =
+      (session.payment_status === "paid" || session.payment_status === "no_payment_required") &&
+      session.status === "complete";
     const type = session.metadata?.type || "ai";
     const topics = Number(session.metadata?.topics || 0);
     const advisorId = session.metadata?.advisorId || null;
