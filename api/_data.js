@@ -16,7 +16,7 @@ export const ADVISOR_WHATSAPP = {
 // /berater.html. She types it once; the browser remembers it after that.
 // Never exposed via api/advisors.js.
 export const ADVISOR_TOKENS = {
-  papuli: "583920"
+  papuli: "161098"
 };
 
 export function getAdvisor(advisorId) {
