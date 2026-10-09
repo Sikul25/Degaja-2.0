@@ -55,6 +55,9 @@ export default async function handler(req, res) {
   body.set("success_url", `${origin}/?payment=success&session_id={CHECKOUT_SESSION_ID}`);
   body.set("cancel_url", `${origin}/?payment=cancelled`);
   body.set("allow_promotion_codes", "true");
+  // Card only: without this Stripe also offers Link, which can prompt
+  // returning customers for an identity-verification code mid-checkout.
+  body.set("payment_method_types[0]", "card");
   body.set("line_items[0][price_data][currency]", currency);
   body.set("line_items[0][price_data][product_data][name]", item.name);
   body.set("line_items[0][price_data][unit_amount]", String(item.amount));
