@@ -181,7 +181,7 @@
     const host=$('#degajaCall');if(!host)return;
     const sourceLabel=source==='credit'?t('live.creditUsedLabel'):t('live.paymentConfirmedLabel');
     const topicsLabel=t('live.topics'+(Number(topics)||1));
-    host.innerHTML=`<div class="degaja-call-panel"><h4 style="color:#18334a">${fmt(t('live.connectionTitle'),{name:esc(advisor.name)})}</h4><div class="degaja-status">${esc(advisor.title)}</div><div class="degaja-code" id="degajaCode">------</div><div class="degaja-status" id="degajaStatus">${t('live.micPreparing')}</div><div class="degaja-live-actions" style="margin-top:12px"><button class="dark" id="degajaMute">${t('live.muteBtn')}</button><button style="background:#a34d4d;color:#fff" id="degajaEnd">${t('live.endBtn')}</button></div><audio id="degajaRemoteAudio" autoplay controls></audio><div class="degaja-transcript" id="degajaTranscript" style="display:none"></div><div class="degaja-privacy">${fmt(t('live.privacyNote'),{topicsLabel,sourceLabel,name:esc(advisor.name)})}</div></div>`;
+    host.innerHTML=`<div class="degaja-call-panel"><h4 style="color:#18334a">${fmt(t('live.connectionTitle'),{name:esc(advisor.name)})}</h4><div class="degaja-status">${esc(advisor.title)}</div><div class="degaja-code" id="degajaCode" style="display:none"></div><div class="degaja-status" id="degajaStatus">${t('live.micPreparing')}</div><div class="degaja-live-actions" style="margin-top:12px"><button class="dark" id="degajaMute">${t('live.muteBtn')}</button><button style="background:#a34d4d;color:#fff" id="degajaEnd">${t('live.endBtn')}</button></div><audio id="degajaRemoteAudio" autoplay controls></audio><div class="degaja-transcript" id="degajaTranscript" style="display:none"></div><div class="degaja-privacy">${fmt(t('live.privacyNote'),{topicsLabel,sourceLabel,name:esc(advisor.name)})}</div></div>`;
     try{
       await peerScript();
       const stream=await navigator.mediaDevices.getUserMedia({audio:true,video:false});
@@ -244,11 +244,15 @@
   function openAdvisorJoinLink(){
     const p=new URLSearchParams(location.search), code=p.get('advisor_join');
     if(!code || !/^\d{6}$/.test(code)) return;
-    $('#degajaAdvisor')?.classList.add('show');
-    const input=$('#degajaAdvisorCode');
-    if(input) input.value=code;
     history.replaceState({},document.title,location.pathname+location.hash);
-    $('#degajaAdvisor')?.scrollIntoView({behavior:'smooth',block:'center'});
+    const panel=$('#degajaAdvisor'); if(!panel) return;
+    panel.classList.add('show');
+    // Skip the manual code field entirely for a link-opened join: one button.
+    const desc=panel.querySelector('p.degaja-live-copy');
+    if(desc) desc.textContent=t('live.incomingCallDesc');
+    const input=$('#degajaAdvisorCode');
+    if(input){ input.value=code; input.style.display='none'; }
+    panel.scrollIntoView({behavior:'smooth',block:'center'});
   }
 
   function init(){
