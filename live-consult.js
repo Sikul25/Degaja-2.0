@@ -12,6 +12,15 @@
     {id:'papuli',name:'Papuli',title:'Tarot, Astrologie & Zukunft'}
   ];
   let remoteAdvisors = null;
+  // Plain STUN-only peer connections fail silently whenever either side is
+  // behind a restrictive NAT (mobile data, corporate wifi) — add TURN relays
+  // as a fallback so the call still connects in those cases.
+  const PEER_CONFIG = { config: { iceServers: [
+    { urls: 'stun:stun.relay.metered.ca:80' },
+    { urls: 'turn:global.relay.metered.ca:80', username: 'openrelayproject', credential: 'openrelayproject' },
+    { urls: 'turn:global.relay.metered.ca:443', username: 'openrelayproject', credential: 'openrelayproject' },
+    { urls: 'turn:global.relay.metered.ca:443?transport=tcp', username: 'openrelayproject', credential: 'openrelayproject' }
+  ] } };
   const esc = v => String(v ?? '').replace(/[&<>\"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;',"'":'&#039;'}[c]));
   const t = key => (window.degajaI18n ? window.degajaI18n.t(key) : key);
   const lang = () => (window.degajaI18n ? window.degajaI18n.getLang() : 'de');
@@ -177,7 +186,7 @@
       await peerScript();
       const stream=await navigator.mediaDevices.getUserMedia({audio:true,video:false});
       const code=String(Math.floor(100000+Math.random()*900000));
-      const peer=new Peer('degaja-'+code);
+      const peer=new Peer('degaja-'+code,PEER_CONFIG);
       window.__degajaPeer=peer;window.__degajaStream=stream;
       $('#degajaCode').textContent=code;
       $('#degajaStatus').textContent=t('live.waitingAdvisor');
@@ -203,7 +212,7 @@
     try{
       await peerScript();
       const stream=await navigator.mediaDevices.getUserMedia({audio:true,video:false});
-      const peer=new Peer();
+      const peer=new Peer(undefined,PEER_CONFIG);
       window.__degajaAdvisorPeer=peer;window.__degajaAdvisorStream=stream;
       const transcript=attachTranscript($('#degajaAdvisorTranscript'));
       peer.on('open',()=>{
