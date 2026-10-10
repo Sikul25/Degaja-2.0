@@ -16,40 +16,74 @@
   <link rel="apple-touch-icon" href="apple-touch-icon.png">
   <link rel="stylesheet" href="style.css">
   <style>
-    body{background:#0f1b2a}
-    .quiz-shell{min-height:100svh;display:flex;flex-direction:column;background:radial-gradient(circle at 50% 0%,#1c3450 0%,#0f1b2a 60%)}
-    .quiz-top{display:flex;align-items:center;gap:14px;padding:18px 20px;max-width:620px;margin:0 auto;width:100%;box-sizing:border-box}
-    .quiz-logo{height:28px}
-    .quiz-progress-wrap{flex:1;height:6px;background:rgba(255,255,255,.12);border-radius:99px;overflow:hidden}
-    .quiz-progress-bar{height:100%;width:4%;background:linear-gradient(90deg,#b88a32,#e7c372);border-radius:99px;transition:width .4s ease}
-    .quiz-step-count{color:rgba(255,255,255,.55);font-size:12px;font-weight:700;white-space:nowrap}
-    .quiz-main{flex:1;display:flex;align-items:center;justify-content:center;padding:10px 20px 40px}
-    .quiz-card{width:min(520px,100%);text-align:center}
-    .quiz-eyebrow{color:#e7c372;font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;margin-bottom:14px}
-    .quiz-h1{font-family:Georgia,"Times New Roman",serif;font-weight:500;color:#fff;font-size:clamp(26px,5.5vw,36px);line-height:1.2;margin:0 0 30px}
-    .quiz-options{display:grid;gap:12px}
-    .quiz-opt{appearance:none;text-align:left;display:flex;align-items:center;gap:14px;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.06);border-radius:18px;padding:16px 18px;color:#fff;font-size:16px;font-weight:600;cursor:pointer;transition:.18s}
-    .quiz-opt:hover,.quiz-opt:active{border-color:#e7c372;background:rgba(231,195,114,.12);transform:translateY(-1px)}
-    .quiz-opt .ic{font-size:22px;flex:0 0 auto}
-    .quiz-input{width:100%;box-sizing:border-box;padding:16px 18px;border-radius:18px;border:1px solid rgba(255,255,255,.18);background:rgba(255,255,255,.07);color:#fff;font-size:17px;text-align:center;outline:0}
-    .quiz-input::placeholder{color:rgba(255,255,255,.4)}
-    .quiz-input:focus{border-color:#e7c372}
-    .quiz-cta{margin-top:22px;width:100%;border:0;border-radius:999px;background:linear-gradient(90deg,#b88a32,#e7c372);color:#1c1200;padding:16px 20px;font-weight:800;font-size:16px;cursor:pointer;box-shadow:0 14px 35px rgba(184,138,50,.25)}
-    .quiz-cta:disabled{opacity:.4;cursor:not-allowed}
-    .quiz-back{display:inline-block;margin-top:16px;color:rgba(255,255,255,.4);font-size:13px;cursor:pointer;background:none;border:0}
-    .quiz-loading{display:flex;flex-direction:column;align-items:center;gap:22px}
-    .quiz-orb{width:120px;height:120px;border-radius:50%;background:radial-gradient(circle at 42% 35%,#fff 0,#f3e3c2 30%,#b88a32 75%,#0f1b2a 100%);box-shadow:0 0 60px rgba(231,195,114,.5);animation:pulse 1.8s ease-in-out infinite}
-    @keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.08)}}
-    .quiz-loading p{color:rgba(255,255,255,.65);font-size:14px}
-    .quiz-reveal-badge{display:inline-block;background:rgba(231,195,114,.15);color:#e7c372;border:1px solid rgba(231,195,114,.35);border-radius:999px;padding:6px 16px;font-size:12px;font-weight:800;letter-spacing:.05em;margin-bottom:18px}
-    .quiz-reveal-text{color:#fff;font-size:18px;line-height:1.65;text-align:left;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:20px;padding:22px 24px;margin-bottom:8px;min-height:90px}
-    .quiz-disclaimer{margin-top:18px;color:rgba(255,255,255,.4);font-size:11px;line-height:1.5}
-    .quiz-lang{position:absolute;top:16px;right:16px;color:rgba(255,255,255,.5);font-size:12px;font-weight:700;background:none;border:1px solid rgba(255,255,255,.2);border-radius:999px;padding:5px 12px;cursor:pointer}
-    @media(max-width:480px){.quiz-h1{font-size:24px}.quiz-opt{padding:14px 16px;font-size:15px}}
+    *{box-sizing:border-box}
+    body{background:#0a1220}
+    .quiz-shell{min-height:100svh;display:flex;flex-direction:column;position:relative;overflow:hidden;background:radial-gradient(ellipse 120% 70% at 50% -10%,#203a58 0%,#101d30 45%,#0a1220 85%)}
+    .quiz-stars{position:absolute;inset:0;z-index:0;pointer-events:none}
+    .quiz-star{position:absolute;border-radius:50%;background:#fff;opacity:.5;animation:twinkle linear infinite}
+    @keyframes twinkle{0%,100%{opacity:.15}50%{opacity:.85}}
+    .quiz-glow{position:absolute;width:480px;height:480px;border-radius:50%;left:50%;top:-180px;transform:translateX(-50%);background:radial-gradient(circle,rgba(231,195,114,.16) 0%,rgba(231,195,114,0) 70%);z-index:0;pointer-events:none}
+
+    .quiz-top{display:flex;align-items:center;gap:14px;padding:18px 20px;max-width:620px;margin:0 auto;width:100%;position:relative;z-index:2}
+    .quiz-logo{height:26px;filter:brightness(0) invert(1);opacity:.92}
+    .quiz-progress-wrap{flex:1;height:5px;background:rgba(255,255,255,.1);border-radius:99px;overflow:hidden}
+    .quiz-progress-bar{height:100%;width:4%;background:linear-gradient(90deg,#b88a32,#f0d48f);border-radius:99px;transition:width .5s cubic-bezier(.4,0,.2,1);box-shadow:0 0 10px rgba(231,195,114,.6)}
+    .quiz-step-count{color:rgba(255,255,255,.45);font-size:11px;font-weight:700;letter-spacing:.03em;white-space:nowrap;font-variant-numeric:tabular-nums}
+
+    .quiz-main{flex:1;display:flex;align-items:center;justify-content:center;padding:10px 20px 48px;position:relative;z-index:2}
+    .quiz-card{width:min(540px,100%);text-align:center}
+    .quiz-anim{animation:quizIn .45s cubic-bezier(.16,1,.3,1) both}
+    @keyframes quizIn{from{opacity:0;transform:translateY(14px) scale(.98)}to{opacity:1;transform:translateY(0) scale(1)}}
+
+    .quiz-eyebrow{display:inline-flex;align-items:center;gap:8px;color:#e7c372;font-size:11px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;margin-bottom:16px}
+    .quiz-eyebrow:before,.quiz-eyebrow:after{content:"";width:16px;height:1px;background:linear-gradient(90deg,transparent,#e7c372)}
+    .quiz-eyebrow:after{background:linear-gradient(90deg,#e7c372,transparent)}
+    .quiz-h1{font-family:Georgia,"Times New Roman",serif;font-weight:500;color:#fff;font-size:clamp(26px,5.5vw,38px);line-height:1.22;margin:0 0 32px;letter-spacing:-.01em}
+
+    .quiz-options{display:grid;gap:11px}
+    .quiz-opt{appearance:none;text-align:left;display:flex;align-items:center;gap:15px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.04);backdrop-filter:blur(6px);border-radius:18px;padding:16px 18px;color:#eef2f6;font-size:16px;font-weight:600;cursor:pointer;transition:.22s cubic-bezier(.4,0,.2,1);position:relative}
+    .quiz-opt:hover{border-color:rgba(231,195,114,.55);background:rgba(231,195,114,.1);transform:translateY(-2px);box-shadow:0 10px 28px rgba(0,0,0,.25)}
+    .quiz-opt.picked{border-color:#e7c372;background:rgba(231,195,114,.18);transform:scale(.98)}
+    .quiz-opt .ic{font-size:21px;flex:0 0 auto;width:30px;text-align:center}
+    .quiz-opt .arrow{margin-left:auto;opacity:0;transform:translateX(-4px);transition:.2s;color:#e7c372}
+    .quiz-opt:hover .arrow{opacity:1;transform:translateX(0)}
+
+    .quiz-input{width:100%;padding:17px 18px;border-radius:18px;border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.05);color:#fff;font-size:17px;text-align:center;outline:0;transition:.2s}
+    .quiz-input::placeholder{color:rgba(255,255,255,.35)}
+    .quiz-input:focus{border-color:#e7c372;background:rgba(255,255,255,.08);box-shadow:0 0 0 4px rgba(231,195,114,.12)}
+
+    .quiz-cta{margin-top:22px;width:100%;border:0;border-radius:999px;background:linear-gradient(90deg,#b88a32,#f0d48f);color:#20160a;padding:17px 20px;font-weight:800;font-size:16px;cursor:pointer;box-shadow:0 16px 38px rgba(184,138,50,.3);transition:.2s}
+    .quiz-cta:hover{transform:translateY(-1px);box-shadow:0 20px 44px rgba(184,138,50,.4)}
+    .quiz-cta:disabled{opacity:.4;cursor:not-allowed;transform:none}
+    .quiz-back{display:inline-block;margin-top:16px;color:rgba(255,255,255,.4);font-size:13px;cursor:pointer;background:none;border:0;transition:.2s}
+    .quiz-back:hover{color:rgba(255,255,255,.7)}
+
+    .quiz-loading{display:flex;flex-direction:column;align-items:center;gap:26px}
+    .quiz-orb-wrap{position:relative;width:132px;height:132px;display:grid;place-items:center}
+    .quiz-orb-ring{position:absolute;inset:0;border-radius:50%;border:1px solid rgba(231,195,114,.3);animation:spin 7s linear infinite}
+    .quiz-orb-ring.r2{inset:-14px;border-color:rgba(231,195,114,.15);animation-duration:11s;animation-direction:reverse}
+    @keyframes spin{to{transform:rotate(360deg)}}
+    .quiz-orb{width:104px;height:104px;border-radius:50%;background:radial-gradient(circle at 38% 32%,#fff 0,#f3e3c2 28%,#b88a32 70%,#4a3414 100%);box-shadow:0 0 70px rgba(231,195,114,.55);animation:pulse 1.7s ease-in-out infinite}
+    @keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.07)}}
+    .quiz-loading-pct{color:#f0d48f;font-size:13px;font-weight:800;letter-spacing:.06em;font-variant-numeric:tabular-nums}
+    .quiz-loading-title{color:#fff;font-size:17px;font-weight:600;min-height:24px;transition:opacity .25s}
+    .quiz-loading-sub{color:rgba(255,255,255,.45);font-size:13px;margin-top:4px}
+
+    .quiz-reveal-badge{display:inline-flex;align-items:center;gap:7px;background:rgba(231,195,114,.14);color:#f0d48f;border:1px solid rgba(231,195,114,.35);border-radius:999px;padding:7px 18px;font-size:12px;font-weight:800;letter-spacing:.06em;margin-bottom:20px}
+    .quiz-reveal-card{position:relative;text-align:left;background:linear-gradient(160deg,rgba(255,255,255,.07),rgba(255,255,255,.02));border:1px solid rgba(231,195,114,.22);border-radius:22px;padding:24px 26px;margin-bottom:10px;min-height:96px;box-shadow:0 20px 50px rgba(0,0,0,.3)}
+    .quiz-reveal-text{color:#f2f4f7;font-size:18px;line-height:1.7}
+    .quiz-reveal-text .cursor{display:inline-block;width:2px;height:1em;background:#e7c372;margin-left:2px;vertical-align:text-bottom;animation:blink .8s step-end infinite}
+    @keyframes blink{50%{opacity:0}}
+    .quiz-disclaimer{margin-top:18px;color:rgba(255,255,255,.35);font-size:11px;line-height:1.5}
+    .quiz-lang{position:absolute;top:16px;right:16px;z-index:3;color:rgba(255,255,255,.5);font-size:12px;font-weight:700;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.16);border-radius:999px;padding:6px 13px;cursor:pointer;transition:.2s}
+    .quiz-lang:hover{border-color:rgba(231,195,114,.5);color:#f0d48f}
+    @media(max-width:480px){.quiz-h1{font-size:23px}.quiz-opt{padding:14px 16px;font-size:14.5px}}
   </style>
 </head>
 <body>
 <div class="quiz-shell">
+  <div class="quiz-glow"></div>
+  <div class="quiz-stars" id="stars"></div>
   <button class="quiz-lang" id="langToggle" type="button">EN</button>
   <div class="quiz-top">
     <img src="assets/degaja-logo.png" alt="DEGAJA" class="quiz-logo">
@@ -67,8 +101,7 @@
 
   var STR = {
     de: {
-      steps: 5,
-      q1_eyebrow: "✦ ENTHÜLLUNG ✦",
+      q1_eyebrow: "ENTHÜLLUNG",
       q1_h1: "Welche persönliche Einsicht suchst du?",
       q1_opts: [
         {ic:"⏳", t:"Sehen, wer ich in einem früheren Leben war"},
@@ -77,13 +110,13 @@
         {ic:"🌟", t:"Meine verborgenen Fähigkeiten entdecken"},
         {ic:"🔮", t:"Meine Zukunft in der Liebe erfahren"}
       ],
-      q2_eyebrow: "✦ SCHRITT 2 ✦",
+      q2_eyebrow: "SCHRITT 2",
       q2_h1: "Wann bist du geboren?",
       q2_placeholder: "TT.MM.JJJJ",
-      q3_eyebrow: "✦ SCHRITT 3 ✦",
+      q3_eyebrow: "SCHRITT 3",
       q3_h1: "Wie dürfen wir dich nennen?",
       q3_placeholder: "Dein Vorname",
-      q4_eyebrow: "✦ SCHRITT 4 ✦",
+      q4_eyebrow: "SCHRITT 4",
       q4_h1: "Was beschäftigt dich gerade am meisten?",
       q4_opts: [
         {ic:"💞", t:"Liebe & Beziehungen"},
@@ -93,16 +126,20 @@
       ],
       next: "Weiter →",
       back: "← Zurück",
-      loading_title: "Wir lesen die Zeichen …",
-      loading_sub: "Deine persönliche Enthüllung wird erstellt",
-      reveal_badge: "Deine Enthüllung",
+      loading_phrases: [
+        "Wir lesen die Zeichen …",
+        "Deine Geburtsenergie wird entschlüsselt …",
+        "Die Karten ordnen sich …",
+        "Deine Enthüllung nimmt Form an …"
+      ],
+      loading_sub: "Bitte warte einen Moment",
+      reveal_badge: "✦ Deine Enthüllung",
       reveal_fallback: "Die Energien um dich sind heute außergewöhnlich stark — deine vollständige Enthüllung wartet in deiner persönlichen Lesung.",
       cta: "Vollständige Lesung freischalten →",
       disclaimer: "DEGAJA dient der persönlichen Orientierung und Unterhaltung und ersetzt keine professionelle Beratung."
     },
     en: {
-      steps: 5,
-      q1_eyebrow: "✦ REVEAL ✦",
+      q1_eyebrow: "REVEAL",
       q1_h1: "What personal insight are you seeking?",
       q1_opts: [
         {ic:"⏳", t:"See who I was in a past life"},
@@ -111,13 +148,13 @@
         {ic:"🌟", t:"Tap into my hidden abilities"},
         {ic:"🔮", t:"Discover my love future"}
       ],
-      q2_eyebrow: "✦ STEP 2 ✦",
+      q2_eyebrow: "STEP 2",
       q2_h1: "When were you born?",
       q2_placeholder: "DD/MM/YYYY",
-      q3_eyebrow: "✦ STEP 3 ✦",
+      q3_eyebrow: "STEP 3",
       q3_h1: "What should we call you?",
       q3_placeholder: "Your first name",
-      q4_eyebrow: "✦ STEP 4 ✦",
+      q4_eyebrow: "STEP 4",
       q4_h1: "What's on your mind the most right now?",
       q4_opts: [
         {ic:"💞", t:"Love & relationships"},
@@ -127,9 +164,14 @@
       ],
       next: "Continue →",
       back: "← Back",
-      loading_title: "Reading the signs …",
-      loading_sub: "Your personal reveal is being created",
-      reveal_badge: "Your reveal",
+      loading_phrases: [
+        "Reading the signs …",
+        "Decoding your birth energy …",
+        "The cards are aligning …",
+        "Your reveal is taking shape …"
+      ],
+      loading_sub: "This will only take a moment",
+      reveal_badge: "✦ Your reveal",
       reveal_fallback: "The energy around you is unusually strong today — your full reveal is waiting in your personal reading.",
       cta: "Unlock your full reading →",
       disclaimer: "DEGAJA is for personal guidance and entertainment purposes and does not replace professional advice."
@@ -143,6 +185,8 @@
   var answers = { insight: null, birthdate: "", name: "", focus: null };
   var step = 1;
   var TOTAL_STEPS = 5;
+  var loadingTimer = null;
+  var typeTimer = null;
 
   var card = document.getElementById("quizCard");
   var progressBar = document.getElementById("progressBar");
@@ -150,6 +194,25 @@
   var langToggle = document.getElementById("langToggle");
 
   function t(){ return STR[lang]; }
+
+  function buildStars(){
+    var wrap = document.getElementById("stars");
+    wrap.innerHTML = "";
+    var count = window.innerWidth < 500 ? 36 : 60;
+    for (var i = 0; i < count; i++) {
+      var s = document.createElement("div");
+      s.className = "quiz-star";
+      var size = (Math.random() * 1.8 + 0.6).toFixed(1);
+      s.style.width = size + "px";
+      s.style.height = size + "px";
+      s.style.left = (Math.random() * 100) + "%";
+      s.style.top = (Math.random() * 100) + "%";
+      s.style.animationDuration = (2 + Math.random() * 3).toFixed(1) + "s";
+      s.style.animationDelay = (Math.random() * 3).toFixed(1) + "s";
+      wrap.appendChild(s);
+    }
+  }
+  buildStars();
 
   function setLangButton(){
     langToggle.textContent = lang === "de" ? "EN" : "DE";
@@ -161,10 +224,10 @@
   });
   setLangButton();
 
-  function updateProgress(){
-    var pct = Math.min(100, Math.round((step - 1) / TOTAL_STEPS * 100) + 8);
+  function updateProgress(pctOverride){
+    var pct = pctOverride != null ? pctOverride : Math.min(100, Math.round((step - 1) / TOTAL_STEPS * 100) + 8);
     progressBar.style.width = pct + "%";
-    stepCount.textContent = step + "/" + TOTAL_STEPS;
+    stepCount.textContent = Math.min(step, TOTAL_STEPS) + "/" + TOTAL_STEPS;
   }
 
   function escapeHtml(s){
@@ -173,18 +236,30 @@
     });
   }
 
+  function setCard(html){
+    card.classList.remove("quiz-anim");
+    card.innerHTML = html;
+    void card.offsetWidth;
+    card.classList.add("quiz-anim");
+  }
+
   function renderOptionsStep(eyebrow, h1, opts, onPick){
     var html = '<div class="quiz-eyebrow">' + eyebrow + '</div>';
     html += '<h1 class="quiz-h1">' + h1 + '</h1>';
     html += '<div class="quiz-options">';
     opts.forEach(function(o, i){
-      html += '<button class="quiz-opt" data-i="' + i + '"><span class="ic">' + o.ic + '</span>' + escapeHtml(o.t) + '</button>';
+      html += '<button class="quiz-opt" data-i="' + i + '"><span class="ic">' + o.ic + '</span>' + escapeHtml(o.t) + '<span class="arrow">→</span></button>';
     });
     html += '</div>';
     if (step > 1) html += '<button class="quiz-back" id="backBtn">' + t().back + '</button>';
-    card.innerHTML = html;
+    setCard(html);
     Array.prototype.forEach.call(card.querySelectorAll(".quiz-opt"), function(btn){
-      btn.addEventListener("click", function(){ onPick(opts[Number(btn.dataset.i)]); });
+      btn.addEventListener("click", function(){
+        if (card.dataset.locked) return;
+        card.dataset.locked = "1";
+        btn.classList.add("picked");
+        setTimeout(function(){ onPick(opts[Number(btn.dataset.i)]); }, 260);
+      });
     });
     var backBtn = document.getElementById("backBtn");
     if (backBtn) backBtn.addEventListener("click", goBack);
@@ -196,7 +271,7 @@
     html += '<input class="quiz-input" id="stepInput" type="' + type + '" placeholder="' + placeholder + '" value="' + escapeHtml(currentValue || "") + '">';
     html += '<button class="quiz-cta" id="nextBtn">' + t().next + '</button>';
     html += '<button class="quiz-back" id="backBtn">' + t().back + '</button>';
-    card.innerHTML = html;
+    setCard(html);
     var input = document.getElementById("stepInput");
     var nextBtn = document.getElementById("nextBtn");
     input.focus();
@@ -215,6 +290,7 @@
   }
 
   function render(){
+    delete card.dataset.locked;
     updateProgress();
     if (step === 1) {
       renderOptionsStep(t().q1_eyebrow, t().q1_h1, t().q1_opts, function(opt){
@@ -242,19 +318,52 @@
 
   function renderLoading(){
     var html = '<div class="quiz-loading">';
-    html += '<div class="quiz-orb"></div>';
-    html += '<div><strong style="color:#fff;font-size:17px">' + t().loading_title + '</strong>';
-    html += '<p>' + t().loading_sub + '</p></div>';
+    html += '<div class="quiz-orb-wrap"><div class="quiz-orb-ring"></div><div class="quiz-orb-ring r2"></div><div class="quiz-orb"></div></div>';
+    html += '<div class="quiz-loading-pct" id="loadPct">0%</div>';
+    html += '<div><div class="quiz-loading-title" id="loadTitle">' + t().loading_phrases[0] + '</div>';
+    html += '<div class="quiz-loading-sub">' + t().loading_sub + '</div></div>';
     html += '</div>';
-    card.innerHTML = html;
+    setCard(html);
+
+    var pctEl = document.getElementById("loadPct");
+    var titleEl = document.getElementById("loadTitle");
+    var phrases = t().loading_phrases;
+    var pct = 0, phraseIdx = 0;
+    clearInterval(loadingTimer);
+    loadingTimer = setInterval(function(){
+      pct = Math.min(96, pct + Math.round(4 + Math.random() * 9));
+      pctEl.textContent = pct + "%";
+      var nextPhrase = Math.floor(pct / (100 / phrases.length));
+      if (nextPhrase !== phraseIdx && nextPhrase < phrases.length) {
+        phraseIdx = nextPhrase;
+        titleEl.style.opacity = 0;
+        setTimeout(function(){ titleEl.textContent = phrases[phraseIdx]; titleEl.style.opacity = 1; }, 220);
+      }
+    }, 260);
+  }
+
+  function typewriter(el, text, done){
+    clearInterval(typeTimer);
+    var i = 0;
+    el.innerHTML = '<span class="cursor"></span>';
+    typeTimer = setInterval(function(){
+      i += 2;
+      el.innerHTML = escapeHtml(text.slice(0, i)) + '<span class="cursor"></span>';
+      if (i >= text.length) {
+        clearInterval(typeTimer);
+        el.innerHTML = escapeHtml(text);
+        if (done) done();
+      }
+    }, 18);
   }
 
   function renderReveal(text){
     var html = '<div class="quiz-reveal-badge">' + t().reveal_badge + '</div>';
-    html += '<div class="quiz-reveal-text">' + escapeHtml(text) + '</div>';
+    html += '<div class="quiz-reveal-card"><div class="quiz-reveal-text" id="revealText"></div></div>';
     html += '<button class="quiz-cta" id="ctaBtn">' + t().cta + '</button>';
     html += '<div class="quiz-disclaimer">' + t().disclaimer + '</div>';
-    card.innerHTML = html;
+    setCard(html);
+    typewriter(document.getElementById("revealText"), text);
     document.getElementById("ctaBtn").addEventListener("click", function(){
       var dest = lang === "en" ? "/en" : "/";
       location.href = dest + (dest.indexOf("?") === -1 ? "?" : "&") + "utm_source=" + encodeURIComponent(ref) + "&utm_campaign=quiz";
@@ -262,15 +371,14 @@
   }
 
   function runReveal(){
-    progressBar.style.width = "100%";
-    stepCount.textContent = TOTAL_STEPS + "/" + TOTAL_STEPS;
+    updateProgress(100);
     renderLoading();
 
     var question = lang === "en"
       ? "My name is " + answers.name + ", born on " + answers.birthdate + ". What I'm seeking: " + answers.insight + ". What's on my mind most right now: " + answers.focus + ". Give me a short, mysterious, captivating personal reveal about my past life or destiny that fits my choice. Maximum 4-5 sentences, written in a dramatic, very personal, TikTok-ready style."
       : "Ich heiße " + answers.name + ", geboren am " + answers.birthdate + ". Ich suche: " + answers.insight + ". Was mich gerade am meisten beschäftigt: " + answers.focus + ". Gib mir eine kurze, mysteriöse, fesselnde persönliche Enthüllung über mein vergangenes Leben oder Schicksal, passend zu meiner Wahl. Maximal 4-5 Sätze, dramatisch und sehr persönlich geschrieben, im Stil eines packenden TikTok-Moments.";
 
-    var minWait = new Promise(function(resolve){ setTimeout(resolve, 2200); });
+    var minWait = new Promise(function(resolve){ setTimeout(resolve, 2600); });
     var request = fetch("/api/oracle", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -283,9 +391,12 @@
     }).then(function(r){ return r.ok ? r.json() : null; }).catch(function(){ return null; });
 
     Promise.all([request, minWait]).then(function(results){
+      clearInterval(loadingTimer);
+      var pctEl = document.getElementById("loadPct");
+      if (pctEl) pctEl.textContent = "100%";
       var data = results[0];
       var text = (data && data.text) ? data.text : t().reveal_fallback;
-      renderReveal(text);
+      setTimeout(function(){ renderReveal(text); }, 260);
     });
   }
 
