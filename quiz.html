@@ -1,0 +1,296 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="description" content="DEGAJA – Entdecke in wenigen Fragen eine persönliche mystische Enthüllung: vergangenes Leben, Schicksal und mehr.">
+  <title>Entdecke dein verborgenes Ich – DEGAJA</title>
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="DEGAJA">
+  <meta property="og:title" content="Entdecke dein verborgenes Ich – DEGAJA">
+  <meta property="og:description" content="Beantworte ein paar Fragen und erhalte deine persönliche mystische Enthüllung.">
+  <meta property="og:image" content="https://www.degaja.com/assets/og-image.png">
+  <meta name="robots" content="noindex">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="favicon.ico" sizes="any">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body{background:#0f1b2a}
+    .quiz-shell{min-height:100svh;display:flex;flex-direction:column;background:radial-gradient(circle at 50% 0%,#1c3450 0%,#0f1b2a 60%)}
+    .quiz-top{display:flex;align-items:center;gap:14px;padding:18px 20px;max-width:620px;margin:0 auto;width:100%;box-sizing:border-box}
+    .quiz-logo{height:28px}
+    .quiz-progress-wrap{flex:1;height:6px;background:rgba(255,255,255,.12);border-radius:99px;overflow:hidden}
+    .quiz-progress-bar{height:100%;width:4%;background:linear-gradient(90deg,#b88a32,#e7c372);border-radius:99px;transition:width .4s ease}
+    .quiz-step-count{color:rgba(255,255,255,.55);font-size:12px;font-weight:700;white-space:nowrap}
+    .quiz-main{flex:1;display:flex;align-items:center;justify-content:center;padding:10px 20px 40px}
+    .quiz-card{width:min(520px,100%);text-align:center}
+    .quiz-eyebrow{color:#e7c372;font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;margin-bottom:14px}
+    .quiz-h1{font-family:Georgia,"Times New Roman",serif;font-weight:500;color:#fff;font-size:clamp(26px,5.5vw,36px);line-height:1.2;margin:0 0 30px}
+    .quiz-options{display:grid;gap:12px}
+    .quiz-opt{appearance:none;text-align:left;display:flex;align-items:center;gap:14px;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.06);border-radius:18px;padding:16px 18px;color:#fff;font-size:16px;font-weight:600;cursor:pointer;transition:.18s}
+    .quiz-opt:hover,.quiz-opt:active{border-color:#e7c372;background:rgba(231,195,114,.12);transform:translateY(-1px)}
+    .quiz-opt .ic{font-size:22px;flex:0 0 auto}
+    .quiz-input{width:100%;box-sizing:border-box;padding:16px 18px;border-radius:18px;border:1px solid rgba(255,255,255,.18);background:rgba(255,255,255,.07);color:#fff;font-size:17px;text-align:center;outline:0}
+    .quiz-input::placeholder{color:rgba(255,255,255,.4)}
+    .quiz-input:focus{border-color:#e7c372}
+    .quiz-cta{margin-top:22px;width:100%;border:0;border-radius:999px;background:linear-gradient(90deg,#b88a32,#e7c372);color:#1c1200;padding:16px 20px;font-weight:800;font-size:16px;cursor:pointer;box-shadow:0 14px 35px rgba(184,138,50,.25)}
+    .quiz-cta:disabled{opacity:.4;cursor:not-allowed}
+    .quiz-back{display:inline-block;margin-top:16px;color:rgba(255,255,255,.4);font-size:13px;cursor:pointer;background:none;border:0}
+    .quiz-loading{display:flex;flex-direction:column;align-items:center;gap:22px}
+    .quiz-orb{width:120px;height:120px;border-radius:50%;background:radial-gradient(circle at 42% 35%,#fff 0,#f3e3c2 30%,#b88a32 75%,#0f1b2a 100%);box-shadow:0 0 60px rgba(231,195,114,.5);animation:pulse 1.8s ease-in-out infinite}
+    @keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.08)}}
+    .quiz-loading p{color:rgba(255,255,255,.65);font-size:14px}
+    .quiz-reveal-badge{display:inline-block;background:rgba(231,195,114,.15);color:#e7c372;border:1px solid rgba(231,195,114,.35);border-radius:999px;padding:6px 16px;font-size:12px;font-weight:800;letter-spacing:.05em;margin-bottom:18px}
+    .quiz-reveal-text{color:#fff;font-size:18px;line-height:1.65;text-align:left;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:20px;padding:22px 24px;margin-bottom:8px;min-height:90px}
+    .quiz-disclaimer{margin-top:18px;color:rgba(255,255,255,.4);font-size:11px;line-height:1.5}
+    .quiz-lang{position:absolute;top:16px;right:16px;color:rgba(255,255,255,.5);font-size:12px;font-weight:700;background:none;border:1px solid rgba(255,255,255,.2);border-radius:999px;padding:5px 12px;cursor:pointer}
+    @media(max-width:480px){.quiz-h1{font-size:24px}.quiz-opt{padding:14px 16px;font-size:15px}}
+  </style>
+</head>
+<body>
+<div class="quiz-shell">
+  <button class="quiz-lang" id="langToggle" type="button">EN</button>
+  <div class="quiz-top">
+    <img src="assets/degaja-logo.png" alt="DEGAJA" class="quiz-logo">
+    <div class="quiz-progress-wrap"><div class="quiz-progress-bar" id="progressBar"></div></div>
+    <div class="quiz-step-count" id="stepCount">1/5</div>
+  </div>
+  <main class="quiz-main">
+    <div class="quiz-card" id="quizCard"></div>
+  </main>
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  var STR = {
+    de: {
+      steps: 5,
+      q1_eyebrow: "✦ ENTHÜLLUNG ✦",
+      q1_h1: "Welche persönliche Einsicht suchst du?",
+      q1_opts: [
+        {ic:"⏳", t:"Sehen, wer ich in einem früheren Leben war"},
+        {ic:"✨", t:"Mein Schicksal und meinen Lebenszweck erkennen"},
+        {ic:"🌀", t:"Herausfinden, ob ich schon einmal gelebt habe"},
+        {ic:"🌟", t:"Meine verborgenen Fähigkeiten entdecken"},
+        {ic:"🔮", t:"Meine Zukunft in der Liebe erfahren"}
+      ],
+      q2_eyebrow: "✦ SCHRITT 2 ✦",
+      q2_h1: "Wann bist du geboren?",
+      q2_placeholder: "TT.MM.JJJJ",
+      q3_eyebrow: "✦ SCHRITT 3 ✦",
+      q3_h1: "Wie dürfen wir dich nennen?",
+      q3_placeholder: "Dein Vorname",
+      q4_eyebrow: "✦ SCHRITT 4 ✦",
+      q4_h1: "Was beschäftigt dich gerade am meisten?",
+      q4_opts: [
+        {ic:"💞", t:"Liebe & Beziehungen"},
+        {ic:"💼", t:"Beruf & Geld"},
+        {ic:"🧭", t:"Lebensweg & Entscheidungen"},
+        {ic:"🌙", t:"Innere Ruhe & Selbstfindung"}
+      ],
+      next: "Weiter →",
+      back: "← Zurück",
+      loading_title: "Wir lesen die Zeichen …",
+      loading_sub: "Deine persönliche Enthüllung wird erstellt",
+      reveal_badge: "Deine Enthüllung",
+      reveal_fallback: "Die Energien um dich sind heute außergewöhnlich stark — deine vollständige Enthüllung wartet in deiner persönlichen Lesung.",
+      cta: "Vollständige Lesung freischalten →",
+      disclaimer: "DEGAJA dient der persönlichen Orientierung und Unterhaltung und ersetzt keine professionelle Beratung."
+    },
+    en: {
+      steps: 5,
+      q1_eyebrow: "✦ REVEAL ✦",
+      q1_h1: "What personal insight are you seeking?",
+      q1_opts: [
+        {ic:"⏳", t:"See who I was in a past life"},
+        {ic:"✨", t:"Reveal my fate and purpose"},
+        {ic:"🌀", t:"Find out if I lived before"},
+        {ic:"🌟", t:"Tap into my hidden abilities"},
+        {ic:"🔮", t:"Discover my love future"}
+      ],
+      q2_eyebrow: "✦ STEP 2 ✦",
+      q2_h1: "When were you born?",
+      q2_placeholder: "DD/MM/YYYY",
+      q3_eyebrow: "✦ STEP 3 ✦",
+      q3_h1: "What should we call you?",
+      q3_placeholder: "Your first name",
+      q4_eyebrow: "✦ STEP 4 ✦",
+      q4_h1: "What's on your mind the most right now?",
+      q4_opts: [
+        {ic:"💞", t:"Love & relationships"},
+        {ic:"💼", t:"Career & money"},
+        {ic:"🧭", t:"Life path & decisions"},
+        {ic:"🌙", t:"Inner peace & self-discovery"}
+      ],
+      next: "Continue →",
+      back: "← Back",
+      loading_title: "Reading the signs …",
+      loading_sub: "Your personal reveal is being created",
+      reveal_badge: "Your reveal",
+      reveal_fallback: "The energy around you is unusually strong today — your full reveal is waiting in your personal reading.",
+      cta: "Unlock your full reading →",
+      disclaimer: "DEGAJA is for personal guidance and entertainment purposes and does not replace professional advice."
+    }
+  };
+
+  var qs = new URLSearchParams(location.search);
+  var lang = qs.get("lang") === "en" ? "en" : "de";
+  var ref = qs.get("ref") || qs.get("utm_source") || "quiz";
+
+  var answers = { insight: null, birthdate: "", name: "", focus: null };
+  var step = 1;
+  var TOTAL_STEPS = 5;
+
+  var card = document.getElementById("quizCard");
+  var progressBar = document.getElementById("progressBar");
+  var stepCount = document.getElementById("stepCount");
+  var langToggle = document.getElementById("langToggle");
+
+  function t(){ return STR[lang]; }
+
+  function setLangButton(){
+    langToggle.textContent = lang === "de" ? "EN" : "DE";
+  }
+  langToggle.addEventListener("click", function(){
+    lang = lang === "de" ? "en" : "de";
+    setLangButton();
+    render();
+  });
+  setLangButton();
+
+  function updateProgress(){
+    var pct = Math.min(100, Math.round((step - 1) / TOTAL_STEPS * 100) + 8);
+    progressBar.style.width = pct + "%";
+    stepCount.textContent = step + "/" + TOTAL_STEPS;
+  }
+
+  function escapeHtml(s){
+    return String(s).replace(/[&<>"']/g, function(c){
+      return { "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;" }[c];
+    });
+  }
+
+  function renderOptionsStep(eyebrow, h1, opts, onPick){
+    var html = '<div class="quiz-eyebrow">' + eyebrow + '</div>';
+    html += '<h1 class="quiz-h1">' + h1 + '</h1>';
+    html += '<div class="quiz-options">';
+    opts.forEach(function(o, i){
+      html += '<button class="quiz-opt" data-i="' + i + '"><span class="ic">' + o.ic + '</span>' + escapeHtml(o.t) + '</button>';
+    });
+    html += '</div>';
+    if (step > 1) html += '<button class="quiz-back" id="backBtn">' + t().back + '</button>';
+    card.innerHTML = html;
+    Array.prototype.forEach.call(card.querySelectorAll(".quiz-opt"), function(btn){
+      btn.addEventListener("click", function(){ onPick(opts[Number(btn.dataset.i)]); });
+    });
+    var backBtn = document.getElementById("backBtn");
+    if (backBtn) backBtn.addEventListener("click", goBack);
+  }
+
+  function renderInputStep(eyebrow, h1, placeholder, type, onNext, currentValue){
+    var html = '<div class="quiz-eyebrow">' + eyebrow + '</div>';
+    html += '<h1 class="quiz-h1">' + h1 + '</h1>';
+    html += '<input class="quiz-input" id="stepInput" type="' + type + '" placeholder="' + placeholder + '" value="' + escapeHtml(currentValue || "") + '">';
+    html += '<button class="quiz-cta" id="nextBtn">' + t().next + '</button>';
+    html += '<button class="quiz-back" id="backBtn">' + t().back + '</button>';
+    card.innerHTML = html;
+    var input = document.getElementById("stepInput");
+    var nextBtn = document.getElementById("nextBtn");
+    input.focus();
+    function tryNext(){
+      var val = input.value.trim();
+      if (!val) { input.style.borderColor = "#e35b5b"; return; }
+      onNext(val);
+    }
+    nextBtn.addEventListener("click", tryNext);
+    input.addEventListener("keydown", function(e){ if (e.key === "Enter") tryNext(); });
+    document.getElementById("backBtn").addEventListener("click", goBack);
+  }
+
+  function goBack(){
+    if (step > 1) { step -= 1; render(); }
+  }
+
+  function render(){
+    updateProgress();
+    if (step === 1) {
+      renderOptionsStep(t().q1_eyebrow, t().q1_h1, t().q1_opts, function(opt){
+        answers.insight = opt.t;
+        step = 2; render();
+      });
+    } else if (step === 2) {
+      renderInputStep(t().q2_eyebrow, t().q2_h1, t().q2_placeholder, "text", function(val){
+        answers.birthdate = val;
+        step = 3; render();
+      }, answers.birthdate);
+    } else if (step === 3) {
+      renderInputStep(t().q3_eyebrow, t().q3_h1, t().q3_placeholder, "text", function(val){
+        answers.name = val;
+        step = 4; render();
+      }, answers.name);
+    } else if (step === 4) {
+      renderOptionsStep(t().q4_eyebrow, t().q4_h1, t().q4_opts, function(opt){
+        answers.focus = opt.t;
+        step = 5; render();
+        runReveal();
+      });
+    }
+  }
+
+  function renderLoading(){
+    var html = '<div class="quiz-loading">';
+    html += '<div class="quiz-orb"></div>';
+    html += '<div><strong style="color:#fff;font-size:17px">' + t().loading_title + '</strong>';
+    html += '<p>' + t().loading_sub + '</p></div>';
+    html += '</div>';
+    card.innerHTML = html;
+  }
+
+  function renderReveal(text){
+    var html = '<div class="quiz-reveal-badge">' + t().reveal_badge + '</div>';
+    html += '<div class="quiz-reveal-text">' + escapeHtml(text) + '</div>';
+    html += '<button class="quiz-cta" id="ctaBtn">' + t().cta + '</button>';
+    html += '<div class="quiz-disclaimer">' + t().disclaimer + '</div>';
+    card.innerHTML = html;
+    document.getElementById("ctaBtn").addEventListener("click", function(){
+      var dest = lang === "en" ? "/en" : "/";
+      location.href = dest + (dest.indexOf("?") === -1 ? "?" : "&") + "utm_source=" + encodeURIComponent(ref) + "&utm_campaign=quiz";
+    });
+  }
+
+  function runReveal(){
+    progressBar.style.width = "100%";
+    stepCount.textContent = TOTAL_STEPS + "/" + TOTAL_STEPS;
+    renderLoading();
+
+    var question = lang === "en"
+      ? "My name is " + answers.name + ", born on " + answers.birthdate + ". What I'm seeking: " + answers.insight + ". What's on my mind most right now: " + answers.focus + ". Give me a short, mysterious, captivating personal reveal about my past life or destiny that fits my choice. Maximum 4-5 sentences, written in a dramatic, very personal, TikTok-ready style."
+      : "Ich heiße " + answers.name + ", geboren am " + answers.birthdate + ". Ich suche: " + answers.insight + ". Was mich gerade am meisten beschäftigt: " + answers.focus + ". Gib mir eine kurze, mysteriöse, fesselnde persönliche Enthüllung über mein vergangenes Leben oder Schicksal, passend zu meiner Wahl. Maximal 4-5 Sätze, dramatisch und sehr persönlich geschrieben, im Stil eines packenden TikTok-Moments.";
+
+    var minWait = new Promise(function(resolve){ setTimeout(resolve, 2200); });
+    var request = fetch("/api/oracle", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        question: question,
+        topic: lang === "en" ? "Past life & destiny" : "Vergangenes Leben & Schicksal",
+        mode: "free",
+        lang: lang === "en" ? "en" : "de"
+      })
+    }).then(function(r){ return r.ok ? r.json() : null; }).catch(function(){ return null; });
+
+    Promise.all([request, minWait]).then(function(results){
+      var data = results[0];
+      var text = (data && data.text) ? data.text : t().reveal_fallback;
+      renderReveal(text);
+    });
+  }
+
+  render();
+})();
+</script>
+</body>
+</html>
