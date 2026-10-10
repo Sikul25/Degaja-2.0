@@ -79,6 +79,7 @@
     .quiz-reveal-text{color:#f2f4f7;font-size:18px;line-height:1.7}
     .quiz-reveal-text .cursor{display:inline-block;width:2px;height:1em;background:#e7c372;margin-left:2px;vertical-align:text-bottom;animation:blink .8s step-end infinite}
     @keyframes blink{50%{opacity:0}}
+    .quiz-papuli-note{margin-top:14px;color:#e7c372;font-size:12.5px;font-weight:600;line-height:1.5}
     .quiz-disclaimer{margin-top:18px;color:rgba(255,255,255,.35);font-size:11px;line-height:1.5}
     .quiz-lang{position:absolute;top:16px;right:16px;z-index:3;color:rgba(255,255,255,.5);font-size:12px;font-weight:700;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.16);border-radius:999px;padding:6px 13px;cursor:pointer;transition:.2s}
     .quiz-lang:hover{border-color:rgba(231,195,114,.5);color:#f0d48f}
@@ -138,14 +139,15 @@
         "Deine Enthüllung nimmt Form an …"
       ],
       loading_sub: "Bitte warte einen Moment",
-      reveal_badge: "✦ Deine Enthüllung",
+      reveal_badge: "✦ Papulis Enthüllung für dich",
       reveal_fallback: "Die Energien um dich sind heute außergewöhnlich stark — deine vollständige Enthüllung wartet in deiner persönlichen Lesung.",
       cta: "Vollständige Lesung freischalten →",
       disclaimer: "DEGAJA dient der persönlichen Orientierung und Unterhaltung und ersetzt keine professionelle Beratung.",
       voice_loading: "Stimme wird vorbereitet …",
       voice_listen: "🔊 Stimme anhören",
       voice_playing: "⏸ Wird abgespielt …",
-      voice_unavailable: ""
+      voice_unavailable: "",
+      papuli_note: "✦ Interpretiert von Papuli, DEGAJAs echter Beraterin — live für dich erreichbar."
     },
     en: {
       q1_eyebrow: "REVEAL",
@@ -180,14 +182,15 @@
         "Your reveal is taking shape …"
       ],
       loading_sub: "This will only take a moment",
-      reveal_badge: "✦ Your reveal",
+      reveal_badge: "✦ Papuli's reveal for you",
       reveal_fallback: "The energy around you is unusually strong today — your full reveal is waiting in your personal reading.",
       cta: "Unlock your full reading →",
       disclaimer: "DEGAJA is for personal guidance and entertainment purposes and does not replace professional advice.",
       voice_loading: "Preparing voice …",
       voice_listen: "🔊 Listen to voice",
       voice_playing: "⏸ Playing …",
-      voice_unavailable: ""
+      voice_unavailable: "",
+      papuli_note: "✦ Interpreted by Papuli, DEGAJA's real advisor — reachable live for you."
     }
   };
 
@@ -407,6 +410,7 @@
     var html = '<div class="quiz-reveal-top"><div class="quiz-reveal-badge">' + t().reveal_badge + '</div>';
     html += '<button class="quiz-voice-btn" id="voiceBtn" disabled>' + t().voice_loading + '</button></div>';
     html += '<div class="quiz-reveal-card"><div class="quiz-reveal-text" id="revealText"></div></div>';
+    html += '<div class="quiz-papuli-note">' + t().papuli_note + '</div>';
     html += '<button class="quiz-cta" id="ctaBtn">' + t().cta + '</button>';
     html += '<div class="quiz-disclaimer">' + t().disclaimer + '</div>';
     setCard(html);
