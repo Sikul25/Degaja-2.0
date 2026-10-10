@@ -80,8 +80,9 @@
     .quiz-reveal-text .cursor{display:inline-block;width:2px;height:1em;background:#e7c372;margin-left:2px;vertical-align:text-bottom;animation:blink .8s step-end infinite}
     @keyframes blink{50%{opacity:0}}
     .quiz-disclaimer{margin-top:18px;color:rgba(255,255,255,.35);font-size:11px;line-height:1.5}
-    .quiz-lang{position:absolute;top:16px;right:16px;z-index:3;color:rgba(255,255,255,.5);font-size:12px;font-weight:700;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.16);border-radius:999px;padding:6px 13px;cursor:pointer;transition:.2s}
+    .quiz-lang{position:absolute;top:16px;right:16px;z-index:3;color:rgba(255,255,255,.7);font-size:12px;font-weight:700;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.16);border-radius:999px;padding:6px 26px 6px 13px;cursor:pointer;transition:.2s;-webkit-appearance:none;appearance:none;background-image:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 6"><path d="M1 1l4 4 4-4" stroke="%23e7c372" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>');background-repeat:no-repeat;background-position:right 10px center}
     .quiz-lang:hover{border-color:rgba(231,195,114,.5);color:#f0d48f}
+    .quiz-lang option{background:#101d30;color:#fff}
 
     .quiz-photo-sub{color:rgba(255,255,255,.5);font-size:14px;line-height:1.6;margin:-18px 0 24px}
     .quiz-dropzone{border:1.5px dashed rgba(231,195,114,.4);border-radius:22px;padding:34px 20px;text-align:center;cursor:pointer;transition:.2s;background:rgba(255,255,255,.03)}
@@ -105,7 +106,15 @@
 <div class="quiz-shell">
   <div class="quiz-glow"></div>
   <div class="quiz-stars" id="stars"></div>
-  <button class="quiz-lang" id="langToggle" type="button">EN</button>
+  <select class="quiz-lang" id="langSelect">
+    <option value="de">DE</option>
+    <option value="en">EN</option>
+    <option value="fr">FR</option>
+    <option value="es">ES</option>
+    <option value="it">IT</option>
+    <option value="pt">PT</option>
+    <option value="ru">RU</option>
+  </select>
   <div class="quiz-top">
     <img src="assets/degaja-logo.png" alt="DEGAJA" class="quiz-logo">
     <div class="quiz-progress-wrap"><div class="quiz-progress-bar" id="progressBar"></div></div>
@@ -234,11 +243,269 @@
       voice_listen: "🔊 Listen to voice",
       voice_playing: "⏸ Playing …",
       voice_unavailable: ""
+    },
+    fr: {
+      q1_eyebrow: "RÉVÉLATION",
+      q1_h1: "Quelle perspicacité personnelle recherches-tu ?",
+      q1_opts: [
+        {ic:"⏳", t:"Découvrir qui j'étais dans une vie antérieure"},
+        {ic:"✨", t:"Révéler mon destin et mon but dans la vie"},
+        {ic:"🌀", t:"Savoir si j'ai déjà vécu auparavant"},
+        {ic:"🌟", t:"Explorer mes capacités cachées"},
+        {ic:"🔮", t:"Découvrir mon avenir amoureux"}
+      ],
+      q2_eyebrow: "ÉTAPE 2",
+      q2_h1: "Quand es-tu né(e) ?",
+      q2_placeholder: "JJ/MM/AAAA",
+      q3_eyebrow: "ÉTAPE 3",
+      q3_h1: "Comment devons-nous t'appeler ?",
+      q3_placeholder: "Ton prénom",
+      q4_eyebrow: "ÉTAPE 4",
+      q4_h1: "Qu'est-ce qui te préoccupe le plus en ce moment ?",
+      q4_opts: [
+        {ic:"💞", t:"Amour & relations"},
+        {ic:"💼", t:"Carrière & argent"},
+        {ic:"🧭", t:"Chemin de vie & décisions"},
+        {ic:"🌙", t:"Paix intérieure & connaissance de soi"}
+      ],
+      q5_eyebrow: "ÉTAPE 5",
+      q5_h1: "Montre-nous ta paume",
+      q5_sub: "Facultatif — une photo de ta paume ouverte rend ta révélation encore plus précise et personnelle.",
+      photo_upload: "📷 Télécharger une photo",
+      photo_hint: "Une photo nette et bien éclairée de ta paume ouverte",
+      photo_skip: "Passer, juste la révélation textuelle",
+      photo_continue: "Continuer avec cette photo →",
+      next: "Continuer →",
+      back: "← Retour",
+      loading_phrases: ["Nous lisons les signes …", "Ton énergie de naissance est décryptée …", "Les cartes s'alignent …", "Ta révélation prend forme …"],
+      loading_phrases_palm: ["Nous observons ta paume …", "Lecture des lignes de vie, de cœur et de tête …", "Les lignes racontent leur histoire …", "Ta lecture de paume prend forme …"],
+      loading_sub: "Cela ne prendra qu'un instant",
+      reveal_badge: "✦ Ta révélation",
+      palm_badge: "✦ Ta lecture de paume",
+      reveal_fallback: "L'énergie autour de toi est exceptionnellement forte aujourd'hui — ta révélation complète t'attend dans ta lecture personnelle.",
+      palm_fallback: "Les lignes de ta main sont difficiles à déchiffrer aujourd'hui — réessaie avec une photo plus nette dans ta lecture personnelle.",
+      cta: "Débloquer ta lecture complète →",
+      disclaimer: "DEGAJA sert à l'orientation personnelle et au divertissement et ne remplace pas un conseil professionnel.",
+      voice_loading: "Préparation de la voix …",
+      voice_listen: "🔊 Écouter la voix",
+      voice_playing: "⏸ Lecture en cours …",
+      voice_unavailable: ""
+    },
+    es: {
+      q1_eyebrow: "REVELACIÓN",
+      q1_h1: "¿Qué perspectiva personal estás buscando?",
+      q1_opts: [
+        {ic:"⏳", t:"Ver quién fui en una vida pasada"},
+        {ic:"✨", t:"Revelar mi destino y propósito"},
+        {ic:"🌀", t:"Descubrir si ya he vivido antes"},
+        {ic:"🌟", t:"Descubrir mis habilidades ocultas"},
+        {ic:"🔮", t:"Descubrir mi futuro amoroso"}
+      ],
+      q2_eyebrow: "PASO 2",
+      q2_h1: "¿Cuándo naciste?",
+      q2_placeholder: "DD/MM/AAAA",
+      q3_eyebrow: "PASO 3",
+      q3_h1: "¿Cómo deberíamos llamarte?",
+      q3_placeholder: "Tu nombre",
+      q4_eyebrow: "PASO 4",
+      q4_h1: "¿Qué es lo que más te preocupa ahora mismo?",
+      q4_opts: [
+        {ic:"💞", t:"Amor y relaciones"},
+        {ic:"💼", t:"Carrera y dinero"},
+        {ic:"🧭", t:"Camino de vida y decisiones"},
+        {ic:"🌙", t:"Paz interior y autoconocimiento"}
+      ],
+      q5_eyebrow: "PASO 5",
+      q5_h1: "Muéstranos tu palma",
+      q5_sub: "Opcional — una foto de tu palma abierta hace tu revelación aún más precisa y personal.",
+      photo_upload: "📷 Subir foto",
+      photo_hint: "Una foto nítida y bien iluminada de tu palma abierta",
+      photo_skip: "Omitir, solo la revelación de texto",
+      photo_continue: "Continuar con esta foto →",
+      next: "Continuar →",
+      back: "← Atrás",
+      loading_phrases: ["Leyendo las señales …", "Descifrando tu energía de nacimiento …", "Las cartas se están alineando …", "Tu revelación está tomando forma …"],
+      loading_phrases_palm: ["Observando tu palma …", "Leyendo tus líneas de vida, corazón y cabeza …", "Las líneas cuentan su historia …", "Tu lectura de palma está tomando forma …"],
+      loading_sub: "Esto solo tomará un momento",
+      reveal_badge: "✦ Tu revelación",
+      palm_badge: "✦ Tu lectura de palma",
+      reveal_fallback: "La energía a tu alrededor es inusualmente fuerte hoy — tu revelación completa te espera en tu lectura personal.",
+      palm_fallback: "Las líneas de tu mano son difíciles de descifrar hoy — inténtalo de nuevo con una foto más clara en tu lectura personal.",
+      cta: "Desbloquear tu lectura completa →",
+      disclaimer: "DEGAJA es para orientación personal y entretenimiento, y no sustituye el asesoramiento profesional.",
+      voice_loading: "Preparando la voz …",
+      voice_listen: "🔊 Escuchar la voz",
+      voice_playing: "⏸ Reproduciendo …",
+      voice_unavailable: ""
+    },
+    it: {
+      q1_eyebrow: "RIVELAZIONE",
+      q1_h1: "Quale intuizione personale stai cercando?",
+      q1_opts: [
+        {ic:"⏳", t:"Scoprire chi ero in una vita passata"},
+        {ic:"✨", t:"Rivelare il mio destino e scopo"},
+        {ic:"🌀", t:"Scoprire se ho già vissuto prima"},
+        {ic:"🌟", t:"Scoprire le mie abilità nascoste"},
+        {ic:"🔮", t:"Scoprire il mio futuro in amore"}
+      ],
+      q2_eyebrow: "PASSO 2",
+      q2_h1: "Quando sei nato/a?",
+      q2_placeholder: "GG/MM/AAAA",
+      q3_eyebrow: "PASSO 3",
+      q3_h1: "Come dobbiamo chiamarti?",
+      q3_placeholder: "Il tuo nome",
+      q4_eyebrow: "PASSO 4",
+      q4_h1: "Cosa ti preoccupa di più in questo momento?",
+      q4_opts: [
+        {ic:"💞", t:"Amore e relazioni"},
+        {ic:"💼", t:"Carriera e denaro"},
+        {ic:"🧭", t:"Percorso di vita e decisioni"},
+        {ic:"🌙", t:"Pace interiore e autoconsapevolezza"}
+      ],
+      q5_eyebrow: "PASSO 5",
+      q5_h1: "Mostraci il tuo palmo",
+      q5_sub: "Facoltativo — una foto del tuo palmo aperto rende la tua rivelazione ancora più precisa e personale.",
+      photo_upload: "📷 Carica foto",
+      photo_hint: "Una foto nitida e ben illuminata del tuo palmo aperto",
+      photo_skip: "Salta, solo la rivelazione testuale",
+      photo_continue: "Continua con questa foto →",
+      next: "Continua →",
+      back: "← Indietro",
+      loading_phrases: ["Leggiamo i segni …", "La tua energia di nascita viene decifrata …", "Le carte si stanno allineando …", "La tua rivelazione sta prendendo forma …"],
+      loading_phrases_palm: ["Osserviamo il tuo palmo …", "Lettura delle linee di vita, cuore e testa …", "Le linee raccontano la loro storia …", "La tua lettura del palmo sta prendendo forma …"],
+      loading_sub: "Ci vorrà solo un momento",
+      reveal_badge: "✦ La tua rivelazione",
+      palm_badge: "✦ La tua lettura del palmo",
+      reveal_fallback: "L'energia intorno a te è insolitamente forte oggi — la tua rivelazione completa ti aspetta nella tua lettura personale.",
+      palm_fallback: "Le linee della tua mano sono difficili da decifrare oggi — riprova con una foto più chiara nella tua lettura personale.",
+      cta: "Sblocca la tua lettura completa →",
+      disclaimer: "DEGAJA è destinato all'orientamento personale e all'intrattenimento e non sostituisce una consulenza professionale.",
+      voice_loading: "Preparazione della voce …",
+      voice_listen: "🔊 Ascolta la voce",
+      voice_playing: "⏸ In riproduzione …",
+      voice_unavailable: ""
+    },
+    pt: {
+      q1_eyebrow: "REVELAÇÃO",
+      q1_h1: "Que perceção pessoal estás a procurar?",
+      q1_opts: [
+        {ic:"⏳", t:"Ver quem eu era numa vida passada"},
+        {ic:"✨", t:"Revelar o meu destino e propósito"},
+        {ic:"🌀", t:"Descobrir se já vivi antes"},
+        {ic:"🌟", t:"Descobrir as minhas capacidades ocultas"},
+        {ic:"🔮", t:"Descobrir o meu futuro amoroso"}
+      ],
+      q2_eyebrow: "PASSO 2",
+      q2_h1: "Quando nasceste?",
+      q2_placeholder: "DD/MM/AAAA",
+      q3_eyebrow: "PASSO 3",
+      q3_h1: "Como devemos chamar-te?",
+      q3_placeholder: "O teu primeiro nome",
+      q4_eyebrow: "PASSO 4",
+      q4_h1: "O que mais te preocupa agora?",
+      q4_opts: [
+        {ic:"💞", t:"Amor e relacionamentos"},
+        {ic:"💼", t:"Carreira e dinheiro"},
+        {ic:"🧭", t:"Caminho de vida e decisões"},
+        {ic:"🌙", t:"Paz interior e autoconhecimento"}
+      ],
+      q5_eyebrow: "PASSO 5",
+      q5_h1: "Mostra-nos a tua palma",
+      q5_sub: "Opcional — uma foto da tua palma aberta torna a tua revelação ainda mais precisa e pessoal.",
+      photo_upload: "📷 Carregar foto",
+      photo_hint: "Uma foto nítida e bem iluminada da tua palma aberta",
+      photo_skip: "Saltar, apenas a revelação em texto",
+      photo_continue: "Continuar com esta foto →",
+      next: "Continuar →",
+      back: "← Voltar",
+      loading_phrases: ["A ler os sinais …", "A tua energia de nascimento está a ser decifrada …", "As cartas estão a alinhar-se …", "A tua revelação está a tomar forma …"],
+      loading_phrases_palm: ["A observar a tua palma …", "A ler as linhas da vida, do coração e da cabeça …", "As linhas estão a contar a sua história …", "A tua leitura da palma está a tomar forma …"],
+      loading_sub: "Isto vai demorar só um momento",
+      reveal_badge: "✦ A tua revelação",
+      palm_badge: "✦ A tua leitura da palma",
+      reveal_fallback: "A energia à tua volta está invulgarmente forte hoje — a tua revelação completa espera por ti na tua leitura pessoal.",
+      palm_fallback: "As linhas da tua mão estão difíceis de decifrar hoje — tenta novamente com uma foto mais nítida na tua leitura pessoal.",
+      cta: "Desbloquear a tua leitura completa →",
+      disclaimer: "A DEGAJA destina-se à orientação pessoal e ao entretenimento e não substitui aconselhamento profissional.",
+      voice_loading: "A preparar a voz …",
+      voice_listen: "🔊 Ouvir a voz",
+      voice_playing: "⏸ A reproduzir …",
+      voice_unavailable: ""
+    },
+    ru: {
+      q1_eyebrow: "ОТКРОВЕНИЕ",
+      q1_h1: "Какое личное озарение ты ищешь?",
+      q1_opts: [
+        {ic:"⏳", t:"Узнать, кем я была в прошлой жизни"},
+        {ic:"✨", t:"Раскрыть свою судьбу и предназначение"},
+        {ic:"🌀", t:"Узнать, жила ли я раньше"},
+        {ic:"🌟", t:"Раскрыть свои скрытые способности"},
+        {ic:"🔮", t:"Узнать своё будущее в любви"}
+      ],
+      q2_eyebrow: "ШАГ 2",
+      q2_h1: "Когда ты родилась?",
+      q2_placeholder: "ДД.ММ.ГГГГ",
+      q3_eyebrow: "ШАГ 3",
+      q3_h1: "Как нам тебя называть?",
+      q3_placeholder: "Твоё имя",
+      q4_eyebrow: "ШАГ 4",
+      q4_h1: "Что сейчас беспокоит тебя больше всего?",
+      q4_opts: [
+        {ic:"💞", t:"Любовь и отношения"},
+        {ic:"💼", t:"Карьера и деньги"},
+        {ic:"🧭", t:"Жизненный путь и решения"},
+        {ic:"🌙", t:"Внутренний покой и самопознание"}
+      ],
+      q5_eyebrow: "ШАГ 5",
+      q5_h1: "Покажи нам свою ладонь",
+      q5_sub: "Необязательно — фото твоей открытой ладони сделает твоё откровение ещё точнее и личнее.",
+      photo_upload: "📷 Загрузить фото",
+      photo_hint: "Чёткое, хорошо освещённое фото твоей открытой ладони",
+      photo_skip: "Пропустить, только текстовое откровение",
+      photo_continue: "Продолжить с этим фото →",
+      next: "Далее →",
+      back: "← Назад",
+      loading_phrases: ["Читаем знаки …", "Расшифровываем энергию твоего рождения …", "Карты выстраиваются …", "Твоё откровение обретает форму …"],
+      loading_phrases_palm: ["Изучаем твою ладонь …", "Читаем линии жизни, сердца и головы …", "Линии рассказывают свою историю …", "Твоё гадание по руке обретает форму …"],
+      loading_sub: "Это займёт всего мгновение",
+      reveal_badge: "✦ Твоё откровение",
+      palm_badge: "✦ Твоё гадание по руке",
+      reveal_fallback: "Энергия вокруг тебя сегодня необычайно сильна — твоё полное откровение ждёт тебя в персональном сеансе.",
+      palm_fallback: "Линии твоей руки сегодня трудно разобрать — попробуй ещё раз с более чётким фото в персональном сеансе.",
+      cta: "Открыть полный сеанс →",
+      disclaimer: "DEGAJA предназначена для личного ориентира и развлечения и не заменяет профессиональную консультацию.",
+      voice_loading: "Подготовка голоса …",
+      voice_listen: "🔊 Слушать голос",
+      voice_playing: "⏸ Воспроизведение …",
+      voice_unavailable: ""
     }
   };
 
+  var SUPPORTED_LANGS = ["de", "en", "fr", "es", "it", "pt", "ru"];
+
+  var REVEAL_TOPIC = {
+    de: "Vergangenes Leben & Schicksal",
+    en: "Past life & destiny",
+    fr: "Vie antérieure & destin",
+    es: "Vida pasada y destino",
+    it: "Vita passata e destino",
+    pt: "Vida passada e destino",
+    ru: "Прошлая жизнь и судьба"
+  };
+
+  // {name}/{birthdate}/{insight}/{focus} are substituted in before sending.
+  var REVEAL_PROMPT = {
+    de: "Ich heiße {name}, geboren am {birthdate}. Ich suche: {insight}. Was mich gerade am meisten beschäftigt: {focus}. Schreibe mir eine immersive, bildhafte persönliche Enthüllung über mein vergangenes Leben oder Schicksal, passend zu meiner Wahl — keine generische Horoskop-Floskel. Nutze meinen Namen direkt, erfinde eine konkrete Epoche, einen Ort und eine lebendige Wendepunkt-Szene aus diesem vergangenen Leben, und verknüpfe sie konkret mit dem, was mich gerade beschäftigt. Baue über 7-9 Sätze hinweg langsam Spannung auf und ende mit einem nachhallenden, leicht offenen Cliffhanger, der neugierig macht. Schreibe es, als würdest du mir etwas anvertrauen, das nur ich hören soll — intim, kinoreif, niemals generisch oder gehetzt.",
+    en: "My name is {name}, born on {birthdate}. What I'm seeking: {insight}. What's on my mind most right now: {focus}. Write me an immersive, vivid personal reveal about my past life or destiny that fits my choice — not a generic horoscope blurb. Use my name directly, invent a specific era, place and a vivid turning-point moment or scene from that past life, and connect it concretely to what's on my mind right now. Build suspense gradually across 7-9 sentences, end on a resonant, slightly cliffhanger note that makes me want to know more. Write it as if you're confiding something only I'm meant to hear — intimate, cinematic, never generic or rushed.",
+    fr: "Je m'appelle {name}, né(e) le {birthdate}. Ce que je recherche : {insight}. Ce qui me préoccupe le plus en ce moment : {focus}. Écris-moi une révélation personnelle immersive et vivante sur ma vie antérieure ou mon destin, adaptée à mon choix — pas une banale formule d'horoscope. Utilise mon prénom directement, invente une époque, un lieu et une scène de tournant précise et vivante de cette vie antérieure, et relie-la concrètement à ce qui me préoccupe en ce moment. Construis progressivement le suspense sur 7 à 9 phrases, et termine sur une note marquante, légèrement en suspens, qui donne envie d'en savoir plus. Écris-le comme si tu me confiais quelque chose que moi seul(e) devais entendre — intime, cinématographique, jamais générique ni précipité.",
+    es: "Me llamo {name}, nací el {birthdate}. Lo que busco: {insight}. Lo que más me preocupa ahora mismo: {focus}. Escríbeme una revelación personal inmersiva y vívida sobre mi vida pasada o destino, acorde a mi elección — no una frase genérica de horóscopo. Usa mi nombre directamente, inventa una época, un lugar y una escena de un momento decisivo vívido de esa vida pasada, y conéctala concretamente con lo que me preocupa ahora mismo. Construye la tensión gradualmente a lo largo de 7 a 9 frases, y termina con una nota resonante y ligeramente en suspenso que me haga querer saber más. Escríbelo como si me estuvieras confiando algo que solo yo debo escuchar — íntimo, cinematográfico, nunca genérico ni apresurado.",
+    it: "Mi chiamo {name}, nato/a il {birthdate}. Ciò che cerco: {insight}. Ciò che mi preoccupa di più in questo momento: {focus}. Scrivimi una rivelazione personale immersiva e vivida sulla mia vita passata o sul mio destino, adatta alla mia scelta — non una frase generica da oroscopo. Usa il mio nome direttamente, inventa un'epoca, un luogo e una scena vivida di un momento di svolta di quella vita passata, e collegala concretamente a ciò che mi preoccupa ora. Costruisci gradualmente la suspense in 7-9 frasi, e termina con una nota risonante, leggermente in sospeso, che mi faccia venire voglia di saperne di più. Scrivilo come se mi stessi confidando qualcosa che solo io devo sentire — intimo, cinematografico, mai generico o affrettato.",
+    pt: "Chamo-me {name}, nasci a {birthdate}. O que procuro: {insight}. O que mais me preocupa agora: {focus}. Escreve-me uma revelação pessoal imersiva e vívida sobre a minha vida passada ou destino, adequada à minha escolha — não uma frase genérica de horóscopo. Usa o meu nome diretamente, inventa uma época, um lugar e uma cena vívida de um momento decisivo dessa vida passada, e liga-a concretamente ao que me preocupa agora. Constrói a tensão gradualmente ao longo de 7-9 frases, e termina com uma nota marcante, ligeiramente em suspenso, que me faça querer saber mais. Escreve-o como se me estivesses a confiar algo que só eu devo ouvir — íntimo, cinematográfico, nunca genérico ou apressado.",
+    ru: "Меня зовут {name}, я родилась {birthdate}. Что я ищу: {insight}. Что сейчас беспокоит меня больше всего: {focus}. Напиши мне живое, захватывающее личное откровение о моей прошлой жизни или судьбе, соответствующее моему выбору — не общую фразу из гороскопа. Используй моё имя напрямую, придумай конкретную эпоху, место и яркий переломный момент или сцену из этой прошлой жизни, и свяжи её конкретно с тем, что меня сейчас беспокоит. Постепенно наращивай напряжение на протяжении 7-9 предложений, и заверши запоминающейся, слегка незавершённой нотой, которая вызывает желание узнать больше. Напиши это так, будто ты доверяешь мне то, что должна услышать только я — интимно, кинематографично, никогда не обобщённо и не второпях."
+  };
+
   var qs = new URLSearchParams(location.search);
-  var lang = qs.get("lang") === "en" ? "en" : "de";
+  var lang = SUPPORTED_LANGS.indexOf(qs.get("lang")) !== -1 ? qs.get("lang") : "de";
   var ref = qs.get("ref") || qs.get("utm_source") || "quiz";
 
   var answers = { insight: null, birthdate: "", name: "", focus: null, palmImage: null, palmMediaType: null };
@@ -250,7 +517,7 @@
   var card = document.getElementById("quizCard");
   var progressBar = document.getElementById("progressBar");
   var stepCount = document.getElementById("stepCount");
-  var langToggle = document.getElementById("langToggle");
+  var langSelect = document.getElementById("langSelect");
 
   function t(){ return STR[lang]; }
 
@@ -273,15 +540,11 @@
   }
   buildStars();
 
-  function setLangButton(){
-    langToggle.textContent = lang === "de" ? "EN" : "DE";
-  }
-  langToggle.addEventListener("click", function(){
-    lang = lang === "de" ? "en" : "de";
-    setLangButton();
+  langSelect.value = lang;
+  langSelect.addEventListener("change", function(){
+    lang = langSelect.value;
     render();
   });
-  setLangButton();
 
   function updateProgress(pctOverride){
     var pct = pctOverride != null ? pctOverride : Math.min(100, Math.round((step - 1) / TOTAL_STEPS * 100) + 8);
@@ -485,7 +748,7 @@
     fetch("/api/tts", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ text: text, lang: lang === "en" ? "en" : "de" })
+      body: JSON.stringify({ text: text, lang: lang })
     }).then(function(r){ return r.ok ? r.blob() : null; }).then(function(blob){
       if (!blob) { btn.style.display = "none"; return; }
       var url = URL.createObjectURL(blob);
@@ -511,7 +774,7 @@
   }
 
   function ctaDestination(){
-    var dest = lang === "en" ? "/en" : "/";
+    var dest = lang === "de" ? "/" : "/" + lang;
     return dest + (dest.indexOf("?") === -1 ? "?" : "&") + "utm_source=" + encodeURIComponent(ref) + "&utm_campaign=quiz";
   }
 
@@ -580,7 +843,7 @@
         body: JSON.stringify({
           image: answers.palmImage,
           mediaType: answers.palmMediaType || "image/jpeg",
-          lang: lang === "en" ? "en" : "de",
+          lang: lang,
           profile: {
             name: answers.name,
             birthDate: answers.birthdate,
@@ -600,9 +863,11 @@
     }
 
     renderLoading(t().loading_phrases);
-    var question = lang === "en"
-      ? "My name is " + answers.name + ", born on " + answers.birthdate + ". What I'm seeking: " + answers.insight + ". What's on my mind most right now: " + answers.focus + ". Write me an immersive, vivid personal reveal about my past life or destiny that fits my choice — not a generic horoscope blurb. Use my name directly, invent a specific era, place and a vivid turning-point moment or scene from that past life, and connect it concretely to what's on my mind right now. Build suspense gradually across 7-9 sentences, end on a resonant, slightly cliffhanger note that makes me want to know more. Write it as if you're confiding something only I'm meant to hear — intimate, cinematic, never generic or rushed."
-      : "Ich heiße " + answers.name + ", geboren am " + answers.birthdate + ". Ich suche: " + answers.insight + ". Was mich gerade am meisten beschäftigt: " + answers.focus + ". Schreibe mir eine immersive, bildhafte persönliche Enthüllung über mein vergangenes Leben oder Schicksal, passend zu meiner Wahl — keine generische Horoskop-Floskel. Nutze meinen Namen direkt, erfinde eine konkrete Epoche, einen Ort und eine lebendige Wendepunkt-Szene aus diesem vergangenen Leben, und verknüpfe sie konkret mit dem, was mich gerade beschäftigt. Baue über 7-9 Sätze hinweg langsam Spannung auf und ende mit einem nachhallenden, leicht offenen Cliffhanger, der neugierig macht. Schreibe es, als würdest du mir etwas anvertrauen, das nur ich hören soll — intim, kinoreif, niemals generisch oder gehetzt.";
+    var question = REVEAL_PROMPT[lang]
+      .replace("{name}", answers.name)
+      .replace("{birthdate}", answers.birthdate)
+      .replace("{insight}", answers.insight)
+      .replace("{focus}", answers.focus);
 
     var minWait = new Promise(function(resolve){ setTimeout(resolve, 3200); });
     var request = fetch("/api/oracle", {
@@ -610,9 +875,9 @@
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         question: question,
-        topic: lang === "en" ? "Past life & destiny" : "Vergangenes Leben & Schicksal",
+        topic: REVEAL_TOPIC[lang],
         mode: "paid",
-        lang: lang === "en" ? "en" : "de"
+        lang: lang
       })
     }).then(function(r){ return r.ok ? r.json() : null; }).catch(function(){ return null; });
 
