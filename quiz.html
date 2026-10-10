@@ -1,0 +1,928 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="description" content="DEGAJA – Entdecke in wenigen Fragen eine persönliche mystische Enthüllung: vergangenes Leben, Schicksal und mehr.">
+  <title>Entdecke dein verborgenes Ich – DEGAJA</title>
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="DEGAJA">
+  <meta property="og:title" content="Entdecke dein verborgenes Ich – DEGAJA">
+  <meta property="og:description" content="Beantworte ein paar Fragen und erhalte deine persönliche mystische Enthüllung.">
+  <meta property="og:image" content="https://www.degaja.com/assets/og-image.png">
+  <meta name="robots" content="noindex">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="favicon.ico" sizes="any">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    *{box-sizing:border-box}
+    body{background:#0a1220}
+    .quiz-shell{min-height:100svh;display:flex;flex-direction:column;position:relative;overflow:hidden;background:radial-gradient(ellipse 120% 70% at 50% -10%,#203a58 0%,#101d30 45%,#0a1220 85%)}
+    .quiz-stars{position:absolute;inset:0;z-index:0;pointer-events:none}
+    .quiz-star{position:absolute;border-radius:50%;background:#fff;opacity:.5;animation:twinkle linear infinite}
+    @keyframes twinkle{0%,100%{opacity:.15}50%{opacity:.85}}
+    .quiz-glow{position:absolute;width:480px;height:480px;border-radius:50%;left:50%;top:-180px;transform:translateX(-50%);background:radial-gradient(circle,rgba(231,195,114,.16) 0%,rgba(231,195,114,0) 70%);z-index:0;pointer-events:none}
+
+    .quiz-top{display:flex;align-items:center;gap:14px;padding:18px 20px;max-width:620px;margin:0 auto;width:100%;position:relative;z-index:2}
+    .quiz-logo{height:26px;filter:brightness(0) invert(1);opacity:.92}
+    .quiz-progress-wrap{flex:1;height:5px;background:rgba(255,255,255,.1);border-radius:99px;overflow:hidden}
+    .quiz-progress-bar{height:100%;width:4%;background:linear-gradient(90deg,#b88a32,#f0d48f);border-radius:99px;transition:width .5s cubic-bezier(.4,0,.2,1);box-shadow:0 0 10px rgba(231,195,114,.6)}
+    .quiz-step-count{color:rgba(255,255,255,.45);font-size:11px;font-weight:700;letter-spacing:.03em;white-space:nowrap;font-variant-numeric:tabular-nums}
+
+    .quiz-main{flex:1;display:flex;align-items:center;justify-content:center;padding:10px 20px 48px;position:relative;z-index:2}
+    .quiz-card{width:min(540px,100%);text-align:center}
+    .quiz-anim{animation:quizIn .45s cubic-bezier(.16,1,.3,1) both}
+    @keyframes quizIn{from{opacity:0;transform:translateY(14px) scale(.98)}to{opacity:1;transform:translateY(0) scale(1)}}
+
+    .quiz-eyebrow{display:inline-flex;align-items:center;gap:8px;color:#e7c372;font-size:11px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;margin-bottom:16px}
+    .quiz-eyebrow:before,.quiz-eyebrow:after{content:"";width:16px;height:1px;background:linear-gradient(90deg,transparent,#e7c372)}
+    .quiz-eyebrow:after{background:linear-gradient(90deg,#e7c372,transparent)}
+    .quiz-h1{font-family:Georgia,"Times New Roman",serif;font-weight:500;color:#fff;font-size:clamp(26px,5.5vw,38px);line-height:1.22;margin:0 0 32px;letter-spacing:-.01em}
+
+    .quiz-options{display:grid;gap:11px}
+    .quiz-opt{appearance:none;text-align:left;display:flex;align-items:center;gap:15px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.04);backdrop-filter:blur(6px);border-radius:18px;padding:16px 18px;color:#eef2f6;font-size:16px;font-weight:600;cursor:pointer;transition:.22s cubic-bezier(.4,0,.2,1);position:relative}
+    .quiz-opt:hover{border-color:rgba(231,195,114,.55);background:rgba(231,195,114,.1);transform:translateY(-2px);box-shadow:0 10px 28px rgba(0,0,0,.25)}
+    .quiz-opt.picked{border-color:#e7c372;background:rgba(231,195,114,.18);transform:scale(.98)}
+    .quiz-opt .ic{font-size:21px;flex:0 0 auto;width:30px;text-align:center}
+    .quiz-opt .arrow{margin-left:auto;opacity:0;transform:translateX(-4px);transition:.2s;color:#e7c372}
+    .quiz-opt:hover .arrow{opacity:1;transform:translateX(0)}
+
+    .quiz-input{width:100%;padding:17px 18px;border-radius:18px;border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.05);color:#fff;font-size:17px;text-align:center;outline:0;transition:.2s}
+    .quiz-input::placeholder{color:rgba(255,255,255,.35)}
+    .quiz-input:focus{border-color:#e7c372;background:rgba(255,255,255,.08);box-shadow:0 0 0 4px rgba(231,195,114,.12)}
+
+    .quiz-cta{margin-top:22px;width:100%;border:0;border-radius:999px;background:linear-gradient(90deg,#b88a32,#f0d48f);color:#20160a;padding:17px 20px;font-weight:800;font-size:16px;cursor:pointer;box-shadow:0 16px 38px rgba(184,138,50,.3);transition:.2s}
+    .quiz-cta:hover{transform:translateY(-1px);box-shadow:0 20px 44px rgba(184,138,50,.4)}
+    .quiz-cta:disabled{opacity:.4;cursor:not-allowed;transform:none}
+    .quiz-back{display:inline-block;margin-top:16px;color:rgba(255,255,255,.4);font-size:13px;cursor:pointer;background:none;border:0;transition:.2s}
+    .quiz-back:hover{color:rgba(255,255,255,.7)}
+
+    .quiz-loading{display:flex;flex-direction:column;align-items:center;gap:26px}
+    .quiz-orb-wrap{position:relative;width:132px;height:132px;display:grid;place-items:center}
+    .quiz-orb-ring{position:absolute;inset:0;border-radius:50%;border:1px solid rgba(231,195,114,.35);animation:spin 7s linear infinite}
+    .quiz-orb-ring.r2{inset:-14px;border-color:rgba(159,216,255,.3);animation-duration:11s;animation-direction:reverse}
+    @keyframes spin{to{transform:rotate(360deg)}}
+    .quiz-orb{width:104px;height:104px;border-radius:50%;background:radial-gradient(circle at 38% 32%,#ffffff 0%,#eaf6ff 20%,#9fd8ff 42%,#4aa0e0 62%,#e7c372 82%,#1c3450 100%);box-shadow:0 0 55px rgba(159,216,255,.5),0 0 40px rgba(231,195,114,.35);animation:pulse 1.7s ease-in-out infinite}
+    @keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.07)}}
+    .quiz-loading-pct{color:#f0d48f;font-size:13px;font-weight:800;letter-spacing:.06em;font-variant-numeric:tabular-nums}
+    .quiz-loading-title{color:#fff;font-size:17px;font-weight:600;min-height:24px;transition:opacity .25s}
+    .quiz-loading-sub{color:rgba(255,255,255,.45);font-size:13px;margin-top:4px}
+
+    .quiz-reveal-top{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:20px;flex-wrap:wrap}
+    .quiz-reveal-badge{display:inline-flex;align-items:center;gap:7px;background:rgba(231,195,114,.14);color:#f0d48f;border:1px solid rgba(231,195,114,.35);border-radius:999px;padding:7px 18px;font-size:12px;font-weight:800;letter-spacing:.06em}
+    .quiz-voice-btn{display:inline-flex;align-items:center;gap:7px;background:rgba(255,255,255,.06);color:#eef2f6;border:1px solid rgba(255,255,255,.18);border-radius:999px;padding:7px 16px;font-size:12px;font-weight:700;cursor:pointer;transition:.2s}
+    .quiz-voice-btn:hover{border-color:rgba(231,195,114,.5);background:rgba(231,195,114,.1)}
+    .quiz-voice-btn:disabled{opacity:.35;cursor:wait}
+    .quiz-voice-btn.playing{border-color:#e7c372;color:#f0d48f}
+    .quiz-reveal-card{position:relative;text-align:left;background:linear-gradient(160deg,rgba(255,255,255,.07),rgba(255,255,255,.02));border:1px solid rgba(231,195,114,.22);border-radius:22px;padding:24px 26px;margin-bottom:10px;min-height:96px;box-shadow:0 20px 50px rgba(0,0,0,.3)}
+    .quiz-reveal-text{color:#f2f4f7;font-size:18px;line-height:1.7}
+    .quiz-reveal-text .cursor{display:inline-block;width:2px;height:1em;background:#e7c372;margin-left:2px;vertical-align:text-bottom;animation:blink .8s step-end infinite}
+    @keyframes blink{50%{opacity:0}}
+    .quiz-disclaimer{margin-top:18px;color:rgba(255,255,255,.35);font-size:11px;line-height:1.5}
+    .quiz-lang{position:absolute;top:16px;right:16px;z-index:3;color:rgba(255,255,255,.7);font-size:12px;font-weight:700;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.16);border-radius:999px;padding:6px 26px 6px 13px;cursor:pointer;transition:.2s;-webkit-appearance:none;appearance:none;background-image:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 6"><path d="M1 1l4 4 4-4" stroke="%23e7c372" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>');background-repeat:no-repeat;background-position:right 10px center}
+    .quiz-lang:hover{border-color:rgba(231,195,114,.5);color:#f0d48f}
+    .quiz-lang option{background:#101d30;color:#fff}
+
+    .quiz-photo-sub{color:rgba(255,255,255,.5);font-size:14px;line-height:1.6;margin:-18px 0 24px}
+    .quiz-dropzone{border:1.5px dashed rgba(231,195,114,.4);border-radius:22px;padding:34px 20px;text-align:center;cursor:pointer;transition:.2s;background:rgba(255,255,255,.03)}
+    .quiz-dropzone:hover{border-color:#e7c372;background:rgba(231,195,114,.07)}
+    .quiz-dropzone .icon{font-size:36px;margin-bottom:10px}
+    .quiz-dropzone .label{color:#eef2f6;font-weight:700;font-size:15px}
+    .quiz-dropzone .hint{color:rgba(255,255,255,.4);font-size:12px;margin-top:6px}
+    .quiz-dropzone.has-img{padding:14px}
+    .quiz-dropzone img{max-width:100%;max-height:220px;border-radius:14px;display:block;margin:0 auto}
+    .quiz-skip{display:block;margin:18px auto 0;color:rgba(255,255,255,.4);font-size:13px;background:none;border:0;cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+    .quiz-skip:hover{color:rgba(255,255,255,.7)}
+
+    .quiz-palm-section{text-align:left;background:linear-gradient(160deg,rgba(255,255,255,.07),rgba(255,255,255,.02));border:1px solid rgba(231,195,114,.22);border-radius:20px;padding:20px 22px;margin-bottom:12px;box-shadow:0 14px 36px rgba(0,0,0,.28);opacity:0;transform:translateY(10px);animation:sectionIn .5s cubic-bezier(.16,1,.3,1) forwards}
+    @keyframes sectionIn{to{opacity:1;transform:translateY(0)}}
+    .quiz-palm-section h3{margin:0 0 8px;color:#f0d48f;font-size:13px;font-weight:800;letter-spacing:.05em;text-transform:uppercase}
+    .quiz-palm-section p{margin:0;color:#f2f4f7;font-size:16px;line-height:1.65}
+    @media(max-width:480px){.quiz-h1{font-size:23px}.quiz-opt{padding:14px 16px;font-size:14.5px}}
+  </style>
+</head>
+<body>
+<div class="quiz-shell">
+  <div class="quiz-glow"></div>
+  <div class="quiz-stars" id="stars"></div>
+  <select class="quiz-lang" id="langSelect">
+    <option value="de">DE</option>
+    <option value="en">EN</option>
+    <option value="fr">FR</option>
+    <option value="es">ES</option>
+    <option value="it">IT</option>
+    <option value="pt">PT</option>
+    <option value="ru">RU</option>
+  </select>
+  <div class="quiz-top">
+    <img src="assets/degaja-logo.png" alt="DEGAJA" class="quiz-logo">
+    <div class="quiz-progress-wrap"><div class="quiz-progress-bar" id="progressBar"></div></div>
+    <div class="quiz-step-count" id="stepCount">1/5</div>
+  </div>
+  <main class="quiz-main">
+    <div class="quiz-card" id="quizCard"></div>
+  </main>
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  var STR = {
+    de: {
+      q1_eyebrow: "ENTHÜLLUNG",
+      q1_h1: "Welche persönliche Einsicht suchst du?",
+      q1_opts: [
+        {ic:"⏳", t:"Sehen, wer ich in einem früheren Leben war"},
+        {ic:"✨", t:"Mein Schicksal und meinen Lebenszweck erkennen"},
+        {ic:"🌀", t:"Herausfinden, ob ich schon einmal gelebt habe"},
+        {ic:"🌟", t:"Meine verborgenen Fähigkeiten entdecken"},
+        {ic:"🔮", t:"Meine Zukunft in der Liebe erfahren"}
+      ],
+      q2_eyebrow: "SCHRITT 2",
+      q2_h1: "Wann bist du geboren?",
+      q2_placeholder: "TT.MM.JJJJ",
+      q3_eyebrow: "SCHRITT 3",
+      q3_h1: "Wie dürfen wir dich nennen?",
+      q3_placeholder: "Dein Vorname",
+      q4_eyebrow: "SCHRITT 4",
+      q4_h1: "Was beschäftigt dich gerade am meisten?",
+      q4_opts: [
+        {ic:"💞", t:"Liebe & Beziehungen"},
+        {ic:"💼", t:"Beruf & Geld"},
+        {ic:"🧭", t:"Lebensweg & Entscheidungen"},
+        {ic:"🌙", t:"Innere Ruhe & Selbstfindung"}
+      ],
+      q5_eyebrow: "SCHRITT 5",
+      q5_h1: "Zeig uns deine Handfläche",
+      q5_sub: "Optional — ein Foto deiner offenen Hand macht deine Enthüllung noch genauer und persönlicher.",
+      photo_upload: "📷 Foto hochladen",
+      photo_hint: "Flaches, gut beleuchtetes Foto deiner offenen Handfläche",
+      photo_skip: "Überspringen, nur Text-Enthüllung",
+      photo_continue: "Mit diesem Foto fortfahren →",
+      next: "Weiter →",
+      back: "← Zurück",
+      loading_phrases: [
+        "Wir lesen die Zeichen …",
+        "Deine Geburtsenergie wird entschlüsselt …",
+        "Die Karten ordnen sich …",
+        "Deine Enthüllung nimmt Form an …"
+      ],
+      loading_phrases_palm: [
+        "Wir betrachten deine Handfläche …",
+        "Lebenslinie, Herzlinie, Kopflinie werden gelesen …",
+        "Die Linien erzählen ihre Geschichte …",
+        "Deine Handlesung nimmt Form an …"
+      ],
+      loading_sub: "Bitte warte einen Moment",
+      reveal_badge: "✦ Deine Enthüllung",
+      palm_badge: "✦ Deine Handlesung",
+      reveal_fallback: "Die Energien um dich sind heute außergewöhnlich stark — deine vollständige Enthüllung wartet in deiner persönlichen Lesung.",
+      palm_fallback: "Deine Handlinien sind heute schwer zu entschlüsseln — versuch es mit einem klareren Foto in deiner persönlichen Lesung.",
+      cta: "Vollständige Lesung freischalten →",
+      disclaimer: "DEGAJA dient der persönlichen Orientierung und Unterhaltung und ersetzt keine professionelle Beratung.",
+      voice_loading: "Stimme wird vorbereitet …",
+      voice_listen: "🔊 Stimme anhören",
+      voice_playing: "⏸ Wird abgespielt …",
+      voice_unavailable: ""
+    },
+    en: {
+      q1_eyebrow: "REVEAL",
+      q1_h1: "What personal insight are you seeking?",
+      q1_opts: [
+        {ic:"⏳", t:"See who I was in a past life"},
+        {ic:"✨", t:"Reveal my fate and purpose"},
+        {ic:"🌀", t:"Find out if I lived before"},
+        {ic:"🌟", t:"Tap into my hidden abilities"},
+        {ic:"🔮", t:"Discover my love future"}
+      ],
+      q2_eyebrow: "STEP 2",
+      q2_h1: "When were you born?",
+      q2_placeholder: "DD/MM/YYYY",
+      q3_eyebrow: "STEP 3",
+      q3_h1: "What should we call you?",
+      q3_placeholder: "Your first name",
+      q4_eyebrow: "STEP 4",
+      q4_h1: "What's on your mind the most right now?",
+      q4_opts: [
+        {ic:"💞", t:"Love & relationships"},
+        {ic:"💼", t:"Career & money"},
+        {ic:"🧭", t:"Life path & decisions"},
+        {ic:"🌙", t:"Inner peace & self-discovery"}
+      ],
+      q5_eyebrow: "STEP 5",
+      q5_h1: "Show us your palm",
+      q5_sub: "Optional — a photo of your open palm makes your reveal even more accurate and personal.",
+      photo_upload: "📷 Upload photo",
+      photo_hint: "A flat, well-lit photo of your open palm",
+      photo_skip: "Skip, just the text reveal",
+      photo_continue: "Continue with this photo →",
+      next: "Continue →",
+      back: "← Back",
+      loading_phrases: [
+        "Reading the signs …",
+        "Decoding your birth energy …",
+        "The cards are aligning …",
+        "Your reveal is taking shape …"
+      ],
+      loading_phrases_palm: [
+        "Studying your palm …",
+        "Reading your life, heart and head lines …",
+        "The lines are telling their story …",
+        "Your palm reading is taking shape …"
+      ],
+      loading_sub: "This will only take a moment",
+      reveal_badge: "✦ Your reveal",
+      palm_badge: "✦ Your palm reading",
+      reveal_fallback: "The energy around you is unusually strong today — your full reveal is waiting in your personal reading.",
+      palm_fallback: "Your palm lines are hard to make out today — try again with a clearer photo in your personal reading.",
+      cta: "Unlock your full reading →",
+      disclaimer: "DEGAJA is for personal guidance and entertainment purposes and does not replace professional advice.",
+      voice_loading: "Preparing voice …",
+      voice_listen: "🔊 Listen to voice",
+      voice_playing: "⏸ Playing …",
+      voice_unavailable: ""
+    },
+    fr: {
+      q1_eyebrow: "RÉVÉLATION",
+      q1_h1: "Quelle perspicacité personnelle recherches-tu ?",
+      q1_opts: [
+        {ic:"⏳", t:"Découvrir qui j'étais dans une vie antérieure"},
+        {ic:"✨", t:"Révéler mon destin et mon but dans la vie"},
+        {ic:"🌀", t:"Savoir si j'ai déjà vécu auparavant"},
+        {ic:"🌟", t:"Explorer mes capacités cachées"},
+        {ic:"🔮", t:"Découvrir mon avenir amoureux"}
+      ],
+      q2_eyebrow: "ÉTAPE 2",
+      q2_h1: "Quand es-tu né(e) ?",
+      q2_placeholder: "JJ/MM/AAAA",
+      q3_eyebrow: "ÉTAPE 3",
+      q3_h1: "Comment devons-nous t'appeler ?",
+      q3_placeholder: "Ton prénom",
+      q4_eyebrow: "ÉTAPE 4",
+      q4_h1: "Qu'est-ce qui te préoccupe le plus en ce moment ?",
+      q4_opts: [
+        {ic:"💞", t:"Amour & relations"},
+        {ic:"💼", t:"Carrière & argent"},
+        {ic:"🧭", t:"Chemin de vie & décisions"},
+        {ic:"🌙", t:"Paix intérieure & connaissance de soi"}
+      ],
+      q5_eyebrow: "ÉTAPE 5",
+      q5_h1: "Montre-nous ta paume",
+      q5_sub: "Facultatif — une photo de ta paume ouverte rend ta révélation encore plus précise et personnelle.",
+      photo_upload: "📷 Télécharger une photo",
+      photo_hint: "Une photo nette et bien éclairée de ta paume ouverte",
+      photo_skip: "Passer, juste la révélation textuelle",
+      photo_continue: "Continuer avec cette photo →",
+      next: "Continuer →",
+      back: "← Retour",
+      loading_phrases: ["Nous lisons les signes …", "Ton énergie de naissance est décryptée …", "Les cartes s'alignent …", "Ta révélation prend forme …"],
+      loading_phrases_palm: ["Nous observons ta paume …", "Lecture des lignes de vie, de cœur et de tête …", "Les lignes racontent leur histoire …", "Ta lecture de paume prend forme …"],
+      loading_sub: "Cela ne prendra qu'un instant",
+      reveal_badge: "✦ Ta révélation",
+      palm_badge: "✦ Ta lecture de paume",
+      reveal_fallback: "L'énergie autour de toi est exceptionnellement forte aujourd'hui — ta révélation complète t'attend dans ta lecture personnelle.",
+      palm_fallback: "Les lignes de ta main sont difficiles à déchiffrer aujourd'hui — réessaie avec une photo plus nette dans ta lecture personnelle.",
+      cta: "Débloquer ta lecture complète →",
+      disclaimer: "DEGAJA sert à l'orientation personnelle et au divertissement et ne remplace pas un conseil professionnel.",
+      voice_loading: "Préparation de la voix …",
+      voice_listen: "🔊 Écouter la voix",
+      voice_playing: "⏸ Lecture en cours …",
+      voice_unavailable: ""
+    },
+    es: {
+      q1_eyebrow: "REVELACIÓN",
+      q1_h1: "¿Qué perspectiva personal estás buscando?",
+      q1_opts: [
+        {ic:"⏳", t:"Ver quién fui en una vida pasada"},
+        {ic:"✨", t:"Revelar mi destino y propósito"},
+        {ic:"🌀", t:"Descubrir si ya he vivido antes"},
+        {ic:"🌟", t:"Descubrir mis habilidades ocultas"},
+        {ic:"🔮", t:"Descubrir mi futuro amoroso"}
+      ],
+      q2_eyebrow: "PASO 2",
+      q2_h1: "¿Cuándo naciste?",
+      q2_placeholder: "DD/MM/AAAA",
+      q3_eyebrow: "PASO 3",
+      q3_h1: "¿Cómo deberíamos llamarte?",
+      q3_placeholder: "Tu nombre",
+      q4_eyebrow: "PASO 4",
+      q4_h1: "¿Qué es lo que más te preocupa ahora mismo?",
+      q4_opts: [
+        {ic:"💞", t:"Amor y relaciones"},
+        {ic:"💼", t:"Carrera y dinero"},
+        {ic:"🧭", t:"Camino de vida y decisiones"},
+        {ic:"🌙", t:"Paz interior y autoconocimiento"}
+      ],
+      q5_eyebrow: "PASO 5",
+      q5_h1: "Muéstranos tu palma",
+      q5_sub: "Opcional — una foto de tu palma abierta hace tu revelación aún más precisa y personal.",
+      photo_upload: "📷 Subir foto",
+      photo_hint: "Una foto nítida y bien iluminada de tu palma abierta",
+      photo_skip: "Omitir, solo la revelación de texto",
+      photo_continue: "Continuar con esta foto →",
+      next: "Continuar →",
+      back: "← Atrás",
+      loading_phrases: ["Leyendo las señales …", "Descifrando tu energía de nacimiento …", "Las cartas se están alineando …", "Tu revelación está tomando forma …"],
+      loading_phrases_palm: ["Observando tu palma …", "Leyendo tus líneas de vida, corazón y cabeza …", "Las líneas cuentan su historia …", "Tu lectura de palma está tomando forma …"],
+      loading_sub: "Esto solo tomará un momento",
+      reveal_badge: "✦ Tu revelación",
+      palm_badge: "✦ Tu lectura de palma",
+      reveal_fallback: "La energía a tu alrededor es inusualmente fuerte hoy — tu revelación completa te espera en tu lectura personal.",
+      palm_fallback: "Las líneas de tu mano son difíciles de descifrar hoy — inténtalo de nuevo con una foto más clara en tu lectura personal.",
+      cta: "Desbloquear tu lectura completa →",
+      disclaimer: "DEGAJA es para orientación personal y entretenimiento, y no sustituye el asesoramiento profesional.",
+      voice_loading: "Preparando la voz …",
+      voice_listen: "🔊 Escuchar la voz",
+      voice_playing: "⏸ Reproduciendo …",
+      voice_unavailable: ""
+    },
+    it: {
+      q1_eyebrow: "RIVELAZIONE",
+      q1_h1: "Quale intuizione personale stai cercando?",
+      q1_opts: [
+        {ic:"⏳", t:"Scoprire chi ero in una vita passata"},
+        {ic:"✨", t:"Rivelare il mio destino e scopo"},
+        {ic:"🌀", t:"Scoprire se ho già vissuto prima"},
+        {ic:"🌟", t:"Scoprire le mie abilità nascoste"},
+        {ic:"🔮", t:"Scoprire il mio futuro in amore"}
+      ],
+      q2_eyebrow: "PASSO 2",
+      q2_h1: "Quando sei nato/a?",
+      q2_placeholder: "GG/MM/AAAA",
+      q3_eyebrow: "PASSO 3",
+      q3_h1: "Come dobbiamo chiamarti?",
+      q3_placeholder: "Il tuo nome",
+      q4_eyebrow: "PASSO 4",
+      q4_h1: "Cosa ti preoccupa di più in questo momento?",
+      q4_opts: [
+        {ic:"💞", t:"Amore e relazioni"},
+        {ic:"💼", t:"Carriera e denaro"},
+        {ic:"🧭", t:"Percorso di vita e decisioni"},
+        {ic:"🌙", t:"Pace interiore e autoconsapevolezza"}
+      ],
+      q5_eyebrow: "PASSO 5",
+      q5_h1: "Mostraci il tuo palmo",
+      q5_sub: "Facoltativo — una foto del tuo palmo aperto rende la tua rivelazione ancora più precisa e personale.",
+      photo_upload: "📷 Carica foto",
+      photo_hint: "Una foto nitida e ben illuminata del tuo palmo aperto",
+      photo_skip: "Salta, solo la rivelazione testuale",
+      photo_continue: "Continua con questa foto →",
+      next: "Continua →",
+      back: "← Indietro",
+      loading_phrases: ["Leggiamo i segni …", "La tua energia di nascita viene decifrata …", "Le carte si stanno allineando …", "La tua rivelazione sta prendendo forma …"],
+      loading_phrases_palm: ["Osserviamo il tuo palmo …", "Lettura delle linee di vita, cuore e testa …", "Le linee raccontano la loro storia …", "La tua lettura del palmo sta prendendo forma …"],
+      loading_sub: "Ci vorrà solo un momento",
+      reveal_badge: "✦ La tua rivelazione",
+      palm_badge: "✦ La tua lettura del palmo",
+      reveal_fallback: "L'energia intorno a te è insolitamente forte oggi — la tua rivelazione completa ti aspetta nella tua lettura personale.",
+      palm_fallback: "Le linee della tua mano sono difficili da decifrare oggi — riprova con una foto più chiara nella tua lettura personale.",
+      cta: "Sblocca la tua lettura completa →",
+      disclaimer: "DEGAJA è destinato all'orientamento personale e all'intrattenimento e non sostituisce una consulenza professionale.",
+      voice_loading: "Preparazione della voce …",
+      voice_listen: "🔊 Ascolta la voce",
+      voice_playing: "⏸ In riproduzione …",
+      voice_unavailable: ""
+    },
+    pt: {
+      q1_eyebrow: "REVELAÇÃO",
+      q1_h1: "Que perceção pessoal estás a procurar?",
+      q1_opts: [
+        {ic:"⏳", t:"Ver quem eu era numa vida passada"},
+        {ic:"✨", t:"Revelar o meu destino e propósito"},
+        {ic:"🌀", t:"Descobrir se já vivi antes"},
+        {ic:"🌟", t:"Descobrir as minhas capacidades ocultas"},
+        {ic:"🔮", t:"Descobrir o meu futuro amoroso"}
+      ],
+      q2_eyebrow: "PASSO 2",
+      q2_h1: "Quando nasceste?",
+      q2_placeholder: "DD/MM/AAAA",
+      q3_eyebrow: "PASSO 3",
+      q3_h1: "Como devemos chamar-te?",
+      q3_placeholder: "O teu primeiro nome",
+      q4_eyebrow: "PASSO 4",
+      q4_h1: "O que mais te preocupa agora?",
+      q4_opts: [
+        {ic:"💞", t:"Amor e relacionamentos"},
+        {ic:"💼", t:"Carreira e dinheiro"},
+        {ic:"🧭", t:"Caminho de vida e decisões"},
+        {ic:"🌙", t:"Paz interior e autoconhecimento"}
+      ],
+      q5_eyebrow: "PASSO 5",
+      q5_h1: "Mostra-nos a tua palma",
+      q5_sub: "Opcional — uma foto da tua palma aberta torna a tua revelação ainda mais precisa e pessoal.",
+      photo_upload: "📷 Carregar foto",
+      photo_hint: "Uma foto nítida e bem iluminada da tua palma aberta",
+      photo_skip: "Saltar, apenas a revelação em texto",
+      photo_continue: "Continuar com esta foto →",
+      next: "Continuar →",
+      back: "← Voltar",
+      loading_phrases: ["A ler os sinais …", "A tua energia de nascimento está a ser decifrada …", "As cartas estão a alinhar-se …", "A tua revelação está a tomar forma …"],
+      loading_phrases_palm: ["A observar a tua palma …", "A ler as linhas da vida, do coração e da cabeça …", "As linhas estão a contar a sua história …", "A tua leitura da palma está a tomar forma …"],
+      loading_sub: "Isto vai demorar só um momento",
+      reveal_badge: "✦ A tua revelação",
+      palm_badge: "✦ A tua leitura da palma",
+      reveal_fallback: "A energia à tua volta está invulgarmente forte hoje — a tua revelação completa espera por ti na tua leitura pessoal.",
+      palm_fallback: "As linhas da tua mão estão difíceis de decifrar hoje — tenta novamente com uma foto mais nítida na tua leitura pessoal.",
+      cta: "Desbloquear a tua leitura completa →",
+      disclaimer: "A DEGAJA destina-se à orientação pessoal e ao entretenimento e não substitui aconselhamento profissional.",
+      voice_loading: "A preparar a voz …",
+      voice_listen: "🔊 Ouvir a voz",
+      voice_playing: "⏸ A reproduzir …",
+      voice_unavailable: ""
+    },
+    ru: {
+      q1_eyebrow: "ОТКРОВЕНИЕ",
+      q1_h1: "Какое личное озарение ты ищешь?",
+      q1_opts: [
+        {ic:"⏳", t:"Узнать, кем я была в прошлой жизни"},
+        {ic:"✨", t:"Раскрыть свою судьбу и предназначение"},
+        {ic:"🌀", t:"Узнать, жила ли я раньше"},
+        {ic:"🌟", t:"Раскрыть свои скрытые способности"},
+        {ic:"🔮", t:"Узнать своё будущее в любви"}
+      ],
+      q2_eyebrow: "ШАГ 2",
+      q2_h1: "Когда ты родилась?",
+      q2_placeholder: "ДД.ММ.ГГГГ",
+      q3_eyebrow: "ШАГ 3",
+      q3_h1: "Как нам тебя называть?",
+      q3_placeholder: "Твоё имя",
+      q4_eyebrow: "ШАГ 4",
+      q4_h1: "Что сейчас беспокоит тебя больше всего?",
+      q4_opts: [
+        {ic:"💞", t:"Любовь и отношения"},
+        {ic:"💼", t:"Карьера и деньги"},
+        {ic:"🧭", t:"Жизненный путь и решения"},
+        {ic:"🌙", t:"Внутренний покой и самопознание"}
+      ],
+      q5_eyebrow: "ШАГ 5",
+      q5_h1: "Покажи нам свою ладонь",
+      q5_sub: "Необязательно — фото твоей открытой ладони сделает твоё откровение ещё точнее и личнее.",
+      photo_upload: "📷 Загрузить фото",
+      photo_hint: "Чёткое, хорошо освещённое фото твоей открытой ладони",
+      photo_skip: "Пропустить, только текстовое откровение",
+      photo_continue: "Продолжить с этим фото →",
+      next: "Далее →",
+      back: "← Назад",
+      loading_phrases: ["Читаем знаки …", "Расшифровываем энергию твоего рождения …", "Карты выстраиваются …", "Твоё откровение обретает форму …"],
+      loading_phrases_palm: ["Изучаем твою ладонь …", "Читаем линии жизни, сердца и головы …", "Линии рассказывают свою историю …", "Твоё гадание по руке обретает форму …"],
+      loading_sub: "Это займёт всего мгновение",
+      reveal_badge: "✦ Твоё откровение",
+      palm_badge: "✦ Твоё гадание по руке",
+      reveal_fallback: "Энергия вокруг тебя сегодня необычайно сильна — твоё полное откровение ждёт тебя в персональном сеансе.",
+      palm_fallback: "Линии твоей руки сегодня трудно разобрать — попробуй ещё раз с более чётким фото в персональном сеансе.",
+      cta: "Открыть полный сеанс →",
+      disclaimer: "DEGAJA предназначена для личного ориентира и развлечения и не заменяет профессиональную консультацию.",
+      voice_loading: "Подготовка голоса …",
+      voice_listen: "🔊 Слушать голос",
+      voice_playing: "⏸ Воспроизведение …",
+      voice_unavailable: ""
+    }
+  };
+
+  var SUPPORTED_LANGS = ["de", "en", "fr", "es", "it", "pt", "ru"];
+
+  var REVEAL_TOPIC = {
+    de: "Vergangenes Leben & Schicksal",
+    en: "Past life & destiny",
+    fr: "Vie antérieure & destin",
+    es: "Vida pasada y destino",
+    it: "Vita passata e destino",
+    pt: "Vida passada e destino",
+    ru: "Прошлая жизнь и судьба"
+  };
+
+  // {name}/{birthdate}/{insight}/{focus} are substituted in before sending.
+  var REVEAL_PROMPT = {
+    de: "Ich heiße {name}, geboren am {birthdate}. Ich suche: {insight}. Was mich gerade am meisten beschäftigt: {focus}. Schreibe mir eine immersive, bildhafte persönliche Enthüllung über mein vergangenes Leben oder Schicksal, passend zu meiner Wahl — keine generische Horoskop-Floskel. Nutze meinen Namen direkt, erfinde eine konkrete Epoche, einen Ort und eine lebendige Wendepunkt-Szene aus diesem vergangenen Leben, und verknüpfe sie konkret mit dem, was mich gerade beschäftigt. Baue über 7-9 Sätze hinweg langsam Spannung auf und ende mit einem nachhallenden, leicht offenen Cliffhanger, der neugierig macht. Schreibe es, als würdest du mir etwas anvertrauen, das nur ich hören soll — intim, kinoreif, niemals generisch oder gehetzt.",
+    en: "My name is {name}, born on {birthdate}. What I'm seeking: {insight}. What's on my mind most right now: {focus}. Write me an immersive, vivid personal reveal about my past life or destiny that fits my choice — not a generic horoscope blurb. Use my name directly, invent a specific era, place and a vivid turning-point moment or scene from that past life, and connect it concretely to what's on my mind right now. Build suspense gradually across 7-9 sentences, end on a resonant, slightly cliffhanger note that makes me want to know more. Write it as if you're confiding something only I'm meant to hear — intimate, cinematic, never generic or rushed.",
+    fr: "Je m'appelle {name}, né(e) le {birthdate}. Ce que je recherche : {insight}. Ce qui me préoccupe le plus en ce moment : {focus}. Écris-moi une révélation personnelle immersive et vivante sur ma vie antérieure ou mon destin, adaptée à mon choix — pas une banale formule d'horoscope. Utilise mon prénom directement, invente une époque, un lieu et une scène de tournant précise et vivante de cette vie antérieure, et relie-la concrètement à ce qui me préoccupe en ce moment. Construis progressivement le suspense sur 7 à 9 phrases, et termine sur une note marquante, légèrement en suspens, qui donne envie d'en savoir plus. Écris-le comme si tu me confiais quelque chose que moi seul(e) devais entendre — intime, cinématographique, jamais générique ni précipité.",
+    es: "Me llamo {name}, nací el {birthdate}. Lo que busco: {insight}. Lo que más me preocupa ahora mismo: {focus}. Escríbeme una revelación personal inmersiva y vívida sobre mi vida pasada o destino, acorde a mi elección — no una frase genérica de horóscopo. Usa mi nombre directamente, inventa una época, un lugar y una escena de un momento decisivo vívido de esa vida pasada, y conéctala concretamente con lo que me preocupa ahora mismo. Construye la tensión gradualmente a lo largo de 7 a 9 frases, y termina con una nota resonante y ligeramente en suspenso que me haga querer saber más. Escríbelo como si me estuvieras confiando algo que solo yo debo escuchar — íntimo, cinematográfico, nunca genérico ni apresurado.",
+    it: "Mi chiamo {name}, nato/a il {birthdate}. Ciò che cerco: {insight}. Ciò che mi preoccupa di più in questo momento: {focus}. Scrivimi una rivelazione personale immersiva e vivida sulla mia vita passata o sul mio destino, adatta alla mia scelta — non una frase generica da oroscopo. Usa il mio nome direttamente, inventa un'epoca, un luogo e una scena vivida di un momento di svolta di quella vita passata, e collegala concretamente a ciò che mi preoccupa ora. Costruisci gradualmente la suspense in 7-9 frasi, e termina con una nota risonante, leggermente in sospeso, che mi faccia venire voglia di saperne di più. Scrivilo come se mi stessi confidando qualcosa che solo io devo sentire — intimo, cinematografico, mai generico o affrettato.",
+    pt: "Chamo-me {name}, nasci a {birthdate}. O que procuro: {insight}. O que mais me preocupa agora: {focus}. Escreve-me uma revelação pessoal imersiva e vívida sobre a minha vida passada ou destino, adequada à minha escolha — não uma frase genérica de horóscopo. Usa o meu nome diretamente, inventa uma época, um lugar e uma cena vívida de um momento decisivo dessa vida passada, e liga-a concretamente ao que me preocupa agora. Constrói a tensão gradualmente ao longo de 7-9 frases, e termina com uma nota marcante, ligeiramente em suspenso, que me faça querer saber mais. Escreve-o como se me estivesses a confiar algo que só eu devo ouvir — íntimo, cinematográfico, nunca genérico ou apressado.",
+    ru: "Меня зовут {name}, я родилась {birthdate}. Что я ищу: {insight}. Что сейчас беспокоит меня больше всего: {focus}. Напиши мне живое, захватывающее личное откровение о моей прошлой жизни или судьбе, соответствующее моему выбору — не общую фразу из гороскопа. Используй моё имя напрямую, придумай конкретную эпоху, место и яркий переломный момент или сцену из этой прошлой жизни, и свяжи её конкретно с тем, что меня сейчас беспокоит. Постепенно наращивай напряжение на протяжении 7-9 предложений, и заверши запоминающейся, слегка незавершённой нотой, которая вызывает желание узнать больше. Напиши это так, будто ты доверяешь мне то, что должна услышать только я — интимно, кинематографично, никогда не обобщённо и не второпях."
+  };
+
+  var qs = new URLSearchParams(location.search);
+  var langWasExplicit = SUPPORTED_LANGS.indexOf(qs.get("lang")) !== -1;
+  var lang = langWasExplicit ? qs.get("lang") : "de";
+  var ref = qs.get("ref") || qs.get("utm_source") || "quiz";
+
+  // Same spirit as i18n.js on the main site: a real visitor-country guess
+  // from Vercel's edge (see /api/geo.js) beats a hardcoded default — but
+  // never overrides an explicit ?lang= pick, and only applies while still
+  // on the first question so it can't disrupt someone mid-quiz.
+  var COUNTRY_LANG = {
+    DE: "de", AT: "de", CH: "de", LI: "de",
+    FR: "fr", MC: "fr",
+    ES: "es", AR: "es", CO: "es", CL: "es", PE: "es", MX: "es", VE: "es",
+    IT: "it",
+    PT: "pt", BR: "pt",
+    RU: "ru", BY: "ru", KZ: "ru", UA: "ru",
+    GB: "en", IE: "en", US: "en", CA: "en", AU: "en", NZ: "en", ZA: "en", IN: "en", SG: "en"
+  };
+  function applyGeoLangIfEligible(){
+    if (langWasExplicit) return;
+    var controller = new AbortController();
+    var timeout = setTimeout(function(){ controller.abort(); }, 2500);
+    fetch("/api/geo", { signal: controller.signal })
+      .then(function(r){ return r.ok ? r.json() : null; })
+      .then(function(data){
+        clearTimeout(timeout);
+        var geoLang = data && COUNTRY_LANG[String(data.country || "").toUpperCase()];
+        if (!geoLang || geoLang === lang || step !== 1) return;
+        lang = geoLang;
+        langSelect.value = lang;
+        render();
+      })
+      .catch(function(){});
+  }
+
+  var answers = { insight: null, birthdate: "", name: "", focus: null, palmImage: null, palmMediaType: null };
+  var step = 1;
+  var TOTAL_STEPS = 5;
+  var loadingTimer = null;
+  var typeTimer = null;
+
+  var card = document.getElementById("quizCard");
+  var progressBar = document.getElementById("progressBar");
+  var stepCount = document.getElementById("stepCount");
+  var langSelect = document.getElementById("langSelect");
+
+  function t(){ return STR[lang]; }
+
+  function buildStars(){
+    var wrap = document.getElementById("stars");
+    wrap.innerHTML = "";
+    var count = window.innerWidth < 500 ? 36 : 60;
+    for (var i = 0; i < count; i++) {
+      var s = document.createElement("div");
+      s.className = "quiz-star";
+      var size = (Math.random() * 1.8 + 0.6).toFixed(1);
+      s.style.width = size + "px";
+      s.style.height = size + "px";
+      s.style.left = (Math.random() * 100) + "%";
+      s.style.top = (Math.random() * 100) + "%";
+      s.style.animationDuration = (2 + Math.random() * 3).toFixed(1) + "s";
+      s.style.animationDelay = (Math.random() * 3).toFixed(1) + "s";
+      wrap.appendChild(s);
+    }
+  }
+  buildStars();
+
+  langSelect.value = lang;
+  langSelect.addEventListener("change", function(){
+    lang = langSelect.value;
+    render();
+  });
+
+  function updateProgress(pctOverride){
+    var pct = pctOverride != null ? pctOverride : Math.min(100, Math.round((step - 1) / TOTAL_STEPS * 100) + 8);
+    progressBar.style.width = pct + "%";
+    stepCount.textContent = Math.min(step, TOTAL_STEPS) + "/" + TOTAL_STEPS;
+  }
+
+  function escapeHtml(s){
+    return String(s).replace(/[&<>"']/g, function(c){
+      return { "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;" }[c];
+    });
+  }
+
+  function setCard(html){
+    card.classList.remove("quiz-anim");
+    card.innerHTML = html;
+    void card.offsetWidth;
+    card.classList.add("quiz-anim");
+  }
+
+  function renderOptionsStep(eyebrow, h1, opts, onPick){
+    var html = '<div class="quiz-eyebrow">' + eyebrow + '</div>';
+    html += '<h1 class="quiz-h1">' + h1 + '</h1>';
+    html += '<div class="quiz-options">';
+    opts.forEach(function(o, i){
+      html += '<button class="quiz-opt" data-i="' + i + '"><span class="ic">' + o.ic + '</span>' + escapeHtml(o.t) + '<span class="arrow">→</span></button>';
+    });
+    html += '</div>';
+    if (step > 1) html += '<button class="quiz-back" id="backBtn">' + t().back + '</button>';
+    setCard(html);
+    Array.prototype.forEach.call(card.querySelectorAll(".quiz-opt"), function(btn){
+      btn.addEventListener("click", function(){
+        if (card.dataset.locked) return;
+        card.dataset.locked = "1";
+        btn.classList.add("picked");
+        setTimeout(function(){ onPick(opts[Number(btn.dataset.i)]); }, 260);
+      });
+    });
+    var backBtn = document.getElementById("backBtn");
+    if (backBtn) backBtn.addEventListener("click", goBack);
+  }
+
+  function renderInputStep(eyebrow, h1, placeholder, type, onNext, currentValue){
+    var html = '<div class="quiz-eyebrow">' + eyebrow + '</div>';
+    html += '<h1 class="quiz-h1">' + h1 + '</h1>';
+    html += '<input class="quiz-input" id="stepInput" type="' + type + '" placeholder="' + placeholder + '" value="' + escapeHtml(currentValue || "") + '">';
+    html += '<button class="quiz-cta" id="nextBtn">' + t().next + '</button>';
+    html += '<button class="quiz-back" id="backBtn">' + t().back + '</button>';
+    setCard(html);
+    var input = document.getElementById("stepInput");
+    var nextBtn = document.getElementById("nextBtn");
+    input.focus();
+    function tryNext(){
+      var val = input.value.trim();
+      if (!val) { input.style.borderColor = "#e35b5b"; return; }
+      onNext(val);
+    }
+    nextBtn.addEventListener("click", tryNext);
+    input.addEventListener("keydown", function(e){ if (e.key === "Enter") tryNext(); });
+    document.getElementById("backBtn").addEventListener("click", goBack);
+  }
+
+  function goBack(){
+    if (step > 1) { step -= 1; render(); }
+  }
+
+  function render(){
+    delete card.dataset.locked;
+    updateProgress();
+    if (step === 1) {
+      renderOptionsStep(t().q1_eyebrow, t().q1_h1, t().q1_opts, function(opt){
+        answers.insight = opt.t;
+        step = 2; render();
+      });
+    } else if (step === 2) {
+      renderInputStep(t().q2_eyebrow, t().q2_h1, t().q2_placeholder, "text", function(val){
+        answers.birthdate = val;
+        step = 3; render();
+      }, answers.birthdate);
+    } else if (step === 3) {
+      renderInputStep(t().q3_eyebrow, t().q3_h1, t().q3_placeholder, "text", function(val){
+        answers.name = val;
+        step = 4; render();
+      }, answers.name);
+    } else if (step === 4) {
+      renderOptionsStep(t().q4_eyebrow, t().q4_h1, t().q4_opts, function(opt){
+        answers.focus = opt.t;
+        step = 5; render();
+      });
+    } else if (step === 5) {
+      renderPhotoStep();
+    }
+  }
+
+  function resizeImage(file, maxDim, quality, callback){
+    var reader = new FileReader();
+    reader.onload = function(e){
+      var img = new Image();
+      img.onload = function(){
+        var scale = Math.min(1, maxDim / Math.max(img.width, img.height));
+        var w = Math.round(img.width * scale);
+        var h = Math.round(img.height * scale);
+        var canvas = document.createElement("canvas");
+        canvas.width = w; canvas.height = h;
+        canvas.getContext("2d").drawImage(img, 0, 0, w, h);
+        callback(canvas.toDataURL("image/jpeg", quality));
+      };
+      img.onerror = function(){ callback(null); };
+      img.src = e.target.result;
+    };
+    reader.onerror = function(){ callback(null); };
+    reader.readAsDataURL(file);
+  }
+
+  function renderPhotoStep(){
+    var html = '<div class="quiz-eyebrow">' + t().q5_eyebrow + '</div>';
+    html += '<h1 class="quiz-h1">' + t().q5_h1 + '</h1>';
+    html += '<p class="quiz-photo-sub">' + t().q5_sub + '</p>';
+    html += '<input type="file" accept="image/*" capture="environment" id="photoInput" style="display:none">';
+    html += '<div class="quiz-dropzone' + (answers.palmImage ? ' has-img' : '') + '" id="dropzone">';
+    if (answers.palmImage) {
+      html += '<img src="' + answers.palmImage + '" alt="">';
+    } else {
+      html += '<div class="icon">🖐️</div><div class="label">' + t().photo_upload + '</div><div class="hint">' + t().photo_hint + '</div>';
+    }
+    html += '</div>';
+    if (answers.palmImage) {
+      html += '<button class="quiz-cta" id="continuePhotoBtn">' + t().photo_continue + '</button>';
+    }
+    html += '<button class="quiz-skip" id="skipBtn">' + t().photo_skip + '</button>';
+    html += '<button class="quiz-back" id="backBtn">' + t().back + '</button>';
+    setCard(html);
+
+    var input = document.getElementById("photoInput");
+    document.getElementById("dropzone").addEventListener("click", function(){ input.click(); });
+    input.addEventListener("change", function(){
+      var file = input.files && input.files[0];
+      if (!file) return;
+      resizeImage(file, 900, 0.82, function(dataUrl){
+        if (!dataUrl) return;
+        answers.palmImage = dataUrl;
+        answers.palmMediaType = "image/jpeg";
+        render();
+      });
+    });
+    var continueBtn = document.getElementById("continuePhotoBtn");
+    if (continueBtn) continueBtn.addEventListener("click", function(){ runReveal(); });
+    document.getElementById("skipBtn").addEventListener("click", function(){
+      answers.palmImage = null;
+      runReveal();
+    });
+    document.getElementById("backBtn").addEventListener("click", goBack);
+  }
+
+  function renderLoading(phrases){
+    phrases = phrases || t().loading_phrases;
+    var html = '<div class="quiz-loading">';
+    html += '<div class="quiz-orb-wrap"><div class="quiz-orb-ring"></div><div class="quiz-orb-ring r2"></div><div class="quiz-orb"></div></div>';
+    html += '<div class="quiz-loading-pct" id="loadPct">0%</div>';
+    html += '<div><div class="quiz-loading-title" id="loadTitle">' + phrases[0] + '</div>';
+    html += '<div class="quiz-loading-sub">' + t().loading_sub + '</div></div>';
+    html += '</div>';
+    setCard(html);
+
+    var pctEl = document.getElementById("loadPct");
+    var titleEl = document.getElementById("loadTitle");
+    var pct = 0, phraseIdx = 0;
+    clearInterval(loadingTimer);
+    loadingTimer = setInterval(function(){
+      pct = Math.min(96, pct + Math.round(4 + Math.random() * 9));
+      pctEl.textContent = pct + "%";
+      var nextPhrase = Math.floor(pct / (100 / phrases.length));
+      if (nextPhrase !== phraseIdx && nextPhrase < phrases.length) {
+        phraseIdx = nextPhrase;
+        titleEl.style.opacity = 0;
+        setTimeout(function(){ titleEl.textContent = phrases[phraseIdx]; titleEl.style.opacity = 1; }, 220);
+      }
+    }, 260);
+  }
+
+  function typewriter(el, text, done){
+    clearInterval(typeTimer);
+    var i = 0;
+    el.innerHTML = '<span class="cursor"></span>';
+    typeTimer = setInterval(function(){
+      i += 2;
+      el.innerHTML = escapeHtml(text.slice(0, i)) + '<span class="cursor"></span>';
+      if (i >= text.length) {
+        clearInterval(typeTimer);
+        el.innerHTML = escapeHtml(text);
+        if (done) done();
+      }
+    }, 18);
+  }
+
+  var revealAudio = null;
+
+  function loadVoice(text, btn){
+    btn.disabled = true;
+    btn.textContent = t().voice_loading;
+    fetch("/api/tts", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ text: text, lang: lang })
+    }).then(function(r){ return r.ok ? r.blob() : null; }).then(function(blob){
+      if (!blob) { btn.style.display = "none"; return; }
+      var url = URL.createObjectURL(blob);
+      revealAudio = new Audio(url);
+      btn.disabled = false;
+      btn.textContent = t().voice_listen;
+      revealAudio.addEventListener("ended", function(){
+        btn.classList.remove("playing");
+        btn.textContent = t().voice_listen;
+      });
+      btn.addEventListener("click", function(){
+        if (revealAudio.paused) {
+          revealAudio.play();
+          btn.classList.add("playing");
+          btn.textContent = t().voice_playing;
+        } else {
+          revealAudio.pause();
+          btn.classList.remove("playing");
+          btn.textContent = t().voice_listen;
+        }
+      });
+    }).catch(function(){ btn.style.display = "none"; });
+  }
+
+  function ctaDestination(){
+    var dest = lang === "de" ? "/" : "/" + lang;
+    return dest + (dest.indexOf("?") === -1 ? "?" : "&") + "utm_source=" + encodeURIComponent(ref) + "&utm_campaign=quiz";
+  }
+
+  function renderReveal(text){
+    var html = '<div class="quiz-reveal-top"><div class="quiz-reveal-badge">' + t().reveal_badge + '</div>';
+    html += '<button class="quiz-voice-btn" id="voiceBtn" disabled>' + t().voice_loading + '</button></div>';
+    html += '<div class="quiz-reveal-card"><div class="quiz-reveal-text" id="revealText"></div></div>';
+    html += '<button class="quiz-cta" id="ctaBtn">' + t().cta + '</button>';
+    html += '<div class="quiz-disclaimer">' + t().disclaimer + '</div>';
+    setCard(html);
+    typewriter(document.getElementById("revealText"), text);
+    loadVoice(text, document.getElementById("voiceBtn"));
+    document.getElementById("ctaBtn").addEventListener("click", function(){
+      if (revealAudio) revealAudio.pause();
+      location.href = ctaDestination();
+    });
+  }
+
+  // palm.js replies as a sequence of "**Label:** body" sections (labels
+  // already translated server-side) — split on that marker generically so
+  // this works for either language without hardcoding label text.
+  function splitPalmSections(text){
+    var parts = text.split(/\*\*(.+?):\*\*/);
+    var sections = [];
+    for (var i = 1; i < parts.length; i += 2) {
+      var body = (parts[i + 1] || "").trim();
+      if (body) sections.push({ label: parts[i].trim(), body: body });
+    }
+    return sections.length ? sections : [{ label: "", body: text }];
+  }
+
+  function renderPalmReveal(text){
+    var sections = splitPalmSections(text);
+    var html = '<div class="quiz-reveal-top"><div class="quiz-reveal-badge">' + t().palm_badge + '</div>';
+    html += '<button class="quiz-voice-btn" id="voiceBtn" disabled>' + t().voice_loading + '</button></div>';
+    sections.forEach(function(s, i){
+      html += '<div class="quiz-palm-section" style="animation-delay:' + (i * 0.12) + 's">';
+      if (s.label) html += '<h3>' + escapeHtml(s.label) + '</h3>';
+      html += '<p>' + escapeHtml(s.body) + '</p></div>';
+    });
+    html += '<button class="quiz-cta" id="ctaBtn">' + t().cta + '</button>';
+    html += '<div class="quiz-disclaimer">' + t().disclaimer + '</div>';
+    setCard(html);
+    loadVoice(sections[0].body, document.getElementById("voiceBtn"));
+    document.getElementById("ctaBtn").addEventListener("click", function(){
+      if (revealAudio) revealAudio.pause();
+      location.href = ctaDestination();
+    });
+  }
+
+  function finishLoadingBar(){
+    clearInterval(loadingTimer);
+    var pctEl = document.getElementById("loadPct");
+    if (pctEl) pctEl.textContent = "100%";
+  }
+
+  function runReveal(){
+    updateProgress(100);
+
+    if (answers.palmImage) {
+      renderLoading(t().loading_phrases_palm);
+      var minWaitPalm = new Promise(function(resolve){ setTimeout(resolve, 3600); });
+      var palmRequest = fetch("/api/palm", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          image: answers.palmImage,
+          mediaType: answers.palmMediaType || "image/jpeg",
+          lang: lang,
+          profile: {
+            name: answers.name,
+            birthDate: answers.birthdate,
+            focus: answers.focus,
+            bigQuestion: answers.insight
+          }
+        })
+      }).then(function(r){ return r.ok ? r.json() : null; }).catch(function(){ return null; });
+
+      Promise.all([palmRequest, minWaitPalm]).then(function(results){
+        finishLoadingBar();
+        var data = results[0];
+        var text = (data && data.text) ? data.text : t().palm_fallback;
+        setTimeout(function(){ renderPalmReveal(text); }, 260);
+      });
+      return;
+    }
+
+    renderLoading(t().loading_phrases);
+    var question = REVEAL_PROMPT[lang]
+      .replace("{name}", answers.name)
+      .replace("{birthdate}", answers.birthdate)
+      .replace("{insight}", answers.insight)
+      .replace("{focus}", answers.focus);
+
+    var minWait = new Promise(function(resolve){ setTimeout(resolve, 3200); });
+    var request = fetch("/api/oracle", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        question: question,
+        topic: REVEAL_TOPIC[lang],
+        mode: "paid",
+        lang: lang
+      })
+    }).then(function(r){ return r.ok ? r.json() : null; }).catch(function(){ return null; });
+
+    Promise.all([request, minWait]).then(function(results){
+      finishLoadingBar();
+      var data = results[0];
+      var text = (data && data.text) ? data.text : t().reveal_fallback;
+      setTimeout(function(){ renderReveal(text); }, 260);
+    });
+  }
+
+  render();
+  applyGeoLangIfEligible();
+})();
+</script>
+</body>
+</html>
