@@ -60,10 +60,10 @@
 
     .quiz-loading{display:flex;flex-direction:column;align-items:center;gap:26px}
     .quiz-orb-wrap{position:relative;width:132px;height:132px;display:grid;place-items:center}
-    .quiz-orb-ring{position:absolute;inset:0;border-radius:50%;border:1px solid rgba(231,195,114,.3);animation:spin 7s linear infinite}
-    .quiz-orb-ring.r2{inset:-14px;border-color:rgba(231,195,114,.15);animation-duration:11s;animation-direction:reverse}
+    .quiz-orb-ring{position:absolute;inset:0;border-radius:50%;border:1px solid rgba(231,195,114,.35);animation:spin 7s linear infinite}
+    .quiz-orb-ring.r2{inset:-14px;border-color:rgba(159,216,255,.3);animation-duration:11s;animation-direction:reverse}
     @keyframes spin{to{transform:rotate(360deg)}}
-    .quiz-orb{width:104px;height:104px;border-radius:50%;background:radial-gradient(circle at 38% 32%,#fff 0,#f3e3c2 28%,#b88a32 70%,#4a3414 100%);box-shadow:0 0 70px rgba(231,195,114,.55);animation:pulse 1.7s ease-in-out infinite}
+    .quiz-orb{width:104px;height:104px;border-radius:50%;background:radial-gradient(circle at 38% 32%,#ffffff 0%,#eaf6ff 20%,#9fd8ff 42%,#4aa0e0 62%,#e7c372 82%,#1c3450 100%);box-shadow:0 0 55px rgba(159,216,255,.5),0 0 40px rgba(231,195,114,.35);animation:pulse 1.7s ease-in-out infinite}
     @keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.07)}}
     .quiz-loading-pct{color:#f0d48f;font-size:13px;font-weight:800;letter-spacing:.06em;font-variant-numeric:tabular-nums}
     .quiz-loading-title{color:#fff;font-size:17px;font-weight:600;min-height:24px;transition:opacity .25s}
@@ -505,8 +505,39 @@
   };
 
   var qs = new URLSearchParams(location.search);
-  var lang = SUPPORTED_LANGS.indexOf(qs.get("lang")) !== -1 ? qs.get("lang") : "de";
+  var langWasExplicit = SUPPORTED_LANGS.indexOf(qs.get("lang")) !== -1;
+  var lang = langWasExplicit ? qs.get("lang") : "de";
   var ref = qs.get("ref") || qs.get("utm_source") || "quiz";
+
+  // Same spirit as i18n.js on the main site: a real visitor-country guess
+  // from Vercel's edge (see /api/geo.js) beats a hardcoded default — but
+  // never overrides an explicit ?lang= pick, and only applies while still
+  // on the first question so it can't disrupt someone mid-quiz.
+  var COUNTRY_LANG = {
+    DE: "de", AT: "de", CH: "de", LI: "de",
+    FR: "fr", MC: "fr",
+    ES: "es", AR: "es", CO: "es", CL: "es", PE: "es", MX: "es", VE: "es",
+    IT: "it",
+    PT: "pt", BR: "pt",
+    RU: "ru", BY: "ru", KZ: "ru", UA: "ru",
+    GB: "en", IE: "en", US: "en", CA: "en", AU: "en", NZ: "en", ZA: "en", IN: "en", SG: "en"
+  };
+  function applyGeoLangIfEligible(){
+    if (langWasExplicit) return;
+    var controller = new AbortController();
+    var timeout = setTimeout(function(){ controller.abort(); }, 2500);
+    fetch("/api/geo", { signal: controller.signal })
+      .then(function(r){ return r.ok ? r.json() : null; })
+      .then(function(data){
+        clearTimeout(timeout);
+        var geoLang = data && COUNTRY_LANG[String(data.country || "").toUpperCase()];
+        if (!geoLang || geoLang === lang || step !== 1) return;
+        lang = geoLang;
+        langSelect.value = lang;
+        render();
+      })
+      .catch(function(){});
+  }
 
   var answers = { insight: null, birthdate: "", name: "", focus: null, palmImage: null, palmMediaType: null };
   var step = 1;
@@ -890,6 +921,7 @@
   }
 
   render();
+  applyGeoLangIfEligible();
 })();
 </script>
 </body>
