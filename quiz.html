@@ -424,17 +424,17 @@
     renderLoading();
 
     var question = lang === "en"
-      ? "My name is " + answers.name + ", born on " + answers.birthdate + ". What I'm seeking: " + answers.insight + ". What's on my mind most right now: " + answers.focus + ". Give me a short, mysterious, captivating personal reveal about my past life or destiny that fits my choice. Maximum 4-5 sentences, written in a dramatic, very personal, TikTok-ready style."
-      : "Ich heiße " + answers.name + ", geboren am " + answers.birthdate + ". Ich suche: " + answers.insight + ". Was mich gerade am meisten beschäftigt: " + answers.focus + ". Gib mir eine kurze, mysteriöse, fesselnde persönliche Enthüllung über mein vergangenes Leben oder Schicksal, passend zu meiner Wahl. Maximal 4-5 Sätze, dramatisch und sehr persönlich geschrieben, im Stil eines packenden TikTok-Moments.";
+      ? "My name is " + answers.name + ", born on " + answers.birthdate + ". What I'm seeking: " + answers.insight + ". What's on my mind most right now: " + answers.focus + ". Write me an immersive, vivid personal reveal about my past life or destiny that fits my choice — not a generic horoscope blurb. Use my name directly, invent a specific era, place and a vivid turning-point moment or scene from that past life, and connect it concretely to what's on my mind right now. Build suspense gradually across 7-9 sentences, end on a resonant, slightly cliffhanger note that makes me want to know more. Write it as if you're confiding something only I'm meant to hear — intimate, cinematic, never generic or rushed."
+      : "Ich heiße " + answers.name + ", geboren am " + answers.birthdate + ". Ich suche: " + answers.insight + ". Was mich gerade am meisten beschäftigt: " + answers.focus + ". Schreibe mir eine immersive, bildhafte persönliche Enthüllung über mein vergangenes Leben oder Schicksal, passend zu meiner Wahl — keine generische Horoskop-Floskel. Nutze meinen Namen direkt, erfinde eine konkrete Epoche, einen Ort und eine lebendige Wendepunkt-Szene aus diesem vergangenen Leben, und verknüpfe sie konkret mit dem, was mich gerade beschäftigt. Baue über 7-9 Sätze hinweg langsam Spannung auf und ende mit einem nachhallenden, leicht offenen Cliffhanger, der neugierig macht. Schreibe es, als würdest du mir etwas anvertrauen, das nur ich hören soll — intim, kinoreif, niemals generisch oder gehetzt.";
 
-    var minWait = new Promise(function(resolve){ setTimeout(resolve, 2600); });
+    var minWait = new Promise(function(resolve){ setTimeout(resolve, 3200); });
     var request = fetch("/api/oracle", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         question: question,
         topic: lang === "en" ? "Past life & destiny" : "Vergangenes Leben & Schicksal",
-        mode: "free",
+        mode: "paid",
         lang: lang === "en" ? "en" : "de"
       })
     }).then(function(r){ return r.ok ? r.json() : null; }).catch(function(){ return null; });
