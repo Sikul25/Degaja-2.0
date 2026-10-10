@@ -82,6 +82,22 @@
     .quiz-disclaimer{margin-top:18px;color:rgba(255,255,255,.35);font-size:11px;line-height:1.5}
     .quiz-lang{position:absolute;top:16px;right:16px;z-index:3;color:rgba(255,255,255,.5);font-size:12px;font-weight:700;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.16);border-radius:999px;padding:6px 13px;cursor:pointer;transition:.2s}
     .quiz-lang:hover{border-color:rgba(231,195,114,.5);color:#f0d48f}
+
+    .quiz-photo-sub{color:rgba(255,255,255,.5);font-size:14px;line-height:1.6;margin:-18px 0 24px}
+    .quiz-dropzone{border:1.5px dashed rgba(231,195,114,.4);border-radius:22px;padding:34px 20px;text-align:center;cursor:pointer;transition:.2s;background:rgba(255,255,255,.03)}
+    .quiz-dropzone:hover{border-color:#e7c372;background:rgba(231,195,114,.07)}
+    .quiz-dropzone .icon{font-size:36px;margin-bottom:10px}
+    .quiz-dropzone .label{color:#eef2f6;font-weight:700;font-size:15px}
+    .quiz-dropzone .hint{color:rgba(255,255,255,.4);font-size:12px;margin-top:6px}
+    .quiz-dropzone.has-img{padding:14px}
+    .quiz-dropzone img{max-width:100%;max-height:220px;border-radius:14px;display:block;margin:0 auto}
+    .quiz-skip{display:block;margin:18px auto 0;color:rgba(255,255,255,.4);font-size:13px;background:none;border:0;cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+    .quiz-skip:hover{color:rgba(255,255,255,.7)}
+
+    .quiz-palm-section{text-align:left;background:linear-gradient(160deg,rgba(255,255,255,.07),rgba(255,255,255,.02));border:1px solid rgba(231,195,114,.22);border-radius:20px;padding:20px 22px;margin-bottom:12px;box-shadow:0 14px 36px rgba(0,0,0,.28);opacity:0;transform:translateY(10px);animation:sectionIn .5s cubic-bezier(.16,1,.3,1) forwards}
+    @keyframes sectionIn{to{opacity:1;transform:translateY(0)}}
+    .quiz-palm-section h3{margin:0 0 8px;color:#f0d48f;font-size:13px;font-weight:800;letter-spacing:.05em;text-transform:uppercase}
+    .quiz-palm-section p{margin:0;color:#f2f4f7;font-size:16px;line-height:1.65}
     @media(max-width:480px){.quiz-h1{font-size:23px}.quiz-opt{padding:14px 16px;font-size:14.5px}}
   </style>
 </head>
@@ -129,6 +145,13 @@
         {ic:"🧭", t:"Lebensweg & Entscheidungen"},
         {ic:"🌙", t:"Innere Ruhe & Selbstfindung"}
       ],
+      q5_eyebrow: "SCHRITT 5",
+      q5_h1: "Zeig uns deine Handfläche",
+      q5_sub: "Optional — ein Foto deiner offenen Hand macht deine Enthüllung noch genauer und persönlicher.",
+      photo_upload: "📷 Foto hochladen",
+      photo_hint: "Flaches, gut beleuchtetes Foto deiner offenen Handfläche",
+      photo_skip: "Überspringen, nur Text-Enthüllung",
+      photo_continue: "Mit diesem Foto fortfahren →",
       next: "Weiter →",
       back: "← Zurück",
       loading_phrases: [
@@ -137,9 +160,17 @@
         "Die Karten ordnen sich …",
         "Deine Enthüllung nimmt Form an …"
       ],
+      loading_phrases_palm: [
+        "Wir betrachten deine Handfläche …",
+        "Lebenslinie, Herzlinie, Kopflinie werden gelesen …",
+        "Die Linien erzählen ihre Geschichte …",
+        "Deine Handlesung nimmt Form an …"
+      ],
       loading_sub: "Bitte warte einen Moment",
       reveal_badge: "✦ Deine Enthüllung",
+      palm_badge: "✦ Deine Handlesung",
       reveal_fallback: "Die Energien um dich sind heute außergewöhnlich stark — deine vollständige Enthüllung wartet in deiner persönlichen Lesung.",
+      palm_fallback: "Deine Handlinien sind heute schwer zu entschlüsseln — versuch es mit einem klareren Foto in deiner persönlichen Lesung.",
       cta: "Vollständige Lesung freischalten →",
       disclaimer: "DEGAJA dient der persönlichen Orientierung und Unterhaltung und ersetzt keine professionelle Beratung.",
       voice_loading: "Stimme wird vorbereitet …",
@@ -171,6 +202,13 @@
         {ic:"🧭", t:"Life path & decisions"},
         {ic:"🌙", t:"Inner peace & self-discovery"}
       ],
+      q5_eyebrow: "STEP 5",
+      q5_h1: "Show us your palm",
+      q5_sub: "Optional — a photo of your open palm makes your reveal even more accurate and personal.",
+      photo_upload: "📷 Upload photo",
+      photo_hint: "A flat, well-lit photo of your open palm",
+      photo_skip: "Skip, just the text reveal",
+      photo_continue: "Continue with this photo →",
       next: "Continue →",
       back: "← Back",
       loading_phrases: [
@@ -179,9 +217,17 @@
         "The cards are aligning …",
         "Your reveal is taking shape …"
       ],
+      loading_phrases_palm: [
+        "Studying your palm …",
+        "Reading your life, heart and head lines …",
+        "The lines are telling their story …",
+        "Your palm reading is taking shape …"
+      ],
       loading_sub: "This will only take a moment",
       reveal_badge: "✦ Your reveal",
+      palm_badge: "✦ Your palm reading",
       reveal_fallback: "The energy around you is unusually strong today — your full reveal is waiting in your personal reading.",
+      palm_fallback: "Your palm lines are hard to make out today — try again with a clearer photo in your personal reading.",
       cta: "Unlock your full reading →",
       disclaimer: "DEGAJA is for personal guidance and entertainment purposes and does not replace professional advice.",
       voice_loading: "Preparing voice …",
@@ -195,7 +241,7 @@
   var lang = qs.get("lang") === "en" ? "en" : "de";
   var ref = qs.get("ref") || qs.get("utm_source") || "quiz";
 
-  var answers = { insight: null, birthdate: "", name: "", focus: null };
+  var answers = { insight: null, birthdate: "", name: "", focus: null, palmImage: null, palmMediaType: null };
   var step = 1;
   var TOTAL_STEPS = 5;
   var loadingTimer = null;
@@ -324,23 +370,84 @@
       renderOptionsStep(t().q4_eyebrow, t().q4_h1, t().q4_opts, function(opt){
         answers.focus = opt.t;
         step = 5; render();
-        runReveal();
       });
+    } else if (step === 5) {
+      renderPhotoStep();
     }
   }
 
-  function renderLoading(){
+  function resizeImage(file, maxDim, quality, callback){
+    var reader = new FileReader();
+    reader.onload = function(e){
+      var img = new Image();
+      img.onload = function(){
+        var scale = Math.min(1, maxDim / Math.max(img.width, img.height));
+        var w = Math.round(img.width * scale);
+        var h = Math.round(img.height * scale);
+        var canvas = document.createElement("canvas");
+        canvas.width = w; canvas.height = h;
+        canvas.getContext("2d").drawImage(img, 0, 0, w, h);
+        callback(canvas.toDataURL("image/jpeg", quality));
+      };
+      img.onerror = function(){ callback(null); };
+      img.src = e.target.result;
+    };
+    reader.onerror = function(){ callback(null); };
+    reader.readAsDataURL(file);
+  }
+
+  function renderPhotoStep(){
+    var html = '<div class="quiz-eyebrow">' + t().q5_eyebrow + '</div>';
+    html += '<h1 class="quiz-h1">' + t().q5_h1 + '</h1>';
+    html += '<p class="quiz-photo-sub">' + t().q5_sub + '</p>';
+    html += '<input type="file" accept="image/*" capture="environment" id="photoInput" style="display:none">';
+    html += '<div class="quiz-dropzone' + (answers.palmImage ? ' has-img' : '') + '" id="dropzone">';
+    if (answers.palmImage) {
+      html += '<img src="' + answers.palmImage + '" alt="">';
+    } else {
+      html += '<div class="icon">🖐️</div><div class="label">' + t().photo_upload + '</div><div class="hint">' + t().photo_hint + '</div>';
+    }
+    html += '</div>';
+    if (answers.palmImage) {
+      html += '<button class="quiz-cta" id="continuePhotoBtn">' + t().photo_continue + '</button>';
+    }
+    html += '<button class="quiz-skip" id="skipBtn">' + t().photo_skip + '</button>';
+    html += '<button class="quiz-back" id="backBtn">' + t().back + '</button>';
+    setCard(html);
+
+    var input = document.getElementById("photoInput");
+    document.getElementById("dropzone").addEventListener("click", function(){ input.click(); });
+    input.addEventListener("change", function(){
+      var file = input.files && input.files[0];
+      if (!file) return;
+      resizeImage(file, 900, 0.82, function(dataUrl){
+        if (!dataUrl) return;
+        answers.palmImage = dataUrl;
+        answers.palmMediaType = "image/jpeg";
+        render();
+      });
+    });
+    var continueBtn = document.getElementById("continuePhotoBtn");
+    if (continueBtn) continueBtn.addEventListener("click", function(){ runReveal(); });
+    document.getElementById("skipBtn").addEventListener("click", function(){
+      answers.palmImage = null;
+      runReveal();
+    });
+    document.getElementById("backBtn").addEventListener("click", goBack);
+  }
+
+  function renderLoading(phrases){
+    phrases = phrases || t().loading_phrases;
     var html = '<div class="quiz-loading">';
     html += '<div class="quiz-orb-wrap"><div class="quiz-orb-ring"></div><div class="quiz-orb-ring r2"></div><div class="quiz-orb"></div></div>';
     html += '<div class="quiz-loading-pct" id="loadPct">0%</div>';
-    html += '<div><div class="quiz-loading-title" id="loadTitle">' + t().loading_phrases[0] + '</div>';
+    html += '<div><div class="quiz-loading-title" id="loadTitle">' + phrases[0] + '</div>';
     html += '<div class="quiz-loading-sub">' + t().loading_sub + '</div></div>';
     html += '</div>';
     setCard(html);
 
     var pctEl = document.getElementById("loadPct");
     var titleEl = document.getElementById("loadTitle");
-    var phrases = t().loading_phrases;
     var pct = 0, phraseIdx = 0;
     clearInterval(loadingTimer);
     loadingTimer = setInterval(function(){
@@ -403,6 +510,11 @@
     }).catch(function(){ btn.style.display = "none"; });
   }
 
+  function ctaDestination(){
+    var dest = lang === "en" ? "/en" : "/";
+    return dest + (dest.indexOf("?") === -1 ? "?" : "&") + "utm_source=" + encodeURIComponent(ref) + "&utm_campaign=quiz";
+  }
+
   function renderReveal(text){
     var html = '<div class="quiz-reveal-top"><div class="quiz-reveal-badge">' + t().reveal_badge + '</div>';
     html += '<button class="quiz-voice-btn" id="voiceBtn" disabled>' + t().voice_loading + '</button></div>';
@@ -414,15 +526,80 @@
     loadVoice(text, document.getElementById("voiceBtn"));
     document.getElementById("ctaBtn").addEventListener("click", function(){
       if (revealAudio) revealAudio.pause();
-      var dest = lang === "en" ? "/en" : "/";
-      location.href = dest + (dest.indexOf("?") === -1 ? "?" : "&") + "utm_source=" + encodeURIComponent(ref) + "&utm_campaign=quiz";
+      location.href = ctaDestination();
     });
+  }
+
+  // palm.js replies as a sequence of "**Label:** body" sections (labels
+  // already translated server-side) — split on that marker generically so
+  // this works for either language without hardcoding label text.
+  function splitPalmSections(text){
+    var parts = text.split(/\*\*(.+?):\*\*/);
+    var sections = [];
+    for (var i = 1; i < parts.length; i += 2) {
+      var body = (parts[i + 1] || "").trim();
+      if (body) sections.push({ label: parts[i].trim(), body: body });
+    }
+    return sections.length ? sections : [{ label: "", body: text }];
+  }
+
+  function renderPalmReveal(text){
+    var sections = splitPalmSections(text);
+    var html = '<div class="quiz-reveal-top"><div class="quiz-reveal-badge">' + t().palm_badge + '</div>';
+    html += '<button class="quiz-voice-btn" id="voiceBtn" disabled>' + t().voice_loading + '</button></div>';
+    sections.forEach(function(s, i){
+      html += '<div class="quiz-palm-section" style="animation-delay:' + (i * 0.12) + 's">';
+      if (s.label) html += '<h3>' + escapeHtml(s.label) + '</h3>';
+      html += '<p>' + escapeHtml(s.body) + '</p></div>';
+    });
+    html += '<button class="quiz-cta" id="ctaBtn">' + t().cta + '</button>';
+    html += '<div class="quiz-disclaimer">' + t().disclaimer + '</div>';
+    setCard(html);
+    loadVoice(sections[0].body, document.getElementById("voiceBtn"));
+    document.getElementById("ctaBtn").addEventListener("click", function(){
+      if (revealAudio) revealAudio.pause();
+      location.href = ctaDestination();
+    });
+  }
+
+  function finishLoadingBar(){
+    clearInterval(loadingTimer);
+    var pctEl = document.getElementById("loadPct");
+    if (pctEl) pctEl.textContent = "100%";
   }
 
   function runReveal(){
     updateProgress(100);
-    renderLoading();
 
+    if (answers.palmImage) {
+      renderLoading(t().loading_phrases_palm);
+      var minWaitPalm = new Promise(function(resolve){ setTimeout(resolve, 3600); });
+      var palmRequest = fetch("/api/palm", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          image: answers.palmImage,
+          mediaType: answers.palmMediaType || "image/jpeg",
+          lang: lang === "en" ? "en" : "de",
+          profile: {
+            name: answers.name,
+            birthDate: answers.birthdate,
+            focus: answers.focus,
+            bigQuestion: answers.insight
+          }
+        })
+      }).then(function(r){ return r.ok ? r.json() : null; }).catch(function(){ return null; });
+
+      Promise.all([palmRequest, minWaitPalm]).then(function(results){
+        finishLoadingBar();
+        var data = results[0];
+        var text = (data && data.text) ? data.text : t().palm_fallback;
+        setTimeout(function(){ renderPalmReveal(text); }, 260);
+      });
+      return;
+    }
+
+    renderLoading(t().loading_phrases);
     var question = lang === "en"
       ? "My name is " + answers.name + ", born on " + answers.birthdate + ". What I'm seeking: " + answers.insight + ". What's on my mind most right now: " + answers.focus + ". Write me an immersive, vivid personal reveal about my past life or destiny that fits my choice — not a generic horoscope blurb. Use my name directly, invent a specific era, place and a vivid turning-point moment or scene from that past life, and connect it concretely to what's on my mind right now. Build suspense gradually across 7-9 sentences, end on a resonant, slightly cliffhanger note that makes me want to know more. Write it as if you're confiding something only I'm meant to hear — intimate, cinematic, never generic or rushed."
       : "Ich heiße " + answers.name + ", geboren am " + answers.birthdate + ". Ich suche: " + answers.insight + ". Was mich gerade am meisten beschäftigt: " + answers.focus + ". Schreibe mir eine immersive, bildhafte persönliche Enthüllung über mein vergangenes Leben oder Schicksal, passend zu meiner Wahl — keine generische Horoskop-Floskel. Nutze meinen Namen direkt, erfinde eine konkrete Epoche, einen Ort und eine lebendige Wendepunkt-Szene aus diesem vergangenen Leben, und verknüpfe sie konkret mit dem, was mich gerade beschäftigt. Baue über 7-9 Sätze hinweg langsam Spannung auf und ende mit einem nachhallenden, leicht offenen Cliffhanger, der neugierig macht. Schreibe es, als würdest du mir etwas anvertrauen, das nur ich hören soll — intim, kinoreif, niemals generisch oder gehetzt.";
@@ -440,9 +617,7 @@
     }).then(function(r){ return r.ok ? r.json() : null; }).catch(function(){ return null; });
 
     Promise.all([request, minWait]).then(function(results){
-      clearInterval(loadingTimer);
-      var pctEl = document.getElementById("loadPct");
-      if (pctEl) pctEl.textContent = "100%";
+      finishLoadingBar();
       var data = results[0];
       var text = (data && data.text) ? data.text : t().reveal_fallback;
       setTimeout(function(){ renderReveal(text); }, 260);
