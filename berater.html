@@ -45,7 +45,7 @@
   </div>
 <script>
 (function(){
-  var id = 'papuli';
+  var id = new URLSearchParams(location.search).get('advisor') || 'papuli';
   var STORE_KEY = 'degajaBeraterPin';
   var loginView = document.getElementById('loginView'), statusView = document.getElementById('statusView'),
       pinInput = document.getElementById('pinInput'), loginBtn = document.getElementById('loginBtn'), loginMsg = document.getElementById('loginMsg'),
