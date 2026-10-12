@@ -532,11 +532,20 @@
 
   $$('[data-buy]').forEach(btn => {
     btn.addEventListener("click", () => {
+      const consent = $("#withdrawalConsent");
+      if (consent && !consent.checked) {
+        consent.closest("label")?.classList.add("needs-attention");
+        consent.focus();
+        return;
+      }
       const question = $("#aiQuestion")?.value.trim() || "";
       const topic = $("#aiTopic")?.value || "";
       stashPendingReading(question, topic);
       startCheckout(btn.dataset.buy);
     });
+  });
+  $("#withdrawalConsent")?.addEventListener("change", (e) => {
+    if (e.target.checked) e.target.closest("label")?.classList.remove("needs-attention");
   });
 
   $("#loginBtn")?.addEventListener("click", () => {
