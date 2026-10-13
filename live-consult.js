@@ -121,9 +121,13 @@
     const c=getCredits();
     const liveAudioWith=fmt(t('live.liveAudioWith'),{name:esc(a.name)})+' · <span style="color:#a34d4d;font-weight:800">'+t('live.maxDurationShort')+'</span>';
     const cur=t('currency.symbol');
-    host.innerHTML=`<div class="degaja-call-panel"><h4 style="color:#18334a">${fmt(t('live.withName'),{name:esc(a.name)})}</h4><p class="degaja-live-copy">${esc(a.title)} · ${c?t('live.hasCredit'):t('live.chooseTopics')}</p>${c?`<button class="gold" id="degajaUseCredit">${t('live.useCredit')}</button>`:''}<div class="degaja-consult-options"><button class="degaja-consult-option" data-topics="1"><span><strong>${t('live.topics1')}</strong><small>${liveAudioWith}</small></span><b>${cur}${prices[1]}</b></button><button class="degaja-consult-option" data-topics="2"><span><strong>${t('live.topics2')}</strong><small>${liveAudioWith}</small></span><b>${cur}${prices[2]}</b></button><button class="degaja-consult-option" data-topics="3"><span><strong>${t('live.topics3')}</strong><small>${liveAudioWith}</small></span><b>${cur}${prices[3]}</b></button></div><div class="degaja-status">${esc(u.name||u.email)}</div></div>`;
+    host.innerHTML=`<div class="degaja-call-panel"><h4 style="color:#18334a">${fmt(t('live.withName'),{name:esc(a.name)})}</h4><p class="degaja-live-copy">${esc(a.title)} · ${c?t('live.hasCredit'):t('live.chooseTopics')}</p>${c?`<button class="gold" id="degajaUseCredit">${t('live.useCredit')}</button>`:''}<div class="degaja-consult-options"><button class="degaja-consult-option" data-topics="1"><span><strong>${t('live.topics1')}</strong><small>${liveAudioWith}</small></span><b>${cur}${prices[1]}</b></button><button class="degaja-consult-option" data-topics="2"><span><strong>${t('live.topics2')}</strong><small>${liveAudioWith}</small></span><b>${cur}${prices[2]}</b></button><button class="degaja-consult-option" data-topics="3"><span><strong>${t('live.topics3')}</strong><small>${liveAudioWith}</small></span><b>${cur}${prices[3]}</b></button></div><label class="degaja-service-consent" style="display:flex;gap:8px;align-items:flex-start;text-align:left;font-size:12px;line-height:1.5;color:#687384;margin-top:10px"><input type="checkbox" id="degajaServiceConsent" style="margin-top:3px;flex-shrink:0"><span>${t('live.serviceConsent')}</span></label><div class="degaja-status">${esc(u.name||u.email)}</div></div>`;
     $('#degajaUseCredit')?.addEventListener('click',()=>{setCredits(getCredits()-1);creditText();call('credit',3,a)});
-    host.querySelectorAll('[data-topics]').forEach(b=>b.addEventListener('click',()=>checkout(Number(b.dataset.topics),a)));
+    host.querySelectorAll('[data-topics]').forEach(b=>b.addEventListener('click',()=>{
+      const consent=$('#degajaServiceConsent');
+      if(consent && !consent.checked){consent.closest('label')?.style.setProperty('color','#a34d4d');consent.focus();return}
+      checkout(Number(b.dataset.topics),a);
+    }));
   }
 
   async function checkout(topics,advisor){
