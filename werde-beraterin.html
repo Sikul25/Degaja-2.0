@@ -151,7 +151,7 @@
       `${t('apply.mail.message')}`,
       val('applyMessage') || '-'
     ].join('\n');
-    const mailto = `mailto:beraterinnen@degaja.com?subject=${encodeURIComponent(t('apply.mail.subject') + name)}&body=${encodeURIComponent(body)}`;
+    const mailto = `mailto:cs@degaja.com?subject=${encodeURIComponent(t('apply.mail.subject') + name)}&body=${encodeURIComponent(body)}`;
     window.location.href = mailto;
   });
 </script>
