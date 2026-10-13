@@ -532,11 +532,20 @@
 
   $$('[data-buy]').forEach(btn => {
     btn.addEventListener("click", () => {
+      const consent = $("#withdrawalConsent");
+      if (consent && !consent.checked) {
+        consent.closest("label")?.classList.add("needs-attention");
+        consent.focus();
+        return;
+      }
       const question = $("#aiQuestion")?.value.trim() || "";
       const topic = $("#aiTopic")?.value || "";
       stashPendingReading(question, topic);
       startCheckout(btn.dataset.buy);
     });
+  });
+  $("#withdrawalConsent")?.addEventListener("change", (e) => {
+    if (e.target.checked) e.target.closest("label")?.classList.remove("needs-attention");
   });
 
   $("#loginBtn")?.addEventListener("click", () => {
@@ -545,32 +554,6 @@
 
   $("#accountBtn")?.addEventListener("click", accountView);
   $("#closeModal")?.addEventListener("click", closeModal);
-
-  $("#impressumLink")?.addEventListener("click", event => {
-    event.preventDefault();
-    openModal(`
-      <h2>Impressum</h2>
-      <p><strong>Sagacitas Ltd</strong><br>136 Capel Street<br>Dublin, Irland</p>
-      <p>Handelsregisternummer: wird nach Abschluss der Eintragung ergänzt (Firmengründung derzeit in Bearbeitung)</p>
-      <p>Kontakt: <a href="mailto:info@degaja.com">info@degaja.com</a></p>
-    `);
-  });
-
-  $("#datenschutzLink")?.addEventListener("click", event => {
-    event.preventDefault();
-    openModal(`
-      <h2>${t("legal.datenschutzTitle")}</h2>
-      <p style="color:#687384;font-size:14px;line-height:1.6">${t("legal.datenschutz")}</p>
-    `);
-  });
-
-  $("#agbLink")?.addEventListener("click", event => {
-    event.preventDefault();
-    openModal(`
-      <h2>${t("legal.agbTitle")}</h2>
-      <p style="color:#687384;font-size:14px;line-height:1.6">${t("legal.agb")}</p>
-    `);
-  });
 
   modal?.addEventListener("click", event => {
     if (event.target === modal) closeModal();
