@@ -838,6 +838,137 @@
     }
   });
 
+  // --- Gematria ---
+  $("#gematriaBtn")?.addEventListener("click", async () => {
+    const name = $("#gematriaNameInput")?.value.trim() || "";
+    const button = $("#gematriaBtn");
+    const result = $("#gematriaResult");
+    if (!name) return;
+
+    if (button) {
+      button.disabled = true;
+      button.textContent = t("gematria.analyzing");
+    }
+    if (result) {
+      result.innerHTML = `<strong>${t("gematria.analyzing")}</strong>`;
+      result.classList.add("show");
+    }
+
+    try {
+      const response = await fetchWithTimeout("/api/gematria", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, lang: currentLang() })
+      }, 30000);
+
+      if (!response.ok) throw new Error("gematria API failed");
+      const data = await response.json();
+      if (!data.text) throw new Error("no text");
+
+      if (result) { result.classList.remove("show"); result.innerHTML = ""; }
+      state.conversationHistory = [];
+      renderResult(data.text, t("gematria.syntheticQuestion"), t("gematria.topic"), false);
+    } catch (error) {
+      if (result) {
+        result.innerHTML = `<strong>${t("gematria.readError")}</strong>`;
+        result.classList.add("show");
+      }
+    }
+
+    if (button) {
+      button.disabled = false;
+      button.textContent = t("gematria.button");
+    }
+  });
+
+  // --- Numerology ---
+  $("#numerologyBtn")?.addEventListener("click", async () => {
+    const name = $("#numerologyNameInput")?.value.trim() || "";
+    const birthDate = $("#numerologyBirthInput")?.value.trim() || "";
+    const button = $("#numerologyBtn");
+    const result = $("#numerologyResult");
+    if (!name || !birthDate) return;
+
+    if (button) {
+      button.disabled = true;
+      button.textContent = t("numerology.analyzing");
+    }
+    if (result) {
+      result.innerHTML = `<strong>${t("numerology.analyzing")}</strong>`;
+      result.classList.add("show");
+    }
+
+    try {
+      const response = await fetchWithTimeout("/api/numerology", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, birthDate, lang: currentLang() })
+      }, 30000);
+
+      if (!response.ok) throw new Error("numerology API failed");
+      const data = await response.json();
+      if (!data.text) throw new Error("no text");
+
+      if (result) { result.classList.remove("show"); result.innerHTML = ""; }
+      state.conversationHistory = [];
+      renderResult(data.text, t("numerology.syntheticQuestion"), t("numerology.topic"), false);
+    } catch (error) {
+      if (result) {
+        result.innerHTML = `<strong>${t("numerology.readError")}</strong>`;
+        result.classList.add("show");
+      }
+    }
+
+    if (button) {
+      button.disabled = false;
+      button.textContent = t("numerology.button");
+    }
+  });
+
+  // --- Horoscope ---
+  $("#horoscopeBtn")?.addEventListener("click", async () => {
+    const birthDate = $("#horoscopeBirthInput")?.value.trim() || "";
+    const question = $("#horoscopeQuestionInput")?.value.trim() || "";
+    const button = $("#horoscopeBtn");
+    const result = $("#horoscopeResult");
+    if (!birthDate) return;
+
+    if (button) {
+      button.disabled = true;
+      button.textContent = t("horoscope.analyzing");
+    }
+    if (result) {
+      result.innerHTML = `<strong>${t("horoscope.analyzing")}</strong>`;
+      result.classList.add("show");
+    }
+
+    try {
+      const response = await fetchWithTimeout("/api/horoscope", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ birthDate, question, lang: currentLang() })
+      }, 30000);
+
+      if (!response.ok) throw new Error("horoscope API failed");
+      const data = await response.json();
+      if (!data.text) throw new Error("no text");
+
+      if (result) { result.classList.remove("show"); result.innerHTML = ""; }
+      state.conversationHistory = [];
+      renderResult(data.text, t("horoscope.syntheticQuestion"), t("horoscope.topic"), false);
+    } catch (error) {
+      if (result) {
+        result.innerHTML = `<strong>${t("horoscope.readError")}</strong>`;
+        result.classList.add("show");
+      }
+    }
+
+    if (button) {
+      button.disabled = false;
+      button.textContent = t("horoscope.button");
+    }
+  });
+
   redeemPromoCredits();
   verifyAiPayment();
 })();
