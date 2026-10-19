@@ -89,9 +89,10 @@
     $('#dpcClear').onclick = () => { state.topic = ''; state.messages = []; save(state); draw(); };
     const voiceBtn = $('#dpcVoice');
     if (voiceBtn) voiceBtn.onclick = () => {
+      const goTo = window.degajaGoTo || ((sel) => document.querySelector(sel)?.scrollIntoView({ behavior: 'smooth', block: 'center' }));
       const live = $('#degajaLiveConsult');
-      if (live) { live.scrollIntoView({ behavior: 'smooth', block: 'center' }); setTimeout(() => $('#degajaLiveStart')?.click(), 350); }
-      else document.querySelector('#human')?.scrollIntoView({ behavior: 'smooth' });
+      if (live) { goTo(live); setTimeout(() => $('#degajaLiveStart')?.click(), 350); }
+      else goTo('#human');
     };
   }
 

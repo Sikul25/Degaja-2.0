@@ -282,7 +282,7 @@
     if(desc) desc.textContent=t('live.incomingCallDesc');
     const input=$('#degajaAdvisorCode');
     if(input){ input.value=code; input.style.display='none'; }
-    panel.scrollIntoView({behavior:'smooth',block:'center'});
+    (window.degajaGoTo||(el=>el.scrollIntoView({behavior:'smooth',block:'center'})))(panel);
     playRingtone();
     const joinBtn=$('#degajaAdvisorJoin');
     if(joinBtn) joinBtn.addEventListener('click',stopRingtone,{once:true});

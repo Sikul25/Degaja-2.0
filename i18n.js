@@ -10,6 +10,7 @@
   const T = {
     de: {
       "nav.start": "Start", "nav.oracle": "Orakel", "nav.palm": "Handlesen", "nav.prices": "Preise", "nav.human": "Beratung", "nav.rituale": "Rituale", "nav.login": "Anmelden",
+      "tab.start": "Start", "tab.readings": "Lesungen", "tab.horoscope": "Horoskop", "tab.advisor": "Beratung", "tab.more": "Mehr",
       "quizBanner.text": "Jetzt im Trend: Entdecke dein vergangenes Leben",
       "hero.eyebrow": "✧ DEIN MOMENT DER KLARHEIT ✧",
       "hero.title1": "Was bewegt", "hero.title2": "dich?",
@@ -415,6 +416,7 @@
     },
     en: {
       "nav.start": "Home", "nav.oracle": "Oracle", "nav.palm": "Palm Reading", "nav.prices": "Pricing", "nav.human": "Advisors", "nav.rituale": "Rituals", "nav.login": "Sign in",
+      "tab.start": "Start", "tab.readings": "Readings", "tab.horoscope": "Horoscope", "tab.advisor": "Advisor", "tab.more": "More",
       "quizBanner.text": "Trending now: Discover your past life",
       "hero.eyebrow": "✧ YOUR MOMENT OF CLARITY ✧",
       "hero.title1": "What's on", "hero.title2": "your mind?",
@@ -816,6 +818,7 @@
     },
     fr: {
       "nav.start": "Accueil", "nav.oracle": "Oracle", "nav.palm": "Lecture de main", "nav.prices": "Tarifs", "nav.human": "Conseil", "nav.rituale": "Rituels", "nav.login": "Connexion",
+      "tab.start": "Accueil", "tab.readings": "Lectures", "tab.horoscope": "Horoscope", "tab.advisor": "Conseil", "tab.more": "Plus",
       "quizBanner.text": "Tendance du moment : découvre ta vie antérieure",
       "hero.eyebrow": "✧ TON MOMENT DE CLARTÉ ✧",
       "hero.title1": "Qu'est-ce qui te", "hero.title2": "préoccupe ?",
@@ -1217,6 +1220,7 @@
     },
     es: {
       "nav.start": "Inicio", "nav.oracle": "Oráculo", "nav.palm": "Lectura de manos", "nav.prices": "Precios", "nav.human": "Asesoría", "nav.rituale": "Rituales", "nav.login": "Acceder",
+      "tab.start": "Inicio", "tab.readings": "Lecturas", "tab.horoscope": "Horóscopo", "tab.advisor": "Asesoría", "tab.more": "Más",
       "quizBanner.text": "Tendencia ahora: descubre tu vida pasada",
       "hero.eyebrow": "✧ TU MOMENTO DE CLARIDAD ✧",
       "hero.title1": "¿Qué te", "hero.title2": "preocupa?",
@@ -1618,6 +1622,7 @@
     },
     it: {
       "nav.start": "Home", "nav.oracle": "Oracolo", "nav.palm": "Lettura della mano", "nav.prices": "Prezzi", "nav.human": "Consulenza", "nav.rituale": "Rituali", "nav.login": "Accedi",
+      "tab.start": "Home", "tab.readings": "Letture", "tab.horoscope": "Oroscopo", "tab.advisor": "Consulenza", "tab.more": "Altro",
       "quizBanner.text": "Di tendenza ora: scopri la tua vita passata",
       "hero.eyebrow": "✧ IL TUO MOMENTO DI CHIAREZZA ✧",
       "hero.title1": "Cosa ti", "hero.title2": "preoccupa?",
@@ -2019,6 +2024,7 @@
     },
     pt: {
       "nav.start": "Início", "nav.oracle": "Oráculo", "nav.palm": "Leitura da mão", "nav.prices": "Preços", "nav.human": "Aconselhamento", "nav.rituale": "Rituais", "nav.login": "Entrar",
+      "tab.start": "Início", "tab.readings": "Leituras", "tab.horoscope": "Horóscopo", "tab.advisor": "Consultoria", "tab.more": "Mais",
       "quizBanner.text": "Tendência agora: descobre a tua vida passada",
       "hero.eyebrow": "✧ O TEU MOMENTO DE CLAREZA ✧",
       "hero.title1": "O que te", "hero.title2": "preocupa?",
@@ -2420,6 +2426,7 @@
     },
     ru: {
       "nav.start": "Главная", "nav.oracle": "Оракул", "nav.palm": "Хиромантия", "nav.prices": "Цены", "nav.human": "Консультанты", "nav.rituale": "Ритуалы", "nav.login": "Войти",
+      "tab.start": "Главная", "tab.readings": "Расклады", "tab.horoscope": "Гороскоп", "tab.advisor": "Консультация", "tab.more": "Ещё",
       "quizBanner.text": "Сейчас в тренде: узнай свою прошлую жизнь",
       "hero.eyebrow": "✧ ТВОЙ МОМЕНТ ЯСНОСТИ ✧",
       "hero.title1": "Что тебя", "hero.title2": "волнует?",
@@ -2825,6 +2832,7 @@
     },
     uk: {
       "nav.start": "Головна", "nav.oracle": "Оракул", "nav.palm": "Хіромантія", "nav.prices": "Ціни", "nav.human": "Консультантки", "nav.rituale": "Ритуали", "nav.login": "Увійти",
+      "tab.start": "Головна", "tab.readings": "Розклади", "tab.horoscope": "Гороскоп", "tab.advisor": "Консультація", "tab.more": "Ще",
       "quizBanner.text": "Зараз у тренді: дізнайся про своє минуле життя",
       "hero.eyebrow": "✧ ТВІЙ МОМЕНТ ЯСНОСТІ ✧",
       "hero.title1": "Що тебе", "hero.title2": "хвилює?",

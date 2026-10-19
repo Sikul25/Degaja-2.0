@@ -242,7 +242,7 @@
 
   async function unlockDeepReading(question, topic) {
     if (!question) {
-      document.querySelector("#oracle")?.scrollIntoView({ behavior: "smooth", block: "center" });
+      (window.degajaGoTo || (s => document.querySelector(s)?.scrollIntoView({ behavior: "smooth", block: "center" })))("#oracle");
       return;
     }
 
@@ -306,7 +306,7 @@
           </div>`;
         result.classList.add("show");
       }
-      document.querySelector("#oracle")?.scrollIntoView({ behavior: "smooth", block: "center" });
+      (window.degajaGoTo || (s => document.querySelector(s)?.scrollIntoView({ behavior: "smooth", block: "center" })))("#oracle");
     } catch (error) {
       // Payment already went through on Stripe's side; nothing to recover client-side here.
     }
