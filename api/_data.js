@@ -1,5 +1,11 @@
-// Single real advisor. To rename her, just change `name` below — the id
-// stays internal (used in URLs/storage) and doesn't need to match the name.
+// Real advisors only - this list renders directly as the public advisor
+// cards on the site, so never add a placeholder/fake entry here. To
+// onboard a new advisor once they're real and ready: add an entry below
+// (id is internal, used in URLs/storage, doesn't need to match the display
+// name), add their WhatsApp number to ADVISOR_WHATSAPP and a PIN to
+// ADVISOR_TOKENS below, and send them their own /berater.html?advisor=<id>
+// link - the availability toggle, the live-call picker and the admin tools
+// all already work generically across however many advisors are listed here.
 export const ADVISORS = [
   { id: "papuli", name: "Papuli", title: "Tarot, Astrologie & Zukunft", specialty: ["Tarot", "Liebe & Beziehung", "Zukunft", "Astrologie", "Numerologie"], style: "warm, intuitiv, empathisch und direkt", active: true }
 ];
