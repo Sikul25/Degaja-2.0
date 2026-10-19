@@ -1076,7 +1076,7 @@
       "quizBanner.text": "Tendencia ahora: descubre tu vida pasada",
       "hero.eyebrow": "✧ TU MOMENTO DE CLARIDAD ✧",
       "hero.title1": "¿Qué te", "hero.title2": "preocupa?",
-      "hero.intro": "A veces solo hace falta un pequeño momento para ver con más claridad. Cuéntale a DEGAJA lo que te preocupa ahora mismo.",
+      "hero.intro": "A veces solo hace falta un pequeño momento para ver con más claridad. Cuéntale a DEGAJA, tu Tarot y oráculo personal, lo que te preocupa ahora mismo.",
       "hero.topicLove": "Amor", "hero.topicCareer": "Carrera", "hero.topicFuture": "Futuro",
       "hero.cta": "✨ Comenzar mi momento",
       "hero.note": "Tu primera respuesta personal es gratuita.",
