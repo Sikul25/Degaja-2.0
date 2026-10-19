@@ -758,6 +758,86 @@
     }
   });
 
+  // --- Coffee cup reading (Kaffeesatzlesen) ---
+  let coffeeImageDataUrl = null;
+
+  $("#coffeeCaptureBtn")?.addEventListener("click", () => {
+    $("#coffeeFileInput")?.click();
+  });
+
+  $("#coffeeFileInput")?.addEventListener("change", async event => {
+    const file = event.target.files?.[0];
+    event.target.value = "";
+    if (!file) return;
+
+    const analyzeBtn = $("#coffeeAnalyzeBtn");
+    const captureBtn = $("#coffeeCaptureBtn");
+    const previewWrap = $("#coffeePreviewWrap");
+    const previewImg = $("#coffeePreviewImg");
+    const result = $("#coffeeResult");
+
+    try {
+      const dataUrl = await resizeImageFile(file);
+      coffeeImageDataUrl = dataUrl;
+      if (previewImg) previewImg.src = dataUrl;
+      if (previewWrap) previewWrap.style.display = "block";
+      if (analyzeBtn) analyzeBtn.style.display = "block";
+      if (captureBtn) captureBtn.textContent = t("coffee.retakeBtn");
+      if (result) { result.classList.remove("show"); result.innerHTML = ""; }
+    } catch (error) {
+      coffeeImageDataUrl = null;
+      if (result) {
+        result.innerHTML = `<strong>${t("coffee.readError")}</strong>`;
+        result.classList.add("show");
+      }
+    }
+  });
+
+  $("#coffeeAnalyzeBtn")?.addEventListener("click", async () => {
+    if (!coffeeImageDataUrl) return;
+
+    const button = $("#coffeeAnalyzeBtn");
+    const result = $("#coffeeResult");
+    const previewWrap = $("#coffeePreviewWrap");
+    if (button) {
+      button.disabled = true;
+      button.textContent = t("coffee.analyzing");
+    }
+    if (result) {
+      result.innerHTML = `<strong>${t("coffee.analyzing")}</strong>`;
+      result.classList.add("show");
+    }
+    previewWrap?.classList.add("scanning");
+
+    try {
+      const response = await fetchWithTimeout("/api/coffee", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ image: coffeeImageDataUrl, mediaType: "image/jpeg", lang: currentLang(), profile: {} })
+      }, 30000);
+
+      if (!response.ok) throw new Error("coffee API failed");
+      const data = await response.json();
+      if (!data.text) throw new Error("no text");
+
+      if (result) { result.classList.remove("show"); result.innerHTML = ""; }
+      state.conversationHistory = [];
+      renderResult(data.text, t("coffee.syntheticQuestion"), t("coffee.topic"), false);
+    } catch (error) {
+      if (result) {
+        result.innerHTML = `<strong>${t("coffee.readError")}</strong>`;
+        result.classList.add("show");
+      }
+    } finally {
+      previewWrap?.classList.remove("scanning");
+    }
+
+    if (button) {
+      button.disabled = false;
+      button.textContent = t("coffee.analyzeBtn");
+    }
+  });
+
   redeemPromoCredits();
   verifyAiPayment();
 })();
