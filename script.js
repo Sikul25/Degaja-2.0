@@ -1015,6 +1015,8 @@
   // --- Horoscope ---
   $("#horoscopeBtn")?.addEventListener("click", async () => {
     const birthDate = $("#horoscopeBirthInput")?.value.trim() || "";
+    const birthTime = $("#horoscopeTimeInput")?.value.trim() || "";
+    const birthPlace = $("#horoscopePlaceInput")?.value.trim() || "";
     const question = $("#horoscopeQuestionInput")?.value.trim() || "";
     const button = $("#horoscopeBtn");
     const result = $("#horoscopeResult");
@@ -1033,7 +1035,7 @@
       const response = await fetchWithTimeout("/api/horoscope", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ birthDate, question, lang: currentLang() })
+        body: JSON.stringify({ birthDate, birthTime, birthPlace, question, lang: currentLang() })
       }, 30000);
 
       if (!response.ok) throw new Error("horoscope API failed");

@@ -1,0 +1,8 @@
+{
+  "name": "degaja",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "tz-lookup": "^6.1.25"
+  }
+}
