@@ -192,13 +192,13 @@
     });
   }
 
-  async function getOracle(question, topic, mode = "free", history = []) {
+  async function getOracle(question, topic, mode = "free", history = [], profile = {}) {
     const lang = currentLang();
     try {
       const response = await fetchWithTimeout("/api/oracle", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ question, topic, mode, history, lang })
+        body: JSON.stringify({ question, topic, mode, history, lang, profile })
       }, 25000);
 
       if (!response.ok) throw new Error("API nicht verfügbar");
@@ -262,7 +262,7 @@
     }
 
     state.conversationHistory = [];
-    const text = await getOracle(question, topic, "paid", state.conversationHistory);
+    const text = await getOracle(question, topic, "paid", state.conversationHistory, oracleQuizAnswers);
     state.conversationHistory.push({ role: "user", content: question });
     state.conversationHistory.push({ role: "assistant", content: text });
     state.paidAccess = true;
@@ -484,7 +484,7 @@
 
     const topic = $("#aiTopic")?.value || "";
     state.conversationHistory.push({ role: "user", content: text });
-    const answer = await getOracle(text, topic, "paid", state.conversationHistory);
+    const answer = await getOracle(text, topic, "paid", state.conversationHistory, oracleQuizAnswers);
     state.conversationHistory.push({ role: "assistant", content: answer });
 
     $("#typing")?.remove();
@@ -517,7 +517,7 @@
       : question;
 
     state.conversationHistory = [];
-    const text = await getOracle(apiQuestion, topic, "free", state.conversationHistory);
+    const text = await getOracle(apiQuestion, topic, "free", state.conversationHistory, oracleQuizAnswers);
     state.conversationHistory.push({ role: "user", content: question });
     state.conversationHistory.push({ role: "assistant", content: text });
     state.freeUsed = true;
@@ -563,6 +563,92 @@
     if (event.key === "Escape") closeModal();
   });
 
+  // --- Tarot/Orakel quiz (same personalization pattern as the palm quiz) ---
+  const ORACLE_QUIZ_STEPS = 10;
+  let oracleQuizStep = 1;
+  const oracleQuizAnswers = {};
+
+  function updateOracleQuizProgress() {
+    const fill = $("#oracleQuizProgressFill");
+    const label = $("#oracleQuizStepLabel");
+    if (fill) fill.style.width = `${Math.round((oracleQuizStep / ORACLE_QUIZ_STEPS) * 100)}%`;
+    if (label) label.textContent = `${oracleQuizStep} / ${ORACLE_QUIZ_STEPS}`;
+    const back = $("#oracleQuizBack");
+    if (back) back.style.display = oracleQuizStep > 1 ? "block" : "none";
+  }
+
+  function showOracleQuizStep(n) {
+    $$("#oracleQuiz .palm-quiz-step").forEach(step => {
+      step.style.display = Number(step.dataset.step) === n ? "block" : "none";
+    });
+    oracleQuizStep = n;
+    updateOracleQuizProgress();
+  }
+
+  function finishOracleQuiz() {
+    const quiz = $("#oracleQuiz");
+    const done = $("#oracleQuizDone");
+    const form = $("#oracleForm");
+    const tarotDraw = $("#tarotDraw");
+    const doneTitle = $("#oracleQuizDoneTitle");
+    if (doneTitle) doneTitle.textContent = t("palm.quiz.done.title").replace("{name}", oracleQuizAnswers.name || "");
+    if (quiz) quiz.style.display = "none";
+    if (done) done.style.display = "block";
+    setTimeout(() => {
+      if (done) done.style.display = "none";
+      if (tarotDraw) tarotDraw.style.display = "block";
+      if (form) form.style.display = "block";
+      (tarotDraw || form)?.scrollIntoView({ behavior: "smooth", block: "center" });
+    }, 1400);
+  }
+
+  function advanceOracleQuiz(key, value) {
+    if (key) oracleQuizAnswers[key] = value;
+    if (oracleQuizStep >= ORACLE_QUIZ_STEPS) finishOracleQuiz();
+    else showOracleQuizStep(oracleQuizStep + 1);
+  }
+
+  $$("#oracleQuiz .palm-choice").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const step = btn.closest(".palm-quiz-step");
+      advanceOracleQuiz(step?.dataset.key, btn.dataset.value);
+    });
+  });
+
+  $$("#oracleQuiz .palm-quiz-next").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const step = btn.closest(".palm-quiz-step");
+      const input = step?.querySelector(".palm-quiz-input");
+      const value = input?.value.trim() || "";
+      const error = step?.querySelector(".palm-quiz-error");
+      if (!value) {
+        input?.classList.remove("invalid");
+        void input?.offsetWidth; // restart the shake animation on repeat empty submits
+        input?.classList.add("invalid");
+        error?.classList.add("show");
+        input?.focus();
+        return;
+      }
+      input?.classList.remove("invalid");
+      error?.classList.remove("show");
+      advanceOracleQuiz(step?.dataset.key, value);
+    });
+  });
+
+  $$("#oracleQuiz .palm-quiz-input").forEach(input => {
+    input.addEventListener("keydown", event => {
+      if (event.key === "Enter") input.closest(".palm-quiz-step")?.querySelector(".palm-quiz-next")?.click();
+    });
+    input.addEventListener("input", () => {
+      input.classList.remove("invalid");
+      input.closest(".palm-quiz-step")?.querySelector(".palm-quiz-error")?.classList.remove("show");
+    });
+  });
+
+  $("#oracleQuizBack")?.addEventListener("click", () => {
+    if (oracleQuizStep > 1) showOracleQuizStep(oracleQuizStep - 1);
+  });
+
   // --- Palm reading quiz (Handlesen) ---
   // Nebula-style personal quiz, one question at a time, before the camera
   // unlocks — builds investment in the result and gives the AI real context
@@ -581,7 +667,7 @@
   }
 
   function showPalmQuizStep(n) {
-    $$(".palm-quiz-step").forEach(step => {
+    $$("#palmQuiz .palm-quiz-step").forEach(step => {
       step.style.display = Number(step.dataset.step) === n ? "block" : "none";
     });
     palmQuizStep = n;

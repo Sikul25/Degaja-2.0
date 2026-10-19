@@ -222,6 +222,7 @@
     const el = document.createElement('div');
     el.id = 'tarotDraw';
     el.className = 'tarot-draw';
+    el.style.display = 'none'; // revealed by finishOracleQuiz() once the personal quiz is done
     el.innerHTML = `
       ${twinkleStars}
       <p class="tarot-draw-copy">${t('tarot.invite')}</p>
