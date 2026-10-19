@@ -563,8 +563,9 @@
     if (event.key === "Escape") closeModal();
   });
 
-  // --- Tarot/Orakel quiz (same personalization pattern as the palm quiz) ---
-  const ORACLE_QUIZ_STEPS = 10;
+  // --- Tarot/Orakel quiz (same personalization pattern as the palm quiz,
+  // trimmed to 3 questions so the free flagship reading stays fast) ---
+  const ORACLE_QUIZ_STEPS = 3;
   let oracleQuizStep = 1;
   const oracleQuizAnswers = {};
 

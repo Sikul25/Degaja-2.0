@@ -143,7 +143,7 @@
 <div id="oracleQuiz" class="palm-quiz">
   <div class="palm-quiz-notice" data-i18n="palm.quiz.mustAnswer">Du musst alle Fragen beantworten, um deine Antwort zu bekommen.</div>
   <div class="palm-quiz-progress"><span id="oracleQuizProgressFill" class="palm-quiz-progress-fill"></span></div>
-  <div class="palm-quiz-step-label" id="oracleQuizStepLabel">1 / 10</div>
+  <div class="palm-quiz-step-label" id="oracleQuizStepLabel">1 / 3</div>
 
   <div class="palm-quiz-step" data-step="1" data-key="name">
     <div class="palm-quiz-title" data-i18n="palm.quiz.s1.title">Wie dürfen wir dich nennen?</div>
@@ -152,23 +152,7 @@
     <button type="button" class="primary-btn palm-quiz-next" data-i18n="palm.quiz.next">Weiter →</button>
   </div>
 
-  <div class="palm-quiz-step" data-step="2" data-key="birthDate" style="display:none">
-    <div class="palm-quiz-title" data-i18n="palm.quiz.s2.title">Wann bist du geboren?</div>
-    <input type="date" class="palm-quiz-input" id="oracleQuizInput2">
-    <div class="palm-quiz-error" data-i18n="palm.quiz.required">Bitte beantworte diese Frage.</div>
-    <button type="button" class="primary-btn palm-quiz-next" data-i18n="palm.quiz.next">Weiter →</button>
-  </div>
-
-  <div class="palm-quiz-step" data-step="3" data-key="gender" style="display:none">
-    <div class="palm-quiz-title" data-i18n="palm.quiz.s3.title">Was beschreibt dich am besten?</div>
-    <div class="palm-quiz-choices">
-      <button type="button" class="palm-choice" data-value="Weiblich" data-i18n="palm.quiz.s3.a">Weiblich</button>
-      <button type="button" class="palm-choice" data-value="Männlich" data-i18n="palm.quiz.s3.b">Männlich</button>
-      <button type="button" class="palm-choice" data-value="Divers" data-i18n="palm.quiz.s3.c">Divers</button>
-    </div>
-  </div>
-
-  <div class="palm-quiz-step" data-step="4" data-key="focus" style="display:none">
+  <div class="palm-quiz-step" data-step="2" data-key="focus" style="display:none">
     <div class="palm-quiz-title" data-i18n="palm.quiz.s4.title">Worauf liegt dein Fokus gerade?</div>
     <div class="palm-quiz-choices">
       <button type="button" class="palm-choice" data-value="Liebe" data-i18n="palm.quiz.s4.a">❤️ Liebe</button>
@@ -178,56 +162,9 @@
     </div>
   </div>
 
-  <div class="palm-quiz-step" data-step="5" data-key="relationship" style="display:none">
-    <div class="palm-quiz-title" data-i18n="palm.quiz.s5.title">Wie ist dein Beziehungsstatus?</div>
-    <div class="palm-quiz-choices">
-      <button type="button" class="palm-choice" data-value="Single" data-i18n="palm.quiz.s5.a">Single</button>
-      <button type="button" class="palm-choice" data-value="In einer Beziehung" data-i18n="palm.quiz.s5.b">In einer Beziehung</button>
-      <button type="button" class="palm-choice" data-value="Verheiratet" data-i18n="palm.quiz.s5.c">Verheiratet</button>
-      <button type="button" class="palm-choice" data-value="Kompliziert" data-i18n="palm.quiz.s5.d">Es ist kompliziert</button>
-    </div>
-  </div>
-
-  <div class="palm-quiz-step" data-step="6" data-key="mood" style="display:none">
-    <div class="palm-quiz-title" data-i18n="palm.quiz.s6.title">Wie fühlst du dich gerade, wenn du ehrlich bist?</div>
-    <div class="palm-quiz-choices">
-      <button type="button" class="palm-choice" data-value="Hoffnungsvoll" data-i18n="palm.quiz.s6.a">Hoffnungsvoll</button>
-      <button type="button" class="palm-choice" data-value="Ängstlich" data-i18n="palm.quiz.s6.b">Ängstlich</button>
-      <button type="button" class="palm-choice" data-value="Verloren" data-i18n="palm.quiz.s6.c">Etwas verloren</button>
-      <button type="button" class="palm-choice" data-value="Aufgeregt" data-i18n="palm.quiz.s6.d">Aufgeregt</button>
-      <button type="button" class="palm-choice" data-value="Müde" data-i18n="palm.quiz.s6.e">Erschöpft</button>
-    </div>
-  </div>
-
-  <div class="palm-quiz-step" data-step="7" data-key="bigQuestion" style="display:none">
+  <div class="palm-quiz-step" data-step="3" data-key="bigQuestion" style="display:none">
     <div class="palm-quiz-title" data-i18n="palm.quiz.s7.title">Was ist deine größte Frage gerade?</div>
-    <input type="text" class="palm-quiz-input" id="oracleQuizInput7" maxlength="120" data-i18n-placeholder="palm.quiz.s7.placeholder" placeholder="Schreib es hier auf …">
-    <div class="palm-quiz-error" data-i18n="palm.quiz.required">Bitte beantworte diese Frage.</div>
-    <button type="button" class="primary-btn palm-quiz-next" data-i18n="palm.quiz.next">Weiter →</button>
-  </div>
-
-  <div class="palm-quiz-step" data-step="8" data-key="worldview" style="display:none">
-    <div class="palm-quiz-title" data-i18n="palm.quiz.s8.title">Glaubst du, dein Schicksal ist bereits geschrieben?</div>
-    <div class="palm-quiz-choices">
-      <button type="button" class="palm-choice" data-value="Es ist vorbestimmt" data-i18n="palm.quiz.s8.a">Es ist vorbestimmt</button>
-      <button type="button" class="palm-choice" data-value="Ich gestalte meinen Weg selbst" data-i18n="palm.quiz.s8.b">Ich gestalte meinen Weg selbst</button>
-      <button type="button" class="palm-choice" data-value="Ein bisschen von beidem" data-i18n="palm.quiz.s8.c">Ein bisschen von beidem</button>
-    </div>
-  </div>
-
-  <div class="palm-quiz-step" data-step="9" data-key="curiosity" style="display:none">
-    <div class="palm-quiz-title" data-i18n="oracle.quiz.s9.title">Worüber möchtest du heute am meisten Klarheit gewinnen?</div>
-    <div class="palm-quiz-choices">
-      <button type="button" class="palm-choice" data-value="Liebe" data-i18n="palm.quiz.s9.a">❤️ Liebe</button>
-      <button type="button" class="palm-choice" data-value="Erfolg & Karriere" data-i18n="palm.quiz.s9.b">💼 Erfolg & Karriere</button>
-      <button type="button" class="palm-choice" data-value="Lebensweg" data-i18n="palm.quiz.s9.c">🌙 Lebensweg</button>
-      <button type="button" class="palm-choice" data-value="Alles" data-i18n="palm.quiz.s9.d">✨ Alles</button>
-    </div>
-  </div>
-
-  <div class="palm-quiz-step" data-step="10" data-key="wish" style="display:none">
-    <div class="palm-quiz-title" data-i18n="palm.quiz.s10.title">Was wünschst du dir, dass dir jemand jetzt sagen würde?</div>
-    <input type="text" class="palm-quiz-input" id="oracleQuizInput10" maxlength="120" data-i18n-placeholder="palm.quiz.s10.placeholder" placeholder="…">
+    <input type="text" class="palm-quiz-input" id="oracleQuizInput3" maxlength="120" data-i18n-placeholder="palm.quiz.s7.placeholder" placeholder="Schreib es hier auf …">
     <div class="palm-quiz-error" data-i18n="palm.quiz.required">Bitte beantworte diese Frage.</div>
     <button type="button" class="primary-btn palm-quiz-next" id="oracleQuizFinishBtn" data-i18n="palm.quiz.finish">Bereit →</button>
   </div>
