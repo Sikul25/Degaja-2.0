@@ -83,6 +83,20 @@
         applyTabVisibility(currentTab());
       }
     });
+
+    // Any same-page #anchor link (logo, footer FAQ, in-section cross-links,
+    // future ones too) goes through degajaGoTo instead of the browser's
+    // native jump, so it still works once a section can be tab-hidden.
+    document.addEventListener("click", event => {
+      const link = event.target.closest('a[href^="#"]');
+      if (!link) return;
+      const hash = link.getAttribute("href");
+      if (!hash || hash.length < 2) return;
+      const target = document.querySelector(hash);
+      if (!target) return;
+      event.preventDefault();
+      window.degajaGoTo(target);
+    });
   }
 
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init, { once: true });

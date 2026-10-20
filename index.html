@@ -293,7 +293,7 @@
 <script src="/entropy-bg.js?v=1"></script>
 <script src="/i18n.js?v=34"></script>
 <script src="/tarot-i18n.js?v=4"></script>
-<script src="/tabs.js?v=1"></script>
+<script src="/tabs.js?v=2"></script>
 <script src="script.js?v=16"></script>
 <script src="/pre-chat.js?v=8"></script>
 <script>
@@ -310,7 +310,6 @@
 <script>
   document.querySelectorAll('.quick-topic').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('.quick-topic').forEach(x=>x.classList.remove('active'));b.classList.add('active');document.querySelector('#aiTopic').value=b.dataset.topic||'';(window.degajaGoTo||((s)=>document.querySelector(s)?.scrollIntoView({behavior:'smooth',block:'center'})))('#oracle');setTimeout(()=>document.querySelector('#aiQuestion')?.focus(),450)}));
   document.querySelector('#startBtn')?.addEventListener('click',()=>{(window.degajaGoTo||((s)=>document.querySelector(s)?.scrollIntoView({behavior:'smooth',block:'center'})))('#oracle');setTimeout(()=>document.querySelector('#aiQuestion')?.focus(),450)});
-  document.querySelectorAll('.service-card[href^="#"]').forEach(a=>a.addEventListener('click',(e)=>{e.preventDefault();(window.degajaGoTo||((s)=>document.querySelector(s)?.scrollIntoView({behavior:'smooth',block:'start'})))(a.getAttribute('href'))}));
   const ritualKeys={love:'rituale.love.title',success:'rituale.success.title',balance:'rituale.balance.title'};
   document.querySelectorAll('[data-ritual]').forEach(btn=>btn.addEventListener('click',()=>{const t=window.degajaI18n?.t||(k=>k);const name=t(ritualKeys[btn.dataset.ritual]||'rituale.love.title');const modal=document.querySelector('#modal');const content=document.querySelector('#modalContent');if(!modal||!content)return;content.innerHTML=`<div class="ritual-modal"><div class="eyebrow">${t('ritual.modalEyebrow')}</div><h2>${name}</h2><p>${t('ritual.modalDesc')}</p><div class="ritual-pay">${t('ritual.modalPay')}</div><p style="font-size:12px;color:#8a91a0">${t('ritual.modalNote')}</p><button class="primary" id="ritualContact">${t('ritual.modalBtn')}</button></div>`;modal.classList.add('show');modal.setAttribute('aria-hidden','false');document.querySelector('#ritualContact')?.addEventListener('click',()=>{modal.classList.remove('show');modal.setAttribute('aria-hidden','true');(window.degajaGoTo||((s)=>document.querySelector(s)?.scrollIntoView({behavior:'smooth',block:'start'})))('#human');})}));
   if ('serviceWorker' in navigator) {
