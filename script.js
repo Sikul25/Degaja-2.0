@@ -22,15 +22,8 @@
     authMode: "signin",
     freeUsed: localStorage.getItem("degajaFreeUsed") === "1",
     paidAccess: localStorage.getItem("degajaPaidAccess") === "1",
-    conversationHistory: [],
-    chatCount: 0
+    conversationHistory: []
   };
-
-  // A single €4.99 reading funds unlimited AI follow-up questions by design
-  // ("24/7 support"), but with zero cap that's an unbounded API cost against
-  // a one-time payment. This keeps the "ask anytime" promise generous
-  // without being exploitable.
-  const MAX_CHAT_FOLLOWUPS = 15;
 
   const AI_CREDIT_KEY = "degajaAiCredits";
   const PENDING_READING_KEY = "degajaPendingReading";
@@ -470,7 +463,6 @@
     $("#speakBtn")?.addEventListener("click", event => speakText(text, event.currentTarget));
 
     if (paid) {
-      state.chatCount = 0;
       $("#chatSend")?.addEventListener("click", sendChat);
       $("#chatInput")?.addEventListener("keydown", event => {
         if (event.key === "Enter") sendChat();
@@ -485,15 +477,6 @@
     const messages = $("#chatMessages");
     if (!messages) return;
 
-    if (state.chatCount >= MAX_CHAT_FOLLOWUPS) {
-      messages.insertAdjacentHTML("beforeend", `<div class="chat-msg ai">${escapeHtml(t("result.chatLimitReached"))}</div>`);
-      messages.scrollTop = messages.scrollHeight;
-      if (input) input.disabled = true;
-      const sendBtn = $("#chatSend");
-      if (sendBtn) sendBtn.disabled = true;
-      return;
-    }
-
     messages.insertAdjacentHTML("beforeend", `<div class="chat-msg user">${escapeHtml(text)}</div>`);
     input.value = "";
     messages.insertAdjacentHTML("beforeend", `<div class="chat-msg ai" id="typing">${t("result.thinking")}</div>`);
@@ -503,7 +486,6 @@
     state.conversationHistory.push({ role: "user", content: text });
     const answer = await getOracle(text, topic, "paid", state.conversationHistory, oracleQuizAnswers);
     state.conversationHistory.push({ role: "assistant", content: answer });
-    state.chatCount++;
 
     $("#typing")?.remove();
     messages.insertAdjacentHTML("beforeend", `<div class="chat-msg ai">${escapeHtml(answer).replace(/\n/g, "<br>")}</div>`);
