@@ -22,19 +22,15 @@
     authMode: "signin",
     freeUsed: localStorage.getItem("degajaFreeUsed") === "1",
     paidAccess: localStorage.getItem("degajaPaidAccess") === "1",
-    conversationHistory: [],
-    chatCount: 0
+    conversationHistory: []
   };
 
   // Time-boxed, not message-counted: the 4.99 promise is a one-time
   // payment for "this session" (see prices.single.desc), not an unlimited
   // subscription - so chat access expires a fixed time after unlocking a
-  // paid reading, stated upfront, same price either way. A generous
-  // message cap stays as a second backstop against a script hammering the
-  // endpoint within that window, not a limit a real conversation would hit.
+  // paid reading, stated upfront, same price either way.
   const CHAT_ACCESS_MS = 24 * 60 * 60 * 1000;
   const CHAT_EXPIRES_KEY = "degajaChatExpiresAt";
-  const MAX_CHAT_FOLLOWUPS = 35;
 
   function startChatWindow() {
     localStorage.setItem(CHAT_EXPIRES_KEY, String(Date.now() + CHAT_ACCESS_MS));
@@ -282,7 +278,6 @@
     }
 
     state.conversationHistory = [];
-    state.chatCount = 0;
     startChatWindow();
     const text = await getOracle(question, topic, "paid", state.conversationHistory, oracleQuizAnswers);
     state.conversationHistory.push({ role: "user", content: question });
@@ -499,7 +494,7 @@
     const messages = $("#chatMessages");
     if (!messages) return;
 
-    if (chatWindowExpired() || state.chatCount >= MAX_CHAT_FOLLOWUPS) {
+    if (chatWindowExpired()) {
       messages.insertAdjacentHTML("beforeend", `<div class="chat-msg ai">${t("result.chatLimitReached")}</div>`);
       messages.scrollTop = messages.scrollHeight;
       if (input) input.disabled = true;
@@ -514,20 +509,12 @@
 
     const topic = $("#aiTopic")?.value || "";
     state.conversationHistory.push({ role: "user", content: text });
-    state.chatCount++;
     const answer = await getOracle(text, topic, "paid", state.conversationHistory, oracleQuizAnswers);
     state.conversationHistory.push({ role: "assistant", content: answer });
 
     $("#typing")?.remove();
     messages.insertAdjacentHTML("beforeend", `<div class="chat-msg ai">${escapeHtml(answer).replace(/\n/g, "<br>")}</div>`);
     messages.scrollTop = messages.scrollHeight;
-
-    if (state.chatCount >= MAX_CHAT_FOLLOWUPS) {
-      messages.insertAdjacentHTML("beforeend", `<div class="chat-msg ai">${t("result.chatLimitReached")}</div>`);
-      messages.scrollTop = messages.scrollHeight;
-      if (input) input.disabled = true;
-      $("#chatSend")?.setAttribute("disabled", "true");
-    }
   }
 
   $("#aiBtn")?.addEventListener("click", async () => {
@@ -555,7 +542,6 @@
       : question;
 
     state.conversationHistory = [];
-    state.chatCount = 0;
     const text = await getOracle(apiQuestion, topic, "free", state.conversationHistory, oracleQuizAnswers);
     state.conversationHistory.push({ role: "user", content: question });
     state.conversationHistory.push({ role: "assistant", content: text });
@@ -868,7 +854,6 @@
 
       if (result) { result.classList.remove("show"); result.innerHTML = ""; }
       state.conversationHistory = [];
-    state.chatCount = 0;
       renderResult(data.text, t("palm.syntheticQuestion"), t("palm.topic"), false);
     } catch (error) {
       if (result) {
@@ -949,7 +934,6 @@
 
       if (result) { result.classList.remove("show"); result.innerHTML = ""; }
       state.conversationHistory = [];
-    state.chatCount = 0;
       renderResult(data.text, t("coffee.syntheticQuestion"), t("coffee.topic"), false);
     } catch (error) {
       if (result) {
@@ -995,7 +979,6 @@
 
       if (result) { result.classList.remove("show"); result.innerHTML = ""; }
       state.conversationHistory = [];
-    state.chatCount = 0;
       renderResult(data.text, t("gematria.syntheticQuestion"), t("gematria.topic"), false);
     } catch (error) {
       if (result) {
@@ -1040,7 +1023,6 @@
 
       if (result) { result.classList.remove("show"); result.innerHTML = ""; }
       state.conversationHistory = [];
-    state.chatCount = 0;
       renderResult(data.text, t("numerology.syntheticQuestion"), t("numerology.topic"), false);
     } catch (error) {
       if (result) {
@@ -1087,7 +1069,6 @@
 
       if (result) { result.classList.remove("show"); result.innerHTML = ""; }
       state.conversationHistory = [];
-    state.chatCount = 0;
       renderResult(data.text, t("horoscope.syntheticQuestion"), t("horoscope.topic"), false);
     } catch (error) {
       if (result) {
@@ -1151,7 +1132,6 @@
 
       if (result) { result.classList.remove("show"); result.innerHTML = ""; }
       state.conversationHistory = [];
-    state.chatCount = 0;
       renderResult(data.text, t("hypnosis.syntheticQuestion"), t("hypnosis.topic"), false);
     } catch (error) {
       if (result) {
