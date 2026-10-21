@@ -26,11 +26,24 @@
     chatCount: 0
   };
 
-  // Generous anti-abuse cap on paid follow-up chat messages per reading -
-  // a real conversation rarely passes 10-15 exchanges, so this is a
-  // backstop against a script hammering the endpoint, not a real limit
-  // a genuine paying customer would ever feel.
+  // Time-boxed, not message-counted: the 4.99 promise is a one-time
+  // payment for "this session" (see prices.single.desc), not an unlimited
+  // subscription - so chat access expires a fixed time after unlocking a
+  // paid reading, stated upfront, same price either way. A generous
+  // message cap stays as a second backstop against a script hammering the
+  // endpoint within that window, not a limit a real conversation would hit.
+  const CHAT_ACCESS_MS = 24 * 60 * 60 * 1000;
+  const CHAT_EXPIRES_KEY = "degajaChatExpiresAt";
   const MAX_CHAT_FOLLOWUPS = 35;
+
+  function startChatWindow() {
+    localStorage.setItem(CHAT_EXPIRES_KEY, String(Date.now() + CHAT_ACCESS_MS));
+  }
+
+  function chatWindowExpired() {
+    const expiresAt = Number(localStorage.getItem(CHAT_EXPIRES_KEY) || 0);
+    return Date.now() > expiresAt;
+  }
 
   const AI_CREDIT_KEY = "degajaAiCredits";
   const PENDING_READING_KEY = "degajaPendingReading";
@@ -270,6 +283,7 @@
 
     state.conversationHistory = [];
     state.chatCount = 0;
+    startChatWindow();
     const text = await getOracle(question, topic, "paid", state.conversationHistory, oracleQuizAnswers);
     state.conversationHistory.push({ role: "user", content: question });
     state.conversationHistory.push({ role: "assistant", content: text });
@@ -485,7 +499,7 @@
     const messages = $("#chatMessages");
     if (!messages) return;
 
-    if (state.chatCount >= MAX_CHAT_FOLLOWUPS) {
+    if (chatWindowExpired() || state.chatCount >= MAX_CHAT_FOLLOWUPS) {
       messages.insertAdjacentHTML("beforeend", `<div class="chat-msg ai">${t("result.chatLimitReached")}</div>`);
       messages.scrollTop = messages.scrollHeight;
       if (input) input.disabled = true;
