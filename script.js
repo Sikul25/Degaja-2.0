@@ -29,7 +29,7 @@
   // payment for "this session" (see prices.single.desc), not an unlimited
   // subscription - so chat access expires a fixed time after unlocking a
   // paid reading, stated upfront, same price either way.
-  const CHAT_ACCESS_MS = 24 * 60 * 60 * 1000;
+  const CHAT_ACCESS_MS = 60 * 60 * 1000;
   const CHAT_EXPIRES_KEY = "degajaChatExpiresAt";
 
   function startChatWindow() {
