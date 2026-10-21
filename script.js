@@ -1058,21 +1058,40 @@
     }
   });
 
-  // --- Hypnosis / guided relaxation ---
-  $("#hypnosisBtn")?.addEventListener("click", async () => {
-    const focus = $("#hypnosisFocusInput")?.value.trim() || "";
-    const note = $("#hypnosisNoteInput")?.value.trim() || "";
-    const button = $("#hypnosisBtn");
+  // --- Hypnosis / guided relaxation quiz ---
+  const HYPNOSIS_QUIZ_STEPS = 2;
+  let hypnosisQuizStep = 1;
+  const hypnosisQuizAnswers = {};
+
+  function updateHypnosisQuizProgress() {
+    const fill = $("#hypnosisQuizProgressFill");
+    const label = $("#hypnosisQuizStepLabel");
+    if (fill) fill.style.width = `${Math.round((hypnosisQuizStep / HYPNOSIS_QUIZ_STEPS) * 100)}%`;
+    if (label) label.textContent = `${hypnosisQuizStep} / ${HYPNOSIS_QUIZ_STEPS}`;
+    const back = $("#hypnosisQuizBack");
+    if (back) back.style.display = hypnosisQuizStep > 1 ? "block" : "none";
+  }
+
+  function showHypnosisQuizStep(n) {
+    $$("#hypnosisQuiz .palm-quiz-step").forEach(step => {
+      step.style.display = Number(step.dataset.step) === n ? "block" : "none";
+    });
+    hypnosisQuizStep = n;
+    updateHypnosisQuizProgress();
+  }
+
+  async function runHypnosisSession() {
+    const focus = hypnosisQuizAnswers.focus || "";
+    const note = hypnosisQuizAnswers.note || "";
+    const quiz = $("#hypnosisQuiz");
     const result = $("#hypnosisResult");
     if (!focus) return;
 
-    if (button) {
-      button.disabled = true;
-      button.textContent = t("hypnosis.analyzing");
-    }
+    if (quiz) quiz.style.display = "none";
     if (result) {
       result.innerHTML = `<strong>${t("hypnosis.analyzing")}</strong>`;
       result.classList.add("show");
+      result.scrollIntoView({ behavior: "smooth", block: "nearest" });
     }
 
     try {
@@ -1095,11 +1114,28 @@
         result.classList.add("show");
       }
     }
+  }
 
-    if (button) {
-      button.disabled = false;
-      button.textContent = t("hypnosis.button");
-    }
+  function advanceHypnosisQuiz(key, value) {
+    if (key) hypnosisQuizAnswers[key] = value;
+    if (hypnosisQuizStep >= HYPNOSIS_QUIZ_STEPS) runHypnosisSession();
+    else showHypnosisQuizStep(hypnosisQuizStep + 1);
+  }
+
+  $$("#hypnosisQuiz .palm-choice").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const step = btn.closest(".palm-quiz-step");
+      advanceHypnosisQuiz(step?.dataset.key, btn.dataset.value);
+    });
+  });
+
+  $("#hypnosisQuizFinishBtn")?.addEventListener("click", () => {
+    const value = $("#hypnosisQuizInput2")?.value.trim() || "";
+    advanceHypnosisQuiz("note", value);
+  });
+
+  $("#hypnosisQuizBack")?.addEventListener("click", () => {
+    if (hypnosisQuizStep > 1) showHypnosisQuizStep(hypnosisQuizStep - 1);
   });
 
   redeemPromoCredits();
