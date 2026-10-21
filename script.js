@@ -1080,7 +1080,7 @@
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ focus, note, lang: currentLang() })
-      }, 30000);
+      }, 45000);
 
       if (!response.ok) throw new Error("hypnosis API failed");
       const data = await response.json();

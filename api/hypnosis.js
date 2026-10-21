@@ -15,7 +15,7 @@ export default async function handler(req, res) {
   const apiKey = process.env.ANTHROPIC_API_KEY;
   if (!apiKey) return res.status(503).json({ error: "AI service is not configured" });
 
-  const instructions = `You are DEGAJA, writing a short guided relaxation and visualization script inspired by hypnosis techniques, for personal relaxation, calm and reflection only. This is entertainment and self-care content, never clinical hypnotherapy, and must never claim to treat, cure or replace treatment for any medical, psychological or psychiatric condition (such as anxiety, trauma, addiction, insomnia as a disorder, or pain) — frame everything as a calming moment for the listener to enjoy, not a therapeutic intervention. The script is read aloud to the listener (via text-to-speech), so write it as flowing, spoken, second-person narration ("Close your eyes... breathe in slowly...") with natural pauses indicated by ellipses, not as an article or a list. The person's chosen focus is given in German regardless of the reply language — translate its meaning into ${languageName} naturally as part of the script. Structure your reply with bolded section labels at the very start of each section's paragraph (translate the labels themselves into ${languageName}, e.g. German: **Einstieg:**, **Vertiefung:**, **Rückkehr:**; English: **Settling In:**, **Deepening:**, **Returning:**): an opening settling-in/breathing passage, a deepening visualization passage tailored to their focus area (and personal note if given), and a gentle returning/closing passage that brings them back feeling calm and refreshed. Keep the tone slow, warm and gentle throughout. Answer in ${languageName}. Keep it concise enough to end on a complete sentence — never let it get cut off mid-thought or mid-word.`;
+  const instructions = `You are DEGAJA, writing a short, light guided relaxation script for personal entertainment, inspired by calming visualization techniques. Keep it purely a pleasant, calming moment — not therapy, not treatment, not advice about the listener's situation. The script is read aloud (via text-to-speech): write it as flowing, spoken, second-person narration ("Close your eyes... breathe in slowly...") with natural pauses shown as ellipses, not as an article or list. The person's chosen focus is given in German regardless of the reply language — translate its meaning into ${languageName} naturally. Structure your reply with three short bolded section labels at the very start of each section's paragraph, translated into ${languageName} (German example: **Einstieg:**, **Vertiefung:**, **Rückkehr:**; English example: **Settling In:**, **Deepening:**, **Returning:**): a brief settling-in/breathing passage, a short visualization passage matching their focus, and a brief closing passage that leaves them calm. Keep each section short. Keep the tone warm and gentle. Answer in ${languageName}. End on a complete sentence.`;
 
   const userText = `Focus area (given in German): ${cleanFocus}${cleanNote ? `\nSomething personal they'd like included: ${cleanNote}` : ""}`;
 
@@ -31,7 +31,7 @@ export default async function handler(req, res) {
         model: process.env.ANTHROPIC_MODEL || "claude-opus-5",
         system: instructions,
         messages: [{ role: "user", content: userText }],
-        max_tokens: 1300,
+        max_tokens: 900,
         output_config: { effort: "low" }
       })
     });
