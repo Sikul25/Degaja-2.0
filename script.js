@@ -22,15 +22,15 @@
     authMode: "signin",
     freeUsed: localStorage.getItem("degajaFreeUsed") === "1",
     paidAccess: localStorage.getItem("degajaPaidAccess") === "1",
-    conversationHistory: []
+    conversationHistory: [],
+    chatCount: 0
   };
 
-  // Time-boxed, not message-counted: the 4.99 promise is a one-time
-  // payment for "this session" (see prices.single.desc), not an unlimited
-  // subscription - so chat access expires a fixed time after unlocking a
-  // paid reading, stated upfront, same price either way.
-  const CHAT_ACCESS_MS = 60 * 60 * 1000;
+  // The 4.99 reading's follow-up chat is capped both ways: a 5-minute
+  // window from unlock, and a message count within that window.
+  const CHAT_ACCESS_MS = 5 * 60 * 1000;
   const CHAT_EXPIRES_KEY = "degajaChatExpiresAt";
+  const MAX_CHAT_FOLLOWUPS = 10;
 
   function startChatWindow() {
     localStorage.setItem(CHAT_EXPIRES_KEY, String(Date.now() + CHAT_ACCESS_MS));
@@ -278,6 +278,7 @@
     }
 
     state.conversationHistory = [];
+    state.chatCount = 0;
     startChatWindow();
     const text = await getOracle(question, topic, "paid", state.conversationHistory, oracleQuizAnswers);
     state.conversationHistory.push({ role: "user", content: question });
@@ -494,7 +495,7 @@
     const messages = $("#chatMessages");
     if (!messages) return;
 
-    if (chatWindowExpired()) {
+    if (chatWindowExpired() || state.chatCount >= MAX_CHAT_FOLLOWUPS) {
       messages.insertAdjacentHTML("beforeend", `<div class="chat-msg ai">${t("result.chatLimitReached")}</div>`);
       messages.scrollTop = messages.scrollHeight;
       if (input) input.disabled = true;
@@ -509,6 +510,7 @@
 
     const topic = $("#aiTopic")?.value || "";
     state.conversationHistory.push({ role: "user", content: text });
+    state.chatCount++;
     const answer = await getOracle(text, topic, "paid", state.conversationHistory, oracleQuizAnswers);
     state.conversationHistory.push({ role: "assistant", content: answer });
 
