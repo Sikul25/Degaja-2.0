@@ -1058,6 +1058,50 @@
     }
   });
 
+  // --- Hypnosis / guided relaxation ---
+  $("#hypnosisBtn")?.addEventListener("click", async () => {
+    const focus = $("#hypnosisFocusInput")?.value.trim() || "";
+    const note = $("#hypnosisNoteInput")?.value.trim() || "";
+    const button = $("#hypnosisBtn");
+    const result = $("#hypnosisResult");
+    if (!focus) return;
+
+    if (button) {
+      button.disabled = true;
+      button.textContent = t("hypnosis.analyzing");
+    }
+    if (result) {
+      result.innerHTML = `<strong>${t("hypnosis.analyzing")}</strong>`;
+      result.classList.add("show");
+    }
+
+    try {
+      const response = await fetchWithTimeout("/api/hypnosis", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ focus, note, lang: currentLang() })
+      }, 30000);
+
+      if (!response.ok) throw new Error("hypnosis API failed");
+      const data = await response.json();
+      if (!data.text) throw new Error("no text");
+
+      if (result) { result.classList.remove("show"); result.innerHTML = ""; }
+      state.conversationHistory = [];
+      renderResult(data.text, t("hypnosis.syntheticQuestion"), t("hypnosis.topic"), false);
+    } catch (error) {
+      if (result) {
+        result.innerHTML = `<strong>${t("hypnosis.readError")}</strong>`;
+        result.classList.add("show");
+      }
+    }
+
+    if (button) {
+      button.disabled = false;
+      button.textContent = t("hypnosis.button");
+    }
+  });
+
   redeemPromoCredits();
   verifyAiPayment();
 })();
