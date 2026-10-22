@@ -21,8 +21,8 @@ export default async function handler(req, res) {
   if (!isAdultBirthDate(birthDate)) {
     return res.status(400).json({ error: "A valid date of birth confirming you are 18 or older is required." });
   }
-  const CURRENCY_BY_LANG = { en: "gbp", us: "usd", br: "brl", mx: "mxn" };
-  const LOCALE_BY_LANG = { de: "de", en: "en-GB", us: "en", fr: "fr", es: "es", it: "it", pt: "pt", ru: "ru", uk: "auto", br: "pt-BR", mx: "es" };
+  const CURRENCY_BY_LANG = { en: "gbp", us: "usd", br: "brl", mx: "mxn", ja: "jpy", zh: "cny", hi: "inr" };
+  const LOCALE_BY_LANG = { de: "de", en: "en-GB", us: "en", fr: "fr", es: "es", it: "it", pt: "pt", ru: "ru", uk: "auto", br: "pt-BR", mx: "es", ja: "ja", zh: "zh", hi: "auto" };
   const currency = CURRENCY_BY_LANG[lang] || "eur";
   const stripeLocale = LOCALE_BY_LANG[lang] || "de";
   const PRODUCT_NAMES = {
@@ -36,14 +36,27 @@ export default async function handler(req, res) {
     ru: { single: "DEGAJA AI – Разовый расклад", pack: "DEGAJA AI – 3 расклада", voice: n => `DEGAJA Live Audio – ${n} ${n === 1 ? "тема" : "темы"}` },
     uk: { single: "DEGAJA AI – Одноразовий розклад", pack: "DEGAJA AI – 3 розклади", voice: n => `DEGAJA Live Audio – ${n} ${n === 1 ? "тема" : "теми"}` },
     br: { single: "DEGAJA AI – Leitura única", pack: "DEGAJA AI – 3 Leituras", voice: n => `DEGAJA Live Audio – ${n} ${n === 1 ? "Tema" : "Temas"}` },
-    mx: { single: "DEGAJA AI – Lectura individual", pack: "DEGAJA AI – 3 Lecturas", voice: n => `DEGAJA Live Audio – ${n} ${n === 1 ? "Tema" : "Temas"}` }
+    mx: { single: "DEGAJA AI – Lectura individual", pack: "DEGAJA AI – 3 Lecturas", voice: n => `DEGAJA Live Audio – ${n} ${n === 1 ? "Tema" : "Temas"}` },
+    ja: { single: "DEGAJA AI – 単発鑑定", pack: "DEGAJA AI – 3回鑑定パック", voice: n => `DEGAJA ライブ音声 – ${n}テーマ` },
+    zh: { single: "DEGAJA AI – 单次解读", pack: "DEGAJA AI – 3次解读", voice: n => `DEGAJA 实时语音 – ${n}个主题` },
+    hi: { single: "DEGAJA AI – सिंगल रीडिंग", pack: "DEGAJA AI – 3 रीडिंग्स", voice: n => `DEGAJA लाइव ऑडियो – ${n} विषय` }
   };
   const names = PRODUCT_NAMES[lang] || PRODUCT_NAMES.de;
 
-  // BRL and MXN are priced as fair converted values, not a same-digits
-  // symbol swap like GBP, so they need their own amounts (in cents/centavos)
-  // here and for voice topic tiers below.
-  const AI_AMOUNTS_BY_CURRENCY = { brl: { single: 2499, pack: 4999 }, mxn: { single: 8900, pack: 17900 } };
+  // BRL, MXN, JPY, CNY and INR are priced as fair converted values, not a
+  // same-digits symbol swap like GBP, so they need their own amounts here
+  // and for voice topic tiers below. Stripe amounts are in the currency's
+  // smallest unit (cents/centavos/paise) EXCEPT zero-decimal currencies
+  // like JPY, where the amount is the literal whole-unit price - ¥750 is
+  // unit_amount 750, not 75000. Getting this wrong would silently charge
+  // either 100x too much or too little.
+  const AI_AMOUNTS_BY_CURRENCY = {
+    brl: { single: 2499, pack: 4999 },
+    mxn: { single: 8900, pack: 17900 },
+    jpy: { single: 750, pack: 1490 },
+    cny: { single: 3900, pack: 7900 },
+    inr: { single: 24900, pack: 49900 }
+  };
   const aiAmounts = AI_AMOUNTS_BY_CURRENCY[currency] || { single: 499, pack: 999 };
   const products = {
     single: { name: names.single, amount: aiAmounts.single, quantity: 1, type: "ai", credits: 1 },
