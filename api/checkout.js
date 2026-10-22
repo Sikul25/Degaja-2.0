@@ -3,7 +3,24 @@ import { VOICE_PRICES } from "./_data.js";
 export default async function handler(req, res) {
   if (req.method !== "POST") return res.status(405).json({ error: "Method not allowed" });
 
-  const { product, topics, email, name, advisorId, ref, lang = "de" } = req.body || {};
+  const { product, topics, email, name, advisorId, ref, birthDate, lang = "de" } = req.body || {};
+
+  // Self-attested date of birth, required for every paid product. Checked
+  // server-side (not just client-side) so there's an enforced, timestamped
+  // record tied to the actual Stripe payment if age is ever disputed later
+  // (e.g. a chargeback claiming the buyer was a minor).
+  function isAdultBirthDate(dateStr) {
+    const parsed = new Date(dateStr);
+    if (!dateStr || isNaN(parsed.getTime())) return false;
+    const today = new Date();
+    let age = today.getFullYear() - parsed.getFullYear();
+    const monthDiff = today.getMonth() - parsed.getMonth();
+    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < parsed.getDate())) age--;
+    return age >= 18;
+  }
+  if (!isAdultBirthDate(birthDate)) {
+    return res.status(400).json({ error: "A valid date of birth confirming you are 18 or older is required." });
+  }
   const CURRENCY_BY_LANG = { en: "gbp", us: "usd", br: "brl", mx: "mxn" };
   const LOCALE_BY_LANG = { de: "de", en: "en-GB", us: "en", fr: "fr", es: "es", it: "it", pt: "pt", ru: "ru", uk: "auto", br: "pt-BR", mx: "es" };
   const currency = CURRENCY_BY_LANG[lang] || "eur";
@@ -72,6 +89,7 @@ export default async function handler(req, res) {
   if (email) body.set("customer_email", String(email));
   if (email) body.set("client_reference_id", String(email).slice(0, 200));
   if (name) body.set("metadata[name]", String(name).slice(0, 200));
+  body.set("metadata[birthDateAttested]", String(birthDate).slice(0, 20));
 
   try {
     const response = await fetch("https://api.stripe.com/v1/checkout/sessions", {

@@ -330,12 +330,12 @@
     }
   }
 
-  async function startCheckout(product) {
+  async function startCheckout(product, birthDate) {
     try {
       const response = await fetchWithTimeout("/api/checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ product, lang: currentLang(), ref: window.degajaI18n ? window.degajaI18n.getRef() : "" })
+        body: JSON.stringify({ product, birthDate, lang: currentLang(), ref: window.degajaI18n ? window.degajaI18n.getRef() : "" })
       }, 15000);
 
       const data = await response.json();
@@ -557,8 +557,29 @@
     }
   });
 
+  function isAdultBirthDate(dateStr) {
+    if (!dateStr) return false;
+    const parsed = new Date(dateStr);
+    if (isNaN(parsed.getTime())) return false;
+    const today = new Date();
+    let age = today.getFullYear() - parsed.getFullYear();
+    const monthDiff = today.getMonth() - parsed.getMonth();
+    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < parsed.getDate())) age--;
+    return age >= 18;
+  }
+
   $$('[data-buy]').forEach(btn => {
     btn.addEventListener("click", () => {
+      const birthDateInput = $("#checkoutBirthDate");
+      const birthDateError = $("#checkoutBirthDateError");
+      const birthDate = birthDateInput?.value || "";
+      if (!isAdultBirthDate(birthDate)) {
+        birthDateError?.classList.add("show");
+        birthDateInput?.focus();
+        return;
+      }
+      birthDateError?.classList.remove("show");
+
       const consent = $("#withdrawalConsent");
       if (consent && !consent.checked) {
         consent.closest("label")?.classList.add("needs-attention");
@@ -568,11 +589,14 @@
       const question = $("#aiQuestion")?.value.trim() || "";
       const topic = $("#aiTopic")?.value || "";
       stashPendingReading(question, topic);
-      startCheckout(btn.dataset.buy);
+      startCheckout(btn.dataset.buy, birthDate);
     });
   });
   $("#withdrawalConsent")?.addEventListener("change", (e) => {
     if (e.target.checked) e.target.closest("label")?.classList.remove("needs-attention");
+  });
+  $("#checkoutBirthDate")?.addEventListener("input", () => {
+    $("#checkoutBirthDateError")?.classList.remove("show");
   });
 
   $("#loginBtn")?.addEventListener("click", () => {

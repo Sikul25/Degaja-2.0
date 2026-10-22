@@ -156,18 +156,35 @@
     const c=getCredits();
     const liveAudioWith=fmt(t('live.liveAudioWith'),{name:esc(a.name)})+' · <span style="color:#a34d4d;font-weight:800">'+t('live.maxDurationShort')+'</span>';
     const cur=t('currency.symbol');
-    host.innerHTML=`<div class="degaja-call-panel"><h4 style="color:#18334a">${fmt(t('live.withName'),{name:esc(a.name)})}</h4><p class="degaja-live-copy">${esc(a.title)} · ${c?t('live.hasCredit'):t('live.chooseTopics')}</p>${c?`<button class="gold" id="degajaUseCredit">${t('live.useCredit')}</button>`:''}<div class="degaja-consult-options"><button class="degaja-consult-option" data-topics="1"><span><strong>${t('live.topics1')}</strong><small>${liveAudioWith}</small></span><b>${cur}${prices[1]}</b></button><button class="degaja-consult-option" data-topics="2"><span><strong>${t('live.topics2')}</strong><small>${liveAudioWith}</small></span><b>${cur}${prices[2]}</b></button><button class="degaja-consult-option" data-topics="3"><span><strong>${t('live.topics3')}</strong><small>${liveAudioWith}</small></span><b>${cur}${prices[3]}</b></button></div><label class="degaja-service-consent" style="display:flex;gap:8px;align-items:flex-start;text-align:left;font-size:12px;line-height:1.5;color:#687384;margin-top:10px"><input type="checkbox" id="degajaServiceConsent" style="margin-top:3px;flex-shrink:0"><span>${t('live.serviceConsent')}</span></label><div class="degaja-status">${esc(u.name||u.email)}</div></div>`;
+    host.innerHTML=`<div class="degaja-call-panel"><h4 style="color:#18334a">${fmt(t('live.withName'),{name:esc(a.name)})}</h4><p class="degaja-live-copy">${esc(a.title)} · ${c?t('live.hasCredit'):t('live.chooseTopics')}</p>${c?`<button class="gold" id="degajaUseCredit">${t('live.useCredit')}</button>`:''}<div class="degaja-consult-options"><button class="degaja-consult-option" data-topics="1"><span><strong>${t('live.topics1')}</strong><small>${liveAudioWith}</small></span><b>${cur}${prices[1]}</b></button><button class="degaja-consult-option" data-topics="2"><span><strong>${t('live.topics2')}</strong><small>${liveAudioWith}</small></span><b>${cur}${prices[2]}</b></button><button class="degaja-consult-option" data-topics="3"><span><strong>${t('live.topics3')}</strong><small>${liveAudioWith}</small></span><b>${cur}${prices[3]}</b></button></div><div style="text-align:left;margin-top:10px"><label for="degajaBirthDate" style="display:block;font-size:12px;font-weight:700;color:#18334a;margin-bottom:5px">${t('checkout.birthDateLabel')}</label><input type="date" id="degajaBirthDate" class="palm-quiz-input" style="width:100%"><div class="palm-quiz-error" id="degajaBirthDateError">${t('checkout.birthDateError')}</div></div><label class="degaja-service-consent" style="display:flex;gap:8px;align-items:flex-start;text-align:left;font-size:12px;line-height:1.5;color:#687384;margin-top:10px"><input type="checkbox" id="degajaServiceConsent" style="margin-top:3px;flex-shrink:0"><span>${t('live.serviceConsent')}</span></label><div class="degaja-status">${esc(u.name||u.email)}</div></div>`;
     $('#degajaUseCredit')?.addEventListener('click',()=>{setCredits(getCredits()-1);creditText();call('credit',3,a)});
+    $('#degajaBirthDate')?.addEventListener('input',()=>{$('#degajaBirthDateError')?.classList.remove('show')});
     host.querySelectorAll('[data-topics]').forEach(b=>b.addEventListener('click',()=>{
+      const birthDateInput=$('#degajaBirthDate');
+      const birthDateError=$('#degajaBirthDateError');
+      const birthDate=birthDateInput?.value||'';
+      if(!isAdultBirthDate(birthDate)){birthDateError?.classList.add('show');birthDateInput?.focus();return}
+      birthDateError?.classList.remove('show');
       const consent=$('#degajaServiceConsent');
       if(consent && !consent.checked){consent.closest('label')?.style.setProperty('color','#a34d4d');consent.focus();return}
-      checkout(Number(b.dataset.topics),a);
+      checkout(Number(b.dataset.topics),a,birthDate);
     }));
   }
 
-  async function checkout(topics,advisor){
+  function isAdultBirthDate(dateStr){
+    if(!dateStr)return false;
+    const parsed=new Date(dateStr);
+    if(isNaN(parsed.getTime()))return false;
+    const today=new Date();
+    let age=today.getFullYear()-parsed.getFullYear();
+    const monthDiff=today.getMonth()-parsed.getMonth();
+    if(monthDiff<0||(monthDiff===0&&today.getDate()<parsed.getDate()))age--;
+    return age>=18;
+  }
+
+  async function checkout(topics,advisor,birthDate){
     const u=getUser(); if(!u||!advisor)return;
-    try{const r=await doFetch('/api/checkout',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({product:'voice',topics,email:u.email,name:u.name||'',advisorId:advisor.id,lang:lang(),ref:window.degajaI18n?window.degajaI18n.getRef():''})},15000);const d=await r.json();if(!r.ok||!d.url)throw new Error(d.error||'Checkout');localStorage.setItem(SESSION_KEY,JSON.stringify({type:'voice',topics,advisorId:advisor.id}));location.href=d.url}catch(_){const e=$('#degajaCall');if(e)e.innerHTML=`<div class="degaja-call-panel"><b>${t('live.checkoutFailTitle')}</b><p class="degaja-live-copy">${t('live.checkoutFailDesc')}</p></div>`;}
+    try{const r=await doFetch('/api/checkout',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({product:'voice',topics,birthDate,email:u.email,name:u.name||'',advisorId:advisor.id,lang:lang(),ref:window.degajaI18n?window.degajaI18n.getRef():''})},15000);const d=await r.json();if(!r.ok||!d.url)throw new Error(d.error||'Checkout');localStorage.setItem(SESSION_KEY,JSON.stringify({type:'voice',topics,advisorId:advisor.id}));location.href=d.url}catch(_){const e=$('#degajaCall');if(e)e.innerHTML=`<div class="degaja-call-panel"><b>${t('live.checkoutFailTitle')}</b><p class="degaja-live-copy">${t('live.checkoutFailDesc')}</p></div>`;}
   }
 
   async function verify(){
