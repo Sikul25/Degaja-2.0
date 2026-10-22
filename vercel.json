@@ -9,6 +9,9 @@
     { "source": "/ru", "destination": "/index.html" },
     { "source": "/uk", "destination": "/index.html" },
     { "source": "/br", "destination": "/index.html" },
-    { "source": "/mx", "destination": "/index.html" }
+    { "source": "/mx", "destination": "/index.html" },
+    { "source": "/ja", "destination": "/index.html" },
+    { "source": "/zh", "destination": "/index.html" },
+    { "source": "/hi", "destination": "/index.html" }
   ]
 }
