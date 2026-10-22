@@ -89,16 +89,16 @@
     <h2 data-i18n="partner.calc.title">Wie viel kannst du verdienen?</h2>
     <div class="calc-wrap">
       <div class="calc-row">
-        <label for="calcOrders"><span data-i18n="partner.calc.ordersLabel">Bestellungen pro Monat über deinen Link</span> <span id="calcOrdersVal">10</span></label>
-        <input type="range" id="calcOrders" min="0" max="50" value="10" step="1">
+        <label for="calcAiOrders"><span data-i18n="partner.calc.aiOrdersLabel">Automatische Lesungen pro Monat über deinen Link</span> <span id="calcAiOrdersVal">10</span></label>
+        <input type="range" id="calcAiOrders" min="0" max="100" value="10" step="1">
       </div>
       <div class="calc-row">
-        <label for="calcAvgOrder"><span data-i18n="partner.calc.avgOrderLabel">Durchschnittlicher Bestellwert</span> <span>€<span id="calcAvgOrderVal">20</span></span></label>
-        <input type="range" id="calcAvgOrder" min="5" max="60" value="20" step="1">
+        <label for="calcVoiceOrders"><span data-i18n="partner.calc.voiceOrdersLabel">Live-Beratungen pro Monat über deinen Link</span> <span id="calcVoiceOrdersVal">2</span></label>
+        <input type="range" id="calcVoiceOrders" min="0" max="30" value="2" step="1">
       </div>
       <div class="calc-result">
-        <span data-i18n="partner.calc.resultLabel">Deine geschätzte monatliche Provision (40 %)</span>
-        <strong id="calcResult">€80</strong>
+        <span data-i18n="partner.calc.resultLabel">Deine geschätzte monatliche Provision</span>
+        <strong id="calcResult">€41</strong>
       </div>
     </div>
     <p class="calc-disclaimer" data-i18n="partner.calc.disclaimer">Nur ein Beispiel zur Orientierung – die tatsächlichen Ergebnisse hängen von deiner Reichweite und deinem Publikum ab.</p>
@@ -184,22 +184,32 @@
   });
 
   (function initCalc() {
-    const ordersEl = document.getElementById('calcOrders');
-    const avgEl = document.getElementById('calcAvgOrder');
-    const ordersVal = document.getElementById('calcOrdersVal');
-    const avgVal = document.getElementById('calcAvgOrderVal');
+    // Two separate product tiers, each with its own typical order value and
+    // commission rate (10% on automated readings, 40% on live consultations
+    // - see partner.hero.commission) rather than one blended rate, since a
+    // flat 40% across both would overstate what an AI-reading-heavy
+    // audience could actually earn.
+    const AI_AVG_ORDER = 7;
+    const AI_RATE = 0.10;
+    const VOICE_AVG_ORDER = 85;
+    const VOICE_RATE = 0.40;
+
+    const aiEl = document.getElementById('calcAiOrders');
+    const voiceEl = document.getElementById('calcVoiceOrders');
+    const aiVal = document.getElementById('calcAiOrdersVal');
+    const voiceVal = document.getElementById('calcVoiceOrdersVal');
     const result = document.getElementById('calcResult');
-    if (!ordersEl || !avgEl || !result) return;
+    if (!aiEl || !voiceEl || !result) return;
     function update() {
-      const orders = Number(ordersEl.value);
-      const avg = Number(avgEl.value);
-      ordersVal.textContent = orders;
-      avgVal.textContent = avg;
-      const commission = Math.round(orders * avg * 0.4);
+      const aiOrders = Number(aiEl.value);
+      const voiceOrders = Number(voiceEl.value);
+      aiVal.textContent = aiOrders;
+      voiceVal.textContent = voiceOrders;
+      const commission = Math.round(aiOrders * AI_AVG_ORDER * AI_RATE + voiceOrders * VOICE_AVG_ORDER * VOICE_RATE);
       result.textContent = '€' + commission.toLocaleString('de-DE');
     }
-    ordersEl.addEventListener('input', update);
-    avgEl.addEventListener('input', update);
+    aiEl.addEventListener('input', update);
+    voiceEl.addEventListener('input', update);
     update();
   })();
 
