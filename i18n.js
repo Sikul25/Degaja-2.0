@@ -4671,10 +4671,18 @@
   // every existing getLang()/t() call downstream just works unchanged.
   function syncLangFromPath() {
     const seg = location.pathname.replace(/\/+$/, "").split("/")[1] || "";
-    if (PATH_LANGS.includes(seg) && localStorage.getItem(LANG_KEY) !== seg) {
-      localStorage.setItem(LANG_KEY, seg);
-      try { localStorage.setItem(LANG_SOURCE_KEY, "url"); } catch (_) {}
-    }
+    if (!PATH_LANGS.includes(seg)) return;
+    // Always (re)stamp the source as "url" on every visit to a language
+    // URL, not only when localStorage disagreed with it — a real bug: on
+    // a repeat visit where LANG_KEY already matched, this used to skip
+    // writing LANG_SOURCE_KEY, so if it had been cleared or never set
+    // (some iOS Safari storage-partitioning edge cases), the background
+    // geo-IP lookup below would run and could silently overwrite the
+    // language a moment after the page rendered correctly.
+    try {
+      if (localStorage.getItem(LANG_KEY) !== seg) localStorage.setItem(LANG_KEY, seg);
+      localStorage.setItem(LANG_SOURCE_KEY, "url");
+    } catch (_) {}
   }
 
   function setLang(lang) {
