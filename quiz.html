@@ -671,7 +671,17 @@
   var requestedLang = qs.get("lang");
   var mappedLang = LANG_ALIAS[requestedLang] || requestedLang;
   var langWasExplicit = SUPPORTED_LANGS.indexOf(mappedLang) !== -1;
-  var lang = langWasExplicit ? mappedLang : "de";
+  // Fall back to the main site's own remembered language (same localStorage
+  // key as i18n.js) before falling back to German/geo-guessing — covers a
+  // direct visit, a bookmark, or an old cached banner link with no ?lang=.
+  var storedLang = null;
+  try {
+    var storedRaw = localStorage.getItem("degajaLang");
+    var storedMapped = LANG_ALIAS[storedRaw] || storedRaw;
+    if (SUPPORTED_LANGS.indexOf(storedMapped) !== -1) storedLang = storedMapped;
+  } catch (_) {}
+  var lang = langWasExplicit ? mappedLang : (storedLang || "de");
+  langWasExplicit = langWasExplicit || !!storedLang;
   var ref = qs.get("ref") || qs.get("utm_source") || "quiz";
 
   // Same spirit as i18n.js on the main site: a real visitor-country guess
