@@ -4784,6 +4784,18 @@
     document.querySelectorAll("[data-advisor-only]").forEach(el => {
       el.style.display = showAdvisor ? "" : "none";
     });
+
+    // The past-life quiz banner links to a standalone page (quiz.html) with
+    // its own, smaller language set. Without this it always opened in
+    // German regardless of the language the visitor was just reading in.
+    const QUIZ_LANG_ALIAS = { us: "en", uk: "en", br: "pt", mx: "es" };
+    const QUIZ_SUPPORTED = ["de", "en", "fr", "es", "it", "pt", "ru", "ja", "zh", "hi"];
+    const quizBanner = document.querySelector(".quiz-trend-bar");
+    if (quizBanner) {
+      const mapped = QUIZ_LANG_ALIAS[getLang()] || getLang();
+      const quizLang = QUIZ_SUPPORTED.includes(mapped) ? mapped : "en";
+      quizBanner.setAttribute("href", "quiz.html?lang=" + quizLang);
+    }
   }
 
   // Real IP-geolocation (via Vercel's edge, see /api/geo.js) refines the
