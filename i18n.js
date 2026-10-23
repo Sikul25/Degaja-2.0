@@ -4785,6 +4785,18 @@
       el.style.display = showAdvisor ? "" : "none";
     });
 
+    // "Back to home" / logo / nav links on the standalone pages (legal
+    // pages, werde-partner.html, werde-beraterin.html) are hardcoded to
+    // index.html in the markup, which is the German homepage path — so a
+    // Chinese/Japanese/etc. visitor clicking "back to home" would land back
+    // on the German URL instead of their own language's. Rewrite them to
+    // the current language's homepage on every render, fragment preserved.
+    document.querySelectorAll('a[href^="index.html"]').forEach(el => {
+      const href = el.getAttribute("href");
+      const suffix = href.slice("index.html".length);
+      el.setAttribute("href", homePathFor(getLang()) + suffix);
+    });
+
     // The past-life quiz banner links to a standalone page (quiz.html) with
     // its own, smaller language set. Without this it always opened in
     // German regardless of the language the visitor was just reading in.
