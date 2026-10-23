@@ -115,6 +115,7 @@
     <option value="es">ES</option>
     <option value="it">IT</option>
     <option value="pt">PT</option>
+    <option value="br">BR</option>
     <option value="ru">RU</option>
     <option value="uk">UA</option>
     <option value="ja">JA</option>
@@ -346,6 +347,54 @@
       voice_loading: "Preparando la voz …",
       voice_listen: "🔊 Escuchar la voz",
       voice_playing: "⏸ Reproduciendo …",
+      voice_unavailable: ""
+    },
+    br: {
+      q1_eyebrow: "REVELAÇÃO",
+      q1_h1: "Que percepção pessoal você está buscando?",
+      q1_opts: [
+        {ic:"⏳", t:"Ver quem eu fui em uma vida passada"},
+        {ic:"✨", t:"Revelar meu destino e propósito"},
+        {ic:"🌀", t:"Descobrir se eu já vivi antes"},
+        {ic:"🌟", t:"Descobrir minhas habilidades ocultas"},
+        {ic:"🔮", t:"Descobrir meu futuro no amor"}
+      ],
+      q2_eyebrow: "PASSO 2",
+      q2_h1: "Quando você nasceu?",
+      q2_placeholder: "DD/MM/AAAA",
+      q3_eyebrow: "PASSO 3",
+      q3_h1: "Como podemos te chamar?",
+      q3_placeholder: "Seu primeiro nome",
+      q4_eyebrow: "PASSO 4",
+      q4_h1: "O que mais está passando pela sua cabeça agora?",
+      q4_opts: [
+        {ic:"💞", t:"Amor e relacionamentos"},
+        {ic:"💼", t:"Carreira e dinheiro"},
+        {ic:"🧭", t:"Caminho de vida e decisões"},
+        {ic:"🌙", t:"Paz interior e autoconhecimento"}
+      ],
+      q5_eyebrow: "PASSO 5",
+      q5_h1: "Mostre sua palma pra gente",
+      q5_sub: "Opcional — uma foto da sua palma aberta deixa sua revelação ainda mais precisa e pessoal.",
+      photo_upload: "📷 Enviar foto",
+      photo_hint: "Uma foto nítida e bem iluminada da sua palma aberta",
+      photo_skip: "Pular, só a revelação em texto",
+      photo_continue: "Continuar com essa foto →",
+      next: "Continuar →",
+      back: "← Voltar",
+      loading_phrases: ["Lendo os sinais …", "Decifrando sua energia de nascimento …", "As cartas estão se alinhando …", "Sua revelação está tomando forma …"],
+      loading_phrases_palm: ["Observando sua palma …", "Lendo as linhas da vida, do coração e da cabeça …", "As linhas estão contando a história delas …", "Sua leitura de mão está tomando forma …"],
+      loading_sub: "Isso vai levar só um instante",
+      reveal_badge: "✦ Sua revelação",
+      palm_badge: "✦ Sua leitura de mão",
+      reveal_fallback: "A energia ao seu redor está incomumente forte hoje — sua revelação completa está esperando por você na sua leitura pessoal.",
+      palm_fallback: "As linhas da sua mão estão difíceis de decifrar hoje — tente de novo com uma foto mais nítida na sua leitura pessoal.",
+      cta: "Desbloquear sua leitura completa →",
+      disclaimer: "A DEGAJA é voltada para orientação pessoal e entretenimento e não substitui aconselhamento profissional. Esta leitura foi gerada por um sistema de IA.",
+      legal: { impressum: "Informações legais", datenschutz: "Privacidade", agb: "Termos", widerruf: "Direito de arrependimento" },
+      voice_loading: "Preparando a voz …",
+      voice_listen: "🔊 Ouvir a voz",
+      voice_playing: "⏸ Reproduzindo …",
       voice_unavailable: ""
     },
     it: {
@@ -686,11 +735,14 @@
     }
   };
 
-  var SUPPORTED_LANGS = ["de", "en", "fr", "es", "it", "pt", "ru", "uk", "ja", "zh", "hi"];
-  // Main site has a couple of language variants (us/br/mx) this quiz
-  // doesn't translate separately — map each to the closest language it
-  // does have, instead of silently falling back to German for them.
-  var LANG_ALIAS = { us: "en", br: "pt", mx: "es" };
+  var SUPPORTED_LANGS = ["de", "en", "fr", "es", "it", "pt", "ru", "uk", "br", "ja", "zh", "hi"];
+  // Brazilian Portuguese gets its own translation above (real differences
+  // from European Portuguese: você vs tu, different verb constructions).
+  // Mexican Spanish is left aliased to es: in neutral written UI text like
+  // this quiz, the two are close enough that a separate translation would
+  // mostly just restate the same sentences — unlike pt-BR vs pt-PT, which
+  // genuinely diverge here. US English is aliased for the same reason.
+  var LANG_ALIAS = { us: "en", mx: "es" };
 
   var REVEAL_TOPIC = {
     de: "Vergangenes Leben & Schicksal",
@@ -713,6 +765,7 @@
     ru: "Меня зовут {name}, я родилась {birthdate}. Что я ищу: {insight}. Что сейчас беспокоит меня больше всего: {focus}. Напиши мне живое, захватывающее личное откровение о моей прошлой жизни или судьбе, соответствующее моему выбору — не общую фразу из гороскопа. Используй моё имя напрямую, придумай конкретную эпоху, место и яркий переломный момент или сцену из этой прошлой жизни, и свяжи её конкретно с тем, что меня сейчас беспокоит. Постепенно наращивай напряжение на протяжении 7-9 предложений, и заверши запоминающейся, слегка незавершённой нотой, которая вызывает желание узнать больше. Напиши это так, будто ты доверяешь мне то, что должна услышать только я — интимно, кинематографично, никогда не обобщённо и не второпях.",
     ja: "私の名前は{name}、{birthdate}生まれです。私が求めているもの：{insight}。今、私が一番気にかけていること：{focus}。私の前世や運命について、選択に合った臨場感あふれる個人的な啓示を書いてください——一般的な占いの決まり文句ではなく。私の名前を直接使い、具体的な時代、場所、そしてその前世における鮮やかな転換点の場面を創作し、それを今私が気にかけていることと具体的に結びつけてください。7〜9文かけて徐々に緊張感を高め、もっと知りたくなるような、余韻の残る少し未完結な一文で締めくくってください。まるで私だけに打ち明けるかのように——親密で、映画のように鮮やかで、決して一般的で急いだものにならないように書いてください。",
     zh: "我叫{name}，出生于{birthdate}。我在寻找：{insight}。我现在最在意的是：{focus}。请为我写一段身临其境、生动的个人揭示，关于我的前世或命运，要契合我的选择——不要是千篇一律的占星套话。直接使用我的名字，虚构一个具体的时代、地点，以及那段前世中一个生动的转折场景，并将它与我现在最在意的事具体联系起来。用7到9句话逐步营造悬念，并以一个令人回味、略带悬念的结尾收束，让我想知道更多。写得就像你在向我诉说只有我才该听到的秘密一样——亲密、如电影般生动，绝不千篇一律或仓促。",
+    br: "Meu nome é {name}, nasci em {birthdate}. O que estou buscando: {insight}. O que mais está passando pela minha cabeça agora: {focus}. Escreva pra mim uma revelação pessoal imersiva e vívida sobre minha vida passada ou destino, que combine com minha escolha — nada de frase genérica de horóscopo. Use meu nome diretamente, invente uma época específica, um lugar e uma cena vívida de um momento decisivo dessa vida passada, e conecte isso concretamente com o que está passando pela minha cabeça agora. Construa a tensão aos poucos ao longo de 7 a 9 frases, e termine com uma nota marcante, meio em suspenso, que me deixe querendo saber mais. Escreva como se você estivesse me confiando algo que só eu devo ouvir — íntimo, cinematográfico, nunca genérico ou apressado.",
     uk: "Мене звати {name}, я народилася {birthdate}. Що я шукаю: {insight}. Що зараз турбує мене найбільше: {focus}. Напиши мені живе, захопливе особисте одкровення про моє минуле життя або долю, що відповідає моєму вибору — не загальну фразу з гороскопу. Використай моє ім'я напряму, вигадай конкретну епоху, місце та яскравий переломний момент або сцену з цього минулого життя, і зв'яжи її конкретно з тим, що мене зараз турбує. Поступово нарощуй напругу протягом 7-9 речень, і заверши пам'ятною, трохи незавершеною нотою, яка викликає бажання дізнатися більше. Напиши це так, ніби ти довіряєш мені те, що маю почути лише я — інтимно, кінематографічно, ніколи узагальнено чи поспішно.",
     hi: "मेरा नाम {name} है, मेरा जन्म {birthdate} को हुआ था। मैं जो तलाश रहा/रही हूं: {insight}। अभी मेरे मन में सबसे ज़्यादा क्या है: {focus}। मेरे पिछले जन्म या भाग्य के बारे में मुझे एक गहन, जीवंत व्यक्तिगत रहस्योद्घाटन लिखें जो मेरी पसंद से मेल खाए — कोई सामान्य कुंडली जैसा वाक्य नहीं। मेरे नाम का सीधे इस्तेमाल करें, एक खास युग, जगह और उस पिछले जन्म का एक जीवंत मोड़ वाला दृश्य गढ़ें, और उसे सीधे उस बात से जोड़ें जो अभी मेरे मन में है। 7-9 वाक्यों में धीरे-धीरे रोमांच बढ़ाएं, और एक यादगार, थोड़े अधूरे अंदाज़ में खत्म करें जिससे मुझे और जानने की इच्छा हो। इसे ऐसे लिखें जैसे आप मुझे कुछ ऐसा बता रहे हों जो सिर्फ मुझे ही सुनना है — आत्मीय, सिनेमाई, कभी भी सामान्य या जल्दबाज़ी वाला नहीं।"
   };
