@@ -1063,6 +1063,51 @@
     }
   });
 
+  // --- Four Pillars / BaZi (四柱推命 / 八字) ---
+  $("#baziBtn")?.addEventListener("click", async () => {
+    const name = $("#baziNameInput")?.value.trim() || "";
+    const birthDate = $("#baziBirthInput")?.value.trim() || "";
+    const birthTime = $("#baziBirthTimeInput")?.value.trim() || "";
+    const button = $("#baziBtn");
+    const result = $("#baziResult");
+    if (!name || !birthDate) return;
+
+    if (button) {
+      button.disabled = true;
+      button.textContent = t("bazi.analyzing");
+    }
+    if (result) {
+      result.innerHTML = `<strong>${t("bazi.analyzing")}</strong>`;
+      result.classList.add("show");
+    }
+
+    try {
+      const response = await fetchWithTimeout("/api/bazi", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, birthDate, birthTime, lang: currentLang() })
+      }, 30000);
+
+      if (!response.ok) throw new Error("bazi API failed");
+      const data = await response.json();
+      if (!data.text) throw new Error("no text");
+
+      if (result) { result.classList.remove("show"); result.innerHTML = ""; }
+      state.conversationHistory = [];
+      renderResult(data.text, t("bazi.syntheticQuestion"), t("bazi.topic"), false);
+    } catch (error) {
+      if (result) {
+        result.innerHTML = `<strong>${t("bazi.readError")}</strong>`;
+        result.classList.add("show");
+      }
+    }
+
+    if (button) {
+      button.disabled = false;
+      button.textContent = t("bazi.button");
+    }
+  });
+
   // --- Horoscope ---
   $("#horoscopeBtn")?.addEventListener("click", async () => {
     const birthDate = $("#horoscopeBirthInput")?.value.trim() || "";

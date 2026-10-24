@@ -72,6 +72,19 @@
       "numerology.disclaimer": "Numerologie dient der persönlichen Unterhaltung und Reflexion und ersetzt keine professionelle Beratung. Diese Deutung wird von DEGAJA AI erstellt.",
       "numerology.syntheticQuestion": "Was verraten meine Zahlen über mich?",
       "numerology.topic": "Numerologie",
+      "bazi.eyebrow": "✦ DEGAJA VIER SÄULEN ✦",
+      "bazi.title": "Deine vier Säulen. Dein Schicksal.",
+      "bazi.intro": "Gib deinen Namen, dein Geburtsdatum und deine Geburtszeit ein – DEGAJA berechnet deine Vier Säulen des Schicksals (BaZi) und deutet sie für dich.",
+      "bazi.nameLabel": "Wie heißt du?",
+      "bazi.namePlaceholder": "Dein vollständiger Name",
+      "bazi.birthLabel": "Wann bist du geboren?",
+      "bazi.birthTimeLabel": "Geburtszeit (optional, für die Stunden-Säule)",
+      "bazi.button": "Meine vier Säulen berechnen →",
+      "bazi.analyzing": "DEGAJA berechnet deine vier Säulen …",
+      "bazi.readError": "Deine vier Säulen konnten gerade nicht berechnet werden. Versuch es erneut.",
+      "bazi.disclaimer": "Die Vier-Säulen-Deutung (BaZi) dient der persönlichen Unterhaltung und Reflexion und ersetzt keine professionelle Beratung. Diese Deutung wird von DEGAJA AI erstellt.",
+      "bazi.syntheticQuestion": "Was verraten meine vier Säulen über mich?",
+      "bazi.topic": "Vier Säulen",
       "hypnosis.eyebrow": "✦ DEGAJA ENTSPANNUNG ✦",
       "hypnosis.title": "Dein Atem. Deine Ruhe.",
       "hypnosis.intro": "Wähle deinen Fokus – DEGAJA erstellt dir eine persönliche geführte Entspannungsreise zum Anhören oder Lesen.",
@@ -503,6 +516,19 @@
       "numerology.disclaimer": "Numerology is for personal entertainment and reflection and does not replace professional advice. This reading is created by DEGAJA AI.",
       "numerology.syntheticQuestion": "What do my numbers reveal about me?",
       "numerology.topic": "Numerology",
+      "bazi.eyebrow": "✦ DEGAJA FOUR PILLARS ✦",
+      "bazi.title": "Your Four Pillars. Your Destiny.",
+      "bazi.intro": "Enter your name, date of birth and time of birth – DEGAJA calculates your Four Pillars of Destiny (BaZi) and interprets them for you.",
+      "bazi.nameLabel": "What's your name?",
+      "bazi.namePlaceholder": "Your full name",
+      "bazi.birthLabel": "When were you born?",
+      "bazi.birthTimeLabel": "Time of birth (optional, used for the Hour Pillar)",
+      "bazi.button": "Calculate my Four Pillars →",
+      "bazi.analyzing": "DEGAJA is calculating your Four Pillars …",
+      "bazi.readError": "Your Four Pillars couldn't be calculated right now. Please try again.",
+      "bazi.disclaimer": "The Four Pillars reading (BaZi) is for personal entertainment and reflection and does not replace professional advice. This reading is created by DEGAJA AI.",
+      "bazi.syntheticQuestion": "What do my Four Pillars reveal about me?",
+      "bazi.topic": "Four Pillars",
       "hypnosis.eyebrow": "✦ DEGAJA RELAXATION ✦",
       "hypnosis.title": "Your Breath. Your Calm.",
       "hypnosis.intro": "Choose your focus – DEGAJA creates a personal guided relaxation journey for you to listen to or read.",
@@ -3510,6 +3536,19 @@
       "numerology.disclaimer": "数秘術は個人的な娯楽と自己観察を目的としており、専門家による助言の代わりにはなりません。この鑑定はDEGAJA AIによって作成されます。",
       "numerology.syntheticQuestion": "私の数字は私について何を明かしていますか?",
       "numerology.topic": "数秘術",
+      "bazi.eyebrow": "✦ DEGAJA 四柱推命 ✦",
+      "bazi.title": "あなたの四柱。あなたの運命。",
+      "bazi.intro": "お名前、生年月日、そして出生時刻を入力してください – DEGAJAが四柱推命であなたの命式を算出し、解釈します。",
+      "bazi.nameLabel": "お名前は何ですか?",
+      "bazi.namePlaceholder": "フルネーム",
+      "bazi.birthLabel": "生年月日はいつですか?",
+      "bazi.birthTimeLabel": "出生時刻（任意・時柱の算出に使用）",
+      "bazi.button": "命式を算出する →",
+      "bazi.analyzing": "DEGAJAが命式を算出しています …",
+      "bazi.readError": "今は命式を算出できませんでした。もう一度お試しください。",
+      "bazi.disclaimer": "四柱推命は個人的な娯楽と自己観察を目的としており、専門家による助言の代わりにはなりません。この鑑定はDEGAJA AIによって作成されます。",
+      "bazi.syntheticQuestion": "私の命式は私について何を明かしていますか?",
+      "bazi.topic": "四柱推命",
       "hypnosis.eyebrow": "✦ DEGAJA リラクゼーション ✦",
       "hypnosis.title": "あなたの呼吸。あなたの安らぎ。",
       "hypnosis.intro": "フォーカスしたいことを選んでください – DEGAJAが聴いたり読んだりできる個人的な誘導リラクゼーションの旅を作成します。",
@@ -3879,6 +3918,19 @@
       "numerology.disclaimer": "生命数字学仅供个人娱乐与反思之用，不能替代专业建议。此解读由DEGAJA AI生成。",
       "numerology.syntheticQuestion": "我的数字透露了关于我的什么信息？",
       "numerology.topic": "生命数字学",
+      "bazi.eyebrow": "✦ DEGAJA 八字命理 ✦",
+      "bazi.title": "你的四柱。你的命局。",
+      "bazi.intro": "输入你的姓名、出生日期和出生时间——DEGAJA为你排出四柱八字并解读你的命局。",
+      "bazi.nameLabel": "你叫什么名字？",
+      "bazi.namePlaceholder": "你的全名",
+      "bazi.birthLabel": "你的出生日期是？",
+      "bazi.birthTimeLabel": "出生时间（可选，用于排时柱）",
+      "bazi.button": "排我的八字 →",
+      "bazi.analyzing": "DEGAJA正在为你排盘……",
+      "bazi.readError": "暂时无法排出你的八字，请重试。",
+      "bazi.disclaimer": "八字命理仅供个人娱乐与反思之用，不能替代专业建议。此解读由DEGAJA AI生成。",
+      "bazi.syntheticQuestion": "我的八字透露了关于我的什么信息？",
+      "bazi.topic": "八字命理",
       "hypnosis.eyebrow": "✦ DEGAJA 身心放松 ✦",
       "hypnosis.title": "你的呼吸。你的平静。",
       "hypnosis.intro": "选择你的关注点——DEGAJA将为你打造一段专属的引导式放松之旅，供你聆听或阅读。",
@@ -4792,6 +4844,15 @@
     document.querySelectorAll("[data-advisor-only]").forEach(el => {
       el.style.display = showAdvisor ? "" : "none";
     });
+
+    // Four Pillars (BaZi / 四柱推命) only makes sense for JA/ZH visitors.
+    // Switching language always reloads the page (see setLang below), so a
+    // one-way attribute removal is enough — no need to re-hide it later.
+    if (getLang() === "ja" || getLang() === "zh") {
+      document.querySelectorAll("[data-ja-zh-only]").forEach(el => {
+        el.removeAttribute("data-ja-zh-only");
+      });
+    }
 
     // "Back to home" / logo / nav links on the standalone pages (legal
     // pages, werde-partner.html, werde-beraterin.html) are hardcoded to
