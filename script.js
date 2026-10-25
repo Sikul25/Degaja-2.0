@@ -1108,6 +1108,49 @@
     }
   });
 
+  // --- Dream decoder ---
+  $("#dreamBtn")?.addEventListener("click", async () => {
+    const dream = $("#dreamInput")?.value.trim() || "";
+    const button = $("#dreamBtn");
+    const result = $("#dreamResult");
+    if (!dream) return;
+
+    if (button) {
+      button.disabled = true;
+      button.textContent = t("dream.analyzing");
+    }
+    if (result) {
+      result.innerHTML = `<strong>${t("dream.analyzing")}</strong>`;
+      result.classList.add("show");
+    }
+
+    try {
+      const response = await fetchWithTimeout("/api/dream", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ dream, lang: currentLang() })
+      }, 30000);
+
+      if (!response.ok) throw new Error("dream API failed");
+      const data = await response.json();
+      if (!data.text) throw new Error("no text");
+
+      if (result) { result.classList.remove("show"); result.innerHTML = ""; }
+      state.conversationHistory = [];
+      renderResult(data.text, t("dream.syntheticQuestion"), t("dream.topic"), false);
+    } catch (error) {
+      if (result) {
+        result.innerHTML = `<strong>${t("dream.readError")}</strong>`;
+        result.classList.add("show");
+      }
+    }
+
+    if (button) {
+      button.disabled = false;
+      button.textContent = t("dream.button");
+    }
+  });
+
   // --- Horoscope ---
   $("#horoscopeBtn")?.addEventListener("click", async () => {
     const birthDate = $("#horoscopeBirthInput")?.value.trim() || "";
