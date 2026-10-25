@@ -1,0 +1,1709 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="description" content="DEGAJA – Entdecke in wenigen Fragen eine persönliche Liebes-Enthüllung: wann, wie und wer deine nächste Beziehung sein wird.">
+  <title>Was wird meine nächste Beziehung sein? – DEGAJA</title>
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="DEGAJA">
+  <meta property="og:title" content="Was wird meine nächste Beziehung sein? – DEGAJA">
+  <meta property="og:description" content="Beantworte ein paar Fragen und erhalte deine persönliche Liebes-Enthüllung.">
+  <meta property="og:image" content="https://www.degaja.com/assets/og-image.png">
+  <meta name="robots" content="noindex">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="favicon.ico" sizes="any">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    *{box-sizing:border-box}
+    body{background:#0a1220}
+    .quiz-shell{min-height:100svh;display:flex;flex-direction:column;position:relative;overflow:hidden;background:radial-gradient(ellipse 120% 70% at 50% -10%,#203a58 0%,#101d30 45%,#0a1220 85%)}
+    .quiz-stars{position:absolute;inset:0;z-index:0;pointer-events:none}
+    .quiz-star{position:absolute;border-radius:50%;background:#fff;opacity:.5;animation:twinkle linear infinite}
+    @keyframes twinkle{0%,100%{opacity:.15}50%{opacity:.85}}
+    .quiz-glow{position:absolute;width:480px;height:480px;border-radius:50%;left:50%;top:-180px;transform:translateX(-50%);background:radial-gradient(circle,rgba(231,195,114,.16) 0%,rgba(231,195,114,0) 70%);z-index:0;pointer-events:none}
+
+    .quiz-top{display:flex;align-items:center;gap:14px;padding:18px 20px;max-width:620px;margin:0 auto;width:100%;position:relative;z-index:2}
+    .quiz-logo{height:26px;filter:brightness(0) invert(1);opacity:.92}
+    .quiz-progress-wrap{flex:1;height:5px;background:rgba(255,255,255,.1);border-radius:99px;overflow:hidden}
+    .quiz-progress-bar{height:100%;width:4%;background:linear-gradient(90deg,#b88a32,#f0d48f);border-radius:99px;transition:width .5s cubic-bezier(.4,0,.2,1);box-shadow:0 0 10px rgba(231,195,114,.6)}
+    .quiz-step-count{color:rgba(255,255,255,.45);font-size:11px;font-weight:700;letter-spacing:.03em;white-space:nowrap;font-variant-numeric:tabular-nums}
+
+    .quiz-main{flex:1;display:flex;align-items:center;justify-content:center;padding:10px 20px 48px;position:relative;z-index:2}
+    .quiz-card{width:min(540px,100%);text-align:center}
+    .quiz-anim{animation:quizIn .45s cubic-bezier(.16,1,.3,1) both}
+    @keyframes quizIn{from{opacity:0;transform:translateY(14px) scale(.98)}to{opacity:1;transform:translateY(0) scale(1)}}
+
+    .quiz-eyebrow{display:inline-flex;align-items:center;gap:8px;color:#e7c372;font-size:11px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;margin-bottom:16px}
+    .quiz-eyebrow:before,.quiz-eyebrow:after{content:"";width:16px;height:1px;background:linear-gradient(90deg,transparent,#e7c372)}
+    .quiz-eyebrow:after{background:linear-gradient(90deg,#e7c372,transparent)}
+    .quiz-h1{font-family:Georgia,"Times New Roman",serif;font-weight:500;color:#fff;font-size:clamp(26px,5.5vw,38px);line-height:1.22;margin:0 0 32px;letter-spacing:-.01em}
+
+    .quiz-options{display:grid;gap:11px}
+    .quiz-opt{appearance:none;text-align:left;display:flex;align-items:center;gap:15px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.04);backdrop-filter:blur(6px);border-radius:18px;padding:16px 18px;color:#eef2f6;font-size:16px;font-weight:600;cursor:pointer;transition:.22s cubic-bezier(.4,0,.2,1);position:relative}
+    .quiz-opt:hover{border-color:rgba(231,195,114,.55);background:rgba(231,195,114,.1);transform:translateY(-2px);box-shadow:0 10px 28px rgba(0,0,0,.25)}
+    .quiz-opt.picked{border-color:#e7c372;background:rgba(231,195,114,.18);transform:scale(.98)}
+    .quiz-opt .ic{font-size:21px;flex:0 0 auto;width:30px;text-align:center}
+    .quiz-opt .arrow{margin-left:auto;opacity:0;transform:translateX(-4px);transition:.2s;color:#e7c372}
+    .quiz-opt:hover .arrow{opacity:1;transform:translateX(0)}
+
+    .quiz-input{width:100%;padding:17px 18px;border-radius:18px;border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.05);color:#fff;font-size:17px;text-align:center;outline:0;transition:.2s}
+    .quiz-input::placeholder{color:rgba(255,255,255,.35)}
+    .quiz-input:focus{border-color:#e7c372;background:rgba(255,255,255,.08);box-shadow:0 0 0 4px rgba(231,195,114,.12)}
+
+    .quiz-cta{margin-top:22px;width:100%;border:0;border-radius:999px;background:linear-gradient(90deg,#b88a32,#f0d48f);color:#20160a;padding:17px 20px;font-weight:800;font-size:16px;cursor:pointer;box-shadow:0 16px 38px rgba(184,138,50,.3);transition:.2s}
+    .quiz-cta:hover{transform:translateY(-1px);box-shadow:0 20px 44px rgba(184,138,50,.4)}
+    .quiz-cta:disabled{opacity:.4;cursor:not-allowed;transform:none}
+    .quiz-back{display:inline-block;margin-top:16px;color:rgba(255,255,255,.4);font-size:13px;cursor:pointer;background:none;border:0;transition:.2s}
+    .quiz-back:hover{color:rgba(255,255,255,.7)}
+
+    .quiz-loading{display:flex;flex-direction:column;align-items:center;gap:26px}
+    .quiz-orb-wrap{position:relative;width:132px;height:132px;display:grid;place-items:center}
+    .quiz-orb-ring{position:absolute;inset:0;border-radius:50%;border:1px solid rgba(231,195,114,.35);animation:spin 7s linear infinite}
+    .quiz-orb-ring.r2{inset:-14px;border-color:rgba(159,216,255,.3);animation-duration:11s;animation-direction:reverse}
+    @keyframes spin{to{transform:rotate(360deg)}}
+    .quiz-orb{width:104px;height:104px;border-radius:50%;background:radial-gradient(circle at 38% 32%,#ffffff 0%,#eaf6ff 20%,#9fd8ff 42%,#4aa0e0 62%,#e7c372 82%,#1c3450 100%);box-shadow:0 0 55px rgba(159,216,255,.5),0 0 40px rgba(231,195,114,.35);animation:pulse 1.7s ease-in-out infinite}
+    @keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.07)}}
+    .quiz-loading-pct{color:#f0d48f;font-size:13px;font-weight:800;letter-spacing:.06em;font-variant-numeric:tabular-nums}
+    .quiz-loading-title{color:#fff;font-size:17px;font-weight:600;min-height:24px;transition:opacity .25s}
+    .quiz-loading-sub{color:rgba(255,255,255,.45);font-size:13px;margin-top:4px}
+
+    .quiz-reveal-top{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:20px;flex-wrap:wrap}
+    .quiz-reveal-badge{display:inline-flex;align-items:center;gap:7px;background:rgba(231,195,114,.14);color:#f0d48f;border:1px solid rgba(231,195,114,.35);border-radius:999px;padding:7px 18px;font-size:12px;font-weight:800;letter-spacing:.06em}
+    .quiz-voice-btn{display:inline-flex;align-items:center;gap:7px;background:rgba(255,255,255,.06);color:#eef2f6;border:1px solid rgba(255,255,255,.18);border-radius:999px;padding:7px 16px;font-size:12px;font-weight:700;cursor:pointer;transition:.2s}
+    .quiz-voice-btn:hover{border-color:rgba(231,195,114,.5);background:rgba(231,195,114,.1)}
+    .quiz-voice-btn:disabled{opacity:.35;cursor:wait}
+    .quiz-voice-btn.playing{border-color:#e7c372;color:#f0d48f}
+    .quiz-reveal-card{position:relative;text-align:left;background:linear-gradient(160deg,rgba(255,255,255,.07),rgba(255,255,255,.02));border:1px solid rgba(231,195,114,.22);border-radius:22px;padding:24px 26px;margin-bottom:10px;min-height:96px;box-shadow:0 20px 50px rgba(0,0,0,.3)}
+    .quiz-reveal-text{color:#f2f4f7;font-size:18px;line-height:1.7}
+    .quiz-reveal-text .cursor{display:inline-block;width:2px;height:1em;background:#e7c372;margin-left:2px;vertical-align:text-bottom;animation:blink .8s step-end infinite}
+    @keyframes blink{50%{opacity:0}}
+    .quiz-disclaimer{margin-top:18px;color:rgba(255,255,255,.35);font-size:11px;line-height:1.5}
+    .quiz-legal-links{margin-top:8px;text-align:center;font-size:11px}
+    .quiz-legal-links a{color:rgba(255,255,255,.45);text-decoration:underline}
+    .quiz-lang{position:absolute;top:16px;right:16px;z-index:3;color:rgba(255,255,255,.7);font-size:12px;font-weight:700;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.16);border-radius:999px;padding:6px 26px 6px 13px;cursor:pointer;transition:.2s;-webkit-appearance:none;appearance:none;background-image:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 6"><path d="M1 1l4 4 4-4" stroke="%23e7c372" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>');background-repeat:no-repeat;background-position:right 10px center}
+    .quiz-lang:hover{border-color:rgba(231,195,114,.5);color:#f0d48f}
+    .quiz-lang option{background:#101d30;color:#fff}
+
+    .quiz-photo-sub{color:rgba(255,255,255,.5);font-size:14px;line-height:1.6;margin:-18px 0 24px}
+    .quiz-dropzone{border:1.5px dashed rgba(231,195,114,.4);border-radius:22px;padding:34px 20px;text-align:center;cursor:pointer;transition:.2s;background:rgba(255,255,255,.03)}
+    .quiz-dropzone:hover{border-color:#e7c372;background:rgba(231,195,114,.07)}
+    .quiz-dropzone .icon{font-size:36px;margin-bottom:10px}
+    .quiz-dropzone .label{color:#eef2f6;font-weight:700;font-size:15px}
+    .quiz-dropzone .hint{color:rgba(255,255,255,.4);font-size:12px;margin-top:6px}
+    .quiz-dropzone.has-img{padding:14px}
+    .quiz-dropzone img{max-width:100%;max-height:220px;border-radius:14px;display:block;margin:0 auto}
+    .quiz-skip{display:block;margin:18px auto 0;color:rgba(255,255,255,.4);font-size:13px;background:none;border:0;cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+    .quiz-skip:hover{color:rgba(255,255,255,.7)}
+
+    .quiz-palm-section{text-align:left;background:linear-gradient(160deg,rgba(255,255,255,.07),rgba(255,255,255,.02));border:1px solid rgba(231,195,114,.22);border-radius:20px;padding:20px 22px;margin-bottom:12px;box-shadow:0 14px 36px rgba(0,0,0,.28);opacity:0;transform:translateY(10px);animation:sectionIn .5s cubic-bezier(.16,1,.3,1) forwards}
+    @keyframes sectionIn{to{opacity:1;transform:translateY(0)}}
+    .quiz-palm-section h3{margin:0 0 8px;color:#f0d48f;font-size:13px;font-weight:800;letter-spacing:.05em;text-transform:uppercase}
+    .quiz-palm-section p{margin:0;color:#f2f4f7;font-size:16px;line-height:1.65}
+    @media(max-width:480px){.quiz-h1{font-size:23px}.quiz-opt{padding:14px 16px;font-size:14.5px}}
+  </style>
+</head>
+<body>
+<div class="quiz-shell">
+  <div class="quiz-glow"></div>
+  <div class="quiz-stars" id="stars"></div>
+  <select class="quiz-lang" id="langSelect">
+    <option value="de">DE</option>
+    <option value="en">EN</option>
+    <option value="fr">FR</option>
+    <option value="es">ES</option>
+    <option value="it">IT</option>
+    <option value="pt">PT</option>
+    <option value="br">BR</option>
+    <option value="ru">RU</option>
+    <option value="uk">UA</option>
+    <option value="ja">JA</option>
+    <option value="zh">ZH</option>
+    <option value="hi">HI</option>
+  </select>
+  <div class="quiz-top">
+    <img src="assets/degaja-logo.png" alt="DEGAJA" class="quiz-logo">
+    <div class="quiz-progress-wrap"><div class="quiz-progress-bar" id="progressBar"></div></div>
+    <div class="quiz-step-count" id="stepCount">1/5</div>
+  </div>
+  <main class="quiz-main">
+    <div class="quiz-card" id="quizCard"></div>
+  </main>
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  var STR = {
+  "de": {
+    "q2_eyebrow": "SCHRITT 2",
+    "q2_h1": "Wann bist du geboren?",
+    "q2_placeholder": "TT.MM.JJJJ",
+    "q3_eyebrow": "SCHRITT 3",
+    "q3_h1": "Wie dürfen wir dich nennen?",
+    "q3_placeholder": "Dein Vorname",
+    "q5_eyebrow": "SCHRITT 5",
+    "photo_upload": "📷 Foto hochladen",
+    "photo_hint": "Flaches, gut beleuchtetes Foto deiner offenen Handfläche",
+    "photo_skip": "Überspringen, nur Text-Enthüllung",
+    "photo_continue": "Mit diesem Foto fortfahren →",
+    "next": "Weiter →",
+    "back": "← Zurück",
+    "loading_phrases_palm": [
+      "Wir betrachten deine Handfläche …",
+      "Lebenslinie, Herzlinie, Kopflinie werden gelesen …",
+      "Die Linien erzählen ihre Geschichte …",
+      "Deine Handlesung nimmt Form an …"
+    ],
+    "loading_sub": "Bitte warte einen Moment",
+    "palm_badge": "✦ Deine Handlesung",
+    "palm_fallback": "Deine Handlinien sind heute schwer zu entschlüsseln — versuch es mit einem klareren Foto in deiner persönlichen Lesung.",
+    "cta": "Vollständige Lesung freischalten →",
+    "disclaimer": "DEGAJA dient der persönlichen Orientierung und Unterhaltung und ersetzt keine professionelle Beratung. Diese Deutung wurde von einem KI-System erstellt.",
+    "legal": {
+      "impressum": "Impressum",
+      "datenschutz": "Datenschutz",
+      "agb": "AGB",
+      "widerruf": "Widerruf"
+    },
+    "voice_loading": "Stimme wird vorbereitet …",
+    "voice_listen": "🔊 Stimme anhören",
+    "voice_playing": "⏸ Wird abgespielt …",
+    "voice_unavailable": "",
+    "q1_eyebrow": "LIEBES-ENTHÜLLUNG",
+    "q1_h1": "Was möchtest du über deine nächste Beziehung wissen?",
+    "q1_opts": [
+      {
+        "ic": "💫",
+        "t": "Wann ich sie/ihn treffen werde"
+      },
+      {
+        "ic": "❤️",
+        "t": "Wie diese Person sein wird"
+      },
+      {
+        "ic": "🔑",
+        "t": "Wie ich sie/ihn erkennen werde"
+      },
+      {
+        "ic": "⏳",
+        "t": "Ob es von Dauer sein wird"
+      },
+      {
+        "ic": "🔮",
+        "t": "Was die Liebe für mich bereithält"
+      }
+    ],
+    "q4_eyebrow": "SCHRITT 4",
+    "q4_h1": "Wie ist deine aktuelle Situation in der Liebe?",
+    "q4_opts": [
+      {
+        "ic": "💔",
+        "t": "Single, offen für etwas Neues"
+      },
+      {
+        "ic": "🌀",
+        "t": "Gerade aus einer Beziehung raus"
+      },
+      {
+        "ic": "🤔",
+        "t": "Unsicher, ob meine jetzige Beziehung Zukunft hat"
+      },
+      {
+        "ic": "✨",
+        "t": "Einfach neugierig, was kommt"
+      }
+    ],
+    "q5_h1": "Zeig uns deine Handfläche",
+    "q5_sub": "Optional — ein Foto deiner offenen Hand lässt uns deine Herzlinie lesen, für eine noch persönlichere Enthüllung.",
+    "loading_phrases": [
+      "Wir lesen die Zeichen der Liebe …",
+      "Deine Herzlinie wird entschlüsselt …",
+      "Zwei Wege beginnen sich zu verbinden …",
+      "Deine Enthüllung nimmt Form an …"
+    ],
+    "reveal_badge": "✦ Deine Liebes-Enthüllung",
+    "reveal_fallback": "Die Energie um deine Liebeslinie ist heute außergewöhnlich stark — deine vollständige Enthüllung wartet in deiner persönlichen Lesung."
+  },
+  "en": {
+    "q2_eyebrow": "STEP 2",
+    "q2_h1": "When were you born?",
+    "q2_placeholder": "DD/MM/YYYY",
+    "q3_eyebrow": "STEP 3",
+    "q3_h1": "What should we call you?",
+    "q3_placeholder": "Your first name",
+    "q5_eyebrow": "STEP 5",
+    "photo_upload": "📷 Upload photo",
+    "photo_hint": "A flat, well-lit photo of your open palm",
+    "photo_skip": "Skip, just the text reveal",
+    "photo_continue": "Continue with this photo →",
+    "next": "Continue →",
+    "back": "← Back",
+    "loading_phrases_palm": [
+      "Studying your palm …",
+      "Reading your life, heart and head lines …",
+      "The lines are telling their story …",
+      "Your palm reading is taking shape …"
+    ],
+    "loading_sub": "This will only take a moment",
+    "palm_badge": "✦ Your palm reading",
+    "palm_fallback": "Your palm lines are hard to make out today — try again with a clearer photo in your personal reading.",
+    "cta": "Unlock your full reading →",
+    "disclaimer": "DEGAJA is for personal guidance and entertainment purposes and does not replace professional advice. This reading was generated by an AI system.",
+    "legal": {
+      "impressum": "Legal notice",
+      "datenschutz": "Privacy",
+      "agb": "Terms",
+      "widerruf": "Withdrawal"
+    },
+    "voice_loading": "Preparing voice …",
+    "voice_listen": "🔊 Listen to voice",
+    "voice_playing": "⏸ Playing …",
+    "voice_unavailable": "",
+    "q1_eyebrow": "LOVE REVEAL",
+    "q1_h1": "What do you want to know about your next relationship?",
+    "q1_opts": [
+      {
+        "ic": "💫",
+        "t": "When I'll meet them"
+      },
+      {
+        "ic": "❤️",
+        "t": "What they'll be like"
+      },
+      {
+        "ic": "🔑",
+        "t": "How I'll recognize them"
+      },
+      {
+        "ic": "⏳",
+        "t": "Whether it will last"
+      },
+      {
+        "ic": "🔮",
+        "t": "What love has in store for me"
+      }
+    ],
+    "q4_eyebrow": "STEP 4",
+    "q4_h1": "What's your current situation in love?",
+    "q4_opts": [
+      {
+        "ic": "💔",
+        "t": "Single, open to someone new"
+      },
+      {
+        "ic": "🌀",
+        "t": "Just came out of a relationship"
+      },
+      {
+        "ic": "🤔",
+        "t": "Unsure if my current relationship has a future"
+      },
+      {
+        "ic": "✨",
+        "t": "Just curious what's ahead"
+      }
+    ],
+    "q5_h1": "Show us your palm",
+    "q5_sub": "Optional — a photo of your open palm lets us read your heart line for an even more personal reveal.",
+    "loading_phrases": [
+      "Reading the signs of love …",
+      "Decoding your heart line …",
+      "Two paths are starting to align …",
+      "Your reveal is taking shape …"
+    ],
+    "reveal_badge": "✦ Your love reveal",
+    "reveal_fallback": "The energy around your love line is unusually strong today — your full reveal is waiting in your personal reading."
+  },
+  "fr": {
+    "q2_eyebrow": "ÉTAPE 2",
+    "q2_h1": "Quand es-tu né(e) ?",
+    "q2_placeholder": "JJ/MM/AAAA",
+    "q3_eyebrow": "ÉTAPE 3",
+    "q3_h1": "Comment devons-nous t'appeler ?",
+    "q3_placeholder": "Ton prénom",
+    "q5_eyebrow": "ÉTAPE 5",
+    "photo_upload": "📷 Télécharger une photo",
+    "photo_hint": "Une photo nette et bien éclairée de ta paume ouverte",
+    "photo_skip": "Passer, juste la révélation textuelle",
+    "photo_continue": "Continuer avec cette photo →",
+    "next": "Continuer →",
+    "back": "← Retour",
+    "loading_phrases_palm": [
+      "Nous observons ta paume …",
+      "Lecture des lignes de vie, de cœur et de tête …",
+      "Les lignes racontent leur histoire …",
+      "Ta lecture de paume prend forme …"
+    ],
+    "loading_sub": "Cela ne prendra qu'un instant",
+    "palm_badge": "✦ Ta lecture de paume",
+    "palm_fallback": "Les lignes de ta main sont difficiles à déchiffrer aujourd'hui — réessaie avec une photo plus nette dans ta lecture personnelle.",
+    "cta": "Débloquer ta lecture complète →",
+    "disclaimer": "DEGAJA sert à l'orientation personnelle et au divertissement et ne remplace pas un conseil professionnel. Cette lecture a été générée par un système d'IA.",
+    "legal": {
+      "impressum": "Mentions légales",
+      "datenschutz": "Confidentialité",
+      "agb": "CGV",
+      "widerruf": "Rétractation"
+    },
+    "voice_loading": "Préparation de la voix …",
+    "voice_listen": "🔊 Écouter la voix",
+    "voice_playing": "⏸ Lecture en cours …",
+    "voice_unavailable": "",
+    "q1_eyebrow": "RÉVÉLATION AMOUREUSE",
+    "q1_h1": "Que veux-tu savoir sur ta prochaine relation ?",
+    "q1_opts": [
+      {
+        "ic": "💫",
+        "t": "Quand je vais la/le rencontrer"
+      },
+      {
+        "ic": "❤️",
+        "t": "Comment cette personne sera"
+      },
+      {
+        "ic": "🔑",
+        "t": "Comment je la/le reconnaîtrai"
+      },
+      {
+        "ic": "⏳",
+        "t": "Si ça va durer"
+      },
+      {
+        "ic": "🔮",
+        "t": "Ce que l'amour me réserve"
+      }
+    ],
+    "q4_eyebrow": "ÉTAPE 4",
+    "q4_h1": "Quelle est ta situation amoureuse actuelle ?",
+    "q4_opts": [
+      {
+        "ic": "💔",
+        "t": "Célibataire, ouvert(e) à quelqu'un de nouveau"
+      },
+      {
+        "ic": "🌀",
+        "t": "Je sors tout juste d'une relation"
+      },
+      {
+        "ic": "🤔",
+        "t": "Incertain(e) si ma relation actuelle a un avenir"
+      },
+      {
+        "ic": "✨",
+        "t": "Juste curieux(se) de ce qui m'attend"
+      }
+    ],
+    "q5_h1": "Montre-nous ta paume",
+    "q5_sub": "Facultatif — une photo de ta paume ouverte nous permet de lire ta ligne de cœur pour une révélation encore plus personnelle.",
+    "loading_phrases": [
+      "Nous lisons les signes de l'amour …",
+      "Ta ligne de cœur est décryptée …",
+      "Deux chemins commencent à s'aligner …",
+      "Ta révélation prend forme …"
+    ],
+    "reveal_badge": "✦ Ta révélation amoureuse",
+    "reveal_fallback": "L'énergie autour de ta ligne de cœur est exceptionnellement forte aujourd'hui — ta révélation complète t'attend dans ta lecture personnelle."
+  },
+  "es": {
+    "q2_eyebrow": "PASO 2",
+    "q2_h1": "¿Cuándo naciste?",
+    "q2_placeholder": "DD/MM/AAAA",
+    "q3_eyebrow": "PASO 3",
+    "q3_h1": "¿Cómo deberíamos llamarte?",
+    "q3_placeholder": "Tu nombre",
+    "q5_eyebrow": "PASO 5",
+    "photo_upload": "📷 Subir foto",
+    "photo_hint": "Una foto nítida y bien iluminada de tu palma abierta",
+    "photo_skip": "Omitir, solo la revelación de texto",
+    "photo_continue": "Continuar con esta foto →",
+    "next": "Continuar →",
+    "back": "← Atrás",
+    "loading_phrases_palm": [
+      "Observando tu palma …",
+      "Leyendo tus líneas de vida, corazón y cabeza …",
+      "Las líneas cuentan su historia …",
+      "Tu lectura de palma está tomando forma …"
+    ],
+    "loading_sub": "Esto solo tomará un momento",
+    "palm_badge": "✦ Tu lectura de palma",
+    "palm_fallback": "Las líneas de tu mano son difíciles de descifrar hoy — inténtalo de nuevo con una foto más clara en tu lectura personal.",
+    "cta": "Desbloquear tu lectura completa →",
+    "disclaimer": "DEGAJA es para orientación personal y entretenimiento, y no sustituye el asesoramiento profesional. Esta lectura fue generada por un sistema de IA.",
+    "legal": {
+      "impressum": "Aviso legal",
+      "datenschutz": "Privacidad",
+      "agb": "Términos",
+      "widerruf": "Desistimiento"
+    },
+    "voice_loading": "Preparando la voz …",
+    "voice_listen": "🔊 Escuchar la voz",
+    "voice_playing": "⏸ Reproduciendo …",
+    "voice_unavailable": "",
+    "q1_eyebrow": "REVELACIÓN AMOROSA",
+    "q1_h1": "¿Qué quieres saber sobre tu próxima relación?",
+    "q1_opts": [
+      {
+        "ic": "💫",
+        "t": "Cuándo la/lo conoceré"
+      },
+      {
+        "ic": "❤️",
+        "t": "Cómo será esa persona"
+      },
+      {
+        "ic": "🔑",
+        "t": "Cómo la/lo reconoceré"
+      },
+      {
+        "ic": "⏳",
+        "t": "Si va a durar"
+      },
+      {
+        "ic": "🔮",
+        "t": "Qué me depara el amor"
+      }
+    ],
+    "q4_eyebrow": "PASO 4",
+    "q4_h1": "¿Cuál es tu situación actual en el amor?",
+    "q4_opts": [
+      {
+        "ic": "💔",
+        "t": "Soltero/a, abierto/a a algo nuevo"
+      },
+      {
+        "ic": "🌀",
+        "t": "Acabo de salir de una relación"
+      },
+      {
+        "ic": "🤔",
+        "t": "No sé si mi relación actual tiene futuro"
+      },
+      {
+        "ic": "✨",
+        "t": "Solo tengo curiosidad por lo que viene"
+      }
+    ],
+    "q5_h1": "Muéstranos tu palma",
+    "q5_sub": "Opcional — una foto de tu palma abierta nos permite leer tu línea del amor para una revelación aún más personal.",
+    "loading_phrases": [
+      "Leyendo las señales del amor …",
+      "Descifrando tu línea del amor …",
+      "Dos caminos empiezan a alinearse …",
+      "Tu revelación está tomando forma …"
+    ],
+    "reveal_badge": "✦ Tu revelación amorosa",
+    "reveal_fallback": "La energía alrededor de tu línea del amor es inusualmente fuerte hoy — tu revelación completa te espera en tu lectura personal."
+  },
+  "it": {
+    "q2_eyebrow": "PASSO 2",
+    "q2_h1": "Quando sei nato/a?",
+    "q2_placeholder": "GG/MM/AAAA",
+    "q3_eyebrow": "PASSO 3",
+    "q3_h1": "Come dobbiamo chiamarti?",
+    "q3_placeholder": "Il tuo nome",
+    "q5_eyebrow": "PASSO 5",
+    "photo_upload": "📷 Carica foto",
+    "photo_hint": "Una foto nitida e ben illuminata del tuo palmo aperto",
+    "photo_skip": "Salta, solo la rivelazione testuale",
+    "photo_continue": "Continua con questa foto →",
+    "next": "Continua →",
+    "back": "← Indietro",
+    "loading_phrases_palm": [
+      "Osserviamo il tuo palmo …",
+      "Lettura delle linee di vita, cuore e testa …",
+      "Le linee raccontano la loro storia …",
+      "La tua lettura del palmo sta prendendo forma …"
+    ],
+    "loading_sub": "Ci vorrà solo un momento",
+    "palm_badge": "✦ La tua lettura del palmo",
+    "palm_fallback": "Le linee della tua mano sono difficili da decifrare oggi — riprova con una foto più chiara nella tua lettura personale.",
+    "cta": "Sblocca la tua lettura completa →",
+    "disclaimer": "DEGAJA è destinato all'orientamento personale e all'intrattenimento e non sostituisce una consulenza professionale. Questa lettura è stata generata da un sistema di IA.",
+    "legal": {
+      "impressum": "Note legali",
+      "datenschutz": "Privacy",
+      "agb": "Termini",
+      "widerruf": "Recesso"
+    },
+    "voice_loading": "Preparazione della voce …",
+    "voice_listen": "🔊 Ascolta la voce",
+    "voice_playing": "⏸ In riproduzione …",
+    "voice_unavailable": "",
+    "q1_eyebrow": "RIVELAZIONE D'AMORE",
+    "q1_h1": "Cosa vuoi sapere sulla tua prossima relazione?",
+    "q1_opts": [
+      {
+        "ic": "💫",
+        "t": "Quando la/lo incontrerò"
+      },
+      {
+        "ic": "❤️",
+        "t": "Come sarà questa persona"
+      },
+      {
+        "ic": "🔑",
+        "t": "Come la/lo riconoscerò"
+      },
+      {
+        "ic": "⏳",
+        "t": "Se durerà"
+      },
+      {
+        "ic": "🔮",
+        "t": "Cosa mi riserva l'amore"
+      }
+    ],
+    "q4_eyebrow": "PASSO 4",
+    "q4_h1": "Qual è la tua situazione attuale in amore?",
+    "q4_opts": [
+      {
+        "ic": "💔",
+        "t": "Single, aperto/a a qualcosa di nuovo"
+      },
+      {
+        "ic": "🌀",
+        "t": "Sono appena uscito/a da una relazione"
+      },
+      {
+        "ic": "🤔",
+        "t": "Non so se la mia relazione attuale ha un futuro"
+      },
+      {
+        "ic": "✨",
+        "t": "Sono solo curioso/a di cosa mi aspetta"
+      }
+    ],
+    "q5_h1": "Mostraci il tuo palmo",
+    "q5_sub": "Facoltativo — una foto del tuo palmo aperto ci permette di leggere la tua linea dell'amore per una rivelazione ancora più personale.",
+    "loading_phrases": [
+      "Leggiamo i segni dell'amore …",
+      "La tua linea dell'amore viene decifrata …",
+      "Due percorsi iniziano ad allinearsi …",
+      "La tua rivelazione sta prendendo forma …"
+    ],
+    "reveal_badge": "✦ La tua rivelazione d'amore",
+    "reveal_fallback": "L'energia intorno alla tua linea dell'amore è insolitamente forte oggi — la tua rivelazione completa ti aspetta nella tua lettura personale."
+  },
+  "pt": {
+    "q2_eyebrow": "PASSO 2",
+    "q2_h1": "Quando nasceste?",
+    "q2_placeholder": "DD/MM/AAAA",
+    "q3_eyebrow": "PASSO 3",
+    "q3_h1": "Como devemos chamar-te?",
+    "q3_placeholder": "O teu primeiro nome",
+    "q5_eyebrow": "PASSO 5",
+    "photo_upload": "📷 Carregar foto",
+    "photo_hint": "Uma foto nítida e bem iluminada da tua palma aberta",
+    "photo_skip": "Saltar, apenas a revelação em texto",
+    "photo_continue": "Continuar com esta foto →",
+    "next": "Continuar →",
+    "back": "← Voltar",
+    "loading_phrases_palm": [
+      "A observar a tua palma …",
+      "A ler as linhas da vida, do coração e da cabeça …",
+      "As linhas estão a contar a sua história …",
+      "A tua leitura da palma está a tomar forma …"
+    ],
+    "loading_sub": "Isto vai demorar só um momento",
+    "palm_badge": "✦ A tua leitura da palma",
+    "palm_fallback": "As linhas da tua mão estão difíceis de decifrar hoje — tenta novamente com uma foto mais nítida na tua leitura pessoal.",
+    "cta": "Desbloquear a tua leitura completa →",
+    "disclaimer": "A DEGAJA destina-se à orientação pessoal e ao entretenimento e não substitui aconselhamento profissional. Esta leitura foi gerada por um sistema de IA.",
+    "legal": {
+      "impressum": "Informação legal",
+      "datenschutz": "Privacidade",
+      "agb": "Termos",
+      "widerruf": "Retratação"
+    },
+    "voice_loading": "A preparar a voz …",
+    "voice_listen": "🔊 Ouvir a voz",
+    "voice_playing": "⏸ A reproduzir …",
+    "voice_unavailable": "",
+    "q1_eyebrow": "REVELAÇÃO AMOROSA",
+    "q1_h1": "O que queres saber sobre a tua próxima relação?",
+    "q1_opts": [
+      {
+        "ic": "💫",
+        "t": "Quando a/o vou conhecer"
+      },
+      {
+        "ic": "❤️",
+        "t": "Como essa pessoa vai ser"
+      },
+      {
+        "ic": "🔑",
+        "t": "Como a/o vou reconhecer"
+      },
+      {
+        "ic": "⏳",
+        "t": "Se vai durar"
+      },
+      {
+        "ic": "🔮",
+        "t": "O que o amor me reserva"
+      }
+    ],
+    "q4_eyebrow": "PASSO 4",
+    "q4_h1": "Qual é a tua situação atual no amor?",
+    "q4_opts": [
+      {
+        "ic": "💔",
+        "t": "Solteiro/a, aberto/a a algo novo"
+      },
+      {
+        "ic": "🌀",
+        "t": "Acabei de sair de uma relação"
+      },
+      {
+        "ic": "🤔",
+        "t": "Não sei se a minha relação atual tem futuro"
+      },
+      {
+        "ic": "✨",
+        "t": "Só tenho curiosidade sobre o que vem aí"
+      }
+    ],
+    "q5_h1": "Mostra-nos a tua palma",
+    "q5_sub": "Opcional — uma foto da tua palma aberta permite-nos ler a tua linha do amor para uma revelação ainda mais pessoal.",
+    "loading_phrases": [
+      "A ler os sinais do amor …",
+      "A tua linha do amor está a ser decifrada …",
+      "Dois caminhos começam a alinhar-se …",
+      "A tua revelação está a tomar forma …"
+    ],
+    "reveal_badge": "✦ A tua revelação amorosa",
+    "reveal_fallback": "A energia à volta da tua linha do amor está invulgarmente forte hoje — a tua revelação completa espera por ti na tua leitura pessoal."
+  },
+  "br": {
+    "q2_eyebrow": "PASSO 2",
+    "q2_h1": "Quando você nasceu?",
+    "q2_placeholder": "DD/MM/AAAA",
+    "q3_eyebrow": "PASSO 3",
+    "q3_h1": "Como podemos te chamar?",
+    "q3_placeholder": "Seu primeiro nome",
+    "q5_eyebrow": "PASSO 5",
+    "photo_upload": "📷 Enviar foto",
+    "photo_hint": "Uma foto nítida e bem iluminada da sua palma aberta",
+    "photo_skip": "Pular, só a revelação em texto",
+    "photo_continue": "Continuar com essa foto →",
+    "next": "Continuar →",
+    "back": "← Voltar",
+    "loading_phrases_palm": [
+      "Observando sua palma …",
+      "Lendo as linhas da vida, do coração e da cabeça …",
+      "As linhas estão contando a história delas …",
+      "Sua leitura de mão está tomando forma …"
+    ],
+    "loading_sub": "Isso vai levar só um instante",
+    "palm_badge": "✦ Sua leitura de mão",
+    "palm_fallback": "As linhas da sua mão estão difíceis de decifrar hoje — tente de novo com uma foto mais nítida na sua leitura pessoal.",
+    "cta": "Desbloquear sua leitura completa →",
+    "disclaimer": "A DEGAJA é voltada para orientação pessoal e entretenimento e não substitui aconselhamento profissional. Esta leitura foi gerada por um sistema de IA.",
+    "legal": {
+      "impressum": "Informações legais",
+      "datenschutz": "Privacidade",
+      "agb": "Termos",
+      "widerruf": "Direito de arrependimento"
+    },
+    "voice_loading": "Preparando a voz …",
+    "voice_listen": "🔊 Ouvir a voz",
+    "voice_playing": "⏸ Reproduzindo …",
+    "voice_unavailable": "",
+    "q1_eyebrow": "REVELAÇÃO DO AMOR",
+    "q1_h1": "O que você quer saber sobre seu próximo relacionamento?",
+    "q1_opts": [
+      {
+        "ic": "💫",
+        "t": "Quando vou conhecer essa pessoa"
+      },
+      {
+        "ic": "❤️",
+        "t": "Como essa pessoa vai ser"
+      },
+      {
+        "ic": "🔑",
+        "t": "Como vou reconhecer essa pessoa"
+      },
+      {
+        "ic": "⏳",
+        "t": "Se vai durar"
+      },
+      {
+        "ic": "🔮",
+        "t": "O que o amor reserva pra mim"
+      }
+    ],
+    "q4_eyebrow": "PASSO 4",
+    "q4_h1": "Qual é a sua situação atual no amor?",
+    "q4_opts": [
+      {
+        "ic": "💔",
+        "t": "Solteiro(a), aberto(a) a algo novo"
+      },
+      {
+        "ic": "🌀",
+        "t": "Acabei de sair de um relacionamento"
+      },
+      {
+        "ic": "🤔",
+        "t": "Não sei se meu relacionamento atual tem futuro"
+      },
+      {
+        "ic": "✨",
+        "t": "Só estou curioso(a) sobre o que vem por aí"
+      }
+    ],
+    "q5_h1": "Mostre sua palma pra gente",
+    "q5_sub": "Opcional — uma foto da sua palma aberta deixa a gente ler sua linha do amor, pra uma revelação ainda mais pessoal.",
+    "loading_phrases": [
+      "Lendo os sinais do amor …",
+      "Sua linha do amor está sendo decifrada …",
+      "Dois caminhos estão começando a se alinhar …",
+      "Sua revelação está tomando forma …"
+    ],
+    "reveal_badge": "✦ Sua revelação do amor",
+    "reveal_fallback": "A energia ao redor da sua linha do amor está incomumente forte hoje — sua revelação completa está esperando por você na sua leitura pessoal."
+  },
+  "ru": {
+    "q2_eyebrow": "ШАГ 2",
+    "q2_h1": "Когда ты родилась?",
+    "q2_placeholder": "ДД.ММ.ГГГГ",
+    "q3_eyebrow": "ШАГ 3",
+    "q3_h1": "Как нам тебя называть?",
+    "q3_placeholder": "Твоё имя",
+    "q5_eyebrow": "ШАГ 5",
+    "photo_upload": "📷 Загрузить фото",
+    "photo_hint": "Чёткое, хорошо освещённое фото твоей открытой ладони",
+    "photo_skip": "Пропустить, только текстовое откровение",
+    "photo_continue": "Продолжить с этим фото →",
+    "next": "Далее →",
+    "back": "← Назад",
+    "loading_phrases_palm": [
+      "Изучаем твою ладонь …",
+      "Читаем линии жизни, сердца и головы …",
+      "Линии рассказывают свою историю …",
+      "Твоё гадание по руке обретает форму …"
+    ],
+    "loading_sub": "Это займёт всего мгновение",
+    "palm_badge": "✦ Твоё гадание по руке",
+    "palm_fallback": "Линии твоей руки сегодня трудно разобрать — попробуй ещё раз с более чётким фото в персональном сеансе.",
+    "cta": "Открыть полный сеанс →",
+    "disclaimer": "DEGAJA предназначена для личного ориентира и развлечения и не заменяет профессиональную консультацию. Это толкование создано системой ИИ.",
+    "legal": {
+      "impressum": "Юридическая информация",
+      "datenschutz": "Конфиденциальность",
+      "agb": "Условия",
+      "widerruf": "Отказ от договора"
+    },
+    "voice_loading": "Подготовка голоса …",
+    "voice_listen": "🔊 Слушать голос",
+    "voice_playing": "⏸ Воспроизведение …",
+    "voice_unavailable": "",
+    "q1_eyebrow": "ЛЮБОВНОЕ ОТКРОВЕНИЕ",
+    "q1_h1": "Что ты хочешь узнать о своих следующих отношениях?",
+    "q1_opts": [
+      {
+        "ic": "💫",
+        "t": "Когда я встречу этого человека"
+      },
+      {
+        "ic": "❤️",
+        "t": "Каким будет этот человек"
+      },
+      {
+        "ic": "🔑",
+        "t": "Как я узнаю этого человека"
+      },
+      {
+        "ic": "⏳",
+        "t": "Продлятся ли эти отношения"
+      },
+      {
+        "ic": "🔮",
+        "t": "Что уготовила мне любовь"
+      }
+    ],
+    "q4_eyebrow": "ШАГ 4",
+    "q4_h1": "Какова твоя текущая ситуация в любви?",
+    "q4_opts": [
+      {
+        "ic": "💔",
+        "t": "Свободен(на), открыт(а) новому"
+      },
+      {
+        "ic": "🌀",
+        "t": "Только что вышел(ла) из отношений"
+      },
+      {
+        "ic": "🤔",
+        "t": "Не уверен(а), есть ли будущее у моих нынешних отношений"
+      },
+      {
+        "ic": "✨",
+        "t": "Просто любопытно, что впереди"
+      }
+    ],
+    "q5_h1": "Покажи нам свою ладонь",
+    "q5_sub": "Необязательно — фото твоей открытой ладони позволит нам прочитать линию любви для ещё более личного откровения.",
+    "loading_phrases": [
+      "Читаем знаки любви …",
+      "Расшифровываем твою линию любви …",
+      "Два пути начинают сближаться …",
+      "Твоё откровение обретает форму …"
+    ],
+    "reveal_badge": "✦ Твоё любовное откровение",
+    "reveal_fallback": "Энергия вокруг твоей линии любви сегодня необычайно сильна — твоё полное откровение ждёт тебя в персональном сеансе."
+  },
+  "uk": {
+    "q2_eyebrow": "КРОК 2",
+    "q2_h1": "Коли ти народилася?",
+    "q2_placeholder": "ДД.ММ.РРРР",
+    "q3_eyebrow": "КРОК 3",
+    "q3_h1": "Як нам тебе називати?",
+    "q3_placeholder": "Твоє ім'я",
+    "q5_eyebrow": "КРОК 5",
+    "photo_upload": "📷 Завантажити фото",
+    "photo_hint": "Чітке, добре освітлене фото твоєї відкритої долоні",
+    "photo_skip": "Пропустити, лише текстове одкровення",
+    "photo_continue": "Продовжити з цим фото →",
+    "next": "Далі →",
+    "back": "← Назад",
+    "loading_phrases_palm": [
+      "Вивчаємо твою долоню …",
+      "Читаємо лінії життя, серця і голови …",
+      "Лінії розповідають свою історію …",
+      "Твоє ворожіння по руці набуває форми …"
+    ],
+    "loading_sub": "Це займе лише мить",
+    "palm_badge": "✦ Твоє ворожіння по руці",
+    "palm_fallback": "Лінії твоєї руки сьогодні важко розібрати — спробуй ще раз з чіткішим фото в персональному сеансі.",
+    "cta": "Відкрити повний сеанс →",
+    "disclaimer": "DEGAJA призначена для особистого орієнтиру та розваги і не замінює професійну консультацію. Це тлумачення створено системою ШІ.",
+    "legal": {
+      "impressum": "Юридична інформація",
+      "datenschutz": "Конфіденційність",
+      "agb": "Умови",
+      "widerruf": "Відмова від договору"
+    },
+    "voice_loading": "Підготовка голосу …",
+    "voice_listen": "🔊 Слухати голос",
+    "voice_playing": "⏸ Відтворення …",
+    "voice_unavailable": "",
+    "q1_eyebrow": "ЛЮБОВНЕ ОДКРОВЕННЯ",
+    "q1_h1": "Що ти хочеш дізнатися про свої наступні стосунки?",
+    "q1_opts": [
+      {
+        "ic": "💫",
+        "t": "Коли я зустріну цю людину"
+      },
+      {
+        "ic": "❤️",
+        "t": "Якою буде ця людина"
+      },
+      {
+        "ic": "🔑",
+        "t": "Як я впізнаю цю людину"
+      },
+      {
+        "ic": "⏳",
+        "t": "Чи триватимуть ці стосунки"
+      },
+      {
+        "ic": "🔮",
+        "t": "Що приготувало для мене кохання"
+      }
+    ],
+    "q4_eyebrow": "КРОК 4",
+    "q4_h1": "Яка твоя теперішня ситуація в коханні?",
+    "q4_opts": [
+      {
+        "ic": "💔",
+        "t": "Вільний(а), відкритий(а) до нового"
+      },
+      {
+        "ic": "🌀",
+        "t": "Щойно вийшов(ла) зі стосунків"
+      },
+      {
+        "ic": "🤔",
+        "t": "Не впевнений(а), чи є майбутнє в моїх теперішніх стосунках"
+      },
+      {
+        "ic": "✨",
+        "t": "Просто цікаво, що попереду"
+      }
+    ],
+    "q5_h1": "Покажи нам свою долоню",
+    "q5_sub": "Необов'язково — фото твоєї відкритої долоні дозволить нам прочитати лінію кохання для ще особистішого одкровення.",
+    "loading_phrases": [
+      "Читаємо знаки кохання …",
+      "Розшифровуємо твою лінію кохання …",
+      "Два шляхи починають зближатися …",
+      "Твоє одкровення набуває форми …"
+    ],
+    "reveal_badge": "✦ Твоє любовне одкровення",
+    "reveal_fallback": "Енергія навколо твоєї лінії кохання сьогодні незвично сильна — твоє повне одкровення чекає на тебе в персональному сеансі."
+  },
+  "ja": {
+    "q2_eyebrow": "ステップ2",
+    "q2_h1": "生年月日は？",
+    "q2_placeholder": "年/月/日",
+    "q3_eyebrow": "ステップ3",
+    "q3_h1": "お名前を教えてください",
+    "q3_placeholder": "お名前",
+    "q5_eyebrow": "ステップ5",
+    "photo_upload": "📷 写真をアップロード",
+    "photo_hint": "明るい場所で撮った、開いた手のひらの写真",
+    "photo_skip": "スキップして、テキストのみで見る",
+    "photo_continue": "この写真で進む →",
+    "next": "次へ →",
+    "back": "← 戻る",
+    "loading_phrases_palm": [
+      "手のひらを見ています…",
+      "生命線・感情線・頭脳線を読み取り中…",
+      "線があなたの物語を語っています…",
+      "手相の結果がまとまりつつあります…"
+    ],
+    "loading_sub": "少々お待ちください",
+    "palm_badge": "✦ あなたの手相",
+    "palm_fallback": "今日は手相の線が読み取りにくいようです — パーソナルリーディングでより鮮明な写真を試してください。",
+    "cta": "フルリーディングを見る →",
+    "disclaimer": "DEGAJAは個人的な指針とエンターテインメントを目的としており、専門的な助言に代わるものではありません。この鑑定はAIによって生成されました。",
+    "legal": {
+      "impressum": "運営者情報",
+      "datenschutz": "プライバシー",
+      "agb": "利用規約",
+      "widerruf": "撤回"
+    },
+    "voice_loading": "音声を準備しています…",
+    "voice_listen": "🔊 音声を聞く",
+    "voice_playing": "⏸ 再生中…",
+    "voice_unavailable": "",
+    "q1_eyebrow": "恋愛の啓示",
+    "q1_h1": "次の恋愛について何を知りたいですか？",
+    "q1_opts": [
+      {
+        "ic": "💫",
+        "t": "いつ出会うか"
+      },
+      {
+        "ic": "❤️",
+        "t": "その人がどんな人か"
+      },
+      {
+        "ic": "🔑",
+        "t": "どうやって気づくか"
+      },
+      {
+        "ic": "⏳",
+        "t": "長く続くかどうか"
+      },
+      {
+        "ic": "🔮",
+        "t": "恋愛に何が待っているか"
+      }
+    ],
+    "q4_eyebrow": "ステップ4",
+    "q4_h1": "今の恋愛の状況は？",
+    "q4_opts": [
+      {
+        "ic": "💔",
+        "t": "独身で、新しい出会いにオープン"
+      },
+      {
+        "ic": "🌀",
+        "t": "最近恋愛が終わったばかり"
+      },
+      {
+        "ic": "🤔",
+        "t": "今の関係に未来があるか分からない"
+      },
+      {
+        "ic": "✨",
+        "t": "ただこれからが気になる"
+      }
+    ],
+    "q5_h1": "手のひらを見せてください",
+    "q5_sub": "任意 — 開いた手のひらの写真があれば、恋愛線を読み取り、さらにパーソナルな啓示をお届けします。",
+    "loading_phrases": [
+      "恋の兆しを読み取っています…",
+      "あなたの恋愛線を解読中…",
+      "二つの道が交わり始めています…",
+      "啓示がまとまりつつあります…"
+    ],
+    "reveal_badge": "✦ あなたへの恋愛の啓示",
+    "reveal_fallback": "今日はあなたの恋愛線の周りのエネルギーが特に強いようです — 完全な啓示はパーソナルリーディングでお待ちしています。"
+  },
+  "zh": {
+    "q2_eyebrow": "第2步",
+    "q2_h1": "你的出生日期是？",
+    "q2_placeholder": "年/月/日",
+    "q3_eyebrow": "第3步",
+    "q3_h1": "我们该怎么称呼你？",
+    "q3_placeholder": "你的名字",
+    "q5_eyebrow": "第5步",
+    "photo_upload": "📷 上传照片",
+    "photo_hint": "一张光线充足、平整的手掌照片",
+    "photo_skip": "跳过，只看文字揭示",
+    "photo_continue": "使用这张照片继续 →",
+    "next": "继续 →",
+    "back": "← 返回",
+    "loading_phrases_palm": [
+      "正在观察你的手掌…",
+      "正在解读你的生命线、感情线与智慧线…",
+      "纹路正在讲述它们的故事…",
+      "你的手相解读正在成形…"
+    ],
+    "loading_sub": "请稍等片刻",
+    "palm_badge": "✦ 你的手相解读",
+    "palm_fallback": "今天你的手纹有点难以辨认——不妨在个人解读中换一张更清晰的照片再试一次。",
+    "cta": "解锁完整解读 →",
+    "disclaimer": "DEGAJA 仅用于个人指引与娱乐目的，不能替代专业建议。此解读由AI系统生成。",
+    "legal": {
+      "impressum": "网站信息",
+      "datenschutz": "隐私政策",
+      "agb": "条款",
+      "widerruf": "撤回权"
+    },
+    "voice_loading": "正在准备语音…",
+    "voice_listen": "🔊 收听语音",
+    "voice_playing": "⏸ 播放中…",
+    "voice_unavailable": "",
+    "q1_eyebrow": "爱情揭示",
+    "q1_h1": "你想知道关于你下一段感情的什么？",
+    "q1_opts": [
+      {
+        "ic": "💫",
+        "t": "我什么时候会遇见对方"
+      },
+      {
+        "ic": "❤️",
+        "t": "对方会是什么样的人"
+      },
+      {
+        "ic": "🔑",
+        "t": "我要怎么认出对方"
+      },
+      {
+        "ic": "⏳",
+        "t": "这段感情会不会长久"
+      },
+      {
+        "ic": "🔮",
+        "t": "爱情为我准备了什么"
+      }
+    ],
+    "q4_eyebrow": "第4步",
+    "q4_h1": "你现在的感情状况是？",
+    "q4_opts": [
+      {
+        "ic": "💔",
+        "t": "单身，对新的开始持开放态度"
+      },
+      {
+        "ic": "🌀",
+        "t": "刚结束一段感情"
+      },
+      {
+        "ic": "🤔",
+        "t": "不确定现在这段感情有没有未来"
+      },
+      {
+        "ic": "✨",
+        "t": "只是好奇接下来会怎样"
+      }
+    ],
+    "q5_h1": "给我们看看你的手掌",
+    "q5_sub": "可选 —— 一张手掌照片能让我们解读你的感情线，带来更个人化的揭示。",
+    "loading_phrases": [
+      "正在解读爱情的迹象…",
+      "正在解码你的感情线…",
+      "两条路正在开始交汇…",
+      "你的揭示正在成形…"
+    ],
+    "reveal_badge": "✦ 你的爱情揭示",
+    "reveal_fallback": "今天你恋爱线周围的能量异常强烈——完整的揭示正在你的个人解读中等待着你。"
+  },
+  "hi": {
+    "q2_eyebrow": "चरण 2",
+    "q2_h1": "आपका जन्म कब हुआ था?",
+    "q2_placeholder": "दिन/माह/वर्ष",
+    "q3_eyebrow": "चरण 3",
+    "q3_h1": "हम आपको क्या कहकर पुकारें?",
+    "q3_placeholder": "आपका पहला नाम",
+    "q5_eyebrow": "चरण 5",
+    "photo_upload": "📷 फोटो अपलोड करें",
+    "photo_hint": "आपकी खुली हथेली की एक स्पष्ट, अच्छी रोशनी वाली तस्वीर",
+    "photo_skip": "छोड़ें, सिर्फ टेक्स्ट रहस्योद्घाटन देखें",
+    "photo_continue": "इस फोटो के साथ आगे बढ़ें →",
+    "next": "आगे बढ़ें →",
+    "back": "← वापस",
+    "loading_phrases_palm": [
+      "आपकी हथेली का अध्ययन किया जा रहा है…",
+      "जीवन रेखा, हृदय रेखा और मस्तिष्क रेखा पढ़ी जा रही है…",
+      "रेखाएं अपनी कहानी बता रही हैं…",
+      "आपका हस्तरेखा पाठ आकार ले रहा है…"
+    ],
+    "loading_sub": "कृपया एक क्षण प्रतीक्षा करें",
+    "palm_badge": "✦ आपका हस्तरेखा पाठ",
+    "palm_fallback": "आज आपकी हथेली की रेखाएं पढ़ना मुश्किल है — अपनी व्यक्तिगत रीडिंग में एक स्पष्ट फोटो के साथ फिर कोशिश करें।",
+    "cta": "अपनी पूरी रीडिंग अनलॉक करें →",
+    "disclaimer": "DEGAJA केवल व्यक्तिगत मार्गदर्शन और मनोरंजन के उद्देश्य से है और यह पेशेवर सलाह का विकल्प नहीं है। यह रीडिंग एक AI सिस्टम द्वारा तैयार की गई है।",
+    "legal": {
+      "impressum": "कानूनी सूचना",
+      "datenschutz": "गोपनीयता",
+      "agb": "शर्तें",
+      "widerruf": "निरसन"
+    },
+    "voice_loading": "आवाज़ तैयार की जा रही है…",
+    "voice_listen": "🔊 आवाज़ सुनें",
+    "voice_playing": "⏸ चल रहा है…",
+    "voice_unavailable": "",
+    "q1_eyebrow": "प्रेम रहस्योद्घाटन",
+    "q1_h1": "तुम अपने अगले रिश्ते के बारे में क्या जानना चाहते हो?",
+    "q1_opts": [
+      {
+        "ic": "💫",
+        "t": "मैं उस व्यक्ति से कब मिलूंगा/मिलूंगी"
+      },
+      {
+        "ic": "❤️",
+        "t": "वह व्यक्ति कैसा होगा"
+      },
+      {
+        "ic": "🔑",
+        "t": "मैं उसे कैसे पहचानूंगा/पहचानूंगी"
+      },
+      {
+        "ic": "⏳",
+        "t": "क्या यह रिश्ता टिकेगा"
+      },
+      {
+        "ic": "🔮",
+        "t": "प्यार मेरे लिए क्या लेकर आया है"
+      }
+    ],
+    "q4_eyebrow": "चरण 4",
+    "q4_h1": "प्यार में तुम्हारी मौजूदा स्थिति क्या है?",
+    "q4_opts": [
+      {
+        "ic": "💔",
+        "t": "सिंगल, कुछ नए के लिए तैयार"
+      },
+      {
+        "ic": "🌀",
+        "t": "अभी-अभी एक रिश्ता खत्म हुआ है"
+      },
+      {
+        "ic": "🤔",
+        "t": "पक्का नहीं कि मेरे मौजूदा रिश्ते का कोई भविष्य है"
+      },
+      {
+        "ic": "✨",
+        "t": "बस जानने को उत्सुक कि आगे क्या है"
+      }
+    ],
+    "q5_h1": "हमें अपनी हथेली दिखाएं",
+    "q5_sub": "वैकल्पिक — तुम्हारी खुली हथेली की एक तस्वीर हमें तुम्हारी प्रेम रेखा पढ़ने देती है, जिससे रहस्योद्घाटन और भी व्यक्तिगत हो जाता है।",
+    "loading_phrases": [
+      "प्रेम के संकेतों को पढ़ा जा रहा है…",
+      "तुम्हारी प्रेम रेखा को समझा जा रहा है…",
+      "दो रास्ते जुड़ने लगे हैं…",
+      "तुम्हारा रहस्योद्घाटन आकार ले रहा है…"
+    ],
+    "reveal_badge": "✦ आपका प्रेम रहस्योद्घाटन",
+    "reveal_fallback": "आज तुम्हारी प्रेम रेखा के आसपास की ऊर्जा असामान्य रूप से प्रबल है — तुम्हारा पूरा रहस्योद्घाटन तुम्हारी व्यक्तिगत रीडिंग में प्रतीक्षा कर रहा है।"
+  }
+};
+  var SUPPORTED_LANGS = ["de", "en", "fr", "es", "it", "pt", "ru", "uk", "br", "ja", "zh", "hi"];
+  // Brazilian Portuguese gets its own translation above (real differences
+  // from European Portuguese: você vs tu, different verb constructions).
+  // Mexican Spanish is left aliased to es: in neutral written UI text like
+  // this quiz, the two are close enough that a separate translation would
+  // mostly just restate the same sentences — unlike pt-BR vs pt-PT, which
+  // genuinely diverge here. US English is aliased for the same reason.
+  var LANG_ALIAS = { us: "en", mx: "es" };
+
+  var REVEAL_TOPIC = {
+  "de": "Nächste Beziehung",
+  "en": "Next relationship",
+  "fr": "Prochaine relation",
+  "es": "Próxima relación",
+  "it": "Prossima relazione",
+  "pt": "Próxima relação",
+  "br": "Próximo relacionamento",
+  "ru": "Следующие отношения",
+  "uk": "Наступні стосунки",
+  "ja": "次の恋愛",
+  "zh": "下一段感情",
+  "hi": "अगला रिश्ता"
+};
+
+  // {name}/{birthdate}/{insight}/{focus} are substituted in before sending.
+  var REVEAL_PROMPT = {
+  "de": "Ich heiße {name}, geboren am {birthdate}. Was ich über meine nächste Beziehung wissen möchte: {insight}. Meine aktuelle Situation in der Liebe: {focus}. Schreibe mir eine immersive, bildhafte persönliche Enthüllung über meine nächste Beziehung, passend zu meiner Wahl — keine generische Horoskop-Floskel. Nutze meinen Namen direkt, erfinde eine konkrete, lebendige Szene, wie und wo wir uns zum ersten Mal begegnen oder erkennen könnten, und beschreibe konkrete Eigenschaften, Energie oder ein prägendes Merkmal dieser Person, verknüpft mit dem, was mich gerade beschäftigt. Baue über 7-9 Sätze hinweg langsam Vorfreude auf und ende mit einem nachhallenden, leicht offenen Cliffhanger, der neugierig macht. Schreibe es, als würdest du mir etwas anvertrauen, das nur ich hören soll — intim, kinoreif, niemals generisch oder gehetzt. Formuliere es als reflektierende Unterhaltung, niemals als garantierte Vorhersage.",
+  "en": "My name is {name}, born on {birthdate}. What I want to know about my next relationship: {insight}. My current situation in love: {focus}. Write me an immersive, vivid personal reveal about my next relationship that fits my choice — not a generic horoscope blurb. Use my name directly, invent a specific, vivid scene of how and where we might first meet or recognize each other, and describe concrete qualities, energy or a defining trait of this person, connecting it to what's on my mind right now. Build anticipation gradually across 7-9 sentences, end on a resonant, slightly cliffhanger note that makes me want to know more. Write it as if you're confiding something only I'm meant to hear — intimate, cinematic, never generic or rushed. Frame it as reflective entertainment, never a guaranteed prediction.",
+  "fr": "Je m'appelle {name}, né(e) le {birthdate}. Ce que je veux savoir sur ma prochaine relation : {insight}. Ma situation actuelle en amour : {focus}. Écris-moi une révélation personnelle immersive et vivante sur ma prochaine relation, adaptée à mon choix — pas une banale formule d'horoscope. Utilise mon prénom directement, invente une scène précise et vivante de comment et où nous pourrions nous rencontrer ou nous reconnaître pour la première fois, et décris des qualités concrètes, une énergie ou un trait marquant de cette personne, en les reliant à ce qui me préoccupe en ce moment. Construis progressivement l'anticipation sur 7 à 9 phrases, et termine sur une note marquante, légèrement en suspens, qui donne envie d'en savoir plus. Écris-le comme si tu me confiais quelque chose que moi seul(e) devais entendre — intime, cinématographique, jamais générique ni précipité. Présente-le comme un divertissement réflexif, jamais comme une prédiction garantie.",
+  "es": "Me llamo {name}, nací el {birthdate}. Lo que quiero saber sobre mi próxima relación: {insight}. Mi situación actual en el amor: {focus}. Escríbeme una revelación personal inmersiva y vívida sobre mi próxima relación, acorde a mi elección — no una frase genérica de horóscopo. Usa mi nombre directamente, inventa una escena concreta y vívida de cómo y dónde podríamos conocernos o reconocernos por primera vez, y describe cualidades concretas, energía o un rasgo distintivo de esta persona, conectándolo con lo que me preocupa ahora mismo. Construye la expectativa gradualmente a lo largo de 7 a 9 frases, y termina con una nota resonante y ligeramente en suspenso que me haga querer saber más. Escríbelo como si me estuvieras confiando algo que solo yo debo escuchar — íntimo, cinematográfico, nunca genérico ni apresurado. Preséntalo como entretenimiento reflexivo, nunca como una predicción garantizada.",
+  "it": "Mi chiamo {name}, nato/a il {birthdate}. Ciò che voglio sapere sulla mia prossima relazione: {insight}. La mia situazione attuale in amore: {focus}. Scrivimi una rivelazione personale immersiva e vivida sulla mia prossima relazione, adatta alla mia scelta — non una frase generica da oroscopo. Usa il mio nome direttamente, inventa una scena concreta e vivida di come e dove potremmo incontrarci o riconoscerci per la prima volta, e descrivi qualità concrete, energia o un tratto distintivo di questa persona, collegandolo a ciò che mi preoccupa ora. Costruisci gradualmente l'attesa in 7-9 frasi, e termina con una nota risonante, leggermente in sospeso, che mi faccia venire voglia di saperne di più. Scrivilo come se mi stessi confidando qualcosa che solo io devo sentire — intimo, cinematografico, mai generico o affrettato. Presentalo come intrattenimento riflessivo, mai come una previsione garantita.",
+  "pt": "Chamo-me {name}, nasci a {birthdate}. O que quero saber sobre a minha próxima relação: {insight}. A minha situação atual no amor: {focus}. Escreve-me uma revelação pessoal imersiva e vívida sobre a minha próxima relação, adequada à minha escolha — não uma frase genérica de horóscopo. Usa o meu nome diretamente, inventa uma cena concreta e vívida de como e onde poderíamos conhecer-nos ou reconhecer-nos pela primeira vez, e descreve qualidades concretas, energia ou um traço marcante dessa pessoa, ligando-o ao que me preocupa agora. Constrói a expectativa gradualmente ao longo de 7-9 frases, e termina com uma nota marcante, ligeiramente em suspenso, que me faça querer saber mais. Escreve-o como se me estivesses a confiar algo que só eu devo ouvir — íntimo, cinematográfico, nunca genérico ou apressado. Apresenta-o como entretenimento reflexivo, nunca como uma previsão garantida.",
+  "br": "Meu nome é {name}, nasci em {birthdate}. O que quero saber sobre meu próximo relacionamento: {insight}. Minha situação atual no amor: {focus}. Escreva pra mim uma revelação pessoal imersiva e vívida sobre meu próximo relacionamento, que combine com minha escolha — nada de frase genérica de horóscopo. Use meu nome diretamente, invente uma cena concreta e vívida de como e onde a gente poderia se conhecer ou se reconhecer pela primeira vez, e descreva qualidades concretas, energia ou um traço marcante dessa pessoa, conectando isso com o que está passando pela minha cabeça agora. Construa a expectativa aos poucos ao longo de 7 a 9 frases, e termine com uma nota marcante, meio em suspenso, que me deixe querendo saber mais. Escreva como se você estivesse me confiando algo que só eu devo ouvir — íntimo, cinematográfico, nunca genérico ou apressado. Apresente isso como entretenimento reflexivo, nunca como uma previsão garantida.",
+  "ru": "Меня зовут {name}, я родился(лась) {birthdate}. Что я хочу узнать о своих следующих отношениях: {insight}. Моя текущая ситуация в любви: {focus}. Напиши мне живое, захватывающее личное откровение о моих следующих отношениях, соответствующее моему выбору — не общую фразу из гороскопа. Используй моё имя напрямую, придумай конкретную, яркую сцену того, как и где мы могли бы впервые встретиться или узнать друг друга, и опиши конкретные качества, энергию или отличительную черту этого человека, связав это с тем, что меня сейчас беспокоит. Постепенно наращивай предвкушение на протяжении 7-9 предложений, и заверши запоминающейся, слегка незавершённой нотой, которая вызывает желание узнать больше. Напиши это так, будто ты доверяешь мне то, что должен услышать только я — интимно, кинематографично, никогда не обобщённо и не второпях. Подай это как рефлексивное развлечение, никогда как гарантированное предсказание.",
+  "uk": "Мене звати {name}, я народився(лася) {birthdate}. Що я хочу дізнатися про свої наступні стосунки: {insight}. Моя теперішня ситуація в коханні: {focus}. Напиши мені живе, захопливе особисте одкровення про мої наступні стосунки, що відповідає моєму вибору — не загальну фразу з гороскопу. Використай моє ім'я напряму, вигадай конкретну, яскраву сцену того, як і де ми могли б вперше зустрітися чи впізнати одне одного, і опиши конкретні якості, енергію або характерну рису цієї людини, пов'язавши це з тим, що мене зараз турбує. Поступово нарощуй передчуття протягом 7-9 речень, і заверши пам'ятною, трохи незавершеною нотою, яка викликає бажання дізнатися більше. Напиши це так, ніби ти довіряєш мені те, що маю почути лише я — інтимно, кінематографічно, ніколи узагальнено чи поспішно. Подай це як рефлексивну розвагу, ніколи як гарантоване передбачення.",
+  "ja": "私の名前は{name}、{birthdate}生まれです。次の恋愛について知りたいこと：{insight}。今の恋愛における状況：{focus}。私の次の恋愛について、選択に合った臨場感あふれる個人的な啓示を書いてください——一般的な占いの決まり文句ではなく。私の名前を直接使い、私たちが初めて出会う、あるいはお互いに気づく具体的で鮮やかな場面を創作し、その人の具体的な特徴やエネルギー、印象的な特徴を、今私が気にかけていることと結びつけて描写してください。7〜9文かけて徐々に期待感を高め、もっと知りたくなるような、余韻の残る少し未完結な一文で締めくくってください。まるで私だけに打ち明けるかのように——親密で、映画のように鮮やかで、決して一般的で急いだものにならないように書いてください。これは内省的なエンターテインメントとして提示し、保証された予言としては決して提示しないでください。",
+  "zh": "我叫{name}，出生于{birthdate}。我想知道关于我下一段感情的事：{insight}。我现在的感情状况：{focus}。请为我写一段身临其境、生动的个人揭示，关于我的下一段感情，要契合我的选择——不要是千篇一律的占星套话。直接使用我的名字，虚构一个具体生动的场景，描述我们可能如何相遇或彼此认出对方，并描绘这个人具体的特质、气场或令人难忘的特点，将其与我现在最在意的事联系起来。用7到9句话逐步营造期待感，并以一个令人回味、略带悬念的结尾收束，让我想知道更多。写得就像你在向我诉说只有我才该听到的秘密一样——亲密、如电影般生动，绝不千篇一律或仓促。请将其呈现为反思性的娱乐内容，绝不是确定的预言。",
+  "hi": "मेरा नाम {name} है, मेरा जन्म {birthdate} को हुआ था। मैं अपने अगले रिश्ते के बारे में जो जानना चाहता/चाहती हूं: {insight}। प्यार में मेरी मौजूदा स्थिति: {focus}। मेरे अगले रिश्ते के बारे में मुझे एक गहन, जीवंत व्यक्तिगत रहस्योद्घाटन लिखें जो मेरी पसंद से मेल खाए — कोई सामान्य कुंडली जैसा वाक्य नहीं। मेरे नाम का सीधे इस्तेमाल करें, एक ठोस, जीवंत दृश्य गढ़ें कि हम पहली बार कैसे और कहां मिल सकते हैं या एक-दूसरे को पहचान सकते हैं, और इस व्यक्ति के ठोस गुण, ऊर्जा या किसी खास विशेषता का वर्णन करें, इसे उस बात से जोड़ते हुए जो अभी मेरे मन में है। 7-9 वाक्यों में धीरे-धीरे उत्सुकता बढ़ाएं, और एक यादगार, थोड़े अधूरे अंदाज़ में खत्म करें जिससे मुझे और जानने की इच्छा हो। इसे ऐसे लिखें जैसे आप मुझे कुछ ऐसा बता रहे हों जो सिर्फ मुझे ही सुनना है — आत्मीय, सिनेमाई, कभी भी सामान्य या जल्दबाज़ी वाला नहीं। इसे चिंतनशील मनोरंजन के रूप में प्रस्तुत करें, कभी भी गारंटीशुदा भविष्यवाणी के रूप में नहीं।"
+};
+
+  var qs = new URLSearchParams(location.search);
+  var requestedLang = qs.get("lang");
+  var mappedLang = LANG_ALIAS[requestedLang] || requestedLang;
+  var langWasExplicit = SUPPORTED_LANGS.indexOf(mappedLang) !== -1;
+  // Fall back to the main site's own remembered language (same localStorage
+  // key as i18n.js) before falling back to German/geo-guessing — covers a
+  // direct visit, a bookmark, or an old cached banner link with no ?lang=.
+  var storedLang = null;
+  try {
+    var storedRaw = localStorage.getItem("degajaLang");
+    var storedMapped = LANG_ALIAS[storedRaw] || storedRaw;
+    if (SUPPORTED_LANGS.indexOf(storedMapped) !== -1) storedLang = storedMapped;
+  } catch (_) {}
+  var lang = langWasExplicit ? mappedLang : (storedLang || "de");
+  langWasExplicit = langWasExplicit || !!storedLang;
+  var ref = qs.get("ref") || qs.get("utm_source") || "love-quiz";
+
+  // Same spirit as i18n.js on the main site: a real visitor-country guess
+  // from Vercel's edge (see /api/geo.js) beats a hardcoded default — but
+  // never overrides an explicit ?lang= pick, and only applies while still
+  // on the first question so it can't disrupt someone mid-quiz.
+  var COUNTRY_LANG = {
+    DE: "de", AT: "de", CH: "de", LI: "de",
+    FR: "fr", MC: "fr",
+    ES: "es", AR: "es", CO: "es", CL: "es", PE: "es", MX: "es", VE: "es",
+    IT: "it",
+    PT: "pt", BR: "pt",
+    RU: "ru", BY: "ru", KZ: "ru", UA: "ru",
+    GB: "en", IE: "en", US: "en", CA: "en", AU: "en", NZ: "en", ZA: "en", SG: "en",
+    JP: "ja", CN: "zh", TW: "zh", HK: "zh", MO: "zh",
+    IN: "hi"
+  };
+  function applyGeoLangIfEligible(){
+    if (langWasExplicit) return;
+    var controller = new AbortController();
+    var timeout = setTimeout(function(){ controller.abort(); }, 2500);
+    fetch("/api/geo", { signal: controller.signal })
+      .then(function(r){ return r.ok ? r.json() : null; })
+      .then(function(data){
+        clearTimeout(timeout);
+        var geoLang = data && COUNTRY_LANG[String(data.country || "").toUpperCase()];
+        if (!geoLang || geoLang === lang || step !== 1) return;
+        lang = geoLang;
+        langSelect.value = lang;
+        render();
+      })
+      .catch(function(){});
+  }
+
+  var answers = { insight: null, birthdate: "", name: "", focus: null, palmImage: null, palmMediaType: null };
+  var step = 1;
+  var TOTAL_STEPS = 5;
+  var loadingTimer = null;
+  var typeTimer = null;
+
+  var card = document.getElementById("quizCard");
+  var progressBar = document.getElementById("progressBar");
+  var stepCount = document.getElementById("stepCount");
+  var langSelect = document.getElementById("langSelect");
+
+  function t(){ return STR[lang]; }
+
+  function buildStars(){
+    var wrap = document.getElementById("stars");
+    wrap.innerHTML = "";
+    var count = window.innerWidth < 500 ? 36 : 60;
+    for (var i = 0; i < count; i++) {
+      var s = document.createElement("div");
+      s.className = "quiz-star";
+      var size = (Math.random() * 1.8 + 0.6).toFixed(1);
+      s.style.width = size + "px";
+      s.style.height = size + "px";
+      s.style.left = (Math.random() * 100) + "%";
+      s.style.top = (Math.random() * 100) + "%";
+      s.style.animationDuration = (2 + Math.random() * 3).toFixed(1) + "s";
+      s.style.animationDelay = (Math.random() * 3).toFixed(1) + "s";
+      wrap.appendChild(s);
+    }
+  }
+  buildStars();
+
+  langSelect.value = lang;
+  langSelect.addEventListener("change", function(){
+    lang = langSelect.value;
+    render();
+  });
+
+  function updateProgress(pctOverride){
+    var pct = pctOverride != null ? pctOverride : Math.min(100, Math.round((step - 1) / TOTAL_STEPS * 100) + 8);
+    progressBar.style.width = pct + "%";
+    stepCount.textContent = Math.min(step, TOTAL_STEPS) + "/" + TOTAL_STEPS;
+  }
+
+  function escapeHtml(s){
+    return String(s).replace(/[&<>"']/g, function(c){
+      return { "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;" }[c];
+    });
+  }
+
+  function setCard(html){
+    card.classList.remove("quiz-anim");
+    card.innerHTML = html;
+    void card.offsetWidth;
+    card.classList.add("quiz-anim");
+  }
+
+  function renderOptionsStep(eyebrow, h1, opts, onPick){
+    var html = '<div class="quiz-eyebrow">' + eyebrow + '</div>';
+    html += '<h1 class="quiz-h1">' + h1 + '</h1>';
+    html += '<div class="quiz-options">';
+    opts.forEach(function(o, i){
+      html += '<button class="quiz-opt" data-i="' + i + '"><span class="ic">' + o.ic + '</span>' + escapeHtml(o.t) + '<span class="arrow">→</span></button>';
+    });
+    html += '</div>';
+    if (step > 1) html += '<button class="quiz-back" id="backBtn">' + t().back + '</button>';
+    setCard(html);
+    Array.prototype.forEach.call(card.querySelectorAll(".quiz-opt"), function(btn){
+      btn.addEventListener("click", function(){
+        if (card.dataset.locked) return;
+        card.dataset.locked = "1";
+        btn.classList.add("picked");
+        setTimeout(function(){ onPick(opts[Number(btn.dataset.i)]); }, 260);
+      });
+    });
+    var backBtn = document.getElementById("backBtn");
+    if (backBtn) backBtn.addEventListener("click", goBack);
+  }
+
+  function renderInputStep(eyebrow, h1, placeholder, type, onNext, currentValue){
+    var html = '<div class="quiz-eyebrow">' + eyebrow + '</div>';
+    html += '<h1 class="quiz-h1">' + h1 + '</h1>';
+    html += '<input class="quiz-input" id="stepInput" type="' + type + '" placeholder="' + placeholder + '" value="' + escapeHtml(currentValue || "") + '">';
+    html += '<button class="quiz-cta" id="nextBtn">' + t().next + '</button>';
+    html += '<button class="quiz-back" id="backBtn">' + t().back + '</button>';
+    setCard(html);
+    var input = document.getElementById("stepInput");
+    var nextBtn = document.getElementById("nextBtn");
+    input.focus();
+    function tryNext(){
+      var val = input.value.trim();
+      if (!val) { input.style.borderColor = "#e35b5b"; return; }
+      onNext(val);
+    }
+    nextBtn.addEventListener("click", tryNext);
+    input.addEventListener("keydown", function(e){ if (e.key === "Enter") tryNext(); });
+    document.getElementById("backBtn").addEventListener("click", goBack);
+  }
+
+  function goBack(){
+    if (step > 1) { step -= 1; render(); }
+  }
+
+  function render(){
+    delete card.dataset.locked;
+    document.documentElement.lang = lang;
+    updateProgress();
+    if (step === 1) {
+      renderOptionsStep(t().q1_eyebrow, t().q1_h1, t().q1_opts, function(opt){
+        answers.insight = opt.t;
+        step = 2; render();
+      });
+    } else if (step === 2) {
+      renderInputStep(t().q2_eyebrow, t().q2_h1, t().q2_placeholder, "text", function(val){
+        answers.birthdate = val;
+        step = 3; render();
+      }, answers.birthdate);
+    } else if (step === 3) {
+      renderInputStep(t().q3_eyebrow, t().q3_h1, t().q3_placeholder, "text", function(val){
+        answers.name = val;
+        step = 4; render();
+      }, answers.name);
+    } else if (step === 4) {
+      renderOptionsStep(t().q4_eyebrow, t().q4_h1, t().q4_opts, function(opt){
+        answers.focus = opt.t;
+        step = 5; render();
+      });
+    } else if (step === 5) {
+      renderPhotoStep();
+    }
+  }
+
+  function resizeImage(file, maxDim, quality, callback){
+    var reader = new FileReader();
+    reader.onload = function(e){
+      var img = new Image();
+      img.onload = function(){
+        var scale = Math.min(1, maxDim / Math.max(img.width, img.height));
+        var w = Math.round(img.width * scale);
+        var h = Math.round(img.height * scale);
+        var canvas = document.createElement("canvas");
+        canvas.width = w; canvas.height = h;
+        canvas.getContext("2d").drawImage(img, 0, 0, w, h);
+        callback(canvas.toDataURL("image/jpeg", quality));
+      };
+      img.onerror = function(){ callback(null); };
+      img.src = e.target.result;
+    };
+    reader.onerror = function(){ callback(null); };
+    reader.readAsDataURL(file);
+  }
+
+  function renderPhotoStep(){
+    var html = '<div class="quiz-eyebrow">' + t().q5_eyebrow + '</div>';
+    html += '<h1 class="quiz-h1">' + t().q5_h1 + '</h1>';
+    html += '<p class="quiz-photo-sub">' + t().q5_sub + '</p>';
+    html += '<input type="file" accept="image/*" capture="environment" id="photoInput" style="display:none">';
+    html += '<div class="quiz-dropzone' + (answers.palmImage ? ' has-img' : '') + '" id="dropzone">';
+    if (answers.palmImage) {
+      html += '<img src="' + answers.palmImage + '" alt="">';
+    } else {
+      html += '<div class="icon">🖐️</div><div class="label">' + t().photo_upload + '</div><div class="hint">' + t().photo_hint + '</div>';
+    }
+    html += '</div>';
+    if (answers.palmImage) {
+      html += '<button class="quiz-cta" id="continuePhotoBtn">' + t().photo_continue + '</button>';
+    }
+    html += '<button class="quiz-skip" id="skipBtn">' + t().photo_skip + '</button>';
+    html += '<button class="quiz-back" id="backBtn">' + t().back + '</button>';
+    setCard(html);
+
+    var input = document.getElementById("photoInput");
+    document.getElementById("dropzone").addEventListener("click", function(){ input.click(); });
+    input.addEventListener("change", function(){
+      var file = input.files && input.files[0];
+      if (!file) return;
+      resizeImage(file, 900, 0.82, function(dataUrl){
+        if (!dataUrl) return;
+        answers.palmImage = dataUrl;
+        answers.palmMediaType = "image/jpeg";
+        render();
+      });
+    });
+    var continueBtn = document.getElementById("continuePhotoBtn");
+    if (continueBtn) continueBtn.addEventListener("click", function(){ runReveal(); });
+    document.getElementById("skipBtn").addEventListener("click", function(){
+      answers.palmImage = null;
+      runReveal();
+    });
+    document.getElementById("backBtn").addEventListener("click", goBack);
+  }
+
+  function renderLoading(phrases){
+    phrases = phrases || t().loading_phrases;
+    var html = '<div class="quiz-loading">';
+    html += '<div class="quiz-orb-wrap"><div class="quiz-orb-ring"></div><div class="quiz-orb-ring r2"></div><div class="quiz-orb"></div></div>';
+    html += '<div class="quiz-loading-pct" id="loadPct">0%</div>';
+    html += '<div><div class="quiz-loading-title" id="loadTitle">' + phrases[0] + '</div>';
+    html += '<div class="quiz-loading-sub">' + t().loading_sub + '</div></div>';
+    html += '</div>';
+    setCard(html);
+
+    var pctEl = document.getElementById("loadPct");
+    var titleEl = document.getElementById("loadTitle");
+    var pct = 0, phraseIdx = 0;
+    clearInterval(loadingTimer);
+    loadingTimer = setInterval(function(){
+      pct = Math.min(96, pct + Math.round(4 + Math.random() * 9));
+      pctEl.textContent = pct + "%";
+      var nextPhrase = Math.floor(pct / (100 / phrases.length));
+      if (nextPhrase !== phraseIdx && nextPhrase < phrases.length) {
+        phraseIdx = nextPhrase;
+        titleEl.style.opacity = 0;
+        setTimeout(function(){ titleEl.textContent = phrases[phraseIdx]; titleEl.style.opacity = 1; }, 220);
+      }
+    }, 260);
+  }
+
+  function typewriter(el, text, done){
+    clearInterval(typeTimer);
+    var i = 0;
+    el.innerHTML = '<span class="cursor"></span>';
+    typeTimer = setInterval(function(){
+      i += 2;
+      el.innerHTML = escapeHtml(text.slice(0, i)) + '<span class="cursor"></span>';
+      if (i >= text.length) {
+        clearInterval(typeTimer);
+        el.innerHTML = escapeHtml(text);
+        if (done) done();
+      }
+    }, 18);
+  }
+
+  var revealAudio = null;
+
+  function loadVoice(text, btn){
+    btn.disabled = true;
+    btn.textContent = t().voice_loading;
+    fetch("/api/tts", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ text: text, lang: lang })
+    }).then(function(r){ return r.ok ? r.blob() : null; }).then(function(blob){
+      if (!blob) { btn.style.display = "none"; return; }
+      var url = URL.createObjectURL(blob);
+      revealAudio = new Audio(url);
+      btn.disabled = false;
+      btn.textContent = t().voice_listen;
+      revealAudio.addEventListener("ended", function(){
+        btn.classList.remove("playing");
+        btn.textContent = t().voice_listen;
+      });
+      btn.addEventListener("click", function(){
+        if (revealAudio.paused) {
+          revealAudio.play();
+          btn.classList.add("playing");
+          btn.textContent = t().voice_playing;
+        } else {
+          revealAudio.pause();
+          btn.classList.remove("playing");
+          btn.textContent = t().voice_listen;
+        }
+      });
+    }).catch(function(){ btn.style.display = "none"; });
+  }
+
+  function ctaDestination(){
+    var dest = lang === "de" ? "/" : "/" + lang;
+    return dest + (dest.indexOf("?") === -1 ? "?" : "&") + "utm_source=" + encodeURIComponent(ref) + "&utm_campaign=love-quiz";
+  }
+
+  function legalLinksHtml(){
+    var l = t().legal || {};
+    return '<div class="quiz-legal-links">' +
+      '<a href="impressum.html" target="_blank" rel="noopener">' + (l.impressum || "Impressum") + '</a> · ' +
+      '<a href="datenschutz.html" target="_blank" rel="noopener">' + (l.datenschutz || "Datenschutz") + '</a> · ' +
+      '<a href="agb.html" target="_blank" rel="noopener">' + (l.agb || "AGB") + '</a> · ' +
+      '<a href="widerruf.html" target="_blank" rel="noopener">' + (l.widerruf || "Widerruf") + '</a>' +
+      '</div>';
+  }
+
+  function renderReveal(text){
+    var html = '<div class="quiz-reveal-top"><div class="quiz-reveal-badge">' + t().reveal_badge + '</div>';
+    html += '<button class="quiz-voice-btn" id="voiceBtn" disabled>' + t().voice_loading + '</button></div>';
+    html += '<div class="quiz-reveal-card"><div class="quiz-reveal-text" id="revealText"></div></div>';
+    html += '<button class="quiz-cta" id="ctaBtn">' + t().cta + '</button>';
+    html += '<div class="quiz-disclaimer">' + t().disclaimer + '</div>';
+    html += legalLinksHtml();
+    setCard(html);
+    typewriter(document.getElementById("revealText"), text);
+    loadVoice(text, document.getElementById("voiceBtn"));
+    document.getElementById("ctaBtn").addEventListener("click", function(){
+      if (revealAudio) revealAudio.pause();
+      location.href = ctaDestination();
+    });
+  }
+
+  // palm.js replies as a sequence of "**Label:** body" sections (labels
+  // already translated server-side) — split on that marker generically so
+  // this works for either language without hardcoding label text.
+  function splitPalmSections(text){
+    var parts = text.split(/\*\*(.+?):\*\*/);
+    var sections = [];
+    for (var i = 1; i < parts.length; i += 2) {
+      var body = (parts[i + 1] || "").trim();
+      if (body) sections.push({ label: parts[i].trim(), body: body });
+    }
+    return sections.length ? sections : [{ label: "", body: text }];
+  }
+
+  function renderPalmReveal(text){
+    var sections = splitPalmSections(text);
+    var html = '<div class="quiz-reveal-top"><div class="quiz-reveal-badge">' + t().palm_badge + '</div>';
+    html += '<button class="quiz-voice-btn" id="voiceBtn" disabled>' + t().voice_loading + '</button></div>';
+    sections.forEach(function(s, i){
+      html += '<div class="quiz-palm-section" style="animation-delay:' + (i * 0.12) + 's">';
+      if (s.label) html += '<h3>' + escapeHtml(s.label) + '</h3>';
+      html += '<p>' + escapeHtml(s.body) + '</p></div>';
+    });
+    html += '<button class="quiz-cta" id="ctaBtn">' + t().cta + '</button>';
+    html += '<div class="quiz-disclaimer">' + t().disclaimer + '</div>';
+    html += legalLinksHtml();
+    setCard(html);
+    loadVoice(sections[0].body, document.getElementById("voiceBtn"));
+    document.getElementById("ctaBtn").addEventListener("click", function(){
+      if (revealAudio) revealAudio.pause();
+      location.href = ctaDestination();
+    });
+  }
+
+  function finishLoadingBar(){
+    clearInterval(loadingTimer);
+    var pctEl = document.getElementById("loadPct");
+    if (pctEl) pctEl.textContent = "100%";
+  }
+
+  function runReveal(){
+    updateProgress(100);
+
+    if (answers.palmImage) {
+      renderLoading(t().loading_phrases_palm);
+      var minWaitPalm = new Promise(function(resolve){ setTimeout(resolve, 3600); });
+      var palmRequest = fetch("/api/palm", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          image: answers.palmImage,
+          mediaType: answers.palmMediaType || "image/jpeg",
+          lang: lang,
+          profile: {
+            name: answers.name,
+            birthDate: answers.birthdate,
+            focus: answers.focus,
+            bigQuestion: answers.insight
+          }
+        })
+      }).then(function(r){ return r.ok ? r.json() : null; }).catch(function(){ return null; });
+
+      Promise.all([palmRequest, minWaitPalm]).then(function(results){
+        finishLoadingBar();
+        var data = results[0];
+        var text = (data && data.text) ? data.text : t().palm_fallback;
+        setTimeout(function(){ renderPalmReveal(text); }, 260);
+      });
+      return;
+    }
+
+    renderLoading(t().loading_phrases);
+    var question = REVEAL_PROMPT[lang]
+      .replace("{name}", answers.name)
+      .replace("{birthdate}", answers.birthdate)
+      .replace("{insight}", answers.insight)
+      .replace("{focus}", answers.focus);
+
+    var minWait = new Promise(function(resolve){ setTimeout(resolve, 3200); });
+    var request = fetch("/api/oracle", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        question: question,
+        topic: REVEAL_TOPIC[lang],
+        mode: "paid",
+        lang: lang
+      })
+    }).then(function(r){ return r.ok ? r.json() : null; }).catch(function(){ return null; });
+
+    Promise.all([request, minWait]).then(function(results){
+      finishLoadingBar();
+      var data = results[0];
+      var text = (data && data.text) ? data.text : t().reveal_fallback;
+      setTimeout(function(){ renderReveal(text); }, 260);
+    });
+  }
+
+  render();
+  applyGeoLangIfEligible();
+})();
+</script>
+</body>
+</html>

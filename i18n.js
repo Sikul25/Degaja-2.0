@@ -12,6 +12,7 @@
       "nav.start": "Start", "nav.oracle": "Orakel", "nav.palm": "Handlesen", "nav.prices": "Preise", "nav.human": "Beratung", "nav.rituale": "Rituale", "nav.login": "Anmelden",
       "tab.start": "Start", "tab.readings": "Lesungen", "tab.horoscope": "Horoskop", "tab.advisor": "Beratung", "tab.more": "Mehr",
       "quizBanner.text": "Jetzt im Trend: Entdecke dein vergangenes Leben",
+      "loveQuizBanner.text": "Neu: Erfahre, wie deine nächste Beziehung sein wird",
       "hero.eyebrow": "✧ DEIN MOMENT DER KLARHEIT ✧",
       "hero.title1": "Was bewegt", "hero.title2": "dich?",
       "hero.intro": "Manchmal braucht es nur einen kleinen Moment, um wieder klarer zu sehen. Erzähl DEGAJA, was dich gerade beschäftigt.",
@@ -456,6 +457,7 @@
       "nav.start": "Home", "nav.oracle": "Oracle", "nav.palm": "Palm Reading", "nav.prices": "Pricing", "nav.human": "Advisors", "nav.rituale": "Rituals", "nav.login": "Sign in",
       "tab.start": "Start", "tab.readings": "Readings", "tab.horoscope": "Horoscope", "tab.advisor": "Advisor", "tab.more": "More",
       "quizBanner.text": "Trending now: Discover your past life",
+      "loveQuizBanner.text": "New: Find out what your next relationship will be",
       "hero.eyebrow": "✧ YOUR MOMENT OF CLARITY ✧",
       "hero.title1": "What's on", "hero.title2": "your mind?",
       "hero.intro": "Sometimes all it takes is a small moment to see clearly again. Tell DEGAJA what's on your mind right now.",
@@ -898,6 +900,7 @@
       "nav.start": "Accueil", "nav.oracle": "Oracle", "nav.palm": "Lecture de main", "nav.prices": "Tarifs", "nav.human": "Conseil", "nav.rituale": "Rituels", "nav.login": "Connexion",
       "tab.start": "Accueil", "tab.readings": "Lectures", "tab.horoscope": "Horoscope", "tab.advisor": "Conseil", "tab.more": "Plus",
       "quizBanner.text": "Tendance du moment : découvre ta vie antérieure",
+      "loveQuizBanner.text": "Nouveau : découvre à quoi ressemblera ta prochaine relation",
       "hero.eyebrow": "✧ TON MOMENT DE CLARTÉ ✧",
       "hero.title1": "Qu'est-ce qui te", "hero.title2": "préoccupe ?",
       "hero.intro": "Parfois, il suffit d'un petit moment pour y voir plus clair. Raconte à DEGAJA ce qui te préoccupe en ce moment.",
@@ -1327,6 +1330,7 @@
       "nav.start": "Inicio", "nav.oracle": "Oráculo", "nav.palm": "Lectura de manos", "nav.prices": "Precios", "nav.human": "Asesoría", "nav.rituale": "Rituales", "nav.login": "Acceder",
       "tab.start": "Inicio", "tab.readings": "Lecturas", "tab.horoscope": "Horóscopo", "tab.advisor": "Asesoría", "tab.more": "Más",
       "quizBanner.text": "Tendencia ahora: descubre tu vida pasada",
+      "loveQuizBanner.text": "Nuevo: descubre cómo será tu próxima relación",
       "hero.eyebrow": "✧ TU MOMENTO DE CLARIDAD ✧",
       "hero.title1": "¿Qué te", "hero.title2": "preocupa?",
       "hero.intro": "A veces solo hace falta un pequeño momento para ver con más claridad. Cuéntale a DEGAJA, tu Tarot y oráculo personal, lo que te preocupa ahora mismo.",
@@ -1756,6 +1760,7 @@
       "nav.start": "Home", "nav.oracle": "Oracolo", "nav.palm": "Lettura della mano", "nav.prices": "Prezzi", "nav.human": "Consulenza", "nav.rituale": "Rituali", "nav.login": "Accedi",
       "tab.start": "Home", "tab.readings": "Letture", "tab.horoscope": "Oroscopo", "tab.advisor": "Consulenza", "tab.more": "Altro",
       "quizBanner.text": "Di tendenza ora: scopri la tua vita passata",
+      "loveQuizBanner.text": "Novità: scopri come sarà la tua prossima relazione",
       "hero.eyebrow": "✧ IL TUO MOMENTO DI CHIAREZZA ✧",
       "hero.title1": "Cosa ti", "hero.title2": "preoccupa?",
       "hero.intro": "A volte basta un piccolo momento per vedere di nuovo con più chiarezza. Racconta a DEGAJA cosa ti preoccupa in questo momento.",
@@ -2185,6 +2190,7 @@
       "nav.start": "Início", "nav.oracle": "Oráculo", "nav.palm": "Leitura da mão", "nav.prices": "Preços", "nav.human": "Aconselhamento", "nav.rituale": "Rituais", "nav.login": "Entrar",
       "tab.start": "Início", "tab.readings": "Leituras", "tab.horoscope": "Horóscopo", "tab.advisor": "Consultoria", "tab.more": "Mais",
       "quizBanner.text": "Tendência agora: descobre a tua vida passada",
+      "loveQuizBanner.text": "Novo: descobre como vai ser a tua próxima relação",
       "hero.eyebrow": "✧ O TEU MOMENTO DE CLAREZA ✧",
       "hero.title1": "O que te", "hero.title2": "preocupa?",
       "hero.intro": "Às vezes basta um pequeno momento para veres tudo com mais clareza. Conta à DEGAJA o que te preocupa agora.",
@@ -2614,6 +2620,7 @@
       "nav.start": "Главная", "nav.oracle": "Оракул", "nav.palm": "Хиромантия", "nav.prices": "Цены", "nav.human": "Консультанты", "nav.rituale": "Ритуалы", "nav.login": "Войти",
       "tab.start": "Главная", "tab.readings": "Расклады", "tab.horoscope": "Гороскоп", "tab.advisor": "Консультация", "tab.more": "Ещё",
       "quizBanner.text": "Сейчас в тренде: узнай свою прошлую жизнь",
+      "loveQuizBanner.text": "Новое: узнай, какими будут твои следующие отношения",
       "hero.eyebrow": "✧ ТВОЙ МОМЕНТ ЯСНОСТИ ✧",
       "hero.title1": "Что тебя", "hero.title2": "волнует?",
       "hero.intro": "Иногда достаточно одного момента, чтобы снова увидеть всё ясно. Расскажи DEGAJA, что тебя сейчас беспокоит.",
@@ -3045,6 +3052,7 @@
       "nav.start": "Головна", "nav.oracle": "Оракул", "nav.palm": "Хіромантія", "nav.prices": "Ціни", "nav.human": "Консультантки", "nav.rituale": "Ритуали", "nav.login": "Увійти",
       "tab.start": "Головна", "tab.readings": "Розклади", "tab.horoscope": "Гороскоп", "tab.advisor": "Консультація", "tab.more": "Ще",
       "quizBanner.text": "Зараз у тренді: дізнайся про своє минуле життя",
+      "loveQuizBanner.text": "Нове: дізнайся, якими будуть твої наступні стосунки",
       "hero.eyebrow": "✧ ТВІЙ МОМЕНТ ЯСНОСТІ ✧",
       "hero.title1": "Що тебе", "hero.title2": "хвилює?",
       "hero.intro": "Іноді достатньо одного моменту, щоб знову побачити все ясно. Розкажи DEGAJA, що тебе зараз турбує.",
@@ -3476,6 +3484,7 @@
       "nav.start": "ホーム", "nav.oracle": "オラクル", "nav.palm": "手相占い", "nav.prices": "料金", "nav.login": "ログイン",
       "tab.start": "スタート", "tab.readings": "占い", "tab.horoscope": "ホロスコープ", "tab.advisor": "アドバイザー", "tab.more": "もっと見る",
       "quizBanner.text": "今話題:前世を発見しよう",
+      "loveQuizBanner.text": "新登場：次の恋愛がどうなるか知ろう",
       "hero.eyebrow": "✧ あなたの気づきの瞬間 ✧",
       "hero.title1": "今、何が", "hero.title2": "気になっていますか?",
       "hero.intro": "少しの時間があれば、また物事がはっきり見えてくることがあります。今気になっていることをDEGAJAに教えてください。",
@@ -3858,6 +3867,7 @@
       "nav.start": "首页", "nav.oracle": "神谕", "nav.palm": "手相解读", "nav.prices": "价格", "nav.login": "登录",
       "tab.start": "开始", "tab.readings": "占卜", "tab.horoscope": "星座", "tab.advisor": "咨询", "tab.more": "更多",
       "quizBanner.text": "热门推荐：探索你的前世",
+      "loveQuizBanner.text": "全新上线：了解你的下一段感情会是什么样子",
       "hero.eyebrow": "✧ 属于你的清晰时刻 ✧",
       "hero.title1": "此刻", "hero.title2": "你在想什么？",
       "hero.intro": "有时候，只需要一个小小的瞬间，就能让一切重新变得清晰。告诉DEGAJA你现在的心事。",
@@ -4240,6 +4250,7 @@
       "nav.start": "होम", "nav.oracle": "ओरेकल", "nav.palm": "हस्तरेखा पढ़ाई", "nav.prices": "मूल्य", "nav.login": "साइन इन करें",
       "tab.start": "होम", "tab.readings": "रीडिंग्स", "tab.horoscope": "राशिफल", "tab.advisor": "सलाहकार", "tab.more": "और",
       "quizBanner.text": "अभी ट्रेंड में: अपने पूर्वजन्म के बारे में जानो",
+      "loveQuizBanner.text": "नया: जानो तुम्हारा अगला रिश्ता कैसा होगा",
       "hero.eyebrow": "✧ तुम्हारी स्पष्टता का पल ✧",
       "hero.title1": "क्या चल रहा है", "hero.title2": "तुम्हारे मन में?",
       "hero.intro": "कभी-कभी फिर से साफ़ देखने के लिए बस एक छोटे से पल की ज़रूरत होती है। DEGAJA को बताओ कि अभी तुम्हारे मन में क्या चल रहा है।",
@@ -4876,6 +4887,15 @@
       const mapped = QUIZ_LANG_ALIAS[getLang()] || getLang();
       const quizLang = QUIZ_SUPPORTED.includes(mapped) ? mapped : "en";
       quizBanner.setAttribute("href", "quiz.html?lang=" + quizLang);
+    }
+
+    // Same language set and passthrough logic as the past-life quiz banner —
+    // love-quiz.html is built on the identical standalone-page architecture.
+    const loveQuizBanner = document.querySelector(".love-quiz-trend-bar");
+    if (loveQuizBanner) {
+      const mapped2 = QUIZ_LANG_ALIAS[getLang()] || getLang();
+      const loveQuizLang = QUIZ_SUPPORTED.includes(mapped2) ? mapped2 : "en";
+      loveQuizBanner.setAttribute("href", "love-quiz.html?lang=" + loveQuizLang);
     }
   }
 
