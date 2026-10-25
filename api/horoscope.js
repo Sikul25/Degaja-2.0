@@ -1,3 +1,5 @@
+export const config = { maxDuration: 60 };
+
 import { computeMoonAndAscendant } from "./_astro.js";
 
 export default async function handler(req, res) {
