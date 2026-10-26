@@ -1,0 +1,1496 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="description" content="DEGAJA – Entdecke in wenigen Fragen deine persönliche Reise durch Vergangenheit, Gegenwart und Zukunft im Zeittunnel.">
+  <title>Was verbirgt deine Zeitlinie wirklich? – DEGAJA</title>
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="DEGAJA">
+  <meta property="og:title" content="Was verbirgt deine Zeitlinie wirklich? – DEGAJA">
+  <meta property="og:description" content="Beantworte ein paar Fragen und erhalte deine persönliche Reise durch den Zeittunnel.">
+  <meta property="og:image" content="https://www.degaja.com/assets/og-image.png">
+  <meta name="robots" content="noindex">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="favicon.ico" sizes="any">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    *{box-sizing:border-box}
+    body{background:#0a1220}
+    .quiz-shell{min-height:100svh;display:flex;flex-direction:column;position:relative;overflow:hidden;background:radial-gradient(ellipse 120% 70% at 50% -10%,#203a58 0%,#101d30 45%,#0a1220 85%)}
+    .quiz-stars{position:absolute;inset:0;z-index:0;pointer-events:none}
+    .quiz-star{position:absolute;border-radius:50%;background:#fff;opacity:.5;animation:twinkle linear infinite}
+    @keyframes twinkle{0%,100%{opacity:.15}50%{opacity:.85}}
+    .quiz-glow{position:absolute;width:480px;height:480px;border-radius:50%;left:50%;top:-180px;transform:translateX(-50%);background:radial-gradient(circle,rgba(231,195,114,.16) 0%,rgba(231,195,114,0) 70%);z-index:0;pointer-events:none}
+
+    .quiz-top{display:flex;align-items:center;gap:14px;padding:18px 20px;max-width:620px;margin:0 auto;width:100%;position:relative;z-index:2}
+    .quiz-logo{height:26px;filter:brightness(0) invert(1);opacity:.92}
+    .quiz-progress-wrap{flex:1;height:5px;background:rgba(255,255,255,.1);border-radius:99px;overflow:hidden}
+    .quiz-progress-bar{height:100%;width:4%;background:linear-gradient(90deg,#b88a32,#f0d48f);border-radius:99px;transition:width .5s cubic-bezier(.4,0,.2,1);box-shadow:0 0 10px rgba(231,195,114,.6)}
+    .quiz-step-count{color:rgba(255,255,255,.45);font-size:11px;font-weight:700;letter-spacing:.03em;white-space:nowrap;font-variant-numeric:tabular-nums}
+
+    .quiz-main{flex:1;display:flex;align-items:center;justify-content:center;padding:10px 20px 48px;position:relative;z-index:2}
+    .quiz-card{width:min(540px,100%);text-align:center}
+    .quiz-anim{animation:quizIn .45s cubic-bezier(.16,1,.3,1) both}
+    @keyframes quizIn{from{opacity:0;transform:translateY(14px) scale(.98)}to{opacity:1;transform:translateY(0) scale(1)}}
+
+    .quiz-eyebrow{display:inline-flex;align-items:center;gap:8px;color:#e7c372;font-size:11px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;margin-bottom:16px}
+    .quiz-eyebrow:before,.quiz-eyebrow:after{content:"";width:16px;height:1px;background:linear-gradient(90deg,transparent,#e7c372)}
+    .quiz-eyebrow:after{background:linear-gradient(90deg,#e7c372,transparent)}
+    .quiz-h1{font-family:Georgia,"Times New Roman",serif;font-weight:500;color:#fff;font-size:clamp(26px,5.5vw,38px);line-height:1.22;margin:0 0 32px;letter-spacing:-.01em}
+
+    .quiz-options{display:grid;gap:11px}
+    .quiz-opt{appearance:none;text-align:left;display:flex;align-items:center;gap:15px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.04);backdrop-filter:blur(6px);border-radius:18px;padding:16px 18px;color:#eef2f6;font-size:16px;font-weight:600;cursor:pointer;transition:.22s cubic-bezier(.4,0,.2,1);position:relative}
+    .quiz-opt:hover{border-color:rgba(231,195,114,.55);background:rgba(231,195,114,.1);transform:translateY(-2px);box-shadow:0 10px 28px rgba(0,0,0,.25)}
+    .quiz-opt.picked{border-color:#e7c372;background:rgba(231,195,114,.18);transform:scale(.98)}
+    .quiz-opt .ic{font-size:21px;flex:0 0 auto;width:30px;text-align:center}
+    .quiz-opt .arrow{margin-left:auto;opacity:0;transform:translateX(-4px);transition:.2s;color:#e7c372}
+    .quiz-opt:hover .arrow{opacity:1;transform:translateX(0)}
+
+    .quiz-input{width:100%;padding:17px 18px;border-radius:18px;border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.05);color:#fff;font-size:17px;text-align:center;outline:0;transition:.2s;color-scheme:dark}
+    .quiz-input::placeholder{color:rgba(255,255,255,.35)}
+    .quiz-input:focus{border-color:#e7c372;background:rgba(255,255,255,.08);box-shadow:0 0 0 4px rgba(231,195,114,.12)}
+
+    .quiz-cta{margin-top:22px;width:100%;border:0;border-radius:999px;background:linear-gradient(90deg,#b88a32,#f0d48f);color:#20160a;padding:17px 20px;font-weight:800;font-size:16px;cursor:pointer;box-shadow:0 16px 38px rgba(184,138,50,.3);transition:.2s}
+    .quiz-cta:hover{transform:translateY(-1px);box-shadow:0 20px 44px rgba(184,138,50,.4)}
+    .quiz-cta:disabled{opacity:.4;cursor:not-allowed;transform:none}
+    .quiz-back{display:inline-block;margin-top:16px;color:rgba(255,255,255,.4);font-size:13px;cursor:pointer;background:none;border:0;transition:.2s}
+    .quiz-back:hover{color:rgba(255,255,255,.7)}
+
+    .quiz-loading{display:flex;flex-direction:column;align-items:center;gap:26px}
+    .quiz-orb-wrap{position:relative;width:132px;height:132px;display:grid;place-items:center}
+    .quiz-orb-ring{position:absolute;inset:0;border-radius:50%;border:1px solid rgba(231,195,114,.35);animation:spin 7s linear infinite}
+    .quiz-orb-ring.r2{inset:-14px;border-color:rgba(159,216,255,.3);animation-duration:11s;animation-direction:reverse}
+    @keyframes spin{to{transform:rotate(360deg)}}
+    .quiz-orb{width:104px;height:104px;border-radius:50%;background:radial-gradient(circle at 38% 32%,#ffffff 0%,#eaf6ff 20%,#9fd8ff 42%,#4aa0e0 62%,#e7c372 82%,#1c3450 100%);box-shadow:0 0 55px rgba(159,216,255,.5),0 0 40px rgba(231,195,114,.35);animation:pulse 1.7s ease-in-out infinite}
+    @keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.07)}}
+    .quiz-loading-pct{color:#f0d48f;font-size:13px;font-weight:800;letter-spacing:.06em;font-variant-numeric:tabular-nums}
+    .quiz-loading-title{color:#fff;font-size:17px;font-weight:600;min-height:24px;transition:opacity .25s}
+    .quiz-loading-sub{color:rgba(255,255,255,.45);font-size:13px;margin-top:4px}
+
+    .quiz-reveal-top{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:20px;flex-wrap:wrap}
+    .quiz-reveal-badge{display:inline-flex;align-items:center;gap:7px;background:rgba(231,195,114,.14);color:#f0d48f;border:1px solid rgba(231,195,114,.35);border-radius:999px;padding:7px 18px;font-size:12px;font-weight:800;letter-spacing:.06em}
+    .quiz-voice-btn{display:inline-flex;align-items:center;gap:7px;background:rgba(255,255,255,.06);color:#eef2f6;border:1px solid rgba(255,255,255,.18);border-radius:999px;padding:7px 16px;font-size:12px;font-weight:700;cursor:pointer;transition:.2s}
+    .quiz-voice-btn:hover{border-color:rgba(231,195,114,.5);background:rgba(231,195,114,.1)}
+    .quiz-voice-btn:disabled{opacity:.35;cursor:wait}
+    .quiz-voice-btn.playing{border-color:#e7c372;color:#f0d48f}
+    .quiz-reveal-card{position:relative;text-align:left;background:linear-gradient(160deg,rgba(255,255,255,.07),rgba(255,255,255,.02));border:1px solid rgba(231,195,114,.22);border-radius:22px;padding:24px 26px;margin-bottom:10px;min-height:96px;box-shadow:0 20px 50px rgba(0,0,0,.3)}
+    .quiz-reveal-text{color:#f2f4f7;font-size:18px;line-height:1.7}
+    .quiz-reveal-text .cursor{display:inline-block;width:2px;height:1em;background:#e7c372;margin-left:2px;vertical-align:text-bottom;animation:blink .8s step-end infinite}
+    @keyframes blink{50%{opacity:0}}
+    .quiz-disclaimer{margin-top:18px;color:rgba(255,255,255,.35);font-size:11px;line-height:1.5}
+    .quiz-legal-links{margin-top:8px;text-align:center;font-size:11px}
+    .quiz-legal-links a{color:rgba(255,255,255,.45);text-decoration:underline}
+    .quiz-lang{position:absolute;top:16px;right:16px;z-index:3;color:rgba(255,255,255,.7);font-size:12px;font-weight:700;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.16);border-radius:999px;padding:6px 26px 6px 13px;cursor:pointer;transition:.2s;-webkit-appearance:none;appearance:none;background-image:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 6"><path d="M1 1l4 4 4-4" stroke="%23e7c372" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>');background-repeat:no-repeat;background-position:right 10px center}
+    .quiz-lang:hover{border-color:rgba(231,195,114,.5);color:#f0d48f}
+    .quiz-lang option{background:#101d30;color:#fff}
+
+    @media(max-width:480px){.quiz-h1{font-size:23px}.quiz-opt{padding:14px 16px;font-size:14.5px}}
+
+    .quiz-pack-hint{text-align:center;color:#c9a94f;font-size:12.5px;font-weight:700;margin-top:10px}
+    .quiz-trust-note{text-align:center;color:rgba(255,255,255,.45);font-size:11px;margin-top:6px}
+
+    .quiz-modal-overlay{position:fixed;inset:0;background:rgba(5,10,18,.72);backdrop-filter:blur(3px);z-index:50;display:flex;align-items:center;justify-content:center;padding:20px}
+    .quiz-modal{background:linear-gradient(160deg,#162436,#0e1826);border:1px solid rgba(231,195,114,.3);border-radius:22px;padding:28px 24px;max-width:420px;width:100%;box-shadow:0 30px 70px rgba(0,0,0,.5);text-align:center}
+    .quiz-modal .eyebrow{color:#e7c372;font-size:11px;font-weight:800;letter-spacing:.1em;margin-bottom:10px;text-transform:uppercase}
+    .quiz-modal h2{color:#fff;font-family:Georgia,"Times New Roman",serif;font-weight:500;font-size:26px;margin:0 0 10px}
+    .quiz-modal p{color:rgba(255,255,255,.6);font-size:14px;line-height:1.6;margin:0 0 20px}
+    .quiz-modal-btn{display:block;width:100%;border:1px solid rgba(231,195,114,.4);background:rgba(231,195,114,.08);color:#f0d48f;border-radius:14px;padding:14px 16px;font-weight:800;font-size:15px;margin-bottom:10px;cursor:pointer;text-align:center;transition:.2s}
+    .quiz-modal-btn:hover{background:rgba(231,195,114,.18);border-color:#e7c372}
+    .quiz-modal-note{font-size:11px;color:rgba(255,255,255,.4);text-align:center;margin-top:2px}
+    .quiz-modal-close{display:block;margin:18px auto 0;background:none;border:0;color:rgba(255,255,255,.4);font-size:13px;cursor:pointer}
+    .quiz-modal-close:hover{color:rgba(255,255,255,.7)}
+  </style>
+</head>
+<body>
+<div class="quiz-shell">
+  <div class="quiz-glow"></div>
+  <div class="quiz-stars" id="stars"></div>
+  <select class="quiz-lang" id="langSelect">
+    <option value="de">DE</option>
+    <option value="en">EN</option>
+    <option value="fr">FR</option>
+    <option value="es">ES</option>
+    <option value="it">IT</option>
+    <option value="pt">PT</option>
+    <option value="br">BR</option>
+    <option value="ru">RU</option>
+    <option value="uk">UA</option>
+    <option value="ja">JA</option>
+    <option value="zh">ZH</option>
+    <option value="hi">HI</option>
+  </select>
+  <div class="quiz-top">
+    <img src="assets/degaja-logo.png" alt="DEGAJA" class="quiz-logo">
+    <div class="quiz-progress-wrap"><div class="quiz-progress-bar" id="progressBar"></div></div>
+    <div class="quiz-step-count" id="stepCount">1/4</div>
+  </div>
+  <main class="quiz-main">
+    <div class="quiz-card" id="quizCard"></div>
+  </main>
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  var STR = {
+  "de": {
+    "q2_eyebrow": "SCHRITT 2",
+    "q2_h1": "Wann bist du geboren?",
+    "q2_placeholder": "TT.MM.JJJJ",
+    "q3_eyebrow": "SCHRITT 3",
+    "q3_h1": "Wie dürfen wir dich nennen?",
+    "q3_placeholder": "Dein Vorname",
+    "next": "Weiter →",
+    "back": "← Zurück",
+    "loading_sub": "Bitte warte einen Moment",
+    "cta": "Vollständige Zeitreise freischalten · €4,99 →",
+    "disclaimer": "DEGAJA dient der persönlichen Orientierung und Unterhaltung und ersetzt keine professionelle Beratung. Diese Deutung wurde von einem KI-System erstellt.",
+    "legal": {
+      "impressum": "Impressum",
+      "datenschutz": "Datenschutz",
+      "agb": "AGB",
+      "widerruf": "Widerruf"
+    },
+    "voice_loading": "Stimme wird vorbereitet …",
+    "voice_listen": "🔊 Stimme anhören",
+    "voice_playing": "⏸ Wird abgespielt …",
+    "voice_unavailable": "",
+    "q1_eyebrow": "ZEITTUNNEL",
+    "q1_h1": "Welcher Teil deiner Zeitlinie ruft dich am stärksten?",
+    "q1_opts": [
+      {
+        "ic": "🕰️",
+        "t": "Eine Vergangenheit, die noch nachklingt"
+      },
+      {
+        "ic": "⚡",
+        "t": "Wo ich gerade wirklich stehe"
+      },
+      {
+        "ic": "🌌",
+        "t": "Was vor mir liegt"
+      },
+      {
+        "ic": "🌀",
+        "t": "Alle drei, miteinander verwoben"
+      }
+    ],
+    "q4_eyebrow": "SCHRITT 4",
+    "q4_h1": "Was soll dir der Tunnel offenbaren?",
+    "q4_opts": [
+      {
+        "ic": "💞",
+        "t": "Eine Verbindung, die sich durch die Zeit zieht"
+      },
+      {
+        "ic": "🧭",
+        "t": "Einen Wendepunkt auf meinem Weg"
+      },
+      {
+        "ic": "🔑",
+        "t": "Den roten Faden, der alles verbindet"
+      },
+      {
+        "ic": "✨",
+        "t": "Öffne einfach den Tunnel und zeig's mir"
+      }
+    ],
+    "loading_phrases": [
+      "Der Tunnel öffnet sich …",
+      "Deine Vergangenheit, Gegenwart und Zukunft verbinden sich …",
+      "Die Zeitlinien beginnen sich zu entwirren …",
+      "Deine Reise durch die Zeit nimmt Form an …"
+    ],
+    "reveal_badge": "✦ Dein Zeittunnel",
+    "reveal_fallback": "Die Zeitlinien sind heute ungewöhnlich stark verwoben — deine vollständige Reise wartet in deiner persönlichen Lesung.",
+    "purchase_eyebrow": "DEGAJA™ · 24/7",
+    "purchase_title": "Geh tiefer",
+    "purchase_desc": "Deine erste Antwort war kostenlos. Schalte jetzt eine tiefere persönliche Lesung frei – inklusive 5 Minuten Nachfragen danach.",
+    "purchase_single": "Eine Lesung · €4,99",
+    "purchase_pack": "3 Lesungen · €9,99",
+    "purchase_note": "Einmalige Zahlung · keine automatische Verlängerung.",
+    "purchase_back": "← Zurück",
+    "purchase_error": "Zahlung gerade nicht verfügbar. Versuch es später erneut."
+  },
+  "en": {
+    "q2_eyebrow": "STEP 2",
+    "q2_h1": "When were you born?",
+    "q2_placeholder": "DD/MM/YYYY",
+    "q3_eyebrow": "STEP 3",
+    "q3_h1": "What should we call you?",
+    "q3_placeholder": "Your first name",
+    "next": "Continue →",
+    "back": "← Back",
+    "loading_sub": "This will only take a moment",
+    "cta": "Unlock your full journey · £4.99 →",
+    "disclaimer": "DEGAJA is for personal guidance and entertainment purposes and does not replace professional advice. This reading was generated by an AI system.",
+    "legal": {
+      "impressum": "Legal notice",
+      "datenschutz": "Privacy",
+      "agb": "Terms",
+      "widerruf": "Withdrawal"
+    },
+    "voice_loading": "Preparing voice …",
+    "voice_listen": "🔊 Listen to voice",
+    "voice_playing": "⏸ Playing …",
+    "voice_unavailable": "",
+    "q1_eyebrow": "TIME TUNNEL",
+    "q1_h1": "Which part of your timeline calls to you most?",
+    "q1_opts": [
+      {
+        "ic": "🕰️",
+        "t": "A past that still echoes in me"
+      },
+      {
+        "ic": "⚡",
+        "t": "Where I truly stand right now"
+      },
+      {
+        "ic": "🌌",
+        "t": "What's waiting for me ahead"
+      },
+      {
+        "ic": "🌀",
+        "t": "All three, intertwined"
+      }
+    ],
+    "q4_eyebrow": "STEP 4",
+    "q4_h1": "What do you want the tunnel to reveal?",
+    "q4_opts": [
+      {
+        "ic": "💞",
+        "t": "A connection that runs across time"
+      },
+      {
+        "ic": "🧭",
+        "t": "A turning point on my path"
+      },
+      {
+        "ic": "🔑",
+        "t": "The hidden thread tying it all together"
+      },
+      {
+        "ic": "✨",
+        "t": "Just open the tunnel and show me"
+      }
+    ],
+    "loading_phrases": [
+      "The tunnel is opening …",
+      "Your past, present and future are aligning …",
+      "The timelines are starting to unravel …",
+      "Your journey through time is taking shape …"
+    ],
+    "reveal_badge": "✦ Your Time Tunnel",
+    "reveal_fallback": "The timelines are unusually intertwined today — your full journey is waiting in your personal reading.",
+    "purchase_eyebrow": "DEGAJA™ · 24/7",
+    "purchase_title": "Go deeper",
+    "purchase_desc": "Your first answer was free. Unlock a deeper personal reading, plus 5 minutes of follow-up questions.",
+    "purchase_single": "One reading · £4.99",
+    "purchase_pack": "3 readings · £9.99",
+    "purchase_note": "One-time payment · no automatic renewal.",
+    "purchase_back": "← Back",
+    "purchase_error": "Payment isn't available right now. Please try again later."
+  },
+  "fr": {
+    "q2_eyebrow": "ÉTAPE 2",
+    "q2_h1": "Quand es-tu né(e) ?",
+    "q2_placeholder": "JJ/MM/AAAA",
+    "q3_eyebrow": "ÉTAPE 3",
+    "q3_h1": "Comment devons-nous t'appeler ?",
+    "q3_placeholder": "Ton prénom",
+    "next": "Continuer →",
+    "back": "← Retour",
+    "loading_sub": "Cela ne prendra qu'un instant",
+    "cta": "Débloquer ton voyage complet · €4,99 →",
+    "disclaimer": "DEGAJA sert à l'orientation personnelle et au divertissement et ne remplace pas un conseil professionnel. Cette lecture a été générée par un système d'IA.",
+    "legal": {
+      "impressum": "Mentions légales",
+      "datenschutz": "Confidentialité",
+      "agb": "CGV",
+      "widerruf": "Rétractation"
+    },
+    "voice_loading": "Préparation de la voix …",
+    "voice_listen": "🔊 Écouter la voix",
+    "voice_playing": "⏸ Lecture en cours …",
+    "voice_unavailable": "",
+    "q1_eyebrow": "TUNNEL TEMPOREL",
+    "q1_h1": "Quelle partie de ta ligne du temps t'appelle le plus ?",
+    "q1_opts": [
+      {
+        "ic": "🕰️",
+        "t": "Un passé qui résonne encore en moi"
+      },
+      {
+        "ic": "⚡",
+        "t": "Où j'en suis vraiment maintenant"
+      },
+      {
+        "ic": "🌌",
+        "t": "Ce qui m'attend plus loin"
+      },
+      {
+        "ic": "🌀",
+        "t": "Les trois, entremêlés"
+      }
+    ],
+    "q4_eyebrow": "ÉTAPE 4",
+    "q4_h1": "Que veux-tu que le tunnel te révèle ?",
+    "q4_opts": [
+      {
+        "ic": "💞",
+        "t": "Un lien qui traverse le temps"
+      },
+      {
+        "ic": "🧭",
+        "t": "Un tournant sur mon chemin"
+      },
+      {
+        "ic": "🔑",
+        "t": "Le fil caché qui relie tout"
+      },
+      {
+        "ic": "✨",
+        "t": "Ouvre juste le tunnel et montre-moi"
+      }
+    ],
+    "loading_phrases": [
+      "Le tunnel s'ouvre …",
+      "Ton passé, ton présent et ton futur s'alignent …",
+      "Les lignes du temps commencent à se démêler …",
+      "Ton voyage dans le temps prend forme …"
+    ],
+    "reveal_badge": "✦ Ton tunnel temporel",
+    "reveal_fallback": "Les lignes du temps sont exceptionnellement entremêlées aujourd'hui — ton voyage complet t'attend dans ta lecture personnelle.",
+    "purchase_eyebrow": "DEGAJA™ · 24/7",
+    "purchase_title": "Aller plus loin",
+    "purchase_desc": "Ta première réponse était gratuite. Débloque maintenant une lecture personnelle plus approfondie, avec 5 minutes de questions supplémentaires.",
+    "purchase_single": "Une lecture · €4,99",
+    "purchase_pack": "3 lectures · €9,99",
+    "purchase_note": "Paiement unique · pas de renouvellement automatique.",
+    "purchase_back": "← Retour",
+    "purchase_error": "Le paiement n'est pas disponible pour le moment. Réessaie plus tard."
+  },
+  "es": {
+    "q2_eyebrow": "PASO 2",
+    "q2_h1": "¿Cuándo naciste?",
+    "q2_placeholder": "DD/MM/AAAA",
+    "q3_eyebrow": "PASO 3",
+    "q3_h1": "¿Cómo deberíamos llamarte?",
+    "q3_placeholder": "Tu nombre",
+    "next": "Continuar →",
+    "back": "← Atrás",
+    "loading_sub": "Esto solo tomará un momento",
+    "cta": "Desbloquea tu viaje completo · €4,99 →",
+    "disclaimer": "DEGAJA es para orientación personal y entretenimiento, y no sustituye el asesoramiento profesional. Esta lectura fue generada por un sistema de IA.",
+    "legal": {
+      "impressum": "Aviso legal",
+      "datenschutz": "Privacidad",
+      "agb": "Términos",
+      "widerruf": "Desistimiento"
+    },
+    "voice_loading": "Preparando la voz …",
+    "voice_listen": "🔊 Escuchar la voz",
+    "voice_playing": "⏸ Reproduciendo …",
+    "voice_unavailable": "",
+    "q1_eyebrow": "TÚNEL DEL TIEMPO",
+    "q1_h1": "¿Qué parte de tu línea de tiempo te llama más?",
+    "q1_opts": [
+      {
+        "ic": "🕰️",
+        "t": "Un pasado que todavía resuena en mí"
+      },
+      {
+        "ic": "⚡",
+        "t": "Dónde estoy realmente ahora"
+      },
+      {
+        "ic": "🌌",
+        "t": "Lo que me espera más adelante"
+      },
+      {
+        "ic": "🌀",
+        "t": "Los tres, entrelazados"
+      }
+    ],
+    "q4_eyebrow": "PASO 4",
+    "q4_h1": "¿Qué quieres que el túnel te revele?",
+    "q4_opts": [
+      {
+        "ic": "💞",
+        "t": "Una conexión que atraviesa el tiempo"
+      },
+      {
+        "ic": "🧭",
+        "t": "Un punto de inflexión en mi camino"
+      },
+      {
+        "ic": "🔑",
+        "t": "El hilo oculto que lo une todo"
+      },
+      {
+        "ic": "✨",
+        "t": "Abre el túnel y muéstramelo"
+      }
+    ],
+    "loading_phrases": [
+      "El túnel se está abriendo …",
+      "Tu pasado, presente y futuro se están alineando …",
+      "Las líneas del tiempo comienzan a desenredarse …",
+      "Tu viaje por el tiempo está tomando forma …"
+    ],
+    "reveal_badge": "✦ Tu túnel del tiempo",
+    "reveal_fallback": "Las líneas del tiempo están inusualmente entrelazadas hoy — tu viaje completo te espera en tu lectura personal.",
+    "purchase_eyebrow": "DEGAJA™ · 24/7",
+    "purchase_title": "Profundiza",
+    "purchase_desc": "Tu primera respuesta fue gratuita. Desbloquea ahora una lectura personal más profunda, con 5 minutos de preguntas adicionales.",
+    "purchase_single": "Una lectura · €4,99",
+    "purchase_pack": "3 lecturas · €9,99",
+    "purchase_note": "Pago único · sin renovación automática.",
+    "purchase_back": "← Atrás",
+    "purchase_error": "El pago no está disponible ahora mismo. Inténtalo de nuevo más tarde."
+  },
+  "it": {
+    "q2_eyebrow": "PASSO 2",
+    "q2_h1": "Quando sei nato/a?",
+    "q2_placeholder": "GG/MM/AAAA",
+    "q3_eyebrow": "PASSO 3",
+    "q3_h1": "Come dobbiamo chiamarti?",
+    "q3_placeholder": "Il tuo nome",
+    "next": "Continua →",
+    "back": "← Indietro",
+    "loading_sub": "Ci vorrà solo un momento",
+    "cta": "Sblocca il tuo viaggio completo · €4,99 →",
+    "disclaimer": "DEGAJA è destinato all'orientamento personale e all'intrattenimento e non sostituisce una consulenza professionale. Questa lettura è stata generata da un sistema di IA.",
+    "legal": {
+      "impressum": "Note legali",
+      "datenschutz": "Privacy",
+      "agb": "Termini",
+      "widerruf": "Recesso"
+    },
+    "voice_loading": "Preparazione della voce …",
+    "voice_listen": "🔊 Ascolta la voce",
+    "voice_playing": "⏸ In riproduzione …",
+    "voice_unavailable": "",
+    "q1_eyebrow": "TUNNEL DEL TEMPO",
+    "q1_h1": "Quale parte della tua linea temporale ti chiama di più?",
+    "q1_opts": [
+      {
+        "ic": "🕰️",
+        "t": "Un passato che risuona ancora in me"
+      },
+      {
+        "ic": "⚡",
+        "t": "Dove mi trovo davvero ora"
+      },
+      {
+        "ic": "🌌",
+        "t": "Ciò che mi aspetta più avanti"
+      },
+      {
+        "ic": "🌀",
+        "t": "Tutti e tre, intrecciati"
+      }
+    ],
+    "q4_eyebrow": "PASSO 4",
+    "q4_h1": "Cosa vuoi che il tunnel ti riveli?",
+    "q4_opts": [
+      {
+        "ic": "💞",
+        "t": "Un legame che attraversa il tempo"
+      },
+      {
+        "ic": "🧭",
+        "t": "Una svolta nel mio cammino"
+      },
+      {
+        "ic": "🔑",
+        "t": "Il filo nascosto che collega tutto"
+      },
+      {
+        "ic": "✨",
+        "t": "Apri semplicemente il tunnel e mostramelo"
+      }
+    ],
+    "loading_phrases": [
+      "Il tunnel si sta aprendo …",
+      "Il tuo passato, presente e futuro si stanno allineando …",
+      "Le linee temporali iniziano a dipanarsi …",
+      "Il tuo viaggio nel tempo sta prendendo forma …"
+    ],
+    "reveal_badge": "✦ Il tuo tunnel del tempo",
+    "reveal_fallback": "Le linee temporali sono insolitamente intrecciate oggi — il tuo viaggio completo ti aspetta nella tua lettura personale.",
+    "purchase_eyebrow": "DEGAJA™ · 24/7",
+    "purchase_title": "Approfondisci",
+    "purchase_desc": "La tua prima risposta era gratuita. Sblocca ora una lettura personale più approfondita, con 5 minuti di domande aggiuntive.",
+    "purchase_single": "Una lettura · €4,99",
+    "purchase_pack": "3 letture · €9,99",
+    "purchase_note": "Pagamento unico · nessun rinnovo automatico.",
+    "purchase_back": "← Indietro",
+    "purchase_error": "Il pagamento non è disponibile ora. Riprova più tardi."
+  },
+  "pt": {
+    "q2_eyebrow": "PASSO 2",
+    "q2_h1": "Quando nasceste?",
+    "q2_placeholder": "DD/MM/AAAA",
+    "q3_eyebrow": "PASSO 3",
+    "q3_h1": "Como devemos chamar-te?",
+    "q3_placeholder": "O teu primeiro nome",
+    "next": "Continuar →",
+    "back": "← Voltar",
+    "loading_sub": "Isto vai demorar só um momento",
+    "cta": "Desbloqueia a tua viagem completa · €4,99 →",
+    "disclaimer": "A DEGAJA destina-se à orientação pessoal e ao entretenimento e não substitui aconselhamento profissional. Esta leitura foi gerada por um sistema de IA.",
+    "legal": {
+      "impressum": "Informação legal",
+      "datenschutz": "Privacidade",
+      "agb": "Termos",
+      "widerruf": "Retratação"
+    },
+    "voice_loading": "A preparar a voz …",
+    "voice_listen": "🔊 Ouvir a voz",
+    "voice_playing": "⏸ A reproduzir …",
+    "voice_unavailable": "",
+    "q1_eyebrow": "TÚNEL DO TEMPO",
+    "q1_h1": "Que parte da tua linha do tempo te chama mais?",
+    "q1_opts": [
+      {
+        "ic": "🕰️",
+        "t": "Um passado que ainda ecoa em mim"
+      },
+      {
+        "ic": "⚡",
+        "t": "Onde realmente estou agora"
+      },
+      {
+        "ic": "🌌",
+        "t": "O que me espera mais à frente"
+      },
+      {
+        "ic": "🌀",
+        "t": "Os três, entrelaçados"
+      }
+    ],
+    "q4_eyebrow": "PASSO 4",
+    "q4_h1": "O que queres que o túnel te revele?",
+    "q4_opts": [
+      {
+        "ic": "💞",
+        "t": "Uma ligação que atravessa o tempo"
+      },
+      {
+        "ic": "🧭",
+        "t": "Um ponto de viragem no meu caminho"
+      },
+      {
+        "ic": "🔑",
+        "t": "O fio oculto que liga tudo"
+      },
+      {
+        "ic": "✨",
+        "t": "Abre o túnel e mostra-me"
+      }
+    ],
+    "loading_phrases": [
+      "O túnel está a abrir-se …",
+      "O teu passado, presente e futuro estão a alinhar-se …",
+      "As linhas do tempo começam a desvendar-se …",
+      "A tua viagem pelo tempo está a tomar forma …"
+    ],
+    "reveal_badge": "✦ O teu túnel do tempo",
+    "reveal_fallback": "As linhas do tempo estão invulgarmente entrelaçadas hoje — a tua viagem completa espera por ti na tua leitura pessoal.",
+    "purchase_eyebrow": "DEGAJA™ · 24/7",
+    "purchase_title": "Aprofundar",
+    "purchase_desc": "A tua primeira resposta foi gratuita. Desbloqueia agora uma leitura pessoal mais profunda, com 5 minutos de perguntas adicionais.",
+    "purchase_single": "Uma leitura · €4,99",
+    "purchase_pack": "3 leituras · €9,99",
+    "purchase_note": "Pagamento único · sem renovação automática.",
+    "purchase_back": "← Voltar",
+    "purchase_error": "O pagamento não está disponível agora. Tenta novamente mais tarde."
+  },
+  "br": {
+    "q2_eyebrow": "PASSO 2",
+    "q2_h1": "Quando você nasceu?",
+    "q2_placeholder": "DD/MM/AAAA",
+    "q3_eyebrow": "PASSO 3",
+    "q3_h1": "Como podemos te chamar?",
+    "q3_placeholder": "Seu primeiro nome",
+    "next": "Continuar →",
+    "back": "← Voltar",
+    "loading_sub": "Isso vai levar só um instante",
+    "cta": "Desbloqueie sua jornada completa · R$24,99 →",
+    "disclaimer": "A DEGAJA é voltada para orientação pessoal e entretenimento e não substitui aconselhamento profissional. Esta leitura foi gerada por um sistema de IA.",
+    "legal": {
+      "impressum": "Informações legais",
+      "datenschutz": "Privacidade",
+      "agb": "Termos",
+      "widerruf": "Direito de arrependimento"
+    },
+    "voice_loading": "Preparando a voz …",
+    "voice_listen": "🔊 Ouvir a voz",
+    "voice_playing": "⏸ Reproduzindo …",
+    "voice_unavailable": "",
+    "q1_eyebrow": "TÚNEL DO TEMPO",
+    "q1_h1": "Que parte da sua linha do tempo mais te chama?",
+    "q1_opts": [
+      {
+        "ic": "🕰️",
+        "t": "Um passado que ainda ecoa em mim"
+      },
+      {
+        "ic": "⚡",
+        "t": "Onde eu realmente estou agora"
+      },
+      {
+        "ic": "🌌",
+        "t": "O que me espera lá na frente"
+      },
+      {
+        "ic": "🌀",
+        "t": "Os três, entrelaçados"
+      }
+    ],
+    "q4_eyebrow": "PASSO 4",
+    "q4_h1": "O que você quer que o túnel revele?",
+    "q4_opts": [
+      {
+        "ic": "💞",
+        "t": "Uma conexão que atravessa o tempo"
+      },
+      {
+        "ic": "🧭",
+        "t": "Um ponto de virada no meu caminho"
+      },
+      {
+        "ic": "🔑",
+        "t": "O fio oculto que liga tudo"
+      },
+      {
+        "ic": "✨",
+        "t": "Só abra o túnel e me mostre"
+      }
+    ],
+    "loading_phrases": [
+      "O túnel está se abrindo …",
+      "Seu passado, presente e futuro estão se alinhando …",
+      "As linhas do tempo estão começando a se desvendar …",
+      "Sua jornada pelo tempo está tomando forma …"
+    ],
+    "reveal_badge": "✦ Seu túnel do tempo",
+    "reveal_fallback": "As linhas do tempo estão incomumente entrelaçadas hoje — sua jornada completa está esperando por você na sua leitura pessoal.",
+    "purchase_eyebrow": "DEGAJA™ · 24/7",
+    "purchase_title": "Aprofundar",
+    "purchase_desc": "Sua primeira resposta foi gratuita. Desbloqueie agora uma leitura pessoal mais profunda, com 5 minutos de perguntas adicionais.",
+    "purchase_single": "Uma leitura · R$24,99",
+    "purchase_pack": "3 leituras · R$49,99",
+    "purchase_note": "Pagamento único · sem renovação automática.",
+    "purchase_back": "← Voltar",
+    "purchase_error": "O pagamento não está disponível agora. Tente novamente mais tarde."
+  },
+  "ru": {
+    "q2_eyebrow": "ШАГ 2",
+    "q2_h1": "Когда ты родилась?",
+    "q2_placeholder": "ДД.ММ.ГГГГ",
+    "q3_eyebrow": "ШАГ 3",
+    "q3_h1": "Как нам тебя называть?",
+    "q3_placeholder": "Твоё имя",
+    "next": "Далее →",
+    "back": "← Назад",
+    "loading_sub": "Это займёт всего мгновение",
+    "cta": "Открыть полное путешествие · €4,99 →",
+    "disclaimer": "DEGAJA предназначена для личного ориентира и развлечения и не заменяет профессиональную консультацию. Это толкование создано системой ИИ.",
+    "legal": {
+      "impressum": "Юридическая информация",
+      "datenschutz": "Конфиденциальность",
+      "agb": "Условия",
+      "widerruf": "Отказ от договора"
+    },
+    "voice_loading": "Подготовка голоса …",
+    "voice_listen": "🔊 Слушать голос",
+    "voice_playing": "⏸ Воспроизведение …",
+    "voice_unavailable": "",
+    "q1_eyebrow": "ТУННЕЛЬ ВРЕМЕНИ",
+    "q1_h1": "Какая часть твоей временной линии зовёт тебя сильнее всего?",
+    "q1_opts": [
+      {
+        "ic": "🕰️",
+        "t": "Прошлое, которое всё ещё отзывается во мне"
+      },
+      {
+        "ic": "⚡",
+        "t": "Где я на самом деле нахожусь сейчас"
+      },
+      {
+        "ic": "🌌",
+        "t": "Что ждёт меня впереди"
+      },
+      {
+        "ic": "🌀",
+        "t": "Все три, переплетённые вместе"
+      }
+    ],
+    "q4_eyebrow": "ШАГ 4",
+    "q4_h1": "Что ты хочешь, чтобы тоннель тебе открыл?",
+    "q4_opts": [
+      {
+        "ic": "💞",
+        "t": "Связь, проходящая сквозь время"
+      },
+      {
+        "ic": "🧭",
+        "t": "Поворотный момент на моём пути"
+      },
+      {
+        "ic": "🔑",
+        "t": "Скрытую нить, связывающую всё воедино"
+      },
+      {
+        "ic": "✨",
+        "t": "Просто открой тоннель и покажи мне"
+      }
+    ],
+    "loading_phrases": [
+      "Тоннель открывается …",
+      "Твоё прошлое, настоящее и будущее начинают выравниваться …",
+      "Временные линии начинают распутываться …",
+      "Твоё путешествие сквозь время обретает форму …"
+    ],
+    "reveal_badge": "✦ Твой туннель времени",
+    "reveal_fallback": "Сегодня временные линии необычайно переплетены — твоё полное путешествие ждёт тебя в персональном сеансе.",
+    "purchase_eyebrow": "DEGAJA™ · 24/7",
+    "purchase_title": "Углубиться",
+    "purchase_desc": "Твой первый ответ был бесплатным. Разблокируй более глубокий персональный расклад и 5 минут дополнительных вопросов.",
+    "purchase_single": "Один расклад · €4,99",
+    "purchase_pack": "3 расклада · €9,99",
+    "purchase_note": "Разовый платёж · без автоматического продления.",
+    "purchase_back": "← Назад",
+    "purchase_error": "Оплата сейчас недоступна. Попробуй позже."
+  },
+  "uk": {
+    "q2_eyebrow": "КРОК 2",
+    "q2_h1": "Коли ти народилася?",
+    "q2_placeholder": "ДД.ММ.РРРР",
+    "q3_eyebrow": "КРОК 3",
+    "q3_h1": "Як нам тебе називати?",
+    "q3_placeholder": "Твоє ім'я",
+    "next": "Далі →",
+    "back": "← Назад",
+    "loading_sub": "Це займе лише мить",
+    "cta": "Відкрити повну подорож · €4,99 →",
+    "disclaimer": "DEGAJA призначена для особистого орієнтиру та розваги і не замінює професійну консультацію. Це тлумачення створено системою ШІ.",
+    "legal": {
+      "impressum": "Юридична інформація",
+      "datenschutz": "Конфіденційність",
+      "agb": "Умови",
+      "widerruf": "Відмова від договору"
+    },
+    "voice_loading": "Підготовка голосу …",
+    "voice_listen": "🔊 Слухати голос",
+    "voice_playing": "⏸ Відтворення …",
+    "voice_unavailable": "",
+    "q1_eyebrow": "ТУНЕЛЬ ЧАСУ",
+    "q1_h1": "Яка частина твоєї часової лінії кличе тебе найсильніше?",
+    "q1_opts": [
+      {
+        "ic": "🕰️",
+        "t": "Минуле, яке й досі відлунює в мені"
+      },
+      {
+        "ic": "⚡",
+        "t": "Де я насправді зараз перебуваю"
+      },
+      {
+        "ic": "🌌",
+        "t": "Що чекає на мене попереду"
+      },
+      {
+        "ic": "🌀",
+        "t": "Усі три, переплетені разом"
+      }
+    ],
+    "q4_eyebrow": "КРОК 4",
+    "q4_h1": "Що ти хочеш, щоб тунель тобі відкрив?",
+    "q4_opts": [
+      {
+        "ic": "💞",
+        "t": "Зв'язок, що проходить крізь час"
+      },
+      {
+        "ic": "🧭",
+        "t": "Поворотний момент на моєму шляху"
+      },
+      {
+        "ic": "🔑",
+        "t": "Прихований зв'язок, що з'єднує все"
+      },
+      {
+        "ic": "✨",
+        "t": "Просто відкрий тунель і покажи мені"
+      }
+    ],
+    "loading_phrases": [
+      "Тунель відкривається …",
+      "Твоє минуле, теперішнє і майбутнє починають вирівнюватися …",
+      "Часові лінії починають розплутуватися …",
+      "Твоя подорож крізь час набуває форми …"
+    ],
+    "reveal_badge": "✦ Твій тунель часу",
+    "reveal_fallback": "Сьогодні часові лінії незвично переплетені — твоя повна подорож чекає на тебе в персональному сеансі.",
+    "purchase_eyebrow": "DEGAJA™ · 24/7",
+    "purchase_title": "Заглибитися",
+    "purchase_desc": "Твоя перша відповідь була безкоштовною. Розблокуй глибший особистий розклад і 5 хвилин додаткових запитань.",
+    "purchase_single": "Один розклад · €4,99",
+    "purchase_pack": "3 розклади · €9,99",
+    "purchase_note": "Одноразовий платіж · без автоматичного продовження.",
+    "purchase_back": "← Назад",
+    "purchase_error": "Оплата зараз недоступна. Спробуй пізніше."
+  },
+  "ja": {
+    "q2_eyebrow": "ステップ2",
+    "q2_h1": "生年月日は？",
+    "q2_placeholder": "年/月/日",
+    "q3_eyebrow": "ステップ3",
+    "q3_h1": "お名前を教えてください",
+    "q3_placeholder": "お名前",
+    "next": "次へ →",
+    "back": "← 戻る",
+    "loading_sub": "少々お待ちください",
+    "cta": "完全な旅をアンロック · ¥750 →",
+    "disclaimer": "DEGAJAは個人的な指針とエンターテインメントを目的としており、専門的な助言に代わるものではありません。この鑑定はAIによって生成されました。",
+    "legal": {
+      "impressum": "運営者情報",
+      "datenschutz": "プライバシー",
+      "agb": "利用規約",
+      "widerruf": "撤回"
+    },
+    "voice_loading": "音声を準備しています…",
+    "voice_listen": "🔊 音声を聞く",
+    "voice_playing": "⏸ 再生中…",
+    "voice_unavailable": "",
+    "q1_eyebrow": "タイムトンネル",
+    "q1_h1": "あなたの時間軸のどの部分が一番あなたを呼んでいますか？",
+    "q1_opts": [
+      {
+        "ic": "🕰️",
+        "t": "今も自分の中に響く過去"
+      },
+      {
+        "ic": "⚡",
+        "t": "今、本当に自分がいる場所"
+      },
+      {
+        "ic": "🌌",
+        "t": "この先に待っているもの"
+      },
+      {
+        "ic": "🌀",
+        "t": "その三つすべてが絡み合ったもの"
+      }
+    ],
+    "q4_eyebrow": "ステップ4",
+    "q4_h1": "トンネルに何を明らかにしてほしいですか？",
+    "q4_opts": [
+      {
+        "ic": "💞",
+        "t": "時を超えてつながる絆"
+      },
+      {
+        "ic": "🧭",
+        "t": "自分の道の転機"
+      },
+      {
+        "ic": "🔑",
+        "t": "すべてをつなぐ隠れた糸"
+      },
+      {
+        "ic": "✨",
+        "t": "とにかくトンネルを開いて見せてほしい"
+      }
+    ],
+    "loading_phrases": [
+      "トンネルが開いています…",
+      "あなたの過去・現在・未来が重なり合っています…",
+      "時間の流れがほどけ始めています…",
+      "あなたの時を超える旅が形になりつつあります…"
+    ],
+    "reveal_badge": "✦ あなたのタイムトンネル",
+    "reveal_fallback": "今日は時間の流れが普段以上に絡み合っています——あなたの完全な旅はパーソナル鑑定でお待ちしています。",
+    "purchase_eyebrow": "DEGAJA™ · 24時間対応",
+    "purchase_title": "さらに深く",
+    "purchase_desc": "最初の回答は無料でした。より深いパーソナル鑑定と、5分間の追加質問をアンロックしましょう。",
+    "purchase_single": "鑑定1回 · ¥750",
+    "purchase_pack": "鑑定3回 · ¥1,490",
+    "purchase_note": "一回限りのお支払い · 自動更新はありません。",
+    "purchase_back": "← 戻る",
+    "purchase_error": "現在お支払いをご利用いただけません。後でもう一度お試しください。"
+  },
+  "zh": {
+    "q2_eyebrow": "第2步",
+    "q2_h1": "你的出生日期是？",
+    "q2_placeholder": "年/月/日",
+    "q3_eyebrow": "第3步",
+    "q3_h1": "我们该怎么称呼你？",
+    "q3_placeholder": "你的名字",
+    "next": "继续 →",
+    "back": "← 返回",
+    "loading_sub": "请稍等片刻",
+    "cta": "解锁完整旅程 · ¥39 →",
+    "disclaimer": "DEGAJA 仅用于个人指引与娱乐目的，不能替代专业建议。此解读由AI系统生成。",
+    "legal": {
+      "impressum": "网站信息",
+      "datenschutz": "隐私政策",
+      "agb": "条款",
+      "widerruf": "撤回权"
+    },
+    "voice_loading": "正在准备语音…",
+    "voice_listen": "🔊 收听语音",
+    "voice_playing": "⏸ 播放中…",
+    "voice_unavailable": "",
+    "q1_eyebrow": "时间隧道",
+    "q1_h1": "你的时间线中哪一部分最吸引你？",
+    "q1_opts": [
+      {
+        "ic": "🕰️",
+        "t": "至今仍在我心中回响的过去"
+      },
+      {
+        "ic": "⚡",
+        "t": "我现在真正所处的位置"
+      },
+      {
+        "ic": "🌌",
+        "t": "前方等待着我的事物"
+      },
+      {
+        "ic": "🌀",
+        "t": "三者交织在一起"
+      }
+    ],
+    "q4_eyebrow": "第4步",
+    "q4_h1": "你希望隧道为你揭示什么？",
+    "q4_opts": [
+      {
+        "ic": "💞",
+        "t": "一段跨越时间的联系"
+      },
+      {
+        "ic": "🧭",
+        "t": "我人生道路上的转折点"
+      },
+      {
+        "ic": "🔑",
+        "t": "将一切串联起来的隐藏线索"
+      },
+      {
+        "ic": "✨",
+        "t": "直接打开隧道，让我看看"
+      }
+    ],
+    "loading_phrases": [
+      "隧道正在开启…",
+      "你的过去、现在与未来正在对齐…",
+      "时间线开始逐渐展开…",
+      "你穿越时间的旅程正在成形…"
+    ],
+    "reveal_badge": "✦ 你的时间隧道",
+    "reveal_fallback": "今天的时间线异常地交织在一起——你的完整旅程正在专属解读中等你。",
+    "purchase_eyebrow": "DEGAJA™ · 24/7",
+    "purchase_title": "深入解读",
+    "purchase_desc": "你的第一次解答是免费的。现在解锁更深入的专属解读，并可追加5分钟提问。",
+    "purchase_single": "单次解读 · ¥39",
+    "purchase_pack": "3次解读 · ¥79",
+    "purchase_note": "一次性付款 · 不会自动续费。",
+    "purchase_back": "← 返回",
+    "purchase_error": "暂时无法完成支付，请稍后再试。"
+  },
+  "hi": {
+    "q2_eyebrow": "चरण 2",
+    "q2_h1": "आपका जन्म कब हुआ था?",
+    "q2_placeholder": "दिन/माह/वर्ष",
+    "q3_eyebrow": "चरण 3",
+    "q3_h1": "हम आपको क्या कहकर पुकारें?",
+    "q3_placeholder": "आपका पहला नाम",
+    "next": "आगे बढ़ें →",
+    "back": "← वापस",
+    "loading_sub": "कृपया एक क्षण प्रतीक्षा करें",
+    "cta": "अपनी पूरी यात्रा अनलॉक करें · ₹249 →",
+    "disclaimer": "DEGAJA केवल व्यक्तिगत मार्गदर्शन और मनोरंजन के उद्देश्य से है और यह पेशेवर सलाह का विकल्प नहीं है। यह रीडिंग एक AI सिस्टम द्वारा तैयार की गई है।",
+    "legal": {
+      "impressum": "कानूनी सूचना",
+      "datenschutz": "गोपनीयता",
+      "agb": "शर्तें",
+      "widerruf": "निरसन"
+    },
+    "voice_loading": "आवाज़ तैयार की जा रही है…",
+    "voice_listen": "🔊 आवाज़ सुनें",
+    "voice_playing": "⏸ चल रहा है…",
+    "voice_unavailable": "",
+    "q1_eyebrow": "समय सुरंग",
+    "q1_h1": "तुम्हारी टाइमलाइन का कौन-सा हिस्सा तुम्हें सबसे ज़्यादा बुलाता है?",
+    "q1_opts": [
+      {
+        "ic": "🕰️",
+        "t": "एक अतीत जो आज भी मेरे अंदर गूंजता है"
+      },
+      {
+        "ic": "⚡",
+        "t": "मैं अभी वास्तव में कहाँ खड़ा/खड़ी हूँ"
+      },
+      {
+        "ic": "🌌",
+        "t": "आगे मेरा क्या इंतज़ार कर रहा है"
+      },
+      {
+        "ic": "🌀",
+        "t": "तीनों, एक-दूसरे से जुड़े हुए"
+      }
+    ],
+    "q4_eyebrow": "चरण 4",
+    "q4_h1": "तुम चाहते हो कि सुरंग तुम्हें क्या बताए?",
+    "q4_opts": [
+      {
+        "ic": "💞",
+        "t": "समय के पार जाने वाला एक रिश्ता"
+      },
+      {
+        "ic": "🧭",
+        "t": "मेरे रास्ते का एक मोड़"
+      },
+      {
+        "ic": "🔑",
+        "t": "वो छिपा हुआ धागा जो सब कुछ जोड़ता है"
+      },
+      {
+        "ic": "✨",
+        "t": "बस सुरंग खोलो और मुझे दिखाओ"
+      }
+    ],
+    "loading_phrases": [
+      "सुरंग खुल रही है…",
+      "तुम्हारा अतीत, वर्तमान और भविष्य एक-दूसरे से जुड़ रहे हैं…",
+      "समय की रेखाएँ खुलने लगी हैं…",
+      "समय के पार तुम्हारी यात्रा आकार ले रही है…"
+    ],
+    "reveal_badge": "✦ तुम्हारी समय सुरंग",
+    "reveal_fallback": "आज समय की रेखाएँ असामान्य रूप से आपस में जुड़ी हुई हैं — तुम्हारी पूरी यात्रा तुम्हारी व्यक्तिगत रीडिंग में तुम्हारा इंतज़ार कर रही है।",
+    "purchase_eyebrow": "DEGAJA™ · 24/7",
+    "purchase_title": "और गहराई में जाओ",
+    "purchase_desc": "तुम्हारा पहला जवाब मुफ़्त था। अभी एक गहरी व्यक्तिगत रीडिंग अनलॉक करो, साथ में 5 मिनट के अतिरिक्त सवाल।",
+    "purchase_single": "एक रीडिंग · ₹249",
+    "purchase_pack": "3 रीडिंग्स · ₹499",
+    "purchase_note": "एक बार का भुगतान · कोई ऑटोमैटिक रिन्यूअल नहीं।",
+    "purchase_back": "← वापस",
+    "purchase_error": "अभी भुगतान उपलब्ध नहीं है। कृपया बाद में फिर कोशिश करो।"
+  }
+};
+  var SUPPORTED_LANGS = ["de", "en", "fr", "es", "it", "pt", "ru", "uk", "br", "ja", "zh", "hi"];
+  // Brazilian Portuguese gets its own translation above (real differences
+  // from European Portuguese: você vs tu, different verb constructions).
+  // Mexican Spanish is left aliased to es: in neutral written UI text like
+  // this quiz, the two are close enough that a separate translation would
+  // mostly just restate the same sentences — unlike pt-BR vs pt-PT, which
+  // genuinely diverge here. US English is aliased for the same reason.
+  var LANG_ALIAS = { us: "en", mx: "es" };
+
+  var REVEAL_TOPIC = {
+  "de": "Zeittunnel",
+  "en": "Time Tunnel",
+  "fr": "Tunnel temporel",
+  "es": "Túnel del tiempo",
+  "it": "Tunnel del tempo",
+  "pt": "Túnel do tempo",
+  "br": "Túnel do tempo",
+  "ru": "Туннель времени",
+  "uk": "Тунель часу",
+  "ja": "タイムトンネル",
+  "zh": "时间隧道",
+  "hi": "समय सुरंग"
+};
+
+  // {name}/{birthdate}/{insight}/{focus} are substituted in before sending.
+  var REVEAL_PROMPT = {
+  "de": "Ich heiße {name}, geboren am {birthdate}. Der Teil meiner Zeitlinie, der mich am meisten ruft: {insight}. Was mir der Tunnel offenbaren soll: {focus}. Schreibe mir eine immersive, bildhafte persönliche Reise durch meine eigene Zeitlinie — keine generische Vorhersage. Nutze meinen Namen direkt und führe mich durch drei lebendige Momente: ein Echo aus meiner Vergangenheit, das mich bis heute prägt, eine klare Wahrheit darüber, wo ich gerade wirklich stehe, und einen Blick auf das, was sich vor mir formt — verwebe alle drei zu einem einzigen roten Faden, verbunden mit dem, was ich gewählt habe. Baue über 7-9 Sätze hinweg langsam Vorfreude auf und ende mit einem nachhallenden, leicht offenen Cliffhanger, der neugierig macht. Schreibe es, als würdest du mich durch einen Durchgang führen, den nur ich gehen soll — intim, kinoreif, niemals generisch oder gehetzt. Formuliere es als reflektierende Unterhaltung, niemals als garantierte Vorhersage.",
+  "en": "My name is {name}, born on {birthdate}. The part of my timeline that calls to me most: {insight}. What I want the tunnel to reveal: {focus}. Write me an immersive, vivid personal journey through my own timeline — not a generic prediction. Use my name directly, and move through three vivid moments: one echo from my past still shaping me today, one clear truth about where I stand right now, and one glimpse of what's forming ahead — weaving all three into a single thread, tied to what I chose. Build anticipation gradually across 7-9 sentences, end on a resonant, slightly open cliffhanger that makes me want to know more. Write it as if you're guiding me through a passage only I'm meant to walk — intimate, cinematic, never generic or rushed. Frame it as reflective entertainment, never a guaranteed prediction.",
+  "fr": "Je m'appelle {name}, né(e) le {birthdate}. La partie de ma ligne du temps qui m'appelle le plus : {insight}. Ce que je veux que le tunnel me révèle : {focus}. Écris-moi un voyage personnel immersif et vivant à travers ma propre ligne du temps — pas une prédiction générique. Utilise mon prénom directement, et fais-moi traverser trois moments vivants : un écho de mon passé qui me façonne encore aujourd'hui, une vérité claire sur où j'en suis vraiment maintenant, et un aperçu de ce qui se forme devant moi — en tissant les trois en un seul fil, relié à mon choix. Construis progressivement l'anticipation sur 7 à 9 phrases, et termine sur une note marquante, légèrement en suspens, qui donne envie d'en savoir plus. Écris-le comme si tu me guidais à travers un passage que moi seul(e) dois emprunter — intime, cinématographique, jamais générique ni précipité. Présente-le comme un divertissement réflexif, jamais comme une prédiction garantie.",
+  "es": "Me llamo {name}, nací el {birthdate}. La parte de mi línea de tiempo que más me llama: {insight}. Lo que quiero que el túnel me revele: {focus}. Escríbeme un viaje personal inmersivo y vívido a través de mi propia línea de tiempo — no una predicción genérica. Usa mi nombre directamente, y llévame a través de tres momentos vívidos: un eco de mi pasado que todavía me moldea hoy, una verdad clara sobre dónde estoy realmente ahora, y un vistazo de lo que se está formando más adelante — entrelazando los tres en un solo hilo, conectado con lo que elegí. Construye la expectativa gradualmente a lo largo de 7 a 9 frases, y termina con una nota resonante y ligeramente en suspenso que me haga querer saber más. Escríbelo como si me estuvieras guiando por un pasaje que solo yo debo recorrer — íntimo, cinematográfico, nunca genérico ni apresurado. Preséntalo como entretenimiento reflexivo, nunca como una predicción garantizada.",
+  "it": "Mi chiamo {name}, nato/a il {birthdate}. La parte della mia linea temporale che mi chiama di più: {insight}. Ciò che voglio che il tunnel mi riveli: {focus}. Scrivimi un viaggio personale immersivo e vivido attraverso la mia linea temporale — non una previsione generica. Usa il mio nome direttamente, e guidami attraverso tre momenti vividi: un'eco del mio passato che ancora oggi mi plasma, una verità chiara su dove mi trovo davvero ora, e uno sguardo su ciò che si sta formando più avanti — intrecciando i tre in un unico filo, legato a ciò che ho scelto. Costruisci gradualmente l'attesa in 7-9 frasi, e termina con una nota risonante, leggermente in sospeso, che mi faccia venire voglia di saperne di più. Scrivilo come se mi stessi guidando attraverso un passaggio che solo io devo percorrere — intimo, cinematografico, mai generico o affrettato. Presentalo come intrattenimento riflessivo, mai come una previsione garantita.",
+  "pt": "Chamo-me {name}, nasci a {birthdate}. A parte da minha linha do tempo que mais me chama: {insight}. O que quero que o túnel me revele: {focus}. Escreve-me uma viagem pessoal imersiva e vívida através da minha própria linha do tempo — não uma previsão genérica. Usa o meu nome diretamente, e guia-me através de três momentos vívidos: um eco do meu passado que ainda hoje me molda, uma verdade clara sobre onde realmente estou agora, e um vislumbre do que se está a formar mais à frente — tecendo os três num único fio, ligado àquilo que escolhi. Constrói a expectativa gradualmente ao longo de 7-9 frases, e termina com uma nota marcante, ligeiramente em suspenso, que me faça querer saber mais. Escreve-o como se me estivesses a guiar por uma passagem que só eu devo percorrer — íntimo, cinematográfico, nunca genérico ou apressado. Apresenta-o como entretenimento reflexivo, nunca como uma previsão garantida.",
+  "br": "Meu nome é {name}, nasci em {birthdate}. A parte da minha linha do tempo que mais me chama: {insight}. O que eu quero que o túnel me revele: {focus}. Escreva pra mim uma jornada pessoal imersiva e vívida através da minha própria linha do tempo — nada de previsão genérica. Use meu nome diretamente, e me guie através de três momentos vívidos: um eco do meu passado que ainda hoje me molda, uma verdade clara sobre onde eu realmente estou agora, e um vislumbre do que está se formando lá na frente — tecendo os três em um único fio, ligado ao que eu escolhi. Construa a expectativa aos poucos ao longo de 7 a 9 frases, e termine com uma nota marcante, meio em suspenso, que me deixe querendo saber mais. Escreva como se você estivesse me guiando por uma passagem que só eu devo percorrer — íntimo, cinematográfico, nunca genérico ou apressado. Apresente isso como entretenimento reflexivo, nunca como uma previsão garantida.",
+  "ru": "Меня зовут {name}, я родился(лась) {birthdate}. Часть моей временной линии, которая зовёт меня сильнее всего: {insight}. Что я хочу, чтобы тоннель мне открыл: {focus}. Напиши мне живое, захватывающее личное путешествие сквозь мою собственную временную линию — не общее предсказание. Используй моё имя напрямую и проведи меня через три ярких момента: отголосок моего прошлого, который до сих пор формирует меня, ясную правду о том, где я действительно нахожусь сейчас, и проблеск того, что формируется впереди — сплетая все три в единую нить, связанную с моим выбором. Постепенно наращивай предвкушение на протяжении 7-9 предложений, и заверши запоминающейся, слегка незавершённой нотой, которая вызывает желание узнать больше. Напиши это так, будто ты ведёшь меня через проход, который должен пройти только я — интимно, кинематографично, никогда не обобщённо и не второпях. Подай это как рефлексивное развлечение, никогда как гарантированное предсказание.",
+  "uk": "Мене звати {name}, я народився(лася) {birthdate}. Частина моєї часової лінії, яка кличе мене найсильніше: {insight}. Що я хочу, щоб тунель мені відкрив: {focus}. Напиши мені живу, захопливу особисту подорож крізь мою власну часову лінію — не загальне передбачення. Використай моє ім'я напряму і проведи мене крізь три яскраві моменти: відлуння мого минулого, яке досі формує мене, ясну правду про те, де я насправді зараз перебуваю, і погляд на те, що формується попереду — сплітаючи всі три в єдину нитку, пов'язану з моїм вибором. Поступово нарощуй передчуття протягом 7-9 речень, і заверши пам'ятною, трохи незавершеною нотою, яка викликає бажання дізнатися більше. Напиши це так, ніби ти ведеш мене крізь прохід, яким маю пройти лише я — інтимно, кінематографічно, ніколи узагальнено чи поспішно. Подай це як рефлексивну розвагу, ніколи як гарантоване передбачення.",
+  "ja": "私の名前は{name}、{birthdate}生まれです。私の時間軸の中で最も私を呼んでいる部分：{insight}。トンネルに明らかにしてほしいこと：{focus}。一般的な予言ではなく、私自身の時間軸を巡る臨場感あふれる個人的な旅を書いてください。私の名前を直接使い、3つの鮮やかな瞬間を通して私を導いてください——今も私を形作っている過去の残響、今本当にいる場所についての明確な真実、そしてこの先に形作られつつあるものの一瞬の予感——これら3つを、私が選んだものと結びつけながら一本の糸として織り上げてください。7〜9文かけて徐々に期待感を高め、もっと知りたくなるような、余韻の残る少し未完結な一文で締めくくってください。まるで私だけが通るべき通路を導いているかのように——親密で、映画のように鮮やかで、決して一般的で急いだものにならないように書いてください。これは内省的なエンターテインメントとして提示し、保証された予言としては決して提示しないでください。",
+  "zh": "我叫{name}，出生于{birthdate}。我的时间线中最吸引我的部分：{insight}。我希望隧道为我揭示的内容：{focus}。请为我写一段身临其境、生动的个人旅程，穿越我自己的时间线——不要是千篇一律的预言。直接使用我的名字，带我穿越三个生动的瞬间：一个至今仍在塑造我的过去回响，一个关于我现在真正所处位置的清晰真相，以及一瞥正在前方成形的事物——将这三者编织成一条线索，与我的选择紧密相连。用7到9句话逐步营造期待感，并以一个令人回味、略带悬念的结尾收束，让我想知道更多。写得就像你在引导我走过一段只有我才能走的通道一样——亲密、如电影般生动，绝不千篇一律或仓促。请将其呈现为反思性的娱乐内容，绝不是确定的预言。",
+  "hi": "मेरा नाम {name} है, मेरा जन्म {birthdate} को हुआ था। मेरी टाइमलाइन का वह हिस्सा जो मुझे सबसे ज़्यादा बुलाता है: {insight}। मैं चाहता/चाहती हूं कि सुरंग मुझे क्या दिखाए: {focus}। मुझे मेरी अपनी टाइमलाइन के पार एक गहन, जीवंत व्यक्तिगत यात्रा लिखें — कोई सामान्य भविष्यवाणी नहीं। मेरे नाम का सीधे इस्तेमाल करें, और मुझे तीन जीवंत पलों से होकर ले जाएं: मेरे अतीत की एक गूंज जो आज भी मुझे आकार दे रही है, इस बारे में एक स्पष्ट सच्चाई कि मैं अभी वास्तव में कहां खड़ा/खड़ी हूं, और आगे बन रही किसी चीज़ की एक झलक — इन तीनों को एक ही धागे में बुनते हुए, मेरी पसंद से जोड़ते हुए। 7-9 वाक्यों में धीरे-धीरे उत्सुकता बढ़ाएं, और एक यादगार, थोड़े अधूरे अंदाज़ में खत्म करें जिससे मुझे और जानने की इच्छा हो। इसे ऐसे लिखें जैसे आप मुझे एक ऐसे रास्ते से गुज़ार रहे हों जो सिर्फ मुझे ही पार करना है — आत्मीय, सिनेमाई, कभी भी सामान्य या जल्दबाज़ी वाला नहीं। इसे चिंतनशील मनोरंजन के रूप में प्रस्तुत करें, कभी भी गारंटीशुदा भविष्यवाणी के रूप में नहीं।"
+};
+
+  var qs = new URLSearchParams(location.search);
+  var requestedLang = qs.get("lang");
+  var mappedLang = LANG_ALIAS[requestedLang] || requestedLang;
+  var langWasExplicit = SUPPORTED_LANGS.indexOf(mappedLang) !== -1;
+  // Fall back to the main site's own remembered language (same localStorage
+  // key as i18n.js) before falling back to German/geo-guessing — covers a
+  // direct visit, a bookmark, or an old cached banner link with no ?lang=.
+  var storedLang = null;
+  try {
+    var storedRaw = localStorage.getItem("degajaLang");
+    var storedMapped = LANG_ALIAS[storedRaw] || storedRaw;
+    if (SUPPORTED_LANGS.indexOf(storedMapped) !== -1) storedLang = storedMapped;
+  } catch (_) {}
+  var lang = langWasExplicit ? mappedLang : (storedLang || "de");
+  langWasExplicit = langWasExplicit || !!storedLang;
+  var ref = qs.get("ref") || qs.get("utm_source") || "time-tunnel";
+
+  // Same spirit as i18n.js on the main site: a real visitor-country guess
+  // from Vercel's edge (see /api/geo.js) beats a hardcoded default — but
+  // never overrides an explicit ?lang= pick, and only applies while still
+  // on the first question so it can't disrupt someone mid-quiz.
+  var COUNTRY_LANG = {
+    DE: "de", AT: "de", CH: "de", LI: "de",
+    FR: "fr", MC: "fr",
+    ES: "es", AR: "es", CO: "es", CL: "es", PE: "es", MX: "es", VE: "es",
+    IT: "it",
+    PT: "pt", BR: "pt",
+    RU: "ru", BY: "ru", KZ: "ru", UA: "ru",
+    GB: "en", IE: "en", US: "en", CA: "en", AU: "en", NZ: "en", ZA: "en", SG: "en",
+    JP: "ja", CN: "zh", TW: "zh", HK: "zh", MO: "zh",
+    IN: "hi"
+  };
+  function applyGeoLangIfEligible(){
+    if (langWasExplicit) return;
+    var controller = new AbortController();
+    var timeout = setTimeout(function(){ controller.abort(); }, 2500);
+    fetch("/api/geo", { signal: controller.signal })
+      .then(function(r){ return r.ok ? r.json() : null; })
+      .then(function(data){
+        clearTimeout(timeout);
+        var geoLang = data && COUNTRY_LANG[String(data.country || "").toUpperCase()];
+        if (!geoLang || geoLang === lang || step !== 1) return;
+        lang = geoLang;
+        langSelect.value = lang;
+        render();
+      })
+      .catch(function(){});
+  }
+
+  var answers = { insight: null, birthdate: "", name: "", focus: null };
+  var step = 1;
+  var TOTAL_STEPS = 4;
+  var loadingTimer = null;
+  var typeTimer = null;
+
+  var card = document.getElementById("quizCard");
+  var progressBar = document.getElementById("progressBar");
+  var stepCount = document.getElementById("stepCount");
+  var langSelect = document.getElementById("langSelect");
+
+  function t(){ return STR[lang]; }
+
+  function buildStars(){
+    var wrap = document.getElementById("stars");
+    wrap.innerHTML = "";
+    var count = window.innerWidth < 500 ? 36 : 60;
+    for (var i = 0; i < count; i++) {
+      var s = document.createElement("div");
+      s.className = "quiz-star";
+      var size = (Math.random() * 1.8 + 0.6).toFixed(1);
+      s.style.width = size + "px";
+      s.style.height = size + "px";
+      s.style.left = (Math.random() * 100) + "%";
+      s.style.top = (Math.random() * 100) + "%";
+      s.style.animationDuration = (2 + Math.random() * 3).toFixed(1) + "s";
+      s.style.animationDelay = (Math.random() * 3).toFixed(1) + "s";
+      wrap.appendChild(s);
+    }
+  }
+  buildStars();
+
+  langSelect.value = lang;
+  langSelect.addEventListener("change", function(){
+    lang = langSelect.value;
+    render();
+  });
+
+  function updateProgress(pctOverride){
+    var pct = pctOverride != null ? pctOverride : Math.min(100, Math.round((step - 1) / TOTAL_STEPS * 100) + 8);
+    progressBar.style.width = pct + "%";
+    stepCount.textContent = Math.min(step, TOTAL_STEPS) + "/" + TOTAL_STEPS;
+  }
+
+  function escapeHtml(s){
+    return String(s).replace(/[&<>"']/g, function(c){
+      return { "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;" }[c];
+    });
+  }
+
+  function setCard(html){
+    card.classList.remove("quiz-anim");
+    card.innerHTML = html;
+    void card.offsetWidth;
+    card.classList.add("quiz-anim");
+  }
+
+  function renderOptionsStep(eyebrow, h1, opts, onPick){
+    var html = '<div class="quiz-eyebrow">' + eyebrow + '</div>';
+    html += '<h1 class="quiz-h1">' + h1 + '</h1>';
+    html += '<div class="quiz-options">';
+    opts.forEach(function(o, i){
+      html += '<button class="quiz-opt" data-i="' + i + '"><span class="ic">' + o.ic + '</span>' + escapeHtml(o.t) + '<span class="arrow">→</span></button>';
+    });
+    html += '</div>';
+    if (step > 1) html += '<button class="quiz-back" id="backBtn">' + t().back + '</button>';
+    setCard(html);
+    Array.prototype.forEach.call(card.querySelectorAll(".quiz-opt"), function(btn){
+      btn.addEventListener("click", function(){
+        if (card.dataset.locked) return;
+        card.dataset.locked = "1";
+        btn.classList.add("picked");
+        setTimeout(function(){ onPick(opts[Number(btn.dataset.i)]); }, 260);
+      });
+    });
+    var backBtn = document.getElementById("backBtn");
+    if (backBtn) backBtn.addEventListener("click", goBack);
+  }
+
+  function renderInputStep(eyebrow, h1, placeholder, type, onNext, currentValue){
+    var html = '<div class="quiz-eyebrow">' + eyebrow + '</div>';
+    html += '<h1 class="quiz-h1">' + h1 + '</h1>';
+    html += '<input class="quiz-input" id="stepInput" type="' + type + '" placeholder="' + placeholder + '" value="' + escapeHtml(currentValue || "") + '">';
+    html += '<button class="quiz-cta" id="nextBtn">' + t().next + '</button>';
+    html += '<button class="quiz-back" id="backBtn">' + t().back + '</button>';
+    setCard(html);
+    var input = document.getElementById("stepInput");
+    var nextBtn = document.getElementById("nextBtn");
+    input.focus();
+    function tryNext(){
+      var val = input.value.trim();
+      if (!val) { input.style.borderColor = "#e35b5b"; return; }
+      onNext(val);
+    }
+    nextBtn.addEventListener("click", tryNext);
+    input.addEventListener("keydown", function(e){ if (e.key === "Enter") tryNext(); });
+    document.getElementById("backBtn").addEventListener("click", goBack);
+  }
+
+  function goBack(){
+    if (step > 1) { step -= 1; render(); }
+  }
+
+  function render(){
+    delete card.dataset.locked;
+    document.documentElement.lang = lang;
+    updateProgress();
+    if (step === 1) {
+      renderOptionsStep(t().q1_eyebrow, t().q1_h1, t().q1_opts, function(opt){
+        answers.insight = opt.t;
+        step = 2; render();
+      });
+    } else if (step === 2) {
+      renderInputStep(t().q2_eyebrow, t().q2_h1, t().q2_placeholder, "date", function(val){
+        answers.birthdate = val;
+        step = 3; render();
+      }, answers.birthdate);
+    } else if (step === 3) {
+      renderInputStep(t().q3_eyebrow, t().q3_h1, t().q3_placeholder, "text", function(val){
+        answers.name = val;
+        step = 4; render();
+      }, answers.name);
+    } else if (step === 4) {
+      renderOptionsStep(t().q4_eyebrow, t().q4_h1, t().q4_opts, function(opt){
+        answers.focus = opt.t;
+        runReveal();
+      });
+    }
+  }
+
+  function renderLoading(phrases){
+    phrases = phrases || t().loading_phrases;
+    var html = '<div class="quiz-loading">';
+    html += '<div class="quiz-orb-wrap"><div class="quiz-orb-ring"></div><div class="quiz-orb-ring r2"></div><div class="quiz-orb"></div></div>';
+    html += '<div class="quiz-loading-pct" id="loadPct">0%</div>';
+    html += '<div><div class="quiz-loading-title" id="loadTitle">' + phrases[0] + '</div>';
+    html += '<div class="quiz-loading-sub">' + t().loading_sub + '</div></div>';
+    html += '</div>';
+    setCard(html);
+
+    var pctEl = document.getElementById("loadPct");
+    var titleEl = document.getElementById("loadTitle");
+    var pct = 0, phraseIdx = 0;
+    clearInterval(loadingTimer);
+    loadingTimer = setInterval(function(){
+      pct = Math.min(96, pct + Math.round(4 + Math.random() * 9));
+      pctEl.textContent = pct + "%";
+      var nextPhrase = Math.floor(pct / (100 / phrases.length));
+      if (nextPhrase !== phraseIdx && nextPhrase < phrases.length) {
+        phraseIdx = nextPhrase;
+        titleEl.style.opacity = 0;
+        setTimeout(function(){ titleEl.textContent = phrases[phraseIdx]; titleEl.style.opacity = 1; }, 220);
+      }
+    }, 260);
+  }
+
+  function typewriter(el, text, done){
+    clearInterval(typeTimer);
+    var i = 0;
+    el.innerHTML = '<span class="cursor"></span>';
+    typeTimer = setInterval(function(){
+      i += 2;
+      el.innerHTML = escapeHtml(text.slice(0, i)) + '<span class="cursor"></span>';
+      if (i >= text.length) {
+        clearInterval(typeTimer);
+        el.innerHTML = escapeHtml(text);
+        if (done) done();
+      }
+    }, 18);
+  }
+
+  var revealAudio = null;
+  var lastQuestion = "";
+  var lastTopic = "";
+
+  function loadVoice(text, btn){
+    btn.disabled = true;
+    btn.textContent = t().voice_loading;
+    fetch("/api/tts", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ text: text, lang: lang })
+    }).then(function(r){ return r.ok ? r.blob() : null; }).then(function(blob){
+      if (!blob) { btn.style.display = "none"; return; }
+      var url = URL.createObjectURL(blob);
+      revealAudio = new Audio(url);
+      btn.disabled = false;
+      btn.textContent = t().voice_listen;
+      revealAudio.addEventListener("ended", function(){
+        btn.classList.remove("playing");
+        btn.textContent = t().voice_listen;
+      });
+      btn.addEventListener("click", function(){
+        if (revealAudio.paused) {
+          revealAudio.play();
+          btn.classList.add("playing");
+          btn.textContent = t().voice_playing;
+        } else {
+          revealAudio.pause();
+          btn.classList.remove("playing");
+          btn.textContent = t().voice_listen;
+        }
+      });
+    }).catch(function(){ btn.style.display = "none"; });
+  }
+
+  // Deep-reading upsell, matching the main site's price/wording exactly.
+  // On success, Stripe redirects to the homepage; stashing the pending
+  // question in the same localStorage key the main site's script.js reads
+  // (degajaPendingReading) means it auto-resumes this exact reading there
+  // via its existing verifyAiPayment() -> unlockDeepReading() flow.
+  function startTimeTunnelCheckout(product){
+    try {
+      localStorage.setItem("degajaPendingReading", JSON.stringify({ question: lastQuestion, topic: lastTopic }));
+    } catch (_) {}
+    fetch("/api/checkout", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ product: product, birthDate: answers.birthdate, lang: lang, ref: ref })
+    }).then(function(r){
+      return r.json().then(function(data){ return { ok: r.ok, data: data }; });
+    }).then(function(result){
+      if (!result.ok || !result.data.url) throw new Error("checkout failed");
+      window.location.href = result.data.url;
+    }).catch(function(){
+      alert(t().purchase_error);
+    });
+  }
+
+  function openPurchaseModal(){
+    var overlay = document.createElement("div");
+    overlay.className = "quiz-modal-overlay";
+    overlay.innerHTML =
+      '<div class="quiz-modal">' +
+        '<div class="eyebrow">' + t().purchase_eyebrow + '</div>' +
+        '<h2>' + t().purchase_title + '</h2>' +
+        '<p>' + t().purchase_desc + '</p>' +
+        '<button class="quiz-modal-btn" id="pmSingle">' + t().purchase_single + '</button>' +
+        '<button class="quiz-modal-btn" id="pmPack">' + t().purchase_pack + '</button>' +
+        '<div class="quiz-modal-note">' + t().purchase_note + '</div>' +
+        '<button class="quiz-modal-close" id="pmClose">' + t().purchase_back + '</button>' +
+      '</div>';
+    document.body.appendChild(overlay);
+    overlay.addEventListener("click", function(e){ if (e.target === overlay) overlay.remove(); });
+    document.getElementById("pmClose").addEventListener("click", function(){ overlay.remove(); });
+    document.getElementById("pmSingle").addEventListener("click", function(){ startTimeTunnelCheckout("single"); });
+    document.getElementById("pmPack").addEventListener("click", function(){ startTimeTunnelCheckout("pack"); });
+  }
+
+  function legalLinksHtml(){
+    var l = t().legal || {};
+    return '<div class="quiz-legal-links">' +
+      '<a href="impressum.html" target="_blank" rel="noopener">' + (l.impressum || "Impressum") + '</a> · ' +
+      '<a href="datenschutz.html" target="_blank" rel="noopener">' + (l.datenschutz || "Datenschutz") + '</a> · ' +
+      '<a href="agb.html" target="_blank" rel="noopener">' + (l.agb || "AGB") + '</a> · ' +
+      '<a href="widerruf.html" target="_blank" rel="noopener">' + (l.widerruf || "Widerruf") + '</a>' +
+      '</div>';
+  }
+
+  function renderReveal(text){
+    var html = '<div class="quiz-reveal-top"><div class="quiz-reveal-badge">' + t().reveal_badge + '</div>';
+    html += '<button class="quiz-voice-btn" id="voiceBtn" disabled>' + t().voice_loading + '</button></div>';
+    html += '<div class="quiz-reveal-card"><div class="quiz-reveal-text" id="revealText"></div></div>';
+    html += '<button class="quiz-cta" id="ctaBtn">' + t().cta + '</button>';
+    html += '<div class="quiz-pack-hint">' + t().purchase_pack + '</div>';
+    html += '<div class="quiz-trust-note">🔒 ' + t().purchase_note + '</div>';
+    html += '<div class="quiz-disclaimer">' + t().disclaimer + '</div>';
+    html += legalLinksHtml();
+    setCard(html);
+    typewriter(document.getElementById("revealText"), text);
+    loadVoice(text, document.getElementById("voiceBtn"));
+    document.getElementById("ctaBtn").addEventListener("click", function(){
+      if (revealAudio) revealAudio.pause();
+      openPurchaseModal();
+    });
+  }
+
+  function finishLoadingBar(){
+    clearInterval(loadingTimer);
+    var pctEl = document.getElementById("loadPct");
+    if (pctEl) pctEl.textContent = "100%";
+  }
+
+  function runReveal(){
+    updateProgress(100);
+    renderLoading(t().loading_phrases);
+    var question = REVEAL_PROMPT[lang]
+      .replace("{name}", answers.name)
+      .replace("{birthdate}", answers.birthdate)
+      .replace("{insight}", answers.insight)
+      .replace("{focus}", answers.focus);
+    lastQuestion = question;
+    lastTopic = REVEAL_TOPIC[lang];
+
+    var minWait = new Promise(function(resolve){ setTimeout(resolve, 3200); });
+    var request = fetch("/api/oracle", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        question: question,
+        topic: REVEAL_TOPIC[lang],
+        mode: "paid",
+        lang: lang
+      })
+    }).then(function(r){ return r.ok ? r.json() : null; }).catch(function(){ return null; });
+
+    Promise.all([request, minWait]).then(function(results){
+      finishLoadingBar();
+      var data = results[0];
+      var text = (data && data.text) ? data.text : t().reveal_fallback;
+      setTimeout(function(){ renderReveal(text); }, 260);
+    });
+  }
+
+  render();
+  applyGeoLangIfEligible();
+})();
+</script>
+</body>
+</html>

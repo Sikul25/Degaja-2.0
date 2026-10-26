@@ -13,6 +13,7 @@
       "tab.start": "Start", "tab.readings": "Lesungen", "tab.horoscope": "Horoskop", "tab.advisor": "Beratung", "tab.more": "Mehr",
       "quizBanner.text": "Jetzt im Trend: Entdecke dein vergangenes Leben",
       "loveQuizBanner.text": "Neu: Erfahre, wie deine nächste Beziehung sein wird",
+      "timeTunnelBanner.text": "Neu: Reise durch deinen Zeittunnel – Vergangenheit, Gegenwart, Zukunft",
       "dreamBanner.text": "Neu: Entschlüssle, was dein Traum dir sagt",
       "hero.eyebrow": "✧ DEIN MOMENT DER KLARHEIT ✧",
       "hero.title1": "Was bewegt", "hero.title2": "dich?",
@@ -470,6 +471,7 @@
       "tab.start": "Start", "tab.readings": "Readings", "tab.horoscope": "Horoscope", "tab.advisor": "Advisor", "tab.more": "More",
       "quizBanner.text": "Trending now: Discover your past life",
       "loveQuizBanner.text": "New: Find out what your next relationship will be",
+      "timeTunnelBanner.text": "New: Travel your Time Tunnel – past, present and future",
       "dreamBanner.text": "New: Decode what your dream is telling you",
       "hero.eyebrow": "✧ YOUR MOMENT OF CLARITY ✧",
       "hero.title1": "What's on", "hero.title2": "your mind?",
@@ -925,6 +927,7 @@
       "tab.start": "Accueil", "tab.readings": "Lectures", "tab.horoscope": "Horoscope", "tab.advisor": "Conseil", "tab.more": "Plus",
       "quizBanner.text": "Tendance du moment : découvre ta vie antérieure",
       "loveQuizBanner.text": "Nouveau : découvre à quoi ressemblera ta prochaine relation",
+      "timeTunnelBanner.text": "Nouveau : voyage dans ton tunnel temporel – passé, présent, futur",
       "dreamBanner.text": "Nouveau : décrypte ce que ton rêve te dit",
       "hero.eyebrow": "✧ TON MOMENT DE CLARTÉ ✧",
       "hero.title1": "Qu'est-ce qui te", "hero.title2": "préoccupe ?",
@@ -1367,6 +1370,7 @@
       "tab.start": "Inicio", "tab.readings": "Lecturas", "tab.horoscope": "Horóscopo", "tab.advisor": "Asesoría", "tab.more": "Más",
       "quizBanner.text": "Tendencia ahora: descubre tu vida pasada",
       "loveQuizBanner.text": "Nuevo: descubre cómo será tu próxima relación",
+      "timeTunnelBanner.text": "Nuevo: viaja por tu túnel del tiempo – pasado, presente y futuro",
       "dreamBanner.text": "Nuevo: descifra lo que tu sueño te dice",
       "hero.eyebrow": "✧ TU MOMENTO DE CLARIDAD ✧",
       "hero.title1": "¿Qué te", "hero.title2": "preocupa?",
@@ -1809,6 +1813,7 @@
       "tab.start": "Home", "tab.readings": "Letture", "tab.horoscope": "Oroscopo", "tab.advisor": "Consulenza", "tab.more": "Altro",
       "quizBanner.text": "Di tendenza ora: scopri la tua vita passata",
       "loveQuizBanner.text": "Novità: scopri come sarà la tua prossima relazione",
+      "timeTunnelBanner.text": "Novità: viaggia nel tuo tunnel del tempo – passato, presente e futuro",
       "dreamBanner.text": "Novità: decifra cosa ti dice il tuo sogno",
       "hero.eyebrow": "✧ IL TUO MOMENTO DI CHIAREZZA ✧",
       "hero.title1": "Cosa ti", "hero.title2": "preoccupa?",
@@ -2251,6 +2256,7 @@
       "tab.start": "Início", "tab.readings": "Leituras", "tab.horoscope": "Horóscopo", "tab.advisor": "Consultoria", "tab.more": "Mais",
       "quizBanner.text": "Tendência agora: descobre a tua vida passada",
       "loveQuizBanner.text": "Novo: descobre como vai ser a tua próxima relação",
+      "timeTunnelBanner.text": "Novo: viaja pelo teu túnel do tempo – passado, presente e futuro",
       "dreamBanner.text": "Novo: decifra o que o teu sonho te diz",
       "hero.eyebrow": "✧ O TEU MOMENTO DE CLAREZA ✧",
       "hero.title1": "O que te", "hero.title2": "preocupa?",
@@ -2693,6 +2699,7 @@
       "tab.start": "Главная", "tab.readings": "Расклады", "tab.horoscope": "Гороскоп", "tab.advisor": "Консультация", "tab.more": "Ещё",
       "quizBanner.text": "Сейчас в тренде: узнай свою прошлую жизнь",
       "loveQuizBanner.text": "Новое: узнай, какими будут твои следующие отношения",
+      "timeTunnelBanner.text": "Новое: путешествие сквозь твой туннель времени – прошлое, настоящее, будущее",
       "dreamBanner.text": "Новое: узнай, что говорит твой сон",
       "hero.eyebrow": "✧ ТВОЙ МОМЕНТ ЯСНОСТИ ✧",
       "hero.title1": "Что тебя", "hero.title2": "волнует?",
@@ -3137,6 +3144,7 @@
       "tab.start": "Головна", "tab.readings": "Розклади", "tab.horoscope": "Гороскоп", "tab.advisor": "Консультація", "tab.more": "Ще",
       "quizBanner.text": "Зараз у тренді: дізнайся про своє минуле життя",
       "loveQuizBanner.text": "Нове: дізнайся, якими будуть твої наступні стосунки",
+      "timeTunnelBanner.text": "Нове: подорож крізь твій тунель часу – минуле, теперішнє, майбутнє",
       "dreamBanner.text": "Нове: дізнайся, що говорить твій сон",
       "hero.eyebrow": "✧ ТВІЙ МОМЕНТ ЯСНОСТІ ✧",
       "hero.title1": "Що тебе", "hero.title2": "хвилює?",
@@ -3581,6 +3589,7 @@
       "tab.start": "スタート", "tab.readings": "占い", "tab.horoscope": "ホロスコープ", "tab.advisor": "アドバイザー", "tab.more": "もっと見る",
       "quizBanner.text": "今話題:前世を発見しよう",
       "loveQuizBanner.text": "新登場：次の恋愛がどうなるか知ろう",
+      "timeTunnelBanner.text": "新登場：タイムトンネルを旅しよう——過去・現在・未来",
       "dreamBanner.text": "新登場：あなたの夢が伝えていることを解き明かそう",
       "hero.eyebrow": "✧ あなたの気づきの瞬間 ✧",
       "hero.title1": "今、何が", "hero.title2": "気になっていますか?",
@@ -3976,6 +3985,7 @@
       "tab.start": "开始", "tab.readings": "占卜", "tab.horoscope": "星座", "tab.advisor": "咨询", "tab.more": "更多",
       "quizBanner.text": "热门推荐：探索你的前世",
       "loveQuizBanner.text": "全新上线：了解你的下一段感情会是什么样子",
+      "timeTunnelBanner.text": "全新上线：穿越你的时间隧道——过去、现在与未来",
       "dreamBanner.text": "全新上线：解读你的梦在告诉你什么",
       "hero.eyebrow": "✧ 属于你的清晰时刻 ✧",
       "hero.title1": "此刻", "hero.title2": "你在想什么？",
@@ -4371,6 +4381,7 @@
       "tab.start": "होम", "tab.readings": "रीडिंग्स", "tab.horoscope": "राशिफल", "tab.advisor": "सलाहकार", "tab.more": "और",
       "quizBanner.text": "अभी ट्रेंड में: अपने पूर्वजन्म के बारे में जानो",
       "loveQuizBanner.text": "नया: जानो तुम्हारा अगला रिश्ता कैसा होगा",
+      "timeTunnelBanner.text": "नया: अपनी समय सुरंग से यात्रा करो – अतीत, वर्तमान और भविष्य",
       "dreamBanner.text": "नया: जानो तुम्हारा सपना तुम्हें क्या बता रहा है",
       "hero.eyebrow": "✧ तुम्हारी स्पष्टता का पल ✧",
       "hero.title1": "क्या चल रहा है", "hero.title2": "तुम्हारे मन में?",
@@ -5028,6 +5039,14 @@
       const mapped2 = QUIZ_LANG_ALIAS[getLang()] || getLang();
       const loveQuizLang = QUIZ_SUPPORTED.includes(mapped2) ? mapped2 : "en";
       loveQuizBanner.setAttribute("href", "love-quiz.html?lang=" + loveQuizLang);
+    }
+
+    // Same again for time-tunnel.html.
+    const timeTunnelBanner = document.querySelector(".time-tunnel-trend-bar");
+    if (timeTunnelBanner) {
+      const mapped3 = QUIZ_LANG_ALIAS[getLang()] || getLang();
+      const timeTunnelLang = QUIZ_SUPPORTED.includes(mapped3) ? mapped3 : "en";
+      timeTunnelBanner.setAttribute("href", "time-tunnel.html?lang=" + timeTunnelLang);
     }
   }
 
