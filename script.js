@@ -1132,65 +1132,6 @@
     }
   });
 
-  // --- Dream decoder ---
-  $("#dreamBtn")?.addEventListener("click", async () => {
-    const dream = $("#dreamInput")?.value.trim() || "";
-    const button = $("#dreamBtn");
-    const result = $("#dreamResult");
-    if (!dream) return;
-
-    if (button) {
-      button.disabled = true;
-      button.textContent = t("dream.analyzing");
-    }
-    if (result) {
-      result.innerHTML = `
-        <div class="dream-loading">
-          <div class="dream-orbit-wrap"><div class="dream-orbit-ring"></div><div class="dream-orbit-ring r2"></div><div class="dream-orbit-core"></div></div>
-          <strong>${t("dream.analyzing")}</strong>
-        </div>`;
-      result.classList.add("show");
-    }
-
-    try {
-      const response = await fetchWithTimeout("/api/dream", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ dream, lang: currentLang() })
-      }, 30000);
-
-      if (!response.ok) throw new Error("dream API failed");
-      const data = await response.json();
-      if (!data.text) throw new Error("no text");
-
-      if (result) {
-        const safeText = escapeHtml(data.text).replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>").replace(/\n/g, "<br>");
-        result.innerHTML = `
-          <button type="button" id="dreamSpeakBtn" class="text-button" style="display:block;margin:6px 0;font-size:13px">${t("result.speak")}</button>
-          <p style="margin:8px 0;color:#596273">${safeText}</p>
-          <div style="margin-top:14px">
-            <button class="price-btn" id="dreamDeepBtn">${t("result.deepBtn")}</button>
-            <div style="text-align:center;color:#b48a2e;font-size:12.5px;font-weight:700;margin-top:8px">${t("purchase.pack")}</div>
-            <div style="text-align:center;color:#8a93a3;font-size:11px;margin-top:4px">🔒 ${t("purchase.note")}</div>
-          </div>
-        `;
-        result.classList.add("show");
-        $("#dreamDeepBtn")?.addEventListener("click", () => showPurchaseModal(t("dream.syntheticQuestion"), t("dream.topic")));
-        $("#dreamSpeakBtn")?.addEventListener("click", event => speakText(data.text, event.currentTarget));
-      }
-    } catch (error) {
-      if (result) {
-        result.innerHTML = `<strong>${t("dream.readError")}</strong>`;
-        result.classList.add("show");
-      }
-    }
-
-    if (button) {
-      button.disabled = false;
-      button.textContent = t("dream.button");
-    }
-  });
-
   // --- Horoscope ---
   $("#horoscopeBtn")?.addEventListener("click", async () => {
     const birthDate = $("#horoscopeBirthInput")?.value.trim() || "";

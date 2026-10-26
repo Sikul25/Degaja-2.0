@@ -1,0 +1,805 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="description" content="DEGAJA – Beschreibe deinen Traum und erhalte sofort eine persönliche Deutung, was er wirklich bedeutet.">
+  <title>Was sagt dein Traum wirklich? – DEGAJA</title>
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="DEGAJA">
+  <meta property="og:title" content="Was sagt dein Traum wirklich? – DEGAJA">
+  <meta property="og:description" content="Beschreibe, was du in deinem Traum gesehen hast, und DEGAJA entschlüsselt, was dahinter liegt.">
+  <meta property="og:image" content="https://www.degaja.com/assets/og-image.png">
+  <meta name="robots" content="noindex">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="favicon.ico" sizes="any">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    *{box-sizing:border-box}
+    body{background:#0a1220}
+    .quiz-shell{min-height:100svh;display:flex;flex-direction:column;position:relative;overflow:hidden;background:radial-gradient(ellipse 120% 70% at 50% -10%,#203a58 0%,#101d30 45%,#0a1220 85%)}
+    .quiz-stars{position:absolute;inset:0;z-index:0;pointer-events:none}
+    .quiz-star{position:absolute;border-radius:50%;background:#fff;opacity:.5;animation:twinkle linear infinite}
+    @keyframes twinkle{0%,100%{opacity:.15}50%{opacity:.85}}
+    .quiz-glow{position:absolute;width:480px;height:480px;border-radius:50%;left:50%;top:-180px;transform:translateX(-50%);background:radial-gradient(circle,rgba(159,216,255,.16) 0%,rgba(159,216,255,0) 70%);z-index:0;pointer-events:none}
+
+    .quiz-top{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:18px 20px;max-width:620px;margin:0 auto;width:100%;position:relative;z-index:2}
+    .quiz-logo{height:26px;filter:brightness(0) invert(1);opacity:.92}
+
+    .dream-hero{position:relative;width:170px;height:170px;margin:4px auto 10px;display:grid;place-items:center}
+    .dream-hero-ring{position:absolute;inset:0;border-radius:50%;border:2px solid rgba(74,160,224,.4);animation:dreamHeroSpin 7s linear infinite}
+    .dream-hero-ring.r2{inset:-18px;border-color:rgba(231,195,114,.5);animation-duration:10s;animation-direction:reverse}
+    .dream-hero-core{width:108px;height:108px;border-radius:50%;background:radial-gradient(circle at 38% 32%,#ffffff 0%,#eaf6ff 20%,#9fd8ff 42%,#4aa0e0 62%,#e7c372 82%,#1c3450 100%);box-shadow:0 0 50px rgba(159,216,255,.5),0 0 34px rgba(231,195,114,.35);animation:dreamHeroPulse 2.4s ease-in-out infinite}
+    @keyframes dreamHeroSpin{to{transform:rotate(360deg)}}
+    @keyframes dreamHeroPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.06)}}
+    @media(prefers-reduced-motion:reduce){.dream-hero-ring,.dream-hero-core{animation:none}}
+
+    .quiz-main{flex:1;display:flex;align-items:center;justify-content:center;padding:10px 20px 48px;position:relative;z-index:2}
+    .quiz-card{width:min(540px,100%);text-align:center}
+    .quiz-anim{animation:quizIn .45s cubic-bezier(.16,1,.3,1) both}
+    @keyframes quizIn{from{opacity:0;transform:translateY(14px) scale(.98)}to{opacity:1;transform:translateY(0) scale(1)}}
+
+    .quiz-eyebrow{display:inline-flex;align-items:center;gap:8px;color:#9fd8ff;font-size:11px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;margin-bottom:16px}
+    .quiz-eyebrow:before,.quiz-eyebrow:after{content:"";width:16px;height:1px;background:linear-gradient(90deg,transparent,#9fd8ff)}
+    .quiz-eyebrow:after{background:linear-gradient(90deg,#9fd8ff,transparent)}
+    .quiz-h1{font-family:Georgia,"Times New Roman",serif;font-weight:500;color:#fff;font-size:clamp(26px,5.5vw,38px);line-height:1.22;margin:0 0 28px;letter-spacing:-.01em}
+
+    .quiz-textarea{width:100%;min-height:120px;padding:17px 18px;border-radius:18px;border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.05);color:#fff;font-size:16px;font-family:inherit;line-height:1.5;resize:none;outline:0;transition:.2s;color-scheme:dark}
+    .quiz-textarea::placeholder{color:rgba(255,255,255,.35)}
+    .quiz-textarea:focus{border-color:#9fd8ff;background:rgba(255,255,255,.08);box-shadow:0 0 0 4px rgba(159,216,255,.14)}
+    .quiz-input{width:100%;padding:17px 18px;border-radius:18px;border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.05);color:#fff;font-size:17px;text-align:center;outline:0;transition:.2s;color-scheme:dark}
+    .quiz-input:focus{border-color:#e7c372;background:rgba(255,255,255,.08);box-shadow:0 0 0 4px rgba(231,195,114,.12)}
+
+    .quiz-cta{margin-top:18px;width:100%;border:0;border-radius:999px;background:linear-gradient(90deg,#2f6da8,#9fd8ff);color:#0e1f30;padding:17px 20px;font-weight:800;font-size:16px;cursor:pointer;box-shadow:0 16px 38px rgba(74,160,224,.32);transition:.2s}
+    .quiz-cta:hover{transform:translateY(-1px);box-shadow:0 20px 44px rgba(74,160,224,.42)}
+    .quiz-cta:disabled{opacity:.4;cursor:not-allowed;transform:none}
+
+    .quiz-loading{display:flex;flex-direction:column;align-items:center;gap:26px}
+    .quiz-orb-wrap{position:relative;width:132px;height:132px;display:grid;place-items:center}
+    .quiz-orb-ring{position:absolute;inset:0;border-radius:50%;border:1px solid rgba(74,160,224,.4);animation:spin 7s linear infinite}
+    .quiz-orb-ring.r2{inset:-14px;border-color:rgba(231,195,114,.4);animation-duration:11s;animation-direction:reverse}
+    @keyframes spin{to{transform:rotate(360deg)}}
+    .quiz-orb{width:104px;height:104px;border-radius:50%;background:radial-gradient(circle at 38% 32%,#ffffff 0%,#eaf6ff 20%,#9fd8ff 42%,#4aa0e0 62%,#e7c372 82%,#1c3450 100%);box-shadow:0 0 55px rgba(159,216,255,.5),0 0 40px rgba(231,195,114,.35);animation:pulse 1.7s ease-in-out infinite}
+    @keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.07)}}
+    .quiz-loading-pct{color:#9fd8ff;font-size:13px;font-weight:800;letter-spacing:.06em;font-variant-numeric:tabular-nums}
+    .quiz-loading-title{color:#fff;font-size:17px;font-weight:600;min-height:24px;transition:opacity .25s}
+    .quiz-loading-sub{color:rgba(255,255,255,.45);font-size:13px;margin-top:4px}
+
+    .quiz-reveal-top{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:20px;flex-wrap:wrap}
+    .quiz-reveal-badge{display:inline-flex;align-items:center;gap:7px;background:rgba(159,216,255,.14);color:#bfe6ff;border:1px solid rgba(159,216,255,.35);border-radius:999px;padding:7px 18px;font-size:12px;font-weight:800;letter-spacing:.06em}
+    .quiz-voice-btn{display:inline-flex;align-items:center;gap:7px;background:rgba(255,255,255,.06);color:#eef2f6;border:1px solid rgba(255,255,255,.18);border-radius:999px;padding:7px 16px;font-size:12px;font-weight:700;cursor:pointer;transition:.2s}
+    .quiz-voice-btn:hover{border-color:rgba(159,216,255,.5);background:rgba(159,216,255,.1)}
+    .quiz-voice-btn:disabled{opacity:.35;cursor:wait}
+    .quiz-voice-btn.playing{border-color:#9fd8ff;color:#bfe6ff}
+    .quiz-reveal-card{position:relative;text-align:left;background:linear-gradient(160deg,rgba(255,255,255,.07),rgba(255,255,255,.02));border:1px solid rgba(159,216,255,.22);border-radius:22px;padding:24px 26px;margin-bottom:10px;min-height:96px;box-shadow:0 20px 50px rgba(0,0,0,.3)}
+    .quiz-reveal-text{color:#f2f4f7;font-size:17px;line-height:1.7}
+    .quiz-disclaimer{margin-top:18px;color:rgba(255,255,255,.35);font-size:11px;line-height:1.5}
+    .quiz-legal-links{margin-top:8px;text-align:center;font-size:11px}
+    .quiz-legal-links a{color:rgba(255,255,255,.45);text-decoration:underline}
+    .quiz-lang{position:relative;z-index:3;color:rgba(255,255,255,.7);font-size:12px;font-weight:700;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.16);border-radius:999px;padding:6px 26px 6px 13px;cursor:pointer;transition:.2s;-webkit-appearance:none;appearance:none;background-image:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 6"><path d="M1 1l4 4 4-4" stroke="%239fd8ff" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>');background-repeat:no-repeat;background-position:right 10px center}
+    .quiz-lang:hover{border-color:rgba(159,216,255,.5);color:#bfe6ff}
+    .quiz-lang option{background:#101d30;color:#fff}
+
+    @media(max-width:480px){.quiz-h1{font-size:23px}}
+
+    .quiz-pack-hint{text-align:center;color:#8fc7ec;font-size:12.5px;font-weight:700;margin-top:10px}
+    .quiz-trust-note{text-align:center;color:rgba(255,255,255,.45);font-size:11px;margin-top:6px}
+
+    .quiz-modal-overlay{position:fixed;inset:0;background:rgba(5,10,18,.72);backdrop-filter:blur(3px);z-index:50;display:flex;align-items:center;justify-content:center;padding:20px}
+    .quiz-modal{background:linear-gradient(160deg,#162436,#0e1826);border:1px solid rgba(159,216,255,.3);border-radius:22px;padding:28px 24px;max-width:420px;width:100%;box-shadow:0 30px 70px rgba(0,0,0,.5);text-align:center}
+    .quiz-modal .eyebrow{color:#9fd8ff;font-size:11px;font-weight:800;letter-spacing:.1em;margin-bottom:10px;text-transform:uppercase}
+    .quiz-modal h2{color:#fff;font-family:Georgia,"Times New Roman",serif;font-weight:500;font-size:26px;margin:0 0 10px}
+    .quiz-modal p{color:rgba(255,255,255,.6);font-size:14px;line-height:1.6;margin:0 0 20px}
+    .quiz-modal-field{text-align:left;margin-bottom:16px}
+    .quiz-modal-field label{display:block;font-size:12px;font-weight:700;color:rgba(255,255,255,.75);margin-bottom:6px}
+    .quiz-modal-error{display:none;color:#f0a0a0;font-size:12px;margin-top:6px;text-align:left}
+    .quiz-modal-error.show{display:block}
+    .quiz-modal-btn{display:block;width:100%;border:1px solid rgba(159,216,255,.4);background:rgba(159,216,255,.08);color:#bfe6ff;border-radius:14px;padding:14px 16px;font-weight:800;font-size:15px;margin-bottom:10px;cursor:pointer;text-align:center;transition:.2s}
+    .quiz-modal-btn:hover{background:rgba(159,216,255,.18);border-color:#9fd8ff}
+    .quiz-modal-note{font-size:11px;color:rgba(255,255,255,.4);text-align:center;margin-top:2px}
+    .quiz-modal-close{display:block;margin:18px auto 0;background:none;border:0;color:rgba(255,255,255,.4);font-size:13px;cursor:pointer}
+    .quiz-modal-close:hover{color:rgba(255,255,255,.7)}
+  </style>
+</head>
+<body>
+<div class="quiz-shell">
+  <div class="quiz-glow"></div>
+  <div class="quiz-stars" id="stars"></div>
+  <div class="quiz-top">
+    <img src="assets/degaja-logo.png" alt="DEGAJA" class="quiz-logo">
+    <select class="quiz-lang" id="langSelect">
+      <option value="de">DE</option>
+      <option value="en">EN</option>
+      <option value="fr">FR</option>
+      <option value="es">ES</option>
+      <option value="it">IT</option>
+      <option value="pt">PT</option>
+      <option value="br">BR</option>
+      <option value="ru">RU</option>
+      <option value="uk">UA</option>
+      <option value="ja">JA</option>
+      <option value="zh">ZH</option>
+      <option value="hi">HI</option>
+    </select>
+  </div>
+  <div class="dream-hero">
+    <div class="dream-hero-ring"></div>
+    <div class="dream-hero-ring r2"></div>
+    <div class="dream-hero-core"></div>
+  </div>
+  <main class="quiz-main">
+    <div class="quiz-card" id="quizCard"></div>
+  </main>
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  var STR = {
+  "de": {
+    "eyebrow": "✦ DIE VERGESSENEN SCHLÜSSEL™ ✦",
+    "h1": "Was sagt dein Traum wirklich?",
+    "placeholder": "z. B. Wasser, eine Schlange, Fliegen …",
+    "button": "Meinen Traum entschlüsseln →",
+    "loading_t1": "DEGAJA liest die Zeichen …",
+    "loading_t2": "Die Symbole beginnen sich zu formen …",
+    "loading_sub": "Bitte warte einen Moment",
+    "disclaimer": "Traumdeutung dient der persönlichen Unterhaltung und Reflexion und ersetzt keine professionelle Beratung. Diese Deutung wird von DEGAJA AI erstellt.",
+    "legal": { "impressum": "Impressum", "datenschutz": "Datenschutz", "agb": "AGB", "widerruf": "Widerruf" },
+    "voice_loading": "Stimme wird vorbereitet …",
+    "voice_listen": "🔊 Stimme anhören",
+    "voice_playing": "⏸ Wird abgespielt …",
+    "reveal_badge": "✦ Die vergessenen Schlüssel™",
+    "reveal_fallback": "Die Zeichen sind heute besonders vielschichtig — die volle Bedeutung deines Traums wartet in deiner persönlichen Deutung.",
+    "cta": "Geh tiefer · €4,99 →",
+    "topic": "Traumdeutung",
+    "deepen_prompt": "Das habe ich in meinem Traum gesehen: {dream}. Gib mir eine tiefere, ausführlichere Deutung genau dieses Traums – erkunde weitere Symbole, ihre möglichen Bedeutungen und wie sie mit dem zusammenhängen könnten, was gerade in meinem Leben passiert. Bleib konkret bei dem, was ich beschrieben habe, statt allgemein zu bleiben.",
+    "purchase_eyebrow": "DEGAJA™ · 24/7",
+    "purchase_title": "Geh tiefer",
+    "purchase_desc": "Deine erste Antwort war kostenlos. Schalte jetzt eine tiefere persönliche Deutung frei – inklusive 5 Minuten Nachfragen danach.",
+    "birthdate_label": "Dein Geburtsdatum (zur Altersbestätigung, 18+)",
+    "birthdate_error": "Bitte gib dein Geburtsdatum ein – du musst 18 Jahre oder älter sein.",
+    "purchase_single": "Eine Lesung · €4,99",
+    "purchase_pack": "3 Lesungen · €9,99",
+    "purchase_note": "Einmalige Zahlung · keine automatische Verlängerung.",
+    "purchase_back": "← Zurück",
+    "purchase_error": "Zahlung gerade nicht verfügbar. Versuch es später erneut.",
+    "read_error": "Dein Traum konnte gerade nicht entschlüsselt werden. Versuch es erneut."
+  },
+  "en": {
+    "eyebrow": "✦ THE FORGOTTEN KEYS™ ✦",
+    "h1": "What is your dream really telling you?",
+    "placeholder": "e.g. water, a snake, flying …",
+    "button": "Decode my dream →",
+    "loading_t1": "DEGAJA is reading the signs …",
+    "loading_t2": "The symbols are beginning to take shape …",
+    "loading_sub": "This will only take a moment",
+    "disclaimer": "Dream interpretation is for personal entertainment and reflection and does not replace professional advice. This reading is created by DEGAJA AI.",
+    "legal": { "impressum": "Legal notice", "datenschutz": "Privacy", "agb": "Terms", "widerruf": "Withdrawal" },
+    "voice_loading": "Preparing voice …",
+    "voice_listen": "🔊 Listen to voice",
+    "voice_playing": "⏸ Playing …",
+    "reveal_badge": "✦ The Forgotten Keys™",
+    "reveal_fallback": "The symbols are unusually layered tonight — the fuller meaning of your dream is waiting in your personal reading.",
+    "cta": "Go deeper · £4.99 →",
+    "topic": "Dream interpretation",
+    "deepen_prompt": "This is what I saw in my dream: {dream}. Give me a deeper, more detailed interpretation of this specific dream — explore additional symbols, their possible meanings, and how they might relate to what's happening in my life right now. Stay specific to what I described rather than general.",
+    "purchase_eyebrow": "DEGAJA™ · 24/7",
+    "purchase_title": "Go deeper",
+    "purchase_desc": "Your first answer was free. Unlock a deeper personal reading, plus 5 minutes of follow-up questions.",
+    "birthdate_label": "Your date of birth (to confirm you're 18+)",
+    "birthdate_error": "Please enter your date of birth – you must be 18 or older.",
+    "purchase_single": "One reading · £4.99",
+    "purchase_pack": "3 readings · £9.99",
+    "purchase_note": "One-time payment · no automatic renewal.",
+    "purchase_back": "← Back",
+    "purchase_error": "Payment isn't available right now. Please try again later.",
+    "read_error": "Your dream couldn't be decoded right now. Please try again."
+  },
+  "fr": {
+    "eyebrow": "✦ LES CLÉS OUBLIÉES™ ✦",
+    "h1": "Que te dit vraiment ton rêve ?",
+    "placeholder": "par ex. de l'eau, un serpent, voler …",
+    "button": "Déchiffrer mon rêve →",
+    "loading_t1": "DEGAJA lit les signes …",
+    "loading_t2": "Les symboles commencent à prendre forme …",
+    "loading_sub": "Cela ne prendra qu'un instant",
+    "disclaimer": "L'interprétation des rêves sert au divertissement personnel et à la réflexion et ne remplace pas un conseil professionnel. Cette interprétation est générée par DEGAJA AI.",
+    "legal": { "impressum": "Mentions légales", "datenschutz": "Confidentialité", "agb": "CGV", "widerruf": "Rétractation" },
+    "voice_loading": "Préparation de la voix …",
+    "voice_listen": "🔊 Écouter la voix",
+    "voice_playing": "⏸ Lecture en cours …",
+    "reveal_badge": "✦ Les clés oubliées™",
+    "reveal_fallback": "Les signes sont particulièrement riches ce soir — le sens complet de ton rêve t'attend dans ta lecture personnelle.",
+    "cta": "Aller plus loin · €4,99 →",
+    "topic": "Interprétation des rêves",
+    "deepen_prompt": "Voici ce que j'ai vu dans mon rêve : {dream}. Donne-moi une interprétation plus approfondie et plus détaillée de ce rêve précis – explore d'autres symboles, leurs significations possibles, et comment ils pourraient se rapporter à ce qui se passe actuellement dans ma vie. Reste précis sur ce que j'ai décrit plutôt que général.",
+    "purchase_eyebrow": "DEGAJA™ · 24/7",
+    "purchase_title": "Aller plus loin",
+    "purchase_desc": "Ta première réponse était gratuite. Débloque maintenant une lecture personnelle plus approfondie, avec 5 minutes de questions supplémentaires.",
+    "birthdate_label": "Ta date de naissance (pour confirmer que tu as 18 ans ou plus)",
+    "birthdate_error": "Merci d'indiquer ta date de naissance – tu dois avoir 18 ans ou plus.",
+    "purchase_single": "Une lecture · €4,99",
+    "purchase_pack": "3 lectures · €9,99",
+    "purchase_note": "Paiement unique · pas de renouvellement automatique.",
+    "purchase_back": "← Retour",
+    "purchase_error": "Le paiement n'est pas disponible pour le moment. Réessaie plus tard.",
+    "read_error": "Ton rêve n'a pas pu être déchiffré pour le moment. Réessaie."
+  },
+  "es": {
+    "eyebrow": "✦ LAS LLAVES OLVIDADAS™ ✦",
+    "h1": "¿Qué te dice realmente tu sueño?",
+    "placeholder": "p. ej. agua, una serpiente, volar …",
+    "button": "Descifrar mi sueño →",
+    "loading_t1": "DEGAJA está leyendo las señales …",
+    "loading_t2": "Los símbolos comienzan a tomar forma …",
+    "loading_sub": "Esto solo tomará un momento",
+    "disclaimer": "La interpretación de sueños es para entretenimiento personal y reflexión y no sustituye el asesoramiento profesional. Esta interpretación es creada por DEGAJA AI.",
+    "legal": { "impressum": "Aviso legal", "datenschutz": "Privacidad", "agb": "Términos", "widerruf": "Desistimiento" },
+    "voice_loading": "Preparando la voz …",
+    "voice_listen": "🔊 Escuchar la voz",
+    "voice_playing": "⏸ Reproduciendo …",
+    "reveal_badge": "✦ Las llaves olvidadas™",
+    "reveal_fallback": "Los símbolos son especialmente profundos esta noche — el significado completo de tu sueño te espera en tu lectura personal.",
+    "cta": "Profundiza · €4,99 →",
+    "topic": "Interpretación de sueños",
+    "deepen_prompt": "Esto es lo que vi en mi sueño: {dream}. Dame una interpretación más profunda y detallada de este sueño concreto – explora símbolos adicionales, sus posibles significados, y cómo podrían relacionarse con lo que está pasando en mi vida ahora mismo. Mantente específico sobre lo que describí, en lugar de ser general.",
+    "purchase_eyebrow": "DEGAJA™ · 24/7",
+    "purchase_title": "Profundiza",
+    "purchase_desc": "Tu primera respuesta fue gratuita. Desbloquea ahora una lectura personal más profunda, con 5 minutos de preguntas adicionales.",
+    "birthdate_label": "Tu fecha de nacimiento (para confirmar que tienes 18 años o más)",
+    "birthdate_error": "Introduce tu fecha de nacimiento – debes tener 18 años o más.",
+    "purchase_single": "Una lectura · €4,99",
+    "purchase_pack": "3 lecturas · €9,99",
+    "purchase_note": "Pago único · sin renovación automática.",
+    "purchase_back": "← Atrás",
+    "purchase_error": "El pago no está disponible ahora mismo. Inténtalo de nuevo más tarde.",
+    "read_error": "Tu sueño no pudo descifrarse en este momento. Inténtalo de nuevo."
+  },
+  "it": {
+    "eyebrow": "✦ LE CHIAVI DIMENTICATE™ ✦",
+    "h1": "Cosa ti sta davvero dicendo il tuo sogno?",
+    "placeholder": "es. acqua, un serpente, volare …",
+    "button": "Decifra il mio sogno →",
+    "loading_t1": "DEGAJA sta leggendo i segni …",
+    "loading_t2": "I simboli iniziano a prendere forma …",
+    "loading_sub": "Ci vorrà solo un momento",
+    "disclaimer": "L'interpretazione dei sogni serve all'intrattenimento personale e alla riflessione e non sostituisce una consulenza professionale. Questa interpretazione è creata da DEGAJA AI.",
+    "legal": { "impressum": "Note legali", "datenschutz": "Privacy", "agb": "Termini", "widerruf": "Recesso" },
+    "voice_loading": "Preparazione della voce …",
+    "voice_listen": "🔊 Ascolta la voce",
+    "voice_playing": "⏸ In riproduzione …",
+    "reveal_badge": "✦ Le chiavi dimenticate™",
+    "reveal_fallback": "I simboli sono particolarmente intensi stanotte — il significato completo del tuo sogno ti aspetta nella tua lettura personale.",
+    "cta": "Approfondisci · €4,99 →",
+    "topic": "Interpretazione dei sogni",
+    "deepen_prompt": "Questo è ciò che ho visto nel mio sogno: {dream}. Dammi un'interpretazione più profonda e dettagliata di questo specifico sogno – esplora ulteriori simboli, i loro possibili significati, e come potrebbero collegarsi a ciò che sta accadendo nella mia vita in questo momento. Resta specifico su ciò che ho descritto, invece di essere generico.",
+    "purchase_eyebrow": "DEGAJA™ · 24/7",
+    "purchase_title": "Approfondisci",
+    "purchase_desc": "La tua prima risposta era gratuita. Sblocca ora una lettura personale più approfondita, con 5 minuti di domande aggiuntive.",
+    "birthdate_label": "La tua data di nascita (per confermare che hai almeno 18 anni)",
+    "birthdate_error": "Inserisci la tua data di nascita – devi avere almeno 18 anni.",
+    "purchase_single": "Una lettura · €4,99",
+    "purchase_pack": "3 letture · €9,99",
+    "purchase_note": "Pagamento unico · nessun rinnovo automatico.",
+    "purchase_back": "← Indietro",
+    "purchase_error": "Il pagamento non è disponibile ora. Riprova più tardi.",
+    "read_error": "Il tuo sogno non ha potuto essere decifrato ora. Riprova."
+  },
+  "pt": {
+    "eyebrow": "✦ AS CHAVES ESQUECIDAS™ ✦",
+    "h1": "O que o teu sonho está mesmo a dizer-te?",
+    "placeholder": "ex.: água, uma cobra, voar …",
+    "button": "Decifrar o meu sonho →",
+    "loading_t1": "A DEGAJA está a ler os sinais …",
+    "loading_t2": "Os símbolos começam a tomar forma …",
+    "loading_sub": "Isto vai demorar só um momento",
+    "disclaimer": "A interpretação de sonhos serve para entretenimento pessoal e reflexão e não substitui aconselhamento profissional. Esta interpretação é criada pela DEGAJA AI.",
+    "legal": { "impressum": "Informação legal", "datenschutz": "Privacidade", "agb": "Termos", "widerruf": "Retratação" },
+    "voice_loading": "A preparar a voz …",
+    "voice_listen": "🔊 Ouvir a voz",
+    "voice_playing": "⏸ A reproduzir …",
+    "reveal_badge": "✦ As chaves esquecidas™",
+    "reveal_fallback": "Os símbolos estão particularmente intensos esta noite — o significado completo do teu sonho espera por ti na tua leitura pessoal.",
+    "cta": "Aprofundar · €4,99 →",
+    "topic": "Interpretação de sonhos",
+    "deepen_prompt": "Isto foi o que vi no meu sonho: {dream}. Dá-me uma interpretação mais profunda e detalhada deste sonho específico – explora símbolos adicionais, os seus possíveis significados, e como se podem relacionar com o que está a acontecer na minha vida agora. Mantém-te específico sobre o que descrevi, em vez de seres genérico.",
+    "purchase_eyebrow": "DEGAJA™ · 24/7",
+    "purchase_title": "Aprofundar",
+    "purchase_desc": "A tua primeira resposta foi gratuita. Desbloqueia agora uma leitura pessoal mais profunda, com 5 minutos de perguntas adicionais.",
+    "birthdate_label": "A tua data de nascimento (para confirmar que tens 18 anos ou mais)",
+    "birthdate_error": "Indica a tua data de nascimento – tens de ter 18 anos ou mais.",
+    "purchase_single": "Uma leitura · €4,99",
+    "purchase_pack": "3 leituras · €9,99",
+    "purchase_note": "Pagamento único · sem renovação automática.",
+    "purchase_back": "← Voltar",
+    "purchase_error": "O pagamento não está disponível agora. Tenta novamente mais tarde.",
+    "read_error": "O teu sonho não pôde ser decifrado agora. Tenta novamente."
+  },
+  "br": {
+    "eyebrow": "✦ AS CHAVES ESQUECIDAS™ ✦",
+    "h1": "O que o seu sonho está realmente a dizer?",
+    "placeholder": "ex.: água, uma cobra, voar …",
+    "button": "Decifrar o meu sonho →",
+    "loading_t1": "A DEGAJA está lendo os sinais …",
+    "loading_t2": "Os símbolos começam a tomar forma …",
+    "loading_sub": "Isso vai levar só um instante",
+    "disclaimer": "A interpretação de sonhos serve para entretenimento pessoal e reflexão e não substitui aconselhamento profissional. Esta interpretação é criada pela DEGAJA AI.",
+    "legal": { "impressum": "Informações legais", "datenschutz": "Privacidade", "agb": "Termos", "widerruf": "Direito de arrependimento" },
+    "voice_loading": "Preparando a voz …",
+    "voice_listen": "🔊 Ouvir a voz",
+    "voice_playing": "⏸ Reproduzindo …",
+    "reveal_badge": "✦ As chaves esquecidas™",
+    "reveal_fallback": "Os símbolos estão particularmente intensos esta noite — o significado completo do seu sonho espera por você na sua leitura pessoal.",
+    "cta": "Aprofundar · R$24,99 →",
+    "topic": "Interpretação de sonhos",
+    "deepen_prompt": "Isto foi o que eu vi no meu sonho: {dream}. Me dê uma interpretação mais profunda e detalhada deste sonho específico – explore símbolos adicionais, seus possíveis significados, e como eles podem se relacionar com o que está acontecendo na minha vida agora. Fique específico sobre o que eu descrevi, em vez de ser genérico.",
+    "purchase_eyebrow": "DEGAJA™ · 24/7",
+    "purchase_title": "Aprofundar",
+    "purchase_desc": "Sua primeira resposta foi gratuita. Desbloqueie agora uma leitura pessoal mais profunda, com 5 minutos de perguntas adicionais.",
+    "birthdate_label": "Sua data de nascimento (para confirmar que você tem 18 anos ou mais)",
+    "birthdate_error": "Indique sua data de nascimento – você precisa ter 18 anos ou mais.",
+    "purchase_single": "Uma leitura · R$24,99",
+    "purchase_pack": "3 leituras · R$49,99",
+    "purchase_note": "Pagamento único · sem renovação automática.",
+    "purchase_back": "← Voltar",
+    "purchase_error": "O pagamento não está disponível agora. Tente novamente mais tarde.",
+    "read_error": "Seu sonho não pôde ser decifrado agora. Tente novamente."
+  },
+  "ru": {
+    "eyebrow": "✦ ЗАБЫТЫЕ КЛЮЧИ™ ✦",
+    "h1": "Что на самом деле говорит твой сон?",
+    "placeholder": "напр. вода, змея, полёт …",
+    "button": "Расшифровать мой сон →",
+    "loading_t1": "DEGAJA читает знаки …",
+    "loading_t2": "Символы начинают обретать форму …",
+    "loading_sub": "Это займёт всего мгновение",
+    "disclaimer": "Толкование снов предназначено для личного развлечения и размышлений и не заменяет профессиональную консультацию. Эта трактовка создана DEGAJA AI.",
+    "legal": { "impressum": "Юридическая информация", "datenschutz": "Конфиденциальность", "agb": "Условия", "widerruf": "Отказ от договора" },
+    "voice_loading": "Подготовка голоса …",
+    "voice_listen": "🔊 Слушать голос",
+    "voice_playing": "⏸ Воспроизведение …",
+    "reveal_badge": "✦ Забытые ключи™",
+    "reveal_fallback": "Сегодня символы особенно многослойны — полное значение твоего сна ждёт тебя в персональном толковании.",
+    "cta": "Углубиться · €4,99 →",
+    "topic": "Толкование снов",
+    "deepen_prompt": "Вот что я видел(а) во сне: {dream}. Дай мне более глубокое и подробное толкование именно этого сна – исследуй дополнительные символы, их возможные значения и то, как они могут быть связаны с тем, что происходит в моей жизни сейчас. Оставайся конкретным по поводу того, что я описал(а), а не общим.",
+    "purchase_eyebrow": "DEGAJA™ · 24/7",
+    "purchase_title": "Углубиться",
+    "purchase_desc": "Твой первый ответ был бесплатным. Разблокируй более глубокий персональный расклад и 5 минут дополнительных вопросов.",
+    "birthdate_label": "Твоя дата рождения (для подтверждения, что тебе есть 18 лет)",
+    "birthdate_error": "Укажи дату рождения – тебе должно быть не менее 18 лет.",
+    "purchase_single": "Один расклад · €4,99",
+    "purchase_pack": "3 расклада · €9,99",
+    "purchase_note": "Разовый платёж · без автоматического продления.",
+    "purchase_back": "← Назад",
+    "purchase_error": "Оплата сейчас недоступна. Попробуй позже.",
+    "read_error": "Не удалось расшифровать твой сон сейчас. Попробуй ещё раз."
+  },
+  "uk": {
+    "eyebrow": "✦ ЗАБУТІ КЛЮЧІ™ ✦",
+    "h1": "Що насправді говорить твій сон?",
+    "placeholder": "напр. вода, змія, політ …",
+    "button": "Розшифрувати мій сон →",
+    "loading_t1": "DEGAJA читає знаки …",
+    "loading_t2": "Символи починають набувати форми …",
+    "loading_sub": "Це займе лише мить",
+    "disclaimer": "Тлумачення снів призначене для особистої розваги та роздумів і не замінює професійну консультацію. Це тлумачення створено DEGAJA AI.",
+    "legal": { "impressum": "Юридична інформація", "datenschutz": "Конфіденційність", "agb": "Умови", "widerruf": "Відмова від договору" },
+    "voice_loading": "Підготовка голосу …",
+    "voice_listen": "🔊 Слухати голос",
+    "voice_playing": "⏸ Відтворення …",
+    "reveal_badge": "✦ Забуті ключі™",
+    "reveal_fallback": "Сьогодні символи особливо багатошарові — повне значення твого сну чекає на тебе в персональному тлумаченні.",
+    "cta": "Заглибитися · €4,99 →",
+    "topic": "Тлумачення снів",
+    "deepen_prompt": "Ось що я бачив(ла) уві сні: {dream}. Дай мені глибше й детальніше тлумачення саме цього сну – досліди додаткові символи, їхні можливі значення та те, як вони можуть бути пов'язані з тим, що відбувається в моєму житті зараз. Залишайся конкретним щодо того, що я описав(ла), а не загальним.",
+    "purchase_eyebrow": "DEGAJA™ · 24/7",
+    "purchase_title": "Заглибитися",
+    "purchase_desc": "Твоя перша відповідь була безкоштовною. Розблокуй глибший особистий розклад і 5 хвилин додаткових запитань.",
+    "birthdate_label": "Твоя дата народження (для підтвердження, що тобі є 18 років)",
+    "birthdate_error": "Вкажи дату народження – тобі має бути щонайменше 18 років.",
+    "purchase_single": "Один розклад · €4,99",
+    "purchase_pack": "3 розклади · €9,99",
+    "purchase_note": "Одноразовий платіж · без автоматичного продовження.",
+    "purchase_back": "← Назад",
+    "purchase_error": "Оплата зараз недоступна. Спробуй пізніше.",
+    "read_error": "Не вдалося розшифрувати твій сон зараз. Спробуй ще раз."
+  },
+  "ja": {
+    "eyebrow": "✦ 忘れられた鍵™ ✦",
+    "h1": "あなたの夢は本当は何を伝えていますか？",
+    "placeholder": "例：水、蛇、空を飛ぶ…",
+    "button": "夢を解き明かす →",
+    "loading_t1": "DEGAJAが兆しを読み取っています…",
+    "loading_t2": "象徴が形になり始めています…",
+    "loading_sub": "少々お待ちください",
+    "disclaimer": "夢占いは個人的な娯楽と自己観察を目的としており、専門家による助言の代わりにはなりません。この鑑定はDEGAJA AIによって作成されます。",
+    "legal": { "impressum": "運営者情報", "datenschutz": "プライバシー", "agb": "利用規約", "widerruf": "撤回" },
+    "voice_loading": "音声を準備しています…",
+    "voice_listen": "🔊 音声を聞く",
+    "voice_playing": "⏸ 再生中…",
+    "reveal_badge": "✦ 忘れられた鍵™",
+    "reveal_fallback": "今夜はシンボルが特に重なり合っています——あなたの夢の本当の意味はパーソナル鑑定で待っています。",
+    "cta": "さらに深く · ¥750 →",
+    "topic": "夢占い",
+    "deepen_prompt": "私が夢で見たのはこれです：{dream}。この特定の夢について、より深く詳細な解釈をしてください——追加の象徴やその考えられる意味、そしてそれらが今の私の人生に起きていることとどう関係しているかを探ってください。一般的な解釈ではなく、私が説明した内容に具体的に即してください。",
+    "purchase_eyebrow": "DEGAJA™ · 24時間対応",
+    "purchase_title": "さらに深く",
+    "purchase_desc": "最初の回答は無料でした。より深いパーソナル鑑定と、5分間の追加質問をアンロックしましょう。",
+    "birthdate_label": "生年月日(18歳以上であることの確認のため)",
+    "birthdate_error": "生年月日を入力してください – 18歳以上である必要があります。",
+    "purchase_single": "鑑定1回 · ¥750",
+    "purchase_pack": "鑑定3回 · ¥1,490",
+    "purchase_note": "一回限りのお支払い · 自動更新はありません。",
+    "purchase_back": "← 戻る",
+    "purchase_error": "現在お支払いをご利用いただけません。後でもう一度お試しください。",
+    "read_error": "今は夢を解き明かせませんでした。もう一度お試しください。"
+  },
+  "zh": {
+    "eyebrow": "✦ 被遗忘的钥匙™ ✦",
+    "h1": "你的梦真正想告诉你什么？",
+    "placeholder": "例如：水、一条蛇、飞翔……",
+    "button": "解读我的梦 →",
+    "loading_t1": "DEGAJA 正在解读迹象……",
+    "loading_t2": "象征正在逐渐显现……",
+    "loading_sub": "请稍等片刻",
+    "disclaimer": "解梦仅供个人娱乐与反思之用，不能替代专业建议。此解读由DEGAJA AI生成。",
+    "legal": { "impressum": "网站信息", "datenschutz": "隐私政策", "agb": "条款", "widerruf": "撤回权" },
+    "voice_loading": "正在准备语音…",
+    "voice_listen": "🔊 收听语音",
+    "voice_playing": "⏸ 播放中…",
+    "reveal_badge": "✦ 被遗忘的钥匙™",
+    "reveal_fallback": "今晚的象征格外丰富——你梦境的完整含义正在专属解读中等你。",
+    "cta": "深入解读 · ¥39 →",
+    "topic": "解梦",
+    "deepen_prompt": "这是我在梦中看到的：{dream}。请给我一个更深入、更详细的关于这个具体梦境的解读——探索更多的象征、它们可能的含义，以及它们可能与我现在生活中正在发生的事情有什么关联。请具体针对我描述的内容，而不要泛泛而谈。",
+    "purchase_eyebrow": "DEGAJA™ · 24/7",
+    "purchase_title": "深入解读",
+    "purchase_desc": "你的第一次解答是免费的。现在解锁更深入的专属解读，并可追加5分钟提问。",
+    "birthdate_label": "你的出生日期（用于确认你已年满18岁）",
+    "birthdate_error": "请输入你的出生日期——你必须年满18岁。",
+    "purchase_single": "单次解读 · ¥39",
+    "purchase_pack": "3次解读 · ¥79",
+    "purchase_note": "一次性付款 · 不会自动续费。",
+    "purchase_back": "← 返回",
+    "purchase_error": "暂时无法完成支付，请稍后再试。",
+    "read_error": "暂时无法解读你的梦，请重试。"
+  },
+  "hi": {
+    "eyebrow": "✦ भूली हुई कुंजियाँ™ ✦",
+    "h1": "तुम्हारा सपना असल में क्या कह रहा है?",
+    "placeholder": "जैसे: पानी, एक सांप, उड़ना …",
+    "button": "मेरा सपना खोलो →",
+    "loading_t1": "DEGAJA संकेतों को पढ़ रहा है …",
+    "loading_t2": "प्रतीक आकार लेने लगे हैं …",
+    "loading_sub": "कृपया एक क्षण प्रतीक्षा करें",
+    "disclaimer": "स्वप्न व्याख्या व्यक्तिगत मनोरंजन और आत्म-चिंतन के लिए है और पेशेवर सलाह की जगह नहीं लेती। यह रीडिंग DEGAJA AI द्वारा बनाई जाती है।",
+    "legal": { "impressum": "कानूनी सूचना", "datenschutz": "गोपनीयता", "agb": "शर्तें", "widerruf": "निरसन" },
+    "voice_loading": "आवाज़ तैयार की जा रही है…",
+    "voice_listen": "🔊 आवाज़ सुनें",
+    "voice_playing": "⏸ चल रहा है…",
+    "reveal_badge": "✦ भूली हुई कुंजियाँ™",
+    "reveal_fallback": "आज रात प्रतीक विशेष रूप से गहरे हैं — तुम्हारे सपने का पूरा अर्थ तुम्हारी व्यक्तिगत रीडिंग में तुम्हारा इंतज़ार कर रहा है।",
+    "cta": "और गहराई में जाओ · ₹249 →",
+    "topic": "स्वप्न व्याख्या",
+    "deepen_prompt": "मैंने अपने सपने में यह देखा: {dream}। मुझे इस खास सपने की एक गहरी, अधिक विस्तृत व्याख्या दो — अतिरिक्त प्रतीकों, उनके संभावित अर्थों, और वे अभी मेरी ज़िंदगी में हो रही चीज़ों से कैसे जुड़े हो सकते हैं, इसकी खोज करो। सामान्य बातें करने के बजाय मैंने जो बताया है उस पर ही विशेष रूप से ध्यान दो।",
+    "purchase_eyebrow": "DEGAJA™ · 24/7",
+    "purchase_title": "और गहराई में जाओ",
+    "purchase_desc": "तुम्हारा पहला जवाब मुफ़्त था। अभी एक गहरी व्यक्तिगत रीडिंग अनलॉक करो, साथ में 5 मिनट के अतिरिक्त सवाल।",
+    "birthdate_label": "तुम्हारी जन्मतिथि (यह पुष्टि करने के लिए कि तुम 18+ हो)",
+    "birthdate_error": "कृपया अपनी जन्मतिथि दर्ज करो – तुम्हारी उम्र 18 साल या उससे ज़्यादा होनी चाहिए।",
+    "purchase_single": "एक रीडिंग · ₹249",
+    "purchase_pack": "3 रीडिंग्स · ₹499",
+    "purchase_note": "एक बार का भुगतान · कोई ऑटोमैटिक रिन्यूअल नहीं।",
+    "purchase_back": "← वापस",
+    "purchase_error": "अभी भुगतान उपलब्ध नहीं है। कृपया बाद में फिर कोशिश करो।",
+    "read_error": "अभी तुम्हारे सपने को नहीं खोला जा सका। कृपया फिर कोशिश करो।"
+  }
+};
+  var SUPPORTED_LANGS = ["de", "en", "fr", "es", "it", "pt", "ru", "uk", "br", "ja", "zh", "hi"];
+  var LANG_ALIAS = { us: "en", mx: "es" };
+
+  var qs = new URLSearchParams(location.search);
+  var requestedLang = qs.get("lang");
+  var mappedLang = LANG_ALIAS[requestedLang] || requestedLang;
+  var langWasExplicit = SUPPORTED_LANGS.indexOf(mappedLang) !== -1;
+  var storedLang = null;
+  try {
+    var storedRaw = localStorage.getItem("degajaLang");
+    var storedMapped = LANG_ALIAS[storedRaw] || storedRaw;
+    if (SUPPORTED_LANGS.indexOf(storedMapped) !== -1) storedLang = storedMapped;
+  } catch (_) {}
+  var lang = langWasExplicit ? mappedLang : (storedLang || "de");
+  langWasExplicit = langWasExplicit || !!storedLang;
+  var ref = qs.get("ref") || qs.get("utm_source") || "dream";
+
+  var COUNTRY_LANG = {
+    DE: "de", AT: "de", CH: "de", LI: "de",
+    FR: "fr", MC: "fr",
+    ES: "es", AR: "es", CO: "es", CL: "es", PE: "es", MX: "es", VE: "es",
+    IT: "it",
+    PT: "pt", BR: "pt",
+    RU: "ru", BY: "ru", KZ: "ru", UA: "ru",
+    GB: "en", IE: "en", US: "en", CA: "en", AU: "en", NZ: "en", ZA: "en", SG: "en",
+    JP: "ja", CN: "zh", TW: "zh", HK: "zh", MO: "zh",
+    IN: "hi"
+  };
+  function applyGeoLangIfEligible(){
+    if (langWasExplicit) return;
+    var controller = new AbortController();
+    var timeout = setTimeout(function(){ controller.abort(); }, 2500);
+    fetch("/api/geo", { signal: controller.signal })
+      .then(function(r){ return r.ok ? r.json() : null; })
+      .then(function(data){
+        clearTimeout(timeout);
+        var geoLang = data && COUNTRY_LANG[String(data.country || "").toUpperCase()];
+        if (!geoLang || geoLang === lang || stage !== "input") return;
+        lang = geoLang;
+        langSelect.value = lang;
+        render();
+      })
+      .catch(function(){});
+  }
+
+  var stage = "input";
+  var dreamText = "";
+  var loadingTimer = null;
+
+  var card = document.getElementById("quizCard");
+  var langSelect = document.getElementById("langSelect");
+
+  function t(){ return STR[lang]; }
+
+  function buildStars(){
+    var wrap = document.getElementById("stars");
+    wrap.innerHTML = "";
+    var count = window.innerWidth < 500 ? 36 : 60;
+    for (var i = 0; i < count; i++) {
+      var s = document.createElement("div");
+      s.className = "quiz-star";
+      var size = (Math.random() * 1.8 + 0.6).toFixed(1);
+      s.style.width = size + "px";
+      s.style.height = size + "px";
+      s.style.left = (Math.random() * 100) + "%";
+      s.style.top = (Math.random() * 100) + "%";
+      s.style.animationDuration = (2 + Math.random() * 3).toFixed(1) + "s";
+      s.style.animationDelay = (Math.random() * 3).toFixed(1) + "s";
+      wrap.appendChild(s);
+    }
+  }
+  buildStars();
+
+  langSelect.value = lang;
+  langSelect.addEventListener("change", function(){
+    lang = langSelect.value;
+    render();
+  });
+
+  function escapeHtml(s){
+    return String(s).replace(/[&<>"']/g, function(c){
+      return { "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;" }[c];
+    });
+  }
+
+  function formatReading(text){
+    return escapeHtml(text).replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>").replace(/\n/g, "<br>");
+  }
+
+  function setCard(html){
+    card.classList.remove("quiz-anim");
+    card.innerHTML = html;
+    void card.offsetWidth;
+    card.classList.add("quiz-anim");
+  }
+
+  function renderInput(){
+    var html = '<div class="quiz-eyebrow">' + t().eyebrow + '</div>';
+    html += '<h1 class="quiz-h1">' + t().h1 + '</h1>';
+    html += '<textarea class="quiz-textarea" id="dreamInput" maxlength="400" placeholder="' + t().placeholder + '">' + escapeHtml(dreamText) + '</textarea>';
+    html += '<button class="quiz-cta" id="goBtn">' + t().button + '</button>';
+    setCard(html);
+    var input = document.getElementById("dreamInput");
+    input.focus();
+    document.getElementById("goBtn").addEventListener("click", function(){
+      var val = input.value.trim();
+      if (!val) { input.style.borderColor = "#e35b5b"; return; }
+      dreamText = val;
+      runReveal();
+    });
+  }
+
+  function renderLoading(){
+    var phrases = [t().loading_t1, t().loading_t2];
+    var html = '<div class="quiz-loading">';
+    html += '<div class="quiz-orb-wrap"><div class="quiz-orb-ring"></div><div class="quiz-orb-ring r2"></div><div class="quiz-orb"></div></div>';
+    html += '<div class="quiz-loading-pct" id="loadPct">0%</div>';
+    html += '<div><div class="quiz-loading-title" id="loadTitle">' + phrases[0] + '</div>';
+    html += '<div class="quiz-loading-sub">' + t().loading_sub + '</div></div>';
+    html += '</div>';
+    setCard(html);
+
+    var pctEl = document.getElementById("loadPct");
+    var titleEl = document.getElementById("loadTitle");
+    var pct = 0, phraseIdx = 0;
+    clearInterval(loadingTimer);
+    loadingTimer = setInterval(function(){
+      pct = Math.min(96, pct + Math.round(4 + Math.random() * 9));
+      pctEl.textContent = pct + "%";
+      var nextPhrase = Math.floor(pct / (100 / phrases.length));
+      if (nextPhrase !== phraseIdx && nextPhrase < phrases.length) {
+        phraseIdx = nextPhrase;
+        titleEl.style.opacity = 0;
+        setTimeout(function(){ titleEl.textContent = phrases[phraseIdx]; titleEl.style.opacity = 1; }, 220);
+      }
+    }, 260);
+  }
+
+  function finishLoadingBar(){
+    clearInterval(loadingTimer);
+    var pctEl = document.getElementById("loadPct");
+    if (pctEl) pctEl.textContent = "100%";
+  }
+
+  var revealAudio = null;
+
+  function loadVoice(text, btn){
+    btn.disabled = true;
+    btn.textContent = t().voice_loading;
+    fetch("/api/tts", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ text: text, lang: lang })
+    }).then(function(r){ return r.ok ? r.blob() : null; }).then(function(blob){
+      if (!blob) { btn.style.display = "none"; return; }
+      var url = URL.createObjectURL(blob);
+      revealAudio = new Audio(url);
+      btn.disabled = false;
+      btn.textContent = t().voice_listen;
+      revealAudio.addEventListener("ended", function(){
+        btn.classList.remove("playing");
+        btn.textContent = t().voice_listen;
+      });
+      btn.addEventListener("click", function(){
+        if (revealAudio.paused) {
+          revealAudio.play();
+          btn.classList.add("playing");
+          btn.textContent = t().voice_playing;
+        } else {
+          revealAudio.pause();
+          btn.classList.remove("playing");
+          btn.textContent = t().voice_listen;
+        }
+      });
+    }).catch(function(){ btn.style.display = "none"; });
+  }
+
+  function startDreamCheckout(product, birthDate){
+    var question = t().deepen_prompt.replace("{dream}", dreamText);
+    try {
+      localStorage.setItem("degajaPendingReading", JSON.stringify({ question: question, topic: t().topic }));
+    } catch (_) {}
+    fetch("/api/checkout", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ product: product, birthDate: birthDate, lang: lang, ref: ref })
+    }).then(function(r){
+      return r.json().then(function(data){ return { ok: r.ok, data: data }; });
+    }).then(function(result){
+      if (!result.ok || !result.data.url) throw new Error("checkout failed");
+      window.location.href = result.data.url;
+    }).catch(function(){
+      alert(t().purchase_error);
+    });
+  }
+
+  function legalLinksHtml(){
+    var l = t().legal || {};
+    return '<div class="quiz-legal-links">' +
+      '<a href="impressum.html" target="_blank" rel="noopener">' + (l.impressum || "Impressum") + '</a> · ' +
+      '<a href="datenschutz.html" target="_blank" rel="noopener">' + (l.datenschutz || "Datenschutz") + '</a> · ' +
+      '<a href="agb.html" target="_blank" rel="noopener">' + (l.agb || "AGB") + '</a> · ' +
+      '<a href="widerruf.html" target="_blank" rel="noopener">' + (l.widerruf || "Widerruf") + '</a>' +
+      '</div>';
+  }
+
+  function openPurchaseModal(){
+    var overlay = document.createElement("div");
+    overlay.className = "quiz-modal-overlay";
+    overlay.innerHTML =
+      '<div class="quiz-modal">' +
+        '<div class="eyebrow">' + t().purchase_eyebrow + '</div>' +
+        '<h2>' + t().purchase_title + '</h2>' +
+        '<p>' + t().purchase_desc + '</p>' +
+        '<div class="quiz-modal-field">' +
+          '<label for="pmBirthDate">' + t().birthdate_label + '</label>' +
+          '<input type="date" class="quiz-input" id="pmBirthDate">' +
+          '<div class="quiz-modal-error" id="pmBirthDateError">' + t().birthdate_error + '</div>' +
+        '</div>' +
+        '<button class="quiz-modal-btn" id="pmSingle">' + t().purchase_single + '</button>' +
+        '<button class="quiz-modal-btn" id="pmPack">' + t().purchase_pack + '</button>' +
+        '<div class="quiz-modal-note">' + t().purchase_note + '</div>' +
+        '<button class="quiz-modal-close" id="pmClose">' + t().purchase_back + '</button>' +
+      '</div>';
+    document.body.appendChild(overlay);
+    overlay.addEventListener("click", function(e){ if (e.target === overlay) overlay.remove(); });
+    document.getElementById("pmClose").addEventListener("click", function(){ overlay.remove(); });
+
+    var birthInput = document.getElementById("pmBirthDate");
+    var birthError = document.getElementById("pmBirthDateError");
+    birthInput.addEventListener("input", function(){ birthError.classList.remove("show"); });
+
+    function isAdult(dateStr){
+      if (!dateStr) return false;
+      var dob = new Date(dateStr);
+      if (isNaN(dob.getTime())) return false;
+      var today = new Date();
+      var age = today.getFullYear() - dob.getFullYear();
+      var hadBirthdayThisYear = (today.getMonth() > dob.getMonth()) || (today.getMonth() === dob.getMonth() && today.getDate() >= dob.getDate());
+      if (!hadBirthdayThisYear) age -= 1;
+      return age >= 18;
+    }
+
+    function tryCheckout(product){
+      var val = birthInput.value;
+      if (!isAdult(val)) {
+        birthError.classList.add("show");
+        birthInput.focus();
+        return;
+      }
+      startDreamCheckout(product, val);
+    }
+
+    document.getElementById("pmSingle").addEventListener("click", function(){ tryCheckout("single"); });
+    document.getElementById("pmPack").addEventListener("click", function(){ tryCheckout("pack"); });
+  }
+
+  function renderReveal(text){
+    var html = '<div class="quiz-reveal-top"><div class="quiz-reveal-badge">' + t().reveal_badge + '</div>';
+    html += '<button class="quiz-voice-btn" id="voiceBtn" disabled>' + t().voice_loading + '</button></div>';
+    html += '<div class="quiz-reveal-card"><div class="quiz-reveal-text" id="revealText">' + formatReading(text) + '</div></div>';
+    html += '<button class="quiz-cta" id="ctaBtn">' + t().cta + '</button>';
+    html += '<div class="quiz-pack-hint">' + t().purchase_pack + '</div>';
+    html += '<div class="quiz-trust-note">🔒 ' + t().purchase_note + '</div>';
+    html += '<div class="quiz-disclaimer">' + t().disclaimer + '</div>';
+    html += legalLinksHtml();
+    setCard(html);
+    loadVoice(text, document.getElementById("voiceBtn"));
+    document.getElementById("ctaBtn").addEventListener("click", function(){
+      if (revealAudio) revealAudio.pause();
+      openPurchaseModal();
+    });
+  }
+
+  function runReveal(){
+    stage = "loading";
+    renderLoading();
+
+    var minWait = new Promise(function(resolve){ setTimeout(resolve, 2400); });
+    var request = fetch("/api/dream", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ dream: dreamText, lang: lang })
+    }).then(function(r){ return r.ok ? r.json() : null; }).catch(function(){ return null; });
+
+    Promise.all([request, minWait]).then(function(results){
+      finishLoadingBar();
+      var data = results[0];
+      var text = (data && data.text) ? data.text : t().reveal_fallback;
+      setTimeout(function(){ stage = "reveal"; renderReveal(text); }, 260);
+    });
+  }
+
+  function render(){
+    document.documentElement.lang = lang;
+    if (stage === "input") renderInput();
+  }
+
+  render();
+  applyGeoLangIfEligible();
+})();
+</script>
+</body>
+</html>
