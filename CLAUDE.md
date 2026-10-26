@@ -108,7 +108,7 @@ DEGAJA should contrast against, not emulate. The established pattern:
   loads it. Check with `grep -rn 'scriptname.js?v=' *.html` first — not all
   shared scripts are loaded by all pages (e.g. only `index.html` loads
   `script.js`; the legal pages don't).
-- **Standalone quiz pages** (`quiz.html`, `love-quiz.html`) do **not** load
+- **Standalone quiz pages** (`quiz.html`, `love-quiz.html`, `time-tunnel.html`) do **not** load
   `script.js` or `i18n.js` — each is fully self-contained with its own
   embedded `STR` object, language detection, and mini purchase flow. They
   call the same shared backend endpoints (`/api/oracle`, `/api/palm`,
