@@ -145,6 +145,19 @@ DEGAJA should contrast against, not emulate. The established pattern:
   always ISO `yyyy-mm-dd` regardless of display locale. The main site's
   numerology/palm birthdate inputs already did this correctly — match that
   pattern for any new birthdate field.
+- **Any new "go deeper" / checkout entry point must collect a birthdate.**
+  `api/checkout.js` always requires one and returns 400 without it. The
+  main site's shared `showPurchaseModal()` in `script.js` (used by the "go
+  deeper" CTA on oracle/palm/coffee/gematria/numerology/bazi/horoscope/
+  hypnosis/dream) went live for a long time calling `startCheckout()` with
+  no birthdate at all — found and fixed 2026-10-26. It now has its own
+  `type="date"` input, validated client-side via `isAdultBirthDate()`
+  before calling `startCheckout(product, birthDate)`. This was distinct
+  from, and did not affect, the separate `#prices` section's own purchase
+  flow, which already collected birthdate correctly. Any new purchase
+  entry point (e.g. a future dream.html standalone page) must either reuse
+  this pattern or replicate it — never call `startCheckout`/hit
+  `/api/checkout` without a real collected birthdate.
 - Mixing an RTL character (e.g. Hebrew ה) directly next to a Latin digit/word
   in plain text can render reversed in-browser (bidi algorithm artifact).
   Don't try to force direction with Unicode control characters — use an
