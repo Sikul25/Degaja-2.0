@@ -244,6 +244,11 @@
       <div class="eyebrow">${t("purchase.eyebrow")}</div>
       <h2>${t("purchase.title")}</h2>
       <p style="color:#687384">${t("purchase.desc")}</p>
+      <div style="text-align:left;margin-bottom:14px">
+        <label for="purchaseBirthDate" style="display:block;font-size:12px;font-weight:700;color:#18334a;margin-bottom:5px">${t("checkout.birthDateLabel")}</label>
+        <input type="date" id="purchaseBirthDate" class="palm-quiz-input" style="width:100%">
+        <div class="palm-quiz-error" id="purchaseBirthDateError">${t("checkout.birthDateError")}</div>
+      </div>
       <div class="pricing-grid" style="grid-template-columns:1fr;gap:10px">
         <button class="price-btn" data-checkout="single">${t("purchase.single")}</button>
         <button class="price-btn" data-checkout="pack">${t("purchase.pack")}</button>
@@ -251,8 +256,23 @@
       <p class="pay-note">${t("purchase.note")}</p>
     `);
 
+    $("#purchaseBirthDate")?.addEventListener("input", () => {
+      $("#purchaseBirthDateError")?.classList.remove("show");
+    });
+
     $$('[data-checkout]').forEach(btn => {
-      btn.addEventListener("click", () => startCheckout(btn.dataset.checkout));
+      btn.addEventListener("click", () => {
+        const birthDateInput = $("#purchaseBirthDate");
+        const birthDateError = $("#purchaseBirthDateError");
+        const birthDate = birthDateInput?.value || "";
+        if (!isAdultBirthDate(birthDate)) {
+          birthDateError?.classList.add("show");
+          birthDateInput?.focus();
+          return;
+        }
+        birthDateError?.classList.remove("show");
+        startCheckout(btn.dataset.checkout, birthDate);
+      });
     });
   }
 
