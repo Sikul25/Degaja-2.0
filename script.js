@@ -448,8 +448,8 @@
     }
   }
 
-  function renderResult(text, question, topic, paid = false) {
-    const result = $("#aiResult");
+  function renderResult(text, question, topic, paid = false, target = null) {
+    const result = target || $("#aiResult");
     if (!result) return;
 
     const safeText = escapeHtml(text)
@@ -481,8 +481,8 @@
 
     result.classList.add("show");
     result.scrollIntoView({ behavior: "smooth", block: "nearest" });
-    $("#deepBtn")?.addEventListener("click", () => showPurchaseModal(question, topic));
-    $("#speakBtn")?.addEventListener("click", event => speakText(text, event.currentTarget));
+    result.querySelector("#deepBtn")?.addEventListener("click", () => showPurchaseModal(question, topic));
+    result.querySelector("#speakBtn")?.addEventListener("click", event => speakText(text, event.currentTarget));
 
     if (paid) {
       $("#chatSend")?.addEventListener("click", sendChat);
@@ -884,7 +884,7 @@
 
       if (result) { result.classList.remove("show"); result.innerHTML = ""; }
       state.conversationHistory = [];
-      renderResult(data.text, t("palm.syntheticQuestion"), t("palm.topic"), false);
+      renderResult(data.text, t("palm.syntheticQuestion"), t("palm.topic"), false, result);
     } catch (error) {
       if (result) {
         result.innerHTML = `<strong>${t("palm.readError")}</strong>`;
@@ -964,7 +964,7 @@
 
       if (result) { result.classList.remove("show"); result.innerHTML = ""; }
       state.conversationHistory = [];
-      renderResult(data.text, t("coffee.syntheticQuestion"), t("coffee.topic"), false);
+      renderResult(data.text, t("coffee.syntheticQuestion"), t("coffee.topic"), false, result);
     } catch (error) {
       if (result) {
         result.innerHTML = `<strong>${t("coffee.readError")}</strong>`;
@@ -1009,7 +1009,7 @@
 
       if (result) { result.classList.remove("show"); result.innerHTML = ""; }
       state.conversationHistory = [];
-      renderResult(data.text, t("gematria.syntheticQuestion"), t("gematria.topic"), false);
+      renderResult(data.text, t("gematria.syntheticQuestion"), t("gematria.topic"), false, result);
     } catch (error) {
       if (result) {
         result.innerHTML = `<strong>${t("gematria.readError")}</strong>`;
@@ -1053,7 +1053,7 @@
 
       if (result) { result.classList.remove("show"); result.innerHTML = ""; }
       state.conversationHistory = [];
-      renderResult(data.text, t("numerology.syntheticQuestion"), t("numerology.topic"), false);
+      renderResult(data.text, t("numerology.syntheticQuestion"), t("numerology.topic"), false, result);
     } catch (error) {
       if (result) {
         result.innerHTML = `<strong>${t("numerology.readError")}</strong>`;
@@ -1098,7 +1098,7 @@
 
       if (result) { result.classList.remove("show"); result.innerHTML = ""; }
       state.conversationHistory = [];
-      renderResult(data.text, t("bazi.syntheticQuestion"), t("bazi.topic"), false);
+      renderResult(data.text, t("bazi.syntheticQuestion"), t("bazi.topic"), false, result);
     } catch (error) {
       if (result) {
         result.innerHTML = `<strong>${t("bazi.readError")}</strong>`;
@@ -1199,7 +1199,7 @@
 
       if (result) { result.classList.remove("show"); result.innerHTML = ""; }
       state.conversationHistory = [];
-      renderResult(data.text, t("horoscope.syntheticQuestion"), t("horoscope.topic"), false);
+      renderResult(data.text, t("horoscope.syntheticQuestion"), t("horoscope.topic"), false, result);
     } catch (error) {
       if (result) {
         result.innerHTML = `<strong>${t("horoscope.readError")}</strong>`;
@@ -1262,7 +1262,7 @@
 
       if (result) { result.classList.remove("show"); result.innerHTML = ""; }
       state.conversationHistory = [];
-      renderResult(data.text, t("hypnosis.syntheticQuestion"), t("hypnosis.topic"), false);
+      renderResult(data.text, t("hypnosis.syntheticQuestion"), t("hypnosis.topic"), false, result);
     } catch (error) {
       if (result) {
         result.innerHTML = `<strong>${t("hypnosis.readError")}</strong>`;
