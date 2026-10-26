@@ -39,6 +39,21 @@ detail — read it at the start of any new session on this repo.
   CCBill sends the actual integration code/credentials (Client Account
   Number, Sub Account, Flex Form/Widget ID, Webhook Salt) — ask Yoel for
   current status if it's not obvious from recent conversation.
+- **2026-10-26: CCBill's compliance/underwriting team sent their first
+  review.** Open items from that review (ask Yoel for current status if not
+  obvious from recent conversation):
+  - Underwriting: proof-of-address document (Yoel's own, not something
+    Claude can produce) and confirming `info@degaja.com` as a secondary
+    account email, CC'd on all future CCBill correspondence (ceo@degaja.com
+    stays primary).
+  - Compliance: a written consumer purchase flow and a full services/products
+    list were drafted and sent back (same lists belong here if a future
+    session needs them again — see git history around this date, or ask
+    Yoel, for the exact text sent).
+  - Compliance also flagged a real bug found during their own live testing:
+    see the Numerology/AI-loading-spinner entry under "Architecture notes"
+    below. This was the only functional issue they found — the site is
+    otherwise expected to be fully testable now.
 
 ## Universal / non-denominational framing — standing design principle
 
@@ -133,6 +148,20 @@ DEGAJA should contrast against, not emulate. The established pattern:
   get killed server-side with no error surfaced to the user — this caused a
   real, previously-undetected bug across all 9 AI endpoints. Add this line
   to any new AI endpoint from the start.
+- **Every AI "analyzing..." loading state needs a visible animation, not just
+  static text.** `palm`/`coffee`/`gematria`/`numerology`/`bazi`/`horoscope`/
+  `hypnosis` on the main site each only wrote a static bold "DEGAJA is
+  calculating..." string into the result panel while waiting 7-20+ seconds
+  for the AI response, with zero motion. A CCBill compliance reviewer
+  testing Numerology (2026-10-26) reported the page "only displayed a
+  loading message, and no results... were provided" — verified directly
+  against production that the backend actually responds correctly in ~7s,
+  so the static unmoving text was almost certainly read as a frozen page,
+  not a real functional bug. Fixed by adding a shared `.ai-loading`/
+  `.ai-loading-spinner` CSS spinner (style.css) and wiring it into all 7 of
+  these loading states in script.js — same fix already applied earlier to
+  the dream decoder's own loading state. Give any new AI loading state this
+  same spinner from the start rather than a bare string.
 - **Verifying "is this actually live"**: don't trust local files or
   first-pass log queries. `get_runtime_logs` only shows what a function
   explicitly `console.log`s — none of the AI endpoints log anything, so a
