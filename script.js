@@ -472,7 +472,11 @@
             <button id="chatSend">${t("result.chatSend")}</button>
           </div>
         </div>` : `
-        <div style="margin-top:14px"><button class="price-btn" id="deepBtn">${t("result.deepBtn")}</button></div>`}
+        <div style="margin-top:14px">
+          <button class="price-btn" id="deepBtn">${t("result.deepBtn")}</button>
+          <div style="text-align:center;color:#b48a2e;font-size:12.5px;font-weight:700;margin-top:8px">${t("purchase.pack")}</div>
+          <div style="text-align:center;color:#8a93a3;font-size:11px;margin-top:4px">🔒 ${t("purchase.note")}</div>
+        </div>`}
     `;
 
     result.classList.add("show");
@@ -1140,7 +1144,11 @@
         result.innerHTML = `
           <button type="button" id="dreamSpeakBtn" class="text-button" style="display:block;margin:6px 0;font-size:13px">${t("result.speak")}</button>
           <p style="margin:8px 0;color:#596273">${safeText}</p>
-          <div style="margin-top:14px"><button class="price-btn" id="dreamDeepBtn">${t("result.deepBtn")}</button></div>
+          <div style="margin-top:14px">
+            <button class="price-btn" id="dreamDeepBtn">${t("result.deepBtn")}</button>
+            <div style="text-align:center;color:#b48a2e;font-size:12.5px;font-weight:700;margin-top:8px">${t("purchase.pack")}</div>
+            <div style="text-align:center;color:#8a93a3;font-size:11px;margin-top:4px">🔒 ${t("purchase.note")}</div>
+          </div>
         `;
         result.classList.add("show");
         $("#dreamDeepBtn")?.addEventListener("click", () => showPurchaseModal(t("dream.syntheticQuestion"), t("dream.topic")));
