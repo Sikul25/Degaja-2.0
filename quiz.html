@@ -25,6 +25,10 @@
     .quiz-glow{position:absolute;width:480px;height:480px;border-radius:50%;left:50%;top:-180px;transform:translateX(-50%);background:radial-gradient(circle,rgba(231,195,114,.16) 0%,rgba(231,195,114,0) 70%);z-index:0;pointer-events:none}
 
     .quiz-top{display:flex;align-items:center;gap:14px;padding:18px 20px;max-width:620px;margin:0 auto;width:100%;position:relative;z-index:2}
+    .past-life-hero{max-width:160px;margin:0 auto;padding:0 20px;position:relative;z-index:2;text-align:center}
+    .past-life-hero img{width:100%;display:block;margin:0 auto;transform-origin:50% 8%;filter:drop-shadow(0 20px 40px rgba(0,0,0,.45)) drop-shadow(0 0 30px rgba(240,201,105,.4));animation:hourglassTick 2.4s ease-in-out infinite}
+    @keyframes hourglassTick{0%,100%{transform:rotate(-9deg)}50%{transform:rotate(9deg)}}
+    @media(prefers-reduced-motion:reduce){.past-life-hero img{animation:none}}
     .quiz-logo{height:26px;filter:brightness(0) invert(1);opacity:.92}
     .quiz-progress-wrap{flex:1;height:5px;background:rgba(255,255,255,.1);border-radius:99px;overflow:hidden}
     .quiz-progress-bar{height:100%;width:4%;background:linear-gradient(90deg,#b88a32,#f0d48f);border-radius:99px;transition:width .5s cubic-bezier(.4,0,.2,1);box-shadow:0 0 10px rgba(231,195,114,.6)}
@@ -138,6 +142,9 @@
     <img src="assets/degaja-logo.png" alt="DEGAJA" class="quiz-logo">
     <div class="quiz-progress-wrap"><div class="quiz-progress-bar" id="progressBar"></div></div>
     <div class="quiz-step-count" id="stepCount">1/5</div>
+  </div>
+  <div class="past-life-hero">
+    <img src="assets/quiz-logo.png" alt="">
   </div>
   <main class="quiz-main">
     <div class="quiz-card" id="quizCard"></div>
