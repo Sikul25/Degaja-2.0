@@ -25,6 +25,8 @@
     .quiz-glow{position:absolute;width:480px;height:480px;border-radius:50%;left:50%;top:-180px;transform:translateX(-50%);background:radial-gradient(circle,rgba(231,195,114,.16) 0%,rgba(231,195,114,0) 70%);z-index:0;pointer-events:none}
 
     .quiz-top{display:flex;align-items:center;gap:14px;padding:18px 20px;max-width:620px;margin:0 auto;width:100%;position:relative;z-index:2}
+    .love-quiz-hero{max-width:280px;margin:0 auto;padding:0 20px;position:relative;z-index:2;text-align:center}
+    .love-quiz-hero img{width:100%;display:block;margin:0 auto;filter:drop-shadow(0 20px 40px rgba(0,0,0,.45)) drop-shadow(0 0 30px rgba(227,107,150,.35))}
     .quiz-logo{height:26px;filter:brightness(0) invert(1);opacity:.92}
     .quiz-progress-wrap{flex:1;height:5px;background:rgba(255,255,255,.1);border-radius:99px;overflow:hidden}
     .quiz-progress-bar{height:100%;width:4%;background:linear-gradient(90deg,#b88a32,#f0d48f);border-radius:99px;transition:width .5s cubic-bezier(.4,0,.2,1);box-shadow:0 0 10px rgba(231,195,114,.6)}
@@ -60,7 +62,7 @@
 
     .quiz-loading{display:flex;flex-direction:column;align-items:center;gap:26px}
     .quiz-heart-wrap{width:132px;height:132px;display:grid;place-items:center}
-    .quiz-heart{font-size:72px;display:inline-block;animation:heartBeat 2.6s ease-in-out infinite;filter:saturate(1.7) hue-rotate(-8deg) brightness(1.05) drop-shadow(0 0 20px rgba(227,107,150,.6)) drop-shadow(0 0 40px rgba(227,107,150,.3))}
+    .quiz-heart{width:110px;height:auto;display:inline-block;animation:heartBeat 2.6s ease-in-out infinite;filter:drop-shadow(0 0 20px rgba(227,107,150,.6)) drop-shadow(0 0 40px rgba(227,107,150,.3))}
     @keyframes heartBeat{0%,100%{transform:scale(1)}14%{transform:scale(1.22)}28%{transform:scale(1)}42%{transform:scale(1.22)}70%{transform:scale(1)}}
     @media(prefers-reduced-motion:reduce){.quiz-heart{animation:none}}
     .quiz-loading-pct{color:#f0d48f;font-size:13px;font-weight:800;letter-spacing:.06em;font-variant-numeric:tabular-nums}
@@ -138,6 +140,9 @@
     <img src="assets/degaja-logo.png" alt="DEGAJA" class="quiz-logo">
     <div class="quiz-progress-wrap"><div class="quiz-progress-bar" id="progressBar"></div></div>
     <div class="quiz-step-count" id="stepCount">1/5</div>
+  </div>
+  <div class="love-quiz-hero">
+    <img src="assets/love-quiz-logo.png" alt="">
   </div>
   <main class="quiz-main">
     <div class="quiz-card" id="quizCard"></div>
@@ -1610,7 +1615,7 @@
   function renderLoading(phrases){
     phrases = phrases || t().loading_phrases;
     var html = '<div class="quiz-loading">';
-    html += '<div class="quiz-heart-wrap"><span class="quiz-heart">💘</span></div>';
+    html += '<div class="quiz-heart-wrap"><img class="quiz-heart" src="assets/love-quiz-logo.png" alt=""></div>';
     html += '<div class="quiz-loading-pct" id="loadPct">0%</div>';
     html += '<div><div class="quiz-loading-title" id="loadTitle">' + phrases[0] + '</div>';
     html += '<div class="quiz-loading-sub">' + t().loading_sub + '</div></div>';
