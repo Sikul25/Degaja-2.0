@@ -102,6 +102,20 @@
     .quiz-palm-section h3{margin:0 0 8px;color:#f0d48f;font-size:13px;font-weight:800;letter-spacing:.05em;text-transform:uppercase}
     .quiz-palm-section p{margin:0;color:#f2f4f7;font-size:16px;line-height:1.65}
     @media(max-width:480px){.quiz-h1{font-size:23px}.quiz-opt{padding:14px 16px;font-size:14.5px}}
+
+    .quiz-pack-hint{text-align:center;color:#c9a94f;font-size:12.5px;font-weight:700;margin-top:10px}
+    .quiz-trust-note{text-align:center;color:rgba(255,255,255,.45);font-size:11px;margin-top:6px}
+
+    .quiz-modal-overlay{position:fixed;inset:0;background:rgba(5,10,18,.72);backdrop-filter:blur(3px);z-index:50;display:flex;align-items:center;justify-content:center;padding:20px}
+    .quiz-modal{background:linear-gradient(160deg,#162436,#0e1826);border:1px solid rgba(231,195,114,.3);border-radius:22px;padding:28px 24px;max-width:420px;width:100%;box-shadow:0 30px 70px rgba(0,0,0,.5);text-align:center}
+    .quiz-modal .eyebrow{color:#e7c372;font-size:11px;font-weight:800;letter-spacing:.1em;margin-bottom:10px;text-transform:uppercase}
+    .quiz-modal h2{color:#fff;font-family:Georgia,"Times New Roman",serif;font-weight:500;font-size:26px;margin:0 0 10px}
+    .quiz-modal p{color:rgba(255,255,255,.6);font-size:14px;line-height:1.6;margin:0 0 20px}
+    .quiz-modal-btn{display:block;width:100%;border:1px solid rgba(231,195,114,.4);background:rgba(231,195,114,.08);color:#f0d48f;border-radius:14px;padding:14px 16px;font-weight:800;font-size:15px;margin-bottom:10px;cursor:pointer;text-align:center;transition:.2s}
+    .quiz-modal-btn:hover{background:rgba(231,195,114,.18);border-color:#e7c372}
+    .quiz-modal-note{font-size:11px;color:rgba(255,255,255,.4);text-align:center;margin-top:2px}
+    .quiz-modal-close{display:block;margin:18px auto 0;background:none;border:0;color:rgba(255,255,255,.4);font-size:13px;cursor:pointer}
+    .quiz-modal-close:hover{color:rgba(255,255,255,.7)}
   </style>
 </head>
 <body>
@@ -137,604 +151,1183 @@
   "use strict";
 
   var STR = {
-    de: {
-      q1_eyebrow: "ENTHÜLLUNG",
-      q1_h1: "Welche persönliche Einsicht suchst du?",
-      q1_opts: [
-        {ic:"⏳", t:"Sehen, wer ich in einem früheren Leben war"},
-        {ic:"✨", t:"Mein Schicksal und meinen Lebenszweck erkennen"},
-        {ic:"🌀", t:"Herausfinden, ob ich schon einmal gelebt habe"},
-        {ic:"🌟", t:"Meine verborgenen Fähigkeiten entdecken"},
-        {ic:"🔮", t:"Meine Zukunft in der Liebe erfahren"}
-      ],
-      q2_eyebrow: "SCHRITT 2",
-      q2_h1: "Wann bist du geboren?",
-      q2_placeholder: "TT.MM.JJJJ",
-      q3_eyebrow: "SCHRITT 3",
-      q3_h1: "Wie dürfen wir dich nennen?",
-      q3_placeholder: "Dein Vorname",
-      q4_eyebrow: "SCHRITT 4",
-      q4_h1: "Was beschäftigt dich gerade am meisten?",
-      q4_opts: [
-        {ic:"💞", t:"Liebe & Beziehungen"},
-        {ic:"💼", t:"Beruf & Geld"},
-        {ic:"🧭", t:"Lebensweg & Entscheidungen"},
-        {ic:"🌙", t:"Innere Ruhe & Selbstfindung"}
-      ],
-      q5_eyebrow: "SCHRITT 5",
-      q5_h1: "Zeig uns deine Handfläche",
-      q5_sub: "Optional — ein Foto deiner offenen Hand macht deine Enthüllung noch genauer und persönlicher.",
-      photo_upload: "📷 Foto hochladen",
-      photo_hint: "Flaches, gut beleuchtetes Foto deiner offenen Handfläche",
-      photo_skip: "Überspringen, nur Text-Enthüllung",
-      photo_continue: "Mit diesem Foto fortfahren →",
-      next: "Weiter →",
-      back: "← Zurück",
-      loading_phrases: [
-        "Wir lesen die Zeichen …",
-        "Deine Geburtsenergie wird entschlüsselt …",
-        "Die Karten ordnen sich …",
-        "Deine Enthüllung nimmt Form an …"
-      ],
-      loading_phrases_palm: [
-        "Wir betrachten deine Handfläche …",
-        "Lebenslinie, Herzlinie, Kopflinie werden gelesen …",
-        "Die Linien erzählen ihre Geschichte …",
-        "Deine Handlesung nimmt Form an …"
-      ],
-      loading_sub: "Bitte warte einen Moment",
-      reveal_badge: "✦ Deine Enthüllung",
-      palm_badge: "✦ Deine Handlesung",
-      reveal_fallback: "Die Energien um dich sind heute außergewöhnlich stark — deine vollständige Enthüllung wartet in deiner persönlichen Lesung.",
-      palm_fallback: "Deine Handlinien sind heute schwer zu entschlüsseln — versuch es mit einem klareren Foto in deiner persönlichen Lesung.",
-      cta: "Vollständige Lesung freischalten →",
-      disclaimer: "DEGAJA dient der persönlichen Orientierung und Unterhaltung und ersetzt keine professionelle Beratung. Diese Deutung wurde von einem KI-System erstellt.",
-      legal: { impressum: "Impressum", datenschutz: "Datenschutz", agb: "AGB", widerruf: "Widerruf" },
-      voice_loading: "Stimme wird vorbereitet …",
-      voice_listen: "🔊 Stimme anhören",
-      voice_playing: "⏸ Wird abgespielt …",
-      voice_unavailable: ""
+  "de": {
+    "q1_eyebrow": "ENTHÜLLUNG",
+    "q1_h1": "Welche persönliche Einsicht suchst du?",
+    "q1_opts": [
+      {
+        "ic": "⏳",
+        "t": "Sehen, wer ich in einem früheren Leben war"
+      },
+      {
+        "ic": "✨",
+        "t": "Mein Schicksal und meinen Lebenszweck erkennen"
+      },
+      {
+        "ic": "🌀",
+        "t": "Herausfinden, ob ich schon einmal gelebt habe"
+      },
+      {
+        "ic": "🌟",
+        "t": "Meine verborgenen Fähigkeiten entdecken"
+      },
+      {
+        "ic": "🔮",
+        "t": "Meine Zukunft in der Liebe erfahren"
+      }
+    ],
+    "q2_eyebrow": "SCHRITT 2",
+    "q2_h1": "Wann bist du geboren?",
+    "q2_placeholder": "TT.MM.JJJJ",
+    "q3_eyebrow": "SCHRITT 3",
+    "q3_h1": "Wie dürfen wir dich nennen?",
+    "q3_placeholder": "Dein Vorname",
+    "q4_eyebrow": "SCHRITT 4",
+    "q4_h1": "Was beschäftigt dich gerade am meisten?",
+    "q4_opts": [
+      {
+        "ic": "💞",
+        "t": "Liebe & Beziehungen"
+      },
+      {
+        "ic": "💼",
+        "t": "Beruf & Geld"
+      },
+      {
+        "ic": "🧭",
+        "t": "Lebensweg & Entscheidungen"
+      },
+      {
+        "ic": "🌙",
+        "t": "Innere Ruhe & Selbstfindung"
+      }
+    ],
+    "q5_eyebrow": "SCHRITT 5",
+    "q5_h1": "Zeig uns deine Handfläche",
+    "q5_sub": "Optional — ein Foto deiner offenen Hand macht deine Enthüllung noch genauer und persönlicher.",
+    "photo_upload": "📷 Foto hochladen",
+    "photo_hint": "Flaches, gut beleuchtetes Foto deiner offenen Handfläche",
+    "photo_skip": "Überspringen, nur Text-Enthüllung",
+    "photo_continue": "Mit diesem Foto fortfahren →",
+    "next": "Weiter →",
+    "back": "← Zurück",
+    "loading_phrases": [
+      "Wir lesen die Zeichen …",
+      "Deine Geburtsenergie wird entschlüsselt …",
+      "Die Karten ordnen sich …",
+      "Deine Enthüllung nimmt Form an …"
+    ],
+    "loading_phrases_palm": [
+      "Wir betrachten deine Handfläche …",
+      "Lebenslinie, Herzlinie, Kopflinie werden gelesen …",
+      "Die Linien erzählen ihre Geschichte …",
+      "Deine Handlesung nimmt Form an …"
+    ],
+    "loading_sub": "Bitte warte einen Moment",
+    "reveal_badge": "✦ Deine Enthüllung",
+    "palm_badge": "✦ Deine Handlesung",
+    "reveal_fallback": "Die Energien um dich sind heute außergewöhnlich stark — deine vollständige Enthüllung wartet in deiner persönlichen Lesung.",
+    "palm_fallback": "Deine Handlinien sind heute schwer zu entschlüsseln — versuch es mit einem klareren Foto in deiner persönlichen Lesung.",
+    "cta": "Vollständige Lesung freischalten · €4,99 →",
+    "disclaimer": "DEGAJA dient der persönlichen Orientierung und Unterhaltung und ersetzt keine professionelle Beratung. Diese Deutung wurde von einem KI-System erstellt.",
+    "legal": {
+      "impressum": "Impressum",
+      "datenschutz": "Datenschutz",
+      "agb": "AGB",
+      "widerruf": "Widerruf"
     },
-    en: {
-      q1_eyebrow: "REVEAL",
-      q1_h1: "What personal insight are you seeking?",
-      q1_opts: [
-        {ic:"⏳", t:"See who I was in a past life"},
-        {ic:"✨", t:"Reveal my fate and purpose"},
-        {ic:"🌀", t:"Find out if I lived before"},
-        {ic:"🌟", t:"Tap into my hidden abilities"},
-        {ic:"🔮", t:"Discover my love future"}
-      ],
-      q2_eyebrow: "STEP 2",
-      q2_h1: "When were you born?",
-      q2_placeholder: "DD/MM/YYYY",
-      q3_eyebrow: "STEP 3",
-      q3_h1: "What should we call you?",
-      q3_placeholder: "Your first name",
-      q4_eyebrow: "STEP 4",
-      q4_h1: "What's on your mind the most right now?",
-      q4_opts: [
-        {ic:"💞", t:"Love & relationships"},
-        {ic:"💼", t:"Career & money"},
-        {ic:"🧭", t:"Life path & decisions"},
-        {ic:"🌙", t:"Inner peace & self-discovery"}
-      ],
-      q5_eyebrow: "STEP 5",
-      q5_h1: "Show us your palm",
-      q5_sub: "Optional — a photo of your open palm makes your reveal even more accurate and personal.",
-      photo_upload: "📷 Upload photo",
-      photo_hint: "A flat, well-lit photo of your open palm",
-      photo_skip: "Skip, just the text reveal",
-      photo_continue: "Continue with this photo →",
-      next: "Continue →",
-      back: "← Back",
-      loading_phrases: [
-        "Reading the signs …",
-        "Decoding your birth energy …",
-        "The cards are aligning …",
-        "Your reveal is taking shape …"
-      ],
-      loading_phrases_palm: [
-        "Studying your palm …",
-        "Reading your life, heart and head lines …",
-        "The lines are telling their story …",
-        "Your palm reading is taking shape …"
-      ],
-      loading_sub: "This will only take a moment",
-      reveal_badge: "✦ Your reveal",
-      palm_badge: "✦ Your palm reading",
-      reveal_fallback: "The energy around you is unusually strong today — your full reveal is waiting in your personal reading.",
-      palm_fallback: "Your palm lines are hard to make out today — try again with a clearer photo in your personal reading.",
-      cta: "Unlock your full reading →",
-      disclaimer: "DEGAJA is for personal guidance and entertainment purposes and does not replace professional advice. This reading was generated by an AI system.",
-      legal: { impressum: "Legal notice", datenschutz: "Privacy", agb: "Terms", widerruf: "Withdrawal" },
-      voice_loading: "Preparing voice …",
-      voice_listen: "🔊 Listen to voice",
-      voice_playing: "⏸ Playing …",
-      voice_unavailable: ""
+    "voice_loading": "Stimme wird vorbereitet …",
+    "voice_listen": "🔊 Stimme anhören",
+    "voice_playing": "⏸ Wird abgespielt …",
+    "voice_unavailable": "",
+    "purchase_eyebrow": "DEGAJA™ · 24/7",
+    "purchase_title": "Geh tiefer",
+    "purchase_desc": "Deine erste Antwort war kostenlos. Schalte jetzt eine tiefere persönliche Lesung mit anschließender 24/7-Begleitung frei.",
+    "purchase_single": "Eine Lesung · €4,99",
+    "purchase_pack": "3 Lesungen · €9,99",
+    "purchase_note": "Einmalige Zahlung · keine automatische Verlängerung.",
+    "purchase_back": "← Zurück",
+    "purchase_error": "Zahlung gerade nicht verfügbar. Versuch es später erneut."
+  },
+  "en": {
+    "q1_eyebrow": "REVEAL",
+    "q1_h1": "What personal insight are you seeking?",
+    "q1_opts": [
+      {
+        "ic": "⏳",
+        "t": "See who I was in a past life"
+      },
+      {
+        "ic": "✨",
+        "t": "Reveal my fate and purpose"
+      },
+      {
+        "ic": "🌀",
+        "t": "Find out if I lived before"
+      },
+      {
+        "ic": "🌟",
+        "t": "Tap into my hidden abilities"
+      },
+      {
+        "ic": "🔮",
+        "t": "Discover my love future"
+      }
+    ],
+    "q2_eyebrow": "STEP 2",
+    "q2_h1": "When were you born?",
+    "q2_placeholder": "DD/MM/YYYY",
+    "q3_eyebrow": "STEP 3",
+    "q3_h1": "What should we call you?",
+    "q3_placeholder": "Your first name",
+    "q4_eyebrow": "STEP 4",
+    "q4_h1": "What's on your mind the most right now?",
+    "q4_opts": [
+      {
+        "ic": "💞",
+        "t": "Love & relationships"
+      },
+      {
+        "ic": "💼",
+        "t": "Career & money"
+      },
+      {
+        "ic": "🧭",
+        "t": "Life path & decisions"
+      },
+      {
+        "ic": "🌙",
+        "t": "Inner peace & self-discovery"
+      }
+    ],
+    "q5_eyebrow": "STEP 5",
+    "q5_h1": "Show us your palm",
+    "q5_sub": "Optional — a photo of your open palm makes your reveal even more accurate and personal.",
+    "photo_upload": "📷 Upload photo",
+    "photo_hint": "A flat, well-lit photo of your open palm",
+    "photo_skip": "Skip, just the text reveal",
+    "photo_continue": "Continue with this photo →",
+    "next": "Continue →",
+    "back": "← Back",
+    "loading_phrases": [
+      "Reading the signs …",
+      "Decoding your birth energy …",
+      "The cards are aligning …",
+      "Your reveal is taking shape …"
+    ],
+    "loading_phrases_palm": [
+      "Studying your palm …",
+      "Reading your life, heart and head lines …",
+      "The lines are telling their story …",
+      "Your palm reading is taking shape …"
+    ],
+    "loading_sub": "This will only take a moment",
+    "reveal_badge": "✦ Your reveal",
+    "palm_badge": "✦ Your palm reading",
+    "reveal_fallback": "The energy around you is unusually strong today — your full reveal is waiting in your personal reading.",
+    "palm_fallback": "Your palm lines are hard to make out today — try again with a clearer photo in your personal reading.",
+    "cta": "Unlock your full reading · £4.99 →",
+    "disclaimer": "DEGAJA is for personal guidance and entertainment purposes and does not replace professional advice. This reading was generated by an AI system.",
+    "legal": {
+      "impressum": "Legal notice",
+      "datenschutz": "Privacy",
+      "agb": "Terms",
+      "widerruf": "Withdrawal"
     },
-    fr: {
-      q1_eyebrow: "RÉVÉLATION",
-      q1_h1: "Quelle perspicacité personnelle recherches-tu ?",
-      q1_opts: [
-        {ic:"⏳", t:"Découvrir qui j'étais dans une vie antérieure"},
-        {ic:"✨", t:"Révéler mon destin et mon but dans la vie"},
-        {ic:"🌀", t:"Savoir si j'ai déjà vécu auparavant"},
-        {ic:"🌟", t:"Explorer mes capacités cachées"},
-        {ic:"🔮", t:"Découvrir mon avenir amoureux"}
-      ],
-      q2_eyebrow: "ÉTAPE 2",
-      q2_h1: "Quand es-tu né(e) ?",
-      q2_placeholder: "JJ/MM/AAAA",
-      q3_eyebrow: "ÉTAPE 3",
-      q3_h1: "Comment devons-nous t'appeler ?",
-      q3_placeholder: "Ton prénom",
-      q4_eyebrow: "ÉTAPE 4",
-      q4_h1: "Qu'est-ce qui te préoccupe le plus en ce moment ?",
-      q4_opts: [
-        {ic:"💞", t:"Amour & relations"},
-        {ic:"💼", t:"Carrière & argent"},
-        {ic:"🧭", t:"Chemin de vie & décisions"},
-        {ic:"🌙", t:"Paix intérieure & connaissance de soi"}
-      ],
-      q5_eyebrow: "ÉTAPE 5",
-      q5_h1: "Montre-nous ta paume",
-      q5_sub: "Facultatif — une photo de ta paume ouverte rend ta révélation encore plus précise et personnelle.",
-      photo_upload: "📷 Télécharger une photo",
-      photo_hint: "Une photo nette et bien éclairée de ta paume ouverte",
-      photo_skip: "Passer, juste la révélation textuelle",
-      photo_continue: "Continuer avec cette photo →",
-      next: "Continuer →",
-      back: "← Retour",
-      loading_phrases: ["Nous lisons les signes …", "Ton énergie de naissance est décryptée …", "Les cartes s'alignent …", "Ta révélation prend forme …"],
-      loading_phrases_palm: ["Nous observons ta paume …", "Lecture des lignes de vie, de cœur et de tête …", "Les lignes racontent leur histoire …", "Ta lecture de paume prend forme …"],
-      loading_sub: "Cela ne prendra qu'un instant",
-      reveal_badge: "✦ Ta révélation",
-      palm_badge: "✦ Ta lecture de paume",
-      reveal_fallback: "L'énergie autour de toi est exceptionnellement forte aujourd'hui — ta révélation complète t'attend dans ta lecture personnelle.",
-      palm_fallback: "Les lignes de ta main sont difficiles à déchiffrer aujourd'hui — réessaie avec une photo plus nette dans ta lecture personnelle.",
-      cta: "Débloquer ta lecture complète →",
-      disclaimer: "DEGAJA sert à l'orientation personnelle et au divertissement et ne remplace pas un conseil professionnel. Cette lecture a été générée par un système d'IA.",
-      legal: { impressum: "Mentions légales", datenschutz: "Confidentialité", agb: "CGV", widerruf: "Rétractation" },
-      voice_loading: "Préparation de la voix …",
-      voice_listen: "🔊 Écouter la voix",
-      voice_playing: "⏸ Lecture en cours …",
-      voice_unavailable: ""
+    "voice_loading": "Preparing voice …",
+    "voice_listen": "🔊 Listen to voice",
+    "voice_playing": "⏸ Playing …",
+    "voice_unavailable": "",
+    "purchase_eyebrow": "DEGAJA™ · 24/7",
+    "purchase_title": "Go deeper",
+    "purchase_desc": "Your first answer was free. Unlock a deeper personal reading with ongoing 24/7 support now.",
+    "purchase_single": "One reading · £4.99",
+    "purchase_pack": "3 readings · £9.99",
+    "purchase_note": "One-time payment · no automatic renewal.",
+    "purchase_back": "← Back",
+    "purchase_error": "Payment isn't available right now. Please try again later."
+  },
+  "fr": {
+    "q1_eyebrow": "RÉVÉLATION",
+    "q1_h1": "Quelle perspicacité personnelle recherches-tu ?",
+    "q1_opts": [
+      {
+        "ic": "⏳",
+        "t": "Découvrir qui j'étais dans une vie antérieure"
+      },
+      {
+        "ic": "✨",
+        "t": "Révéler mon destin et mon but dans la vie"
+      },
+      {
+        "ic": "🌀",
+        "t": "Savoir si j'ai déjà vécu auparavant"
+      },
+      {
+        "ic": "🌟",
+        "t": "Explorer mes capacités cachées"
+      },
+      {
+        "ic": "🔮",
+        "t": "Découvrir mon avenir amoureux"
+      }
+    ],
+    "q2_eyebrow": "ÉTAPE 2",
+    "q2_h1": "Quand es-tu né(e) ?",
+    "q2_placeholder": "JJ/MM/AAAA",
+    "q3_eyebrow": "ÉTAPE 3",
+    "q3_h1": "Comment devons-nous t'appeler ?",
+    "q3_placeholder": "Ton prénom",
+    "q4_eyebrow": "ÉTAPE 4",
+    "q4_h1": "Qu'est-ce qui te préoccupe le plus en ce moment ?",
+    "q4_opts": [
+      {
+        "ic": "💞",
+        "t": "Amour & relations"
+      },
+      {
+        "ic": "💼",
+        "t": "Carrière & argent"
+      },
+      {
+        "ic": "🧭",
+        "t": "Chemin de vie & décisions"
+      },
+      {
+        "ic": "🌙",
+        "t": "Paix intérieure & connaissance de soi"
+      }
+    ],
+    "q5_eyebrow": "ÉTAPE 5",
+    "q5_h1": "Montre-nous ta paume",
+    "q5_sub": "Facultatif — une photo de ta paume ouverte rend ta révélation encore plus précise et personnelle.",
+    "photo_upload": "📷 Télécharger une photo",
+    "photo_hint": "Une photo nette et bien éclairée de ta paume ouverte",
+    "photo_skip": "Passer, juste la révélation textuelle",
+    "photo_continue": "Continuer avec cette photo →",
+    "next": "Continuer →",
+    "back": "← Retour",
+    "loading_phrases": [
+      "Nous lisons les signes …",
+      "Ton énergie de naissance est décryptée …",
+      "Les cartes s'alignent …",
+      "Ta révélation prend forme …"
+    ],
+    "loading_phrases_palm": [
+      "Nous observons ta paume …",
+      "Lecture des lignes de vie, de cœur et de tête …",
+      "Les lignes racontent leur histoire …",
+      "Ta lecture de paume prend forme …"
+    ],
+    "loading_sub": "Cela ne prendra qu'un instant",
+    "reveal_badge": "✦ Ta révélation",
+    "palm_badge": "✦ Ta lecture de paume",
+    "reveal_fallback": "L'énergie autour de toi est exceptionnellement forte aujourd'hui — ta révélation complète t'attend dans ta lecture personnelle.",
+    "palm_fallback": "Les lignes de ta main sont difficiles à déchiffrer aujourd'hui — réessaie avec une photo plus nette dans ta lecture personnelle.",
+    "cta": "Débloquer ta lecture complète · €4,99 →",
+    "disclaimer": "DEGAJA sert à l'orientation personnelle et au divertissement et ne remplace pas un conseil professionnel. Cette lecture a été générée par un système d'IA.",
+    "legal": {
+      "impressum": "Mentions légales",
+      "datenschutz": "Confidentialité",
+      "agb": "CGV",
+      "widerruf": "Rétractation"
     },
-    es: {
-      q1_eyebrow: "REVELACIÓN",
-      q1_h1: "¿Qué perspectiva personal estás buscando?",
-      q1_opts: [
-        {ic:"⏳", t:"Ver quién fui en una vida pasada"},
-        {ic:"✨", t:"Revelar mi destino y propósito"},
-        {ic:"🌀", t:"Descubrir si ya he vivido antes"},
-        {ic:"🌟", t:"Descubrir mis habilidades ocultas"},
-        {ic:"🔮", t:"Descubrir mi futuro amoroso"}
-      ],
-      q2_eyebrow: "PASO 2",
-      q2_h1: "¿Cuándo naciste?",
-      q2_placeholder: "DD/MM/AAAA",
-      q3_eyebrow: "PASO 3",
-      q3_h1: "¿Cómo deberíamos llamarte?",
-      q3_placeholder: "Tu nombre",
-      q4_eyebrow: "PASO 4",
-      q4_h1: "¿Qué es lo que más te preocupa ahora mismo?",
-      q4_opts: [
-        {ic:"💞", t:"Amor y relaciones"},
-        {ic:"💼", t:"Carrera y dinero"},
-        {ic:"🧭", t:"Camino de vida y decisiones"},
-        {ic:"🌙", t:"Paz interior y autoconocimiento"}
-      ],
-      q5_eyebrow: "PASO 5",
-      q5_h1: "Muéstranos tu palma",
-      q5_sub: "Opcional — una foto de tu palma abierta hace tu revelación aún más precisa y personal.",
-      photo_upload: "📷 Subir foto",
-      photo_hint: "Una foto nítida y bien iluminada de tu palma abierta",
-      photo_skip: "Omitir, solo la revelación de texto",
-      photo_continue: "Continuar con esta foto →",
-      next: "Continuar →",
-      back: "← Atrás",
-      loading_phrases: ["Leyendo las señales …", "Descifrando tu energía de nacimiento …", "Las cartas se están alineando …", "Tu revelación está tomando forma …"],
-      loading_phrases_palm: ["Observando tu palma …", "Leyendo tus líneas de vida, corazón y cabeza …", "Las líneas cuentan su historia …", "Tu lectura de palma está tomando forma …"],
-      loading_sub: "Esto solo tomará un momento",
-      reveal_badge: "✦ Tu revelación",
-      palm_badge: "✦ Tu lectura de palma",
-      reveal_fallback: "La energía a tu alrededor es inusualmente fuerte hoy — tu revelación completa te espera en tu lectura personal.",
-      palm_fallback: "Las líneas de tu mano son difíciles de descifrar hoy — inténtalo de nuevo con una foto más clara en tu lectura personal.",
-      cta: "Desbloquear tu lectura completa →",
-      disclaimer: "DEGAJA es para orientación personal y entretenimiento, y no sustituye el asesoramiento profesional. Esta lectura fue generada por un sistema de IA.",
-      legal: { impressum: "Aviso legal", datenschutz: "Privacidad", agb: "Términos", widerruf: "Desistimiento" },
-      voice_loading: "Preparando la voz …",
-      voice_listen: "🔊 Escuchar la voz",
-      voice_playing: "⏸ Reproduciendo …",
-      voice_unavailable: ""
+    "voice_loading": "Préparation de la voix …",
+    "voice_listen": "🔊 Écouter la voix",
+    "voice_playing": "⏸ Lecture en cours …",
+    "voice_unavailable": "",
+    "purchase_eyebrow": "DEGAJA™ · 24/7",
+    "purchase_title": "Aller plus loin",
+    "purchase_desc": "Ta première réponse était gratuite. Débloque maintenant une lecture personnelle plus approfondie avec accompagnement 24/7.",
+    "purchase_single": "Une lecture · €4,99",
+    "purchase_pack": "3 lectures · €9,99",
+    "purchase_note": "Paiement unique · pas de renouvellement automatique.",
+    "purchase_back": "← Retour",
+    "purchase_error": "Le paiement n'est pas disponible pour le moment. Réessaie plus tard."
+  },
+  "es": {
+    "q1_eyebrow": "REVELACIÓN",
+    "q1_h1": "¿Qué perspectiva personal estás buscando?",
+    "q1_opts": [
+      {
+        "ic": "⏳",
+        "t": "Ver quién fui en una vida pasada"
+      },
+      {
+        "ic": "✨",
+        "t": "Revelar mi destino y propósito"
+      },
+      {
+        "ic": "🌀",
+        "t": "Descubrir si ya he vivido antes"
+      },
+      {
+        "ic": "🌟",
+        "t": "Descubrir mis habilidades ocultas"
+      },
+      {
+        "ic": "🔮",
+        "t": "Descubrir mi futuro amoroso"
+      }
+    ],
+    "q2_eyebrow": "PASO 2",
+    "q2_h1": "¿Cuándo naciste?",
+    "q2_placeholder": "DD/MM/AAAA",
+    "q3_eyebrow": "PASO 3",
+    "q3_h1": "¿Cómo deberíamos llamarte?",
+    "q3_placeholder": "Tu nombre",
+    "q4_eyebrow": "PASO 4",
+    "q4_h1": "¿Qué es lo que más te preocupa ahora mismo?",
+    "q4_opts": [
+      {
+        "ic": "💞",
+        "t": "Amor y relaciones"
+      },
+      {
+        "ic": "💼",
+        "t": "Carrera y dinero"
+      },
+      {
+        "ic": "🧭",
+        "t": "Camino de vida y decisiones"
+      },
+      {
+        "ic": "🌙",
+        "t": "Paz interior y autoconocimiento"
+      }
+    ],
+    "q5_eyebrow": "PASO 5",
+    "q5_h1": "Muéstranos tu palma",
+    "q5_sub": "Opcional — una foto de tu palma abierta hace tu revelación aún más precisa y personal.",
+    "photo_upload": "📷 Subir foto",
+    "photo_hint": "Una foto nítida y bien iluminada de tu palma abierta",
+    "photo_skip": "Omitir, solo la revelación de texto",
+    "photo_continue": "Continuar con esta foto →",
+    "next": "Continuar →",
+    "back": "← Atrás",
+    "loading_phrases": [
+      "Leyendo las señales …",
+      "Descifrando tu energía de nacimiento …",
+      "Las cartas se están alineando …",
+      "Tu revelación está tomando forma …"
+    ],
+    "loading_phrases_palm": [
+      "Observando tu palma …",
+      "Leyendo tus líneas de vida, corazón y cabeza …",
+      "Las líneas cuentan su historia …",
+      "Tu lectura de palma está tomando forma …"
+    ],
+    "loading_sub": "Esto solo tomará un momento",
+    "reveal_badge": "✦ Tu revelación",
+    "palm_badge": "✦ Tu lectura de palma",
+    "reveal_fallback": "La energía a tu alrededor es inusualmente fuerte hoy — tu revelación completa te espera en tu lectura personal.",
+    "palm_fallback": "Las líneas de tu mano son difíciles de descifrar hoy — inténtalo de nuevo con una foto más clara en tu lectura personal.",
+    "cta": "Desbloquear tu lectura completa · €4,99 →",
+    "disclaimer": "DEGAJA es para orientación personal y entretenimiento, y no sustituye el asesoramiento profesional. Esta lectura fue generada por un sistema de IA.",
+    "legal": {
+      "impressum": "Aviso legal",
+      "datenschutz": "Privacidad",
+      "agb": "Términos",
+      "widerruf": "Desistimiento"
     },
-    br: {
-      q1_eyebrow: "REVELAÇÃO",
-      q1_h1: "Que percepção pessoal você está buscando?",
-      q1_opts: [
-        {ic:"⏳", t:"Ver quem eu fui em uma vida passada"},
-        {ic:"✨", t:"Revelar meu destino e propósito"},
-        {ic:"🌀", t:"Descobrir se eu já vivi antes"},
-        {ic:"🌟", t:"Descobrir minhas habilidades ocultas"},
-        {ic:"🔮", t:"Descobrir meu futuro no amor"}
-      ],
-      q2_eyebrow: "PASSO 2",
-      q2_h1: "Quando você nasceu?",
-      q2_placeholder: "DD/MM/AAAA",
-      q3_eyebrow: "PASSO 3",
-      q3_h1: "Como podemos te chamar?",
-      q3_placeholder: "Seu primeiro nome",
-      q4_eyebrow: "PASSO 4",
-      q4_h1: "O que mais está passando pela sua cabeça agora?",
-      q4_opts: [
-        {ic:"💞", t:"Amor e relacionamentos"},
-        {ic:"💼", t:"Carreira e dinheiro"},
-        {ic:"🧭", t:"Caminho de vida e decisões"},
-        {ic:"🌙", t:"Paz interior e autoconhecimento"}
-      ],
-      q5_eyebrow: "PASSO 5",
-      q5_h1: "Mostre sua palma pra gente",
-      q5_sub: "Opcional — uma foto da sua palma aberta deixa sua revelação ainda mais precisa e pessoal.",
-      photo_upload: "📷 Enviar foto",
-      photo_hint: "Uma foto nítida e bem iluminada da sua palma aberta",
-      photo_skip: "Pular, só a revelação em texto",
-      photo_continue: "Continuar com essa foto →",
-      next: "Continuar →",
-      back: "← Voltar",
-      loading_phrases: ["Lendo os sinais …", "Decifrando sua energia de nascimento …", "As cartas estão se alinhando …", "Sua revelação está tomando forma …"],
-      loading_phrases_palm: ["Observando sua palma …", "Lendo as linhas da vida, do coração e da cabeça …", "As linhas estão contando a história delas …", "Sua leitura de mão está tomando forma …"],
-      loading_sub: "Isso vai levar só um instante",
-      reveal_badge: "✦ Sua revelação",
-      palm_badge: "✦ Sua leitura de mão",
-      reveal_fallback: "A energia ao seu redor está incomumente forte hoje — sua revelação completa está esperando por você na sua leitura pessoal.",
-      palm_fallback: "As linhas da sua mão estão difíceis de decifrar hoje — tente de novo com uma foto mais nítida na sua leitura pessoal.",
-      cta: "Desbloquear sua leitura completa →",
-      disclaimer: "A DEGAJA é voltada para orientação pessoal e entretenimento e não substitui aconselhamento profissional. Esta leitura foi gerada por um sistema de IA.",
-      legal: { impressum: "Informações legais", datenschutz: "Privacidade", agb: "Termos", widerruf: "Direito de arrependimento" },
-      voice_loading: "Preparando a voz …",
-      voice_listen: "🔊 Ouvir a voz",
-      voice_playing: "⏸ Reproduzindo …",
-      voice_unavailable: ""
+    "voice_loading": "Preparando la voz …",
+    "voice_listen": "🔊 Escuchar la voz",
+    "voice_playing": "⏸ Reproduciendo …",
+    "voice_unavailable": "",
+    "purchase_eyebrow": "DEGAJA™ · 24/7",
+    "purchase_title": "Profundiza",
+    "purchase_desc": "Tu primera respuesta fue gratuita. Desbloquea ahora una lectura personal más profunda con acompañamiento continuo 24/7.",
+    "purchase_single": "Una lectura · €4,99",
+    "purchase_pack": "3 lecturas · €9,99",
+    "purchase_note": "Pago único · sin renovación automática.",
+    "purchase_back": "← Atrás",
+    "purchase_error": "El pago no está disponible ahora mismo. Inténtalo de nuevo más tarde."
+  },
+  "br": {
+    "q1_eyebrow": "REVELAÇÃO",
+    "q1_h1": "Que percepção pessoal você está buscando?",
+    "q1_opts": [
+      {
+        "ic": "⏳",
+        "t": "Ver quem eu fui em uma vida passada"
+      },
+      {
+        "ic": "✨",
+        "t": "Revelar meu destino e propósito"
+      },
+      {
+        "ic": "🌀",
+        "t": "Descobrir se eu já vivi antes"
+      },
+      {
+        "ic": "🌟",
+        "t": "Descobrir minhas habilidades ocultas"
+      },
+      {
+        "ic": "🔮",
+        "t": "Descobrir meu futuro no amor"
+      }
+    ],
+    "q2_eyebrow": "PASSO 2",
+    "q2_h1": "Quando você nasceu?",
+    "q2_placeholder": "DD/MM/AAAA",
+    "q3_eyebrow": "PASSO 3",
+    "q3_h1": "Como podemos te chamar?",
+    "q3_placeholder": "Seu primeiro nome",
+    "q4_eyebrow": "PASSO 4",
+    "q4_h1": "O que mais está passando pela sua cabeça agora?",
+    "q4_opts": [
+      {
+        "ic": "💞",
+        "t": "Amor e relacionamentos"
+      },
+      {
+        "ic": "💼",
+        "t": "Carreira e dinheiro"
+      },
+      {
+        "ic": "🧭",
+        "t": "Caminho de vida e decisões"
+      },
+      {
+        "ic": "🌙",
+        "t": "Paz interior e autoconhecimento"
+      }
+    ],
+    "q5_eyebrow": "PASSO 5",
+    "q5_h1": "Mostre sua palma pra gente",
+    "q5_sub": "Opcional — uma foto da sua palma aberta deixa sua revelação ainda mais precisa e pessoal.",
+    "photo_upload": "📷 Enviar foto",
+    "photo_hint": "Uma foto nítida e bem iluminada da sua palma aberta",
+    "photo_skip": "Pular, só a revelação em texto",
+    "photo_continue": "Continuar com essa foto →",
+    "next": "Continuar →",
+    "back": "← Voltar",
+    "loading_phrases": [
+      "Lendo os sinais …",
+      "Decifrando sua energia de nascimento …",
+      "As cartas estão se alinhando …",
+      "Sua revelação está tomando forma …"
+    ],
+    "loading_phrases_palm": [
+      "Observando sua palma …",
+      "Lendo as linhas da vida, do coração e da cabeça …",
+      "As linhas estão contando a história delas …",
+      "Sua leitura de mão está tomando forma …"
+    ],
+    "loading_sub": "Isso vai levar só um instante",
+    "reveal_badge": "✦ Sua revelação",
+    "palm_badge": "✦ Sua leitura de mão",
+    "reveal_fallback": "A energia ao seu redor está incomumente forte hoje — sua revelação completa está esperando por você na sua leitura pessoal.",
+    "palm_fallback": "As linhas da sua mão estão difíceis de decifrar hoje — tente de novo com uma foto mais nítida na sua leitura pessoal.",
+    "cta": "Desbloquear sua leitura completa · R$24,99 →",
+    "disclaimer": "A DEGAJA é voltada para orientação pessoal e entretenimento e não substitui aconselhamento profissional. Esta leitura foi gerada por um sistema de IA.",
+    "legal": {
+      "impressum": "Informações legais",
+      "datenschutz": "Privacidade",
+      "agb": "Termos",
+      "widerruf": "Direito de arrependimento"
     },
-    it: {
-      q1_eyebrow: "RIVELAZIONE",
-      q1_h1: "Quale intuizione personale stai cercando?",
-      q1_opts: [
-        {ic:"⏳", t:"Scoprire chi ero in una vita passata"},
-        {ic:"✨", t:"Rivelare il mio destino e scopo"},
-        {ic:"🌀", t:"Scoprire se ho già vissuto prima"},
-        {ic:"🌟", t:"Scoprire le mie abilità nascoste"},
-        {ic:"🔮", t:"Scoprire il mio futuro in amore"}
-      ],
-      q2_eyebrow: "PASSO 2",
-      q2_h1: "Quando sei nato/a?",
-      q2_placeholder: "GG/MM/AAAA",
-      q3_eyebrow: "PASSO 3",
-      q3_h1: "Come dobbiamo chiamarti?",
-      q3_placeholder: "Il tuo nome",
-      q4_eyebrow: "PASSO 4",
-      q4_h1: "Cosa ti preoccupa di più in questo momento?",
-      q4_opts: [
-        {ic:"💞", t:"Amore e relazioni"},
-        {ic:"💼", t:"Carriera e denaro"},
-        {ic:"🧭", t:"Percorso di vita e decisioni"},
-        {ic:"🌙", t:"Pace interiore e autoconsapevolezza"}
-      ],
-      q5_eyebrow: "PASSO 5",
-      q5_h1: "Mostraci il tuo palmo",
-      q5_sub: "Facoltativo — una foto del tuo palmo aperto rende la tua rivelazione ancora più precisa e personale.",
-      photo_upload: "📷 Carica foto",
-      photo_hint: "Una foto nitida e ben illuminata del tuo palmo aperto",
-      photo_skip: "Salta, solo la rivelazione testuale",
-      photo_continue: "Continua con questa foto →",
-      next: "Continua →",
-      back: "← Indietro",
-      loading_phrases: ["Leggiamo i segni …", "La tua energia di nascita viene decifrata …", "Le carte si stanno allineando …", "La tua rivelazione sta prendendo forma …"],
-      loading_phrases_palm: ["Osserviamo il tuo palmo …", "Lettura delle linee di vita, cuore e testa …", "Le linee raccontano la loro storia …", "La tua lettura del palmo sta prendendo forma …"],
-      loading_sub: "Ci vorrà solo un momento",
-      reveal_badge: "✦ La tua rivelazione",
-      palm_badge: "✦ La tua lettura del palmo",
-      reveal_fallback: "L'energia intorno a te è insolitamente forte oggi — la tua rivelazione completa ti aspetta nella tua lettura personale.",
-      palm_fallback: "Le linee della tua mano sono difficili da decifrare oggi — riprova con una foto più chiara nella tua lettura personale.",
-      cta: "Sblocca la tua lettura completa →",
-      disclaimer: "DEGAJA è destinato all'orientamento personale e all'intrattenimento e non sostituisce una consulenza professionale. Questa lettura è stata generata da un sistema di IA.",
-      legal: { impressum: "Note legali", datenschutz: "Privacy", agb: "Termini", widerruf: "Recesso" },
-      voice_loading: "Preparazione della voce …",
-      voice_listen: "🔊 Ascolta la voce",
-      voice_playing: "⏸ In riproduzione …",
-      voice_unavailable: ""
+    "voice_loading": "Preparando a voz …",
+    "voice_listen": "🔊 Ouvir a voz",
+    "voice_playing": "⏸ Reproduzindo …",
+    "voice_unavailable": "",
+    "purchase_eyebrow": "DEGAJA™ · 24/7",
+    "purchase_title": "Aprofundar",
+    "purchase_desc": "Sua primeira resposta foi gratuita. Desbloqueie agora uma leitura pessoal mais profunda com acompanhamento contínuo 24/7.",
+    "purchase_single": "Uma leitura · R$24,99",
+    "purchase_pack": "3 leituras · R$49,99",
+    "purchase_note": "Pagamento único · sem renovação automática.",
+    "purchase_back": "← Voltar",
+    "purchase_error": "O pagamento não está disponível agora. Tente novamente mais tarde."
+  },
+  "it": {
+    "q1_eyebrow": "RIVELAZIONE",
+    "q1_h1": "Quale intuizione personale stai cercando?",
+    "q1_opts": [
+      {
+        "ic": "⏳",
+        "t": "Scoprire chi ero in una vita passata"
+      },
+      {
+        "ic": "✨",
+        "t": "Rivelare il mio destino e scopo"
+      },
+      {
+        "ic": "🌀",
+        "t": "Scoprire se ho già vissuto prima"
+      },
+      {
+        "ic": "🌟",
+        "t": "Scoprire le mie abilità nascoste"
+      },
+      {
+        "ic": "🔮",
+        "t": "Scoprire il mio futuro in amore"
+      }
+    ],
+    "q2_eyebrow": "PASSO 2",
+    "q2_h1": "Quando sei nato/a?",
+    "q2_placeholder": "GG/MM/AAAA",
+    "q3_eyebrow": "PASSO 3",
+    "q3_h1": "Come dobbiamo chiamarti?",
+    "q3_placeholder": "Il tuo nome",
+    "q4_eyebrow": "PASSO 4",
+    "q4_h1": "Cosa ti preoccupa di più in questo momento?",
+    "q4_opts": [
+      {
+        "ic": "💞",
+        "t": "Amore e relazioni"
+      },
+      {
+        "ic": "💼",
+        "t": "Carriera e denaro"
+      },
+      {
+        "ic": "🧭",
+        "t": "Percorso di vita e decisioni"
+      },
+      {
+        "ic": "🌙",
+        "t": "Pace interiore e autoconsapevolezza"
+      }
+    ],
+    "q5_eyebrow": "PASSO 5",
+    "q5_h1": "Mostraci il tuo palmo",
+    "q5_sub": "Facoltativo — una foto del tuo palmo aperto rende la tua rivelazione ancora più precisa e personale.",
+    "photo_upload": "📷 Carica foto",
+    "photo_hint": "Una foto nitida e ben illuminata del tuo palmo aperto",
+    "photo_skip": "Salta, solo la rivelazione testuale",
+    "photo_continue": "Continua con questa foto →",
+    "next": "Continua →",
+    "back": "← Indietro",
+    "loading_phrases": [
+      "Leggiamo i segni …",
+      "La tua energia di nascita viene decifrata …",
+      "Le carte si stanno allineando …",
+      "La tua rivelazione sta prendendo forma …"
+    ],
+    "loading_phrases_palm": [
+      "Osserviamo il tuo palmo …",
+      "Lettura delle linee di vita, cuore e testa …",
+      "Le linee raccontano la loro storia …",
+      "La tua lettura del palmo sta prendendo forma …"
+    ],
+    "loading_sub": "Ci vorrà solo un momento",
+    "reveal_badge": "✦ La tua rivelazione",
+    "palm_badge": "✦ La tua lettura del palmo",
+    "reveal_fallback": "L'energia intorno a te è insolitamente forte oggi — la tua rivelazione completa ti aspetta nella tua lettura personale.",
+    "palm_fallback": "Le linee della tua mano sono difficili da decifrare oggi — riprova con una foto più chiara nella tua lettura personale.",
+    "cta": "Sblocca la tua lettura completa · €4,99 →",
+    "disclaimer": "DEGAJA è destinato all'orientamento personale e all'intrattenimento e non sostituisce una consulenza professionale. Questa lettura è stata generata da un sistema di IA.",
+    "legal": {
+      "impressum": "Note legali",
+      "datenschutz": "Privacy",
+      "agb": "Termini",
+      "widerruf": "Recesso"
     },
-    pt: {
-      q1_eyebrow: "REVELAÇÃO",
-      q1_h1: "Que perceção pessoal estás a procurar?",
-      q1_opts: [
-        {ic:"⏳", t:"Ver quem eu era numa vida passada"},
-        {ic:"✨", t:"Revelar o meu destino e propósito"},
-        {ic:"🌀", t:"Descobrir se já vivi antes"},
-        {ic:"🌟", t:"Descobrir as minhas capacidades ocultas"},
-        {ic:"🔮", t:"Descobrir o meu futuro amoroso"}
-      ],
-      q2_eyebrow: "PASSO 2",
-      q2_h1: "Quando nasceste?",
-      q2_placeholder: "DD/MM/AAAA",
-      q3_eyebrow: "PASSO 3",
-      q3_h1: "Como devemos chamar-te?",
-      q3_placeholder: "O teu primeiro nome",
-      q4_eyebrow: "PASSO 4",
-      q4_h1: "O que mais te preocupa agora?",
-      q4_opts: [
-        {ic:"💞", t:"Amor e relacionamentos"},
-        {ic:"💼", t:"Carreira e dinheiro"},
-        {ic:"🧭", t:"Caminho de vida e decisões"},
-        {ic:"🌙", t:"Paz interior e autoconhecimento"}
-      ],
-      q5_eyebrow: "PASSO 5",
-      q5_h1: "Mostra-nos a tua palma",
-      q5_sub: "Opcional — uma foto da tua palma aberta torna a tua revelação ainda mais precisa e pessoal.",
-      photo_upload: "📷 Carregar foto",
-      photo_hint: "Uma foto nítida e bem iluminada da tua palma aberta",
-      photo_skip: "Saltar, apenas a revelação em texto",
-      photo_continue: "Continuar com esta foto →",
-      next: "Continuar →",
-      back: "← Voltar",
-      loading_phrases: ["A ler os sinais …", "A tua energia de nascimento está a ser decifrada …", "As cartas estão a alinhar-se …", "A tua revelação está a tomar forma …"],
-      loading_phrases_palm: ["A observar a tua palma …", "A ler as linhas da vida, do coração e da cabeça …", "As linhas estão a contar a sua história …", "A tua leitura da palma está a tomar forma …"],
-      loading_sub: "Isto vai demorar só um momento",
-      reveal_badge: "✦ A tua revelação",
-      palm_badge: "✦ A tua leitura da palma",
-      reveal_fallback: "A energia à tua volta está invulgarmente forte hoje — a tua revelação completa espera por ti na tua leitura pessoal.",
-      palm_fallback: "As linhas da tua mão estão difíceis de decifrar hoje — tenta novamente com uma foto mais nítida na tua leitura pessoal.",
-      cta: "Desbloquear a tua leitura completa →",
-      disclaimer: "A DEGAJA destina-se à orientação pessoal e ao entretenimento e não substitui aconselhamento profissional. Esta leitura foi gerada por um sistema de IA.",
-      legal: { impressum: "Informação legal", datenschutz: "Privacidade", agb: "Termos", widerruf: "Retratação" },
-      voice_loading: "A preparar a voz …",
-      voice_listen: "🔊 Ouvir a voz",
-      voice_playing: "⏸ A reproduzir …",
-      voice_unavailable: ""
+    "voice_loading": "Preparazione della voce …",
+    "voice_listen": "🔊 Ascolta la voce",
+    "voice_playing": "⏸ In riproduzione …",
+    "voice_unavailable": "",
+    "purchase_eyebrow": "DEGAJA™ · 24/7",
+    "purchase_title": "Approfondisci",
+    "purchase_desc": "La tua prima risposta era gratuita. Sblocca ora una lettura personale più approfondita con assistenza continua 24/7.",
+    "purchase_single": "Una lettura · €4,99",
+    "purchase_pack": "3 letture · €9,99",
+    "purchase_note": "Pagamento unico · nessun rinnovo automatico.",
+    "purchase_back": "← Indietro",
+    "purchase_error": "Il pagamento non è disponibile ora. Riprova più tardi."
+  },
+  "pt": {
+    "q1_eyebrow": "REVELAÇÃO",
+    "q1_h1": "Que perceção pessoal estás a procurar?",
+    "q1_opts": [
+      {
+        "ic": "⏳",
+        "t": "Ver quem eu era numa vida passada"
+      },
+      {
+        "ic": "✨",
+        "t": "Revelar o meu destino e propósito"
+      },
+      {
+        "ic": "🌀",
+        "t": "Descobrir se já vivi antes"
+      },
+      {
+        "ic": "🌟",
+        "t": "Descobrir as minhas capacidades ocultas"
+      },
+      {
+        "ic": "🔮",
+        "t": "Descobrir o meu futuro amoroso"
+      }
+    ],
+    "q2_eyebrow": "PASSO 2",
+    "q2_h1": "Quando nasceste?",
+    "q2_placeholder": "DD/MM/AAAA",
+    "q3_eyebrow": "PASSO 3",
+    "q3_h1": "Como devemos chamar-te?",
+    "q3_placeholder": "O teu primeiro nome",
+    "q4_eyebrow": "PASSO 4",
+    "q4_h1": "O que mais te preocupa agora?",
+    "q4_opts": [
+      {
+        "ic": "💞",
+        "t": "Amor e relacionamentos"
+      },
+      {
+        "ic": "💼",
+        "t": "Carreira e dinheiro"
+      },
+      {
+        "ic": "🧭",
+        "t": "Caminho de vida e decisões"
+      },
+      {
+        "ic": "🌙",
+        "t": "Paz interior e autoconhecimento"
+      }
+    ],
+    "q5_eyebrow": "PASSO 5",
+    "q5_h1": "Mostra-nos a tua palma",
+    "q5_sub": "Opcional — uma foto da tua palma aberta torna a tua revelação ainda mais precisa e pessoal.",
+    "photo_upload": "📷 Carregar foto",
+    "photo_hint": "Uma foto nítida e bem iluminada da tua palma aberta",
+    "photo_skip": "Saltar, apenas a revelação em texto",
+    "photo_continue": "Continuar com esta foto →",
+    "next": "Continuar →",
+    "back": "← Voltar",
+    "loading_phrases": [
+      "A ler os sinais …",
+      "A tua energia de nascimento está a ser decifrada …",
+      "As cartas estão a alinhar-se …",
+      "A tua revelação está a tomar forma …"
+    ],
+    "loading_phrases_palm": [
+      "A observar a tua palma …",
+      "A ler as linhas da vida, do coração e da cabeça …",
+      "As linhas estão a contar a sua história …",
+      "A tua leitura da palma está a tomar forma …"
+    ],
+    "loading_sub": "Isto vai demorar só um momento",
+    "reveal_badge": "✦ A tua revelação",
+    "palm_badge": "✦ A tua leitura da palma",
+    "reveal_fallback": "A energia à tua volta está invulgarmente forte hoje — a tua revelação completa espera por ti na tua leitura pessoal.",
+    "palm_fallback": "As linhas da tua mão estão difíceis de decifrar hoje — tenta novamente com uma foto mais nítida na tua leitura pessoal.",
+    "cta": "Desbloquear a tua leitura completa · €4,99 →",
+    "disclaimer": "A DEGAJA destina-se à orientação pessoal e ao entretenimento e não substitui aconselhamento profissional. Esta leitura foi gerada por um sistema de IA.",
+    "legal": {
+      "impressum": "Informação legal",
+      "datenschutz": "Privacidade",
+      "agb": "Termos",
+      "widerruf": "Retratação"
     },
-    ru: {
-      q1_eyebrow: "ОТКРОВЕНИЕ",
-      q1_h1: "Какое личное озарение ты ищешь?",
-      q1_opts: [
-        {ic:"⏳", t:"Узнать, кем я была в прошлой жизни"},
-        {ic:"✨", t:"Раскрыть свою судьбу и предназначение"},
-        {ic:"🌀", t:"Узнать, жила ли я раньше"},
-        {ic:"🌟", t:"Раскрыть свои скрытые способности"},
-        {ic:"🔮", t:"Узнать своё будущее в любви"}
-      ],
-      q2_eyebrow: "ШАГ 2",
-      q2_h1: "Когда ты родилась?",
-      q2_placeholder: "ДД.ММ.ГГГГ",
-      q3_eyebrow: "ШАГ 3",
-      q3_h1: "Как нам тебя называть?",
-      q3_placeholder: "Твоё имя",
-      q4_eyebrow: "ШАГ 4",
-      q4_h1: "Что сейчас беспокоит тебя больше всего?",
-      q4_opts: [
-        {ic:"💞", t:"Любовь и отношения"},
-        {ic:"💼", t:"Карьера и деньги"},
-        {ic:"🧭", t:"Жизненный путь и решения"},
-        {ic:"🌙", t:"Внутренний покой и самопознание"}
-      ],
-      q5_eyebrow: "ШАГ 5",
-      q5_h1: "Покажи нам свою ладонь",
-      q5_sub: "Необязательно — фото твоей открытой ладони сделает твоё откровение ещё точнее и личнее.",
-      photo_upload: "📷 Загрузить фото",
-      photo_hint: "Чёткое, хорошо освещённое фото твоей открытой ладони",
-      photo_skip: "Пропустить, только текстовое откровение",
-      photo_continue: "Продолжить с этим фото →",
-      next: "Далее →",
-      back: "← Назад",
-      loading_phrases: ["Читаем знаки …", "Расшифровываем энергию твоего рождения …", "Карты выстраиваются …", "Твоё откровение обретает форму …"],
-      loading_phrases_palm: ["Изучаем твою ладонь …", "Читаем линии жизни, сердца и головы …", "Линии рассказывают свою историю …", "Твоё гадание по руке обретает форму …"],
-      loading_sub: "Это займёт всего мгновение",
-      reveal_badge: "✦ Твоё откровение",
-      palm_badge: "✦ Твоё гадание по руке",
-      reveal_fallback: "Энергия вокруг тебя сегодня необычайно сильна — твоё полное откровение ждёт тебя в персональном сеансе.",
-      palm_fallback: "Линии твоей руки сегодня трудно разобрать — попробуй ещё раз с более чётким фото в персональном сеансе.",
-      cta: "Открыть полный сеанс →",
-      disclaimer: "DEGAJA предназначена для личного ориентира и развлечения и не заменяет профессиональную консультацию. Это толкование создано системой ИИ.",
-      legal: { impressum: "Юридическая информация", datenschutz: "Конфиденциальность", agb: "Условия", widerruf: "Отказ от договора" },
-      voice_loading: "Подготовка голоса …",
-      voice_listen: "🔊 Слушать голос",
-      voice_playing: "⏸ Воспроизведение …",
-      voice_unavailable: ""
+    "voice_loading": "A preparar a voz …",
+    "voice_listen": "🔊 Ouvir a voz",
+    "voice_playing": "⏸ A reproduzir …",
+    "voice_unavailable": "",
+    "purchase_eyebrow": "DEGAJA™ · 24/7",
+    "purchase_title": "Aprofundar",
+    "purchase_desc": "A tua primeira resposta foi gratuita. Desbloqueia agora uma leitura pessoal mais profunda com acompanhamento contínuo 24/7.",
+    "purchase_single": "Uma leitura · €4,99",
+    "purchase_pack": "3 leituras · €9,99",
+    "purchase_note": "Pagamento único · sem renovação automática.",
+    "purchase_back": "← Voltar",
+    "purchase_error": "O pagamento não está disponível agora. Tenta novamente mais tarde."
+  },
+  "ru": {
+    "q1_eyebrow": "ОТКРОВЕНИЕ",
+    "q1_h1": "Какое личное озарение ты ищешь?",
+    "q1_opts": [
+      {
+        "ic": "⏳",
+        "t": "Узнать, кем я была в прошлой жизни"
+      },
+      {
+        "ic": "✨",
+        "t": "Раскрыть свою судьбу и предназначение"
+      },
+      {
+        "ic": "🌀",
+        "t": "Узнать, жила ли я раньше"
+      },
+      {
+        "ic": "🌟",
+        "t": "Раскрыть свои скрытые способности"
+      },
+      {
+        "ic": "🔮",
+        "t": "Узнать своё будущее в любви"
+      }
+    ],
+    "q2_eyebrow": "ШАГ 2",
+    "q2_h1": "Когда ты родилась?",
+    "q2_placeholder": "ДД.ММ.ГГГГ",
+    "q3_eyebrow": "ШАГ 3",
+    "q3_h1": "Как нам тебя называть?",
+    "q3_placeholder": "Твоё имя",
+    "q4_eyebrow": "ШАГ 4",
+    "q4_h1": "Что сейчас беспокоит тебя больше всего?",
+    "q4_opts": [
+      {
+        "ic": "💞",
+        "t": "Любовь и отношения"
+      },
+      {
+        "ic": "💼",
+        "t": "Карьера и деньги"
+      },
+      {
+        "ic": "🧭",
+        "t": "Жизненный путь и решения"
+      },
+      {
+        "ic": "🌙",
+        "t": "Внутренний покой и самопознание"
+      }
+    ],
+    "q5_eyebrow": "ШАГ 5",
+    "q5_h1": "Покажи нам свою ладонь",
+    "q5_sub": "Необязательно — фото твоей открытой ладони сделает твоё откровение ещё точнее и личнее.",
+    "photo_upload": "📷 Загрузить фото",
+    "photo_hint": "Чёткое, хорошо освещённое фото твоей открытой ладони",
+    "photo_skip": "Пропустить, только текстовое откровение",
+    "photo_continue": "Продолжить с этим фото →",
+    "next": "Далее →",
+    "back": "← Назад",
+    "loading_phrases": [
+      "Читаем знаки …",
+      "Расшифровываем энергию твоего рождения …",
+      "Карты выстраиваются …",
+      "Твоё откровение обретает форму …"
+    ],
+    "loading_phrases_palm": [
+      "Изучаем твою ладонь …",
+      "Читаем линии жизни, сердца и головы …",
+      "Линии рассказывают свою историю …",
+      "Твоё гадание по руке обретает форму …"
+    ],
+    "loading_sub": "Это займёт всего мгновение",
+    "reveal_badge": "✦ Твоё откровение",
+    "palm_badge": "✦ Твоё гадание по руке",
+    "reveal_fallback": "Энергия вокруг тебя сегодня необычайно сильна — твоё полное откровение ждёт тебя в персональном сеансе.",
+    "palm_fallback": "Линии твоей руки сегодня трудно разобрать — попробуй ещё раз с более чётким фото в персональном сеансе.",
+    "cta": "Открыть полный сеанс · €4,99 →",
+    "disclaimer": "DEGAJA предназначена для личного ориентира и развлечения и не заменяет профессиональную консультацию. Это толкование создано системой ИИ.",
+    "legal": {
+      "impressum": "Юридическая информация",
+      "datenschutz": "Конфиденциальность",
+      "agb": "Условия",
+      "widerruf": "Отказ от договора"
     },
-    uk: {
-      q1_eyebrow: "ОДКРОВЕННЯ",
-      q1_h1: "Яке особисте осяяння ти шукаєш?",
-      q1_opts: [
-        {ic:"⏳", t:"Дізнатися, ким я була в минулому житті"},
-        {ic:"✨", t:"Розкрити свою долю та призначення"},
-        {ic:"🌀", t:"Дізнатися, чи жила я раніше"},
-        {ic:"🌟", t:"Розкрити свої приховані здібності"},
-        {ic:"🔮", t:"Дізнатися своє майбутнє в коханні"}
-      ],
-      q2_eyebrow: "КРОК 2",
-      q2_h1: "Коли ти народилася?",
-      q2_placeholder: "ДД.ММ.РРРР",
-      q3_eyebrow: "КРОК 3",
-      q3_h1: "Як нам тебе називати?",
-      q3_placeholder: "Твоє ім'я",
-      q4_eyebrow: "КРОК 4",
-      q4_h1: "Що зараз турбує тебе найбільше?",
-      q4_opts: [
-        {ic:"💞", t:"Кохання і стосунки"},
-        {ic:"💼", t:"Кар'єра і гроші"},
-        {ic:"🧭", t:"Життєвий шлях і рішення"},
-        {ic:"🌙", t:"Внутрішній спокій і самопізнання"}
-      ],
-      q5_eyebrow: "КРОК 5",
-      q5_h1: "Покажи нам свою долоню",
-      q5_sub: "Необов'язково — фото твоєї відкритої долоні зробить твоє одкровення ще точнішим і особистішим.",
-      photo_upload: "📷 Завантажити фото",
-      photo_hint: "Чітке, добре освітлене фото твоєї відкритої долоні",
-      photo_skip: "Пропустити, лише текстове одкровення",
-      photo_continue: "Продовжити з цим фото →",
-      next: "Далі →",
-      back: "← Назад",
-      loading_phrases: ["Читаємо знаки …", "Розшифровуємо енергію твого народження …", "Карти вишиковуються …", "Твоє одкровення набуває форми …"],
-      loading_phrases_palm: ["Вивчаємо твою долоню …", "Читаємо лінії життя, серця і голови …", "Лінії розповідають свою історію …", "Твоє ворожіння по руці набуває форми …"],
-      loading_sub: "Це займе лише мить",
-      reveal_badge: "✦ Твоє одкровення",
-      palm_badge: "✦ Твоє ворожіння по руці",
-      reveal_fallback: "Енергія навколо тебе сьогодні незвично сильна — твоє повне одкровення чекає на тебе в персональному сеансі.",
-      palm_fallback: "Лінії твоєї руки сьогодні важко розібрати — спробуй ще раз з чіткішим фото в персональному сеансі.",
-      cta: "Відкрити повний сеанс →",
-      disclaimer: "DEGAJA призначена для особистого орієнтиру та розваги і не замінює професійну консультацію. Це тлумачення створено системою ШІ.",
-      legal: { impressum: "Юридична інформація", datenschutz: "Конфіденційність", agb: "Умови", widerruf: "Відмова від договору" },
-      voice_loading: "Підготовка голосу …",
-      voice_listen: "🔊 Слухати голос",
-      voice_playing: "⏸ Відтворення …",
-      voice_unavailable: ""
+    "voice_loading": "Подготовка голоса …",
+    "voice_listen": "🔊 Слушать голос",
+    "voice_playing": "⏸ Воспроизведение …",
+    "voice_unavailable": "",
+    "purchase_eyebrow": "DEGAJA™ · 24/7",
+    "purchase_title": "Углубиться",
+    "purchase_desc": "Твой первый ответ был бесплатным. Разблокируй более глубокий персональный расклад с постоянной поддержкой 24/7 прямо сейчас.",
+    "purchase_single": "Один расклад · €4,99",
+    "purchase_pack": "3 расклада · €9,99",
+    "purchase_note": "Разовый платёж · без автоматического продления.",
+    "purchase_back": "← Назад",
+    "purchase_error": "Оплата сейчас недоступна. Попробуй позже."
+  },
+  "uk": {
+    "q1_eyebrow": "ОДКРОВЕННЯ",
+    "q1_h1": "Яке особисте осяяння ти шукаєш?",
+    "q1_opts": [
+      {
+        "ic": "⏳",
+        "t": "Дізнатися, ким я була в минулому житті"
+      },
+      {
+        "ic": "✨",
+        "t": "Розкрити свою долю та призначення"
+      },
+      {
+        "ic": "🌀",
+        "t": "Дізнатися, чи жила я раніше"
+      },
+      {
+        "ic": "🌟",
+        "t": "Розкрити свої приховані здібності"
+      },
+      {
+        "ic": "🔮",
+        "t": "Дізнатися своє майбутнє в коханні"
+      }
+    ],
+    "q2_eyebrow": "КРОК 2",
+    "q2_h1": "Коли ти народилася?",
+    "q2_placeholder": "ДД.ММ.РРРР",
+    "q3_eyebrow": "КРОК 3",
+    "q3_h1": "Як нам тебе називати?",
+    "q3_placeholder": "Твоє ім'я",
+    "q4_eyebrow": "КРОК 4",
+    "q4_h1": "Що зараз турбує тебе найбільше?",
+    "q4_opts": [
+      {
+        "ic": "💞",
+        "t": "Кохання і стосунки"
+      },
+      {
+        "ic": "💼",
+        "t": "Кар'єра і гроші"
+      },
+      {
+        "ic": "🧭",
+        "t": "Життєвий шлях і рішення"
+      },
+      {
+        "ic": "🌙",
+        "t": "Внутрішній спокій і самопізнання"
+      }
+    ],
+    "q5_eyebrow": "КРОК 5",
+    "q5_h1": "Покажи нам свою долоню",
+    "q5_sub": "Необов'язково — фото твоєї відкритої долоні зробить твоє одкровення ще точнішим і особистішим.",
+    "photo_upload": "📷 Завантажити фото",
+    "photo_hint": "Чітке, добре освітлене фото твоєї відкритої долоні",
+    "photo_skip": "Пропустити, лише текстове одкровення",
+    "photo_continue": "Продовжити з цим фото →",
+    "next": "Далі →",
+    "back": "← Назад",
+    "loading_phrases": [
+      "Читаємо знаки …",
+      "Розшифровуємо енергію твого народження …",
+      "Карти вишиковуються …",
+      "Твоє одкровення набуває форми …"
+    ],
+    "loading_phrases_palm": [
+      "Вивчаємо твою долоню …",
+      "Читаємо лінії життя, серця і голови …",
+      "Лінії розповідають свою історію …",
+      "Твоє ворожіння по руці набуває форми …"
+    ],
+    "loading_sub": "Це займе лише мить",
+    "reveal_badge": "✦ Твоє одкровення",
+    "palm_badge": "✦ Твоє ворожіння по руці",
+    "reveal_fallback": "Енергія навколо тебе сьогодні незвично сильна — твоє повне одкровення чекає на тебе в персональному сеансі.",
+    "palm_fallback": "Лінії твоєї руки сьогодні важко розібрати — спробуй ще раз з чіткішим фото в персональному сеансі.",
+    "cta": "Відкрити повний сеанс · €4,99 →",
+    "disclaimer": "DEGAJA призначена для особистого орієнтиру та розваги і не замінює професійну консультацію. Це тлумачення створено системою ШІ.",
+    "legal": {
+      "impressum": "Юридична інформація",
+      "datenschutz": "Конфіденційність",
+      "agb": "Умови",
+      "widerruf": "Відмова від договору"
     },
-    ja: {
-      q1_eyebrow: "啓示",
-      q1_h1: "どんな気づきを求めていますか？",
-      q1_opts: [
-        {ic:"⏳", t:"前世の自分を知る"},
-        {ic:"✨", t:"自分の運命と目的を知る"},
-        {ic:"🌀", t:"前世があったかどうかを知る"},
-        {ic:"🌟", t:"隠れた才能に気づく"},
-        {ic:"🔮", t:"恋愛の未来を知る"}
-      ],
-      q2_eyebrow: "ステップ2",
-      q2_h1: "生年月日は？",
-      q2_placeholder: "年/月/日",
-      q3_eyebrow: "ステップ3",
-      q3_h1: "お名前を教えてください",
-      q3_placeholder: "お名前",
-      q4_eyebrow: "ステップ4",
-      q4_h1: "今、一番気になっていることは？",
-      q4_opts: [
-        {ic:"💞", t:"恋愛・人間関係"},
-        {ic:"💼", t:"仕事・お金"},
-        {ic:"🧭", t:"人生の方向性・決断"},
-        {ic:"🌙", t:"心の平穏・自己探求"}
-      ],
-      q5_eyebrow: "ステップ5",
-      q5_h1: "手のひらを見せてください",
-      q5_sub: "任意 — 手のひらの写真があると、より正確でパーソナルな結果になります。",
-      photo_upload: "📷 写真をアップロード",
-      photo_hint: "明るい場所で撮った、開いた手のひらの写真",
-      photo_skip: "スキップして、テキストのみで見る",
-      photo_continue: "この写真で進む →",
-      next: "次へ →",
-      back: "← 戻る",
-      loading_phrases: ["サインを読み取っています…", "あなたの生まれ持ったエネルギーを解読中…", "カードが並び始めています…", "啓示がまとまりつつあります…"],
-      loading_phrases_palm: ["手のひらを見ています…", "生命線・感情線・頭脳線を読み取り中…", "線があなたの物語を語っています…", "手相の結果がまとまりつつあります…"],
-      loading_sub: "少々お待ちください",
-      reveal_badge: "✦ あなたへの啓示",
-      palm_badge: "✦ あなたの手相",
-      reveal_fallback: "今日はあなたの周りのエネルギーが特に強いようです — 完全な啓示はパーソナルリーディングでお待ちしています。",
-      palm_fallback: "今日は手相の線が読み取りにくいようです — パーソナルリーディングでより鮮明な写真を試してください。",
-      cta: "フルリーディングを見る →",
-      disclaimer: "DEGAJAは個人的な指針とエンターテインメントを目的としており、専門的な助言に代わるものではありません。この鑑定はAIによって生成されました。",
-      legal: { impressum: "運営者情報", datenschutz: "プライバシー", agb: "利用規約", widerruf: "撤回" },
-      voice_loading: "音声を準備しています…",
-      voice_listen: "🔊 音声を聞く",
-      voice_playing: "⏸ 再生中…",
-      voice_unavailable: ""
+    "voice_loading": "Підготовка голосу …",
+    "voice_listen": "🔊 Слухати голос",
+    "voice_playing": "⏸ Відтворення …",
+    "voice_unavailable": "",
+    "purchase_eyebrow": "DEGAJA™ · 24/7",
+    "purchase_title": "Заглибитися",
+    "purchase_desc": "Твоя перша відповідь була безкоштовною. Розблокуй глибший особистий розклад із постійною підтримкою 24/7 просто зараз.",
+    "purchase_single": "Один розклад · €4,99",
+    "purchase_pack": "3 розклади · €9,99",
+    "purchase_note": "Одноразовий платіж · без автоматичного продовження.",
+    "purchase_back": "← Назад",
+    "purchase_error": "Оплата зараз недоступна. Спробуй пізніше."
+  },
+  "ja": {
+    "q1_eyebrow": "啓示",
+    "q1_h1": "どんな気づきを求めていますか？",
+    "q1_opts": [
+      {
+        "ic": "⏳",
+        "t": "前世の自分を知る"
+      },
+      {
+        "ic": "✨",
+        "t": "自分の運命と目的を知る"
+      },
+      {
+        "ic": "🌀",
+        "t": "前世があったかどうかを知る"
+      },
+      {
+        "ic": "🌟",
+        "t": "隠れた才能に気づく"
+      },
+      {
+        "ic": "🔮",
+        "t": "恋愛の未来を知る"
+      }
+    ],
+    "q2_eyebrow": "ステップ2",
+    "q2_h1": "生年月日は？",
+    "q2_placeholder": "年/月/日",
+    "q3_eyebrow": "ステップ3",
+    "q3_h1": "お名前を教えてください",
+    "q3_placeholder": "お名前",
+    "q4_eyebrow": "ステップ4",
+    "q4_h1": "今、一番気になっていることは？",
+    "q4_opts": [
+      {
+        "ic": "💞",
+        "t": "恋愛・人間関係"
+      },
+      {
+        "ic": "💼",
+        "t": "仕事・お金"
+      },
+      {
+        "ic": "🧭",
+        "t": "人生の方向性・決断"
+      },
+      {
+        "ic": "🌙",
+        "t": "心の平穏・自己探求"
+      }
+    ],
+    "q5_eyebrow": "ステップ5",
+    "q5_h1": "手のひらを見せてください",
+    "q5_sub": "任意 — 手のひらの写真があると、より正確でパーソナルな結果になります。",
+    "photo_upload": "📷 写真をアップロード",
+    "photo_hint": "明るい場所で撮った、開いた手のひらの写真",
+    "photo_skip": "スキップして、テキストのみで見る",
+    "photo_continue": "この写真で進む →",
+    "next": "次へ →",
+    "back": "← 戻る",
+    "loading_phrases": [
+      "サインを読み取っています…",
+      "あなたの生まれ持ったエネルギーを解読中…",
+      "カードが並び始めています…",
+      "啓示がまとまりつつあります…"
+    ],
+    "loading_phrases_palm": [
+      "手のひらを見ています…",
+      "生命線・感情線・頭脳線を読み取り中…",
+      "線があなたの物語を語っています…",
+      "手相の結果がまとまりつつあります…"
+    ],
+    "loading_sub": "少々お待ちください",
+    "reveal_badge": "✦ あなたへの啓示",
+    "palm_badge": "✦ あなたの手相",
+    "reveal_fallback": "今日はあなたの周りのエネルギーが特に強いようです — 完全な啓示はパーソナルリーディングでお待ちしています。",
+    "palm_fallback": "今日は手相の線が読み取りにくいようです — パーソナルリーディングでより鮮明な写真を試してください。",
+    "cta": "フルリーディングを見る · ¥750 →",
+    "disclaimer": "DEGAJAは個人的な指針とエンターテインメントを目的としており、専門的な助言に代わるものではありません。この鑑定はAIによって生成されました。",
+    "legal": {
+      "impressum": "運営者情報",
+      "datenschutz": "プライバシー",
+      "agb": "利用規約",
+      "widerruf": "撤回"
     },
-    zh: {
-      q1_eyebrow: "揭示",
-      q1_h1: "你想寻求什么样的个人洞察？",
-      q1_opts: [
-        {ic:"⏳", t:"看看我前世是谁"},
-        {ic:"✨", t:"揭示我的命运与使命"},
-        {ic:"🌀", t:"了解我是否有过前世"},
-        {ic:"🌟", t:"发掘我隐藏的天赋"},
-        {ic:"🔮", t:"了解我的爱情未来"}
-      ],
-      q2_eyebrow: "第2步",
-      q2_h1: "你的出生日期是？",
-      q2_placeholder: "年/月/日",
-      q3_eyebrow: "第3步",
-      q3_h1: "我们该怎么称呼你？",
-      q3_placeholder: "你的名字",
-      q4_eyebrow: "第4步",
-      q4_h1: "你现在最在意的是什么？",
-      q4_opts: [
-        {ic:"💞", t:"爱情与人际关系"},
-        {ic:"💼", t:"事业与金钱"},
-        {ic:"🧭", t:"人生方向与抉择"},
-        {ic:"🌙", t:"内心平静与自我探索"}
-      ],
-      q5_eyebrow: "第5步",
-      q5_h1: "给我们看看你的手掌",
-      q5_sub: "可选 —— 一张手掌照片能让你的揭示更准确、更个人化。",
-      photo_upload: "📷 上传照片",
-      photo_hint: "一张光线充足、平整的手掌照片",
-      photo_skip: "跳过，只看文字揭示",
-      photo_continue: "使用这张照片继续 →",
-      next: "继续 →",
-      back: "← 返回",
-      loading_phrases: ["正在解读迹象…", "正在解码你的出生能量…", "卡牌正在排列…", "你的揭示正在成形…"],
-      loading_phrases_palm: ["正在观察你的手掌…", "正在解读你的生命线、感情线与智慧线…", "纹路正在讲述它们的故事…", "你的手相解读正在成形…"],
-      loading_sub: "请稍等片刻",
-      reveal_badge: "✦ 你的揭示",
-      palm_badge: "✦ 你的手相解读",
-      reveal_fallback: "今天你周围的能量异常强烈——完整的揭示正在你的个人解读中等待着你。",
-      palm_fallback: "今天你的手纹有点难以辨认——不妨在个人解读中换一张更清晰的照片再试一次。",
-      cta: "解锁完整解读 →",
-      disclaimer: "DEGAJA 仅用于个人指引与娱乐目的，不能替代专业建议。此解读由AI系统生成。",
-      legal: { impressum: "网站信息", datenschutz: "隐私政策", agb: "条款", widerruf: "撤回权" },
-      voice_loading: "正在准备语音…",
-      voice_listen: "🔊 收听语音",
-      voice_playing: "⏸ 播放中…",
-      voice_unavailable: ""
+    "voice_loading": "音声を準備しています…",
+    "voice_listen": "🔊 音声を聞く",
+    "voice_playing": "⏸ 再生中…",
+    "voice_unavailable": "",
+    "purchase_eyebrow": "DEGAJA™ · 24時間対応",
+    "purchase_title": "さらに深く",
+    "purchase_desc": "最初の回答は無料でした。今すぐ、継続的な24時間サポート付きのより深いパーソナル鑑定をアンロックしましょう。",
+    "purchase_single": "鑑定1回 · ¥750",
+    "purchase_pack": "鑑定3回 · ¥1,490",
+    "purchase_note": "一回限りのお支払い · 自動更新はありません。",
+    "purchase_back": "← 戻る",
+    "purchase_error": "現在お支払いをご利用いただけません。後でもう一度お試しください。"
+  },
+  "zh": {
+    "q1_eyebrow": "揭示",
+    "q1_h1": "你想寻求什么样的个人洞察？",
+    "q1_opts": [
+      {
+        "ic": "⏳",
+        "t": "看看我前世是谁"
+      },
+      {
+        "ic": "✨",
+        "t": "揭示我的命运与使命"
+      },
+      {
+        "ic": "🌀",
+        "t": "了解我是否有过前世"
+      },
+      {
+        "ic": "🌟",
+        "t": "发掘我隐藏的天赋"
+      },
+      {
+        "ic": "🔮",
+        "t": "了解我的爱情未来"
+      }
+    ],
+    "q2_eyebrow": "第2步",
+    "q2_h1": "你的出生日期是？",
+    "q2_placeholder": "年/月/日",
+    "q3_eyebrow": "第3步",
+    "q3_h1": "我们该怎么称呼你？",
+    "q3_placeholder": "你的名字",
+    "q4_eyebrow": "第4步",
+    "q4_h1": "你现在最在意的是什么？",
+    "q4_opts": [
+      {
+        "ic": "💞",
+        "t": "爱情与人际关系"
+      },
+      {
+        "ic": "💼",
+        "t": "事业与金钱"
+      },
+      {
+        "ic": "🧭",
+        "t": "人生方向与抉择"
+      },
+      {
+        "ic": "🌙",
+        "t": "内心平静与自我探索"
+      }
+    ],
+    "q5_eyebrow": "第5步",
+    "q5_h1": "给我们看看你的手掌",
+    "q5_sub": "可选 —— 一张手掌照片能让你的揭示更准确、更个人化。",
+    "photo_upload": "📷 上传照片",
+    "photo_hint": "一张光线充足、平整的手掌照片",
+    "photo_skip": "跳过，只看文字揭示",
+    "photo_continue": "使用这张照片继续 →",
+    "next": "继续 →",
+    "back": "← 返回",
+    "loading_phrases": [
+      "正在解读迹象…",
+      "正在解码你的出生能量…",
+      "卡牌正在排列…",
+      "你的揭示正在成形…"
+    ],
+    "loading_phrases_palm": [
+      "正在观察你的手掌…",
+      "正在解读你的生命线、感情线与智慧线…",
+      "纹路正在讲述它们的故事…",
+      "你的手相解读正在成形…"
+    ],
+    "loading_sub": "请稍等片刻",
+    "reveal_badge": "✦ 你的揭示",
+    "palm_badge": "✦ 你的手相解读",
+    "reveal_fallback": "今天你周围的能量异常强烈——完整的揭示正在你的个人解读中等待着你。",
+    "palm_fallback": "今天你的手纹有点难以辨认——不妨在个人解读中换一张更清晰的照片再试一次。",
+    "cta": "解锁完整解读 · ¥39 →",
+    "disclaimer": "DEGAJA 仅用于个人指引与娱乐目的，不能替代专业建议。此解读由AI系统生成。",
+    "legal": {
+      "impressum": "网站信息",
+      "datenschutz": "隐私政策",
+      "agb": "条款",
+      "widerruf": "撤回权"
     },
-    hi: {
-      q1_eyebrow: "रहस्योद्घाटन",
-      q1_h1: "आप किस व्यक्तिगत अंतर्दृष्टि की तलाश में हैं?",
-      q1_opts: [
-        {ic:"⏳", t:"जानें मैं पिछले जन्म में कौन था/थी"},
-        {ic:"✨", t:"अपना भाग्य और उद्देश्य जानें"},
-        {ic:"🌀", t:"पता करें कि क्या मेरा कोई पिछला जन्म था"},
-        {ic:"🌟", t:"अपनी छिपी हुई क्षमताओं को पहचानें"},
-        {ic:"🔮", t:"अपने प्रेम भविष्य के बारे में जानें"}
-      ],
-      q2_eyebrow: "चरण 2",
-      q2_h1: "आपका जन्म कब हुआ था?",
-      q2_placeholder: "दिन/माह/वर्ष",
-      q3_eyebrow: "चरण 3",
-      q3_h1: "हम आपको क्या कहकर पुकारें?",
-      q3_placeholder: "आपका पहला नाम",
-      q4_eyebrow: "चरण 4",
-      q4_h1: "अभी आपके मन में सबसे ज़्यादा क्या चल रहा है?",
-      q4_opts: [
-        {ic:"💞", t:"प्रेम और रिश्ते"},
-        {ic:"💼", t:"करियर और पैसा"},
-        {ic:"🧭", t:"जीवन पथ और फैसले"},
-        {ic:"🌙", t:"आंतरिक शांति और आत्म-खोज"}
-      ],
-      q5_eyebrow: "चरण 5",
-      q5_h1: "हमें अपनी हथेली दिखाएं",
-      q5_sub: "वैकल्पिक — आपकी खुली हथेली की एक तस्वीर आपके रहस्योद्घाटन को और सटीक और व्यक्तिगत बना देती है।",
-      photo_upload: "📷 फोटो अपलोड करें",
-      photo_hint: "आपकी खुली हथेली की एक स्पष्ट, अच्छी रोशनी वाली तस्वीर",
-      photo_skip: "छोड़ें, सिर्फ टेक्स्ट रहस्योद्घाटन देखें",
-      photo_continue: "इस फोटो के साथ आगे बढ़ें →",
-      next: "आगे बढ़ें →",
-      back: "← वापस",
-      loading_phrases: ["संकेतों को पढ़ा जा रहा है…", "आपकी जन्म ऊर्जा को समझा जा रहा है…", "कार्ड्स व्यवस्थित हो रहे हैं…", "आपका रहस्योद्घाटन आकार ले रहा है…"],
-      loading_phrases_palm: ["आपकी हथेली का अध्ययन किया जा रहा है…", "जीवन रेखा, हृदय रेखा और मस्तिष्क रेखा पढ़ी जा रही है…", "रेखाएं अपनी कहानी बता रही हैं…", "आपका हस्तरेखा पाठ आकार ले रहा है…"],
-      loading_sub: "कृपया एक क्षण प्रतीक्षा करें",
-      reveal_badge: "✦ आपका रहस्योद्घाटन",
-      palm_badge: "✦ आपका हस्तरेखा पाठ",
-      reveal_fallback: "आज आपके आसपास की ऊर्जा असामान्य रूप से प्रबल है — आपका पूरा रहस्योद्घाटन आपकी व्यक्तिगत रीडिंग में प्रतीक्षा कर रहा है।",
-      palm_fallback: "आज आपकी हथेली की रेखाएं पढ़ना मुश्किल है — अपनी व्यक्तिगत रीडिंग में एक स्पष्ट फोटो के साथ फिर कोशिश करें।",
-      cta: "अपनी पूरी रीडिंग अनलॉक करें →",
-      disclaimer: "DEGAJA केवल व्यक्तिगत मार्गदर्शन और मनोरंजन के उद्देश्य से है और यह पेशेवर सलाह का विकल्प नहीं है। यह रीडिंग एक AI सिस्टम द्वारा तैयार की गई है।",
-      legal: { impressum: "कानूनी सूचना", datenschutz: "गोपनीयता", agb: "शर्तें", widerruf: "निरसन" },
-      voice_loading: "आवाज़ तैयार की जा रही है…",
-      voice_listen: "🔊 आवाज़ सुनें",
-      voice_playing: "⏸ चल रहा है…",
-      voice_unavailable: ""
-    }
-  };
-
+    "voice_loading": "正在准备语音…",
+    "voice_listen": "🔊 收听语音",
+    "voice_playing": "⏸ 播放中…",
+    "voice_unavailable": "",
+    "purchase_eyebrow": "DEGAJA™ · 24/7",
+    "purchase_title": "深入解读",
+    "purchase_desc": "你的第一次解答是免费的。现在解锁更深入的专属解读，并享有持续的24/7支持。",
+    "purchase_single": "单次解读 · ¥39",
+    "purchase_pack": "3次解读 · ¥79",
+    "purchase_note": "一次性付款 · 不会自动续费。",
+    "purchase_back": "← 返回",
+    "purchase_error": "暂时无法完成支付，请稍后再试。"
+  },
+  "hi": {
+    "q1_eyebrow": "रहस्योद्घाटन",
+    "q1_h1": "आप किस व्यक्तिगत अंतर्दृष्टि की तलाश में हैं?",
+    "q1_opts": [
+      {
+        "ic": "⏳",
+        "t": "जानें मैं पिछले जन्म में कौन था/थी"
+      },
+      {
+        "ic": "✨",
+        "t": "अपना भाग्य और उद्देश्य जानें"
+      },
+      {
+        "ic": "🌀",
+        "t": "पता करें कि क्या मेरा कोई पिछला जन्म था"
+      },
+      {
+        "ic": "🌟",
+        "t": "अपनी छिपी हुई क्षमताओं को पहचानें"
+      },
+      {
+        "ic": "🔮",
+        "t": "अपने प्रेम भविष्य के बारे में जानें"
+      }
+    ],
+    "q2_eyebrow": "चरण 2",
+    "q2_h1": "आपका जन्म कब हुआ था?",
+    "q2_placeholder": "दिन/माह/वर्ष",
+    "q3_eyebrow": "चरण 3",
+    "q3_h1": "हम आपको क्या कहकर पुकारें?",
+    "q3_placeholder": "आपका पहला नाम",
+    "q4_eyebrow": "चरण 4",
+    "q4_h1": "अभी आपके मन में सबसे ज़्यादा क्या चल रहा है?",
+    "q4_opts": [
+      {
+        "ic": "💞",
+        "t": "प्रेम और रिश्ते"
+      },
+      {
+        "ic": "💼",
+        "t": "करियर और पैसा"
+      },
+      {
+        "ic": "🧭",
+        "t": "जीवन पथ और फैसले"
+      },
+      {
+        "ic": "🌙",
+        "t": "आंतरिक शांति और आत्म-खोज"
+      }
+    ],
+    "q5_eyebrow": "चरण 5",
+    "q5_h1": "हमें अपनी हथेली दिखाएं",
+    "q5_sub": "वैकल्पिक — आपकी खुली हथेली की एक तस्वीर आपके रहस्योद्घाटन को और सटीक और व्यक्तिगत बना देती है।",
+    "photo_upload": "📷 फोटो अपलोड करें",
+    "photo_hint": "आपकी खुली हथेली की एक स्पष्ट, अच्छी रोशनी वाली तस्वीर",
+    "photo_skip": "छोड़ें, सिर्फ टेक्स्ट रहस्योद्घाटन देखें",
+    "photo_continue": "इस फोटो के साथ आगे बढ़ें →",
+    "next": "आगे बढ़ें →",
+    "back": "← वापस",
+    "loading_phrases": [
+      "संकेतों को पढ़ा जा रहा है…",
+      "आपकी जन्म ऊर्जा को समझा जा रहा है…",
+      "कार्ड्स व्यवस्थित हो रहे हैं…",
+      "आपका रहस्योद्घाटन आकार ले रहा है…"
+    ],
+    "loading_phrases_palm": [
+      "आपकी हथेली का अध्ययन किया जा रहा है…",
+      "जीवन रेखा, हृदय रेखा और मस्तिष्क रेखा पढ़ी जा रही है…",
+      "रेखाएं अपनी कहानी बता रही हैं…",
+      "आपका हस्तरेखा पाठ आकार ले रहा है…"
+    ],
+    "loading_sub": "कृपया एक क्षण प्रतीक्षा करें",
+    "reveal_badge": "✦ आपका रहस्योद्घाटन",
+    "palm_badge": "✦ आपका हस्तरेखा पाठ",
+    "reveal_fallback": "आज आपके आसपास की ऊर्जा असामान्य रूप से प्रबल है — आपका पूरा रहस्योद्घाटन आपकी व्यक्तिगत रीडिंग में प्रतीक्षा कर रहा है।",
+    "palm_fallback": "आज आपकी हथेली की रेखाएं पढ़ना मुश्किल है — अपनी व्यक्तिगत रीडिंग में एक स्पष्ट फोटो के साथ फिर कोशिश करें।",
+    "cta": "अपनी पूरी रीडिंग अनलॉक करें · ₹249 →",
+    "disclaimer": "DEGAJA केवल व्यक्तिगत मार्गदर्शन और मनोरंजन के उद्देश्य से है और यह पेशेवर सलाह का विकल्प नहीं है। यह रीडिंग एक AI सिस्टम द्वारा तैयार की गई है।",
+    "legal": {
+      "impressum": "कानूनी सूचना",
+      "datenschutz": "गोपनीयता",
+      "agb": "शर्तें",
+      "widerruf": "निरसन"
+    },
+    "voice_loading": "आवाज़ तैयार की जा रही है…",
+    "voice_listen": "🔊 आवाज़ सुनें",
+    "voice_playing": "⏸ चल रहा है…",
+    "voice_unavailable": "",
+    "purchase_eyebrow": "DEGAJA™ · 24/7",
+    "purchase_title": "और गहराई में जाओ",
+    "purchase_desc": "तुम्हारा पहला जवाब मुफ़्त था। अभी चल रहे 24/7 सपोर्ट के साथ एक गहरी व्यक्तिगत रीडिंग अनलॉक करो।",
+    "purchase_single": "एक रीडिंग · ₹249",
+    "purchase_pack": "3 रीडिंग्स · ₹499",
+    "purchase_note": "एक बार का भुगतान · कोई ऑटोमैटिक रिन्यूअल नहीं।",
+    "purchase_back": "← वापस",
+    "purchase_error": "अभी भुगतान उपलब्ध नहीं है। कृपया बाद में फिर कोशिश करो।"
+  }
+};
   var SUPPORTED_LANGS = ["de", "en", "fr", "es", "it", "pt", "ru", "uk", "br", "ja", "zh", "hi"];
   // Brazilian Portuguese gets its own translation above (real differences
   // from European Portuguese: você vs tu, different verb constructions).
@@ -1053,6 +1646,8 @@
   }
 
   var revealAudio = null;
+  var lastQuestion = "";
+  var lastTopic = "";
 
   function loadVoice(text, btn){
     btn.disabled = true;
@@ -1090,6 +1685,44 @@
     return dest + (dest.indexOf("?") === -1 ? "?" : "&") + "utm_source=" + encodeURIComponent(ref) + "&utm_campaign=quiz";
   }
 
+  function startQuizCheckout(product){
+    try {
+      localStorage.setItem("degajaPendingReading", JSON.stringify({ question: lastQuestion, topic: lastTopic }));
+    } catch (_) {}
+    fetch("/api/checkout", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ product: product, birthDate: answers.birthdate, lang: lang, ref: ref })
+    }).then(function(r){
+      return r.json().then(function(data){ return { ok: r.ok, data: data }; });
+    }).then(function(result){
+      if (!result.ok || !result.data.url) throw new Error("checkout failed");
+      window.location.href = result.data.url;
+    }).catch(function(){
+      alert(t().purchase_error);
+    });
+  }
+
+  function openPurchaseModal(){
+    var overlay = document.createElement("div");
+    overlay.className = "quiz-modal-overlay";
+    overlay.innerHTML =
+      '<div class="quiz-modal">' +
+        '<div class="eyebrow">' + t().purchase_eyebrow + '</div>' +
+        '<h2>' + t().purchase_title + '</h2>' +
+        '<p>' + t().purchase_desc + '</p>' +
+        '<button class="quiz-modal-btn" id="pmSingle">' + t().purchase_single + '</button>' +
+        '<button class="quiz-modal-btn" id="pmPack">' + t().purchase_pack + '</button>' +
+        '<div class="quiz-modal-note">' + t().purchase_note + '</div>' +
+        '<button class="quiz-modal-close" id="pmClose">' + t().purchase_back + '</button>' +
+      '</div>';
+    document.body.appendChild(overlay);
+    overlay.addEventListener("click", function(e){ if (e.target === overlay) overlay.remove(); });
+    document.getElementById("pmClose").addEventListener("click", function(){ overlay.remove(); });
+    document.getElementById("pmSingle").addEventListener("click", function(){ startQuizCheckout("single"); });
+    document.getElementById("pmPack").addEventListener("click", function(){ startQuizCheckout("pack"); });
+  }
+
   function legalLinksHtml(){
     var l = t().legal || {};
     return '<div class="quiz-legal-links">' +
@@ -1105,6 +1738,8 @@
     html += '<button class="quiz-voice-btn" id="voiceBtn" disabled>' + t().voice_loading + '</button></div>';
     html += '<div class="quiz-reveal-card"><div class="quiz-reveal-text" id="revealText"></div></div>';
     html += '<button class="quiz-cta" id="ctaBtn">' + t().cta + '</button>';
+    html += '<div class="quiz-pack-hint">' + t().purchase_pack + '</div>';
+    html += '<div class="quiz-trust-note">🔒 ' + t().purchase_note + '</div>';
     html += '<div class="quiz-disclaimer">' + t().disclaimer + '</div>';
     html += legalLinksHtml();
     setCard(html);
@@ -1112,7 +1747,7 @@
     loadVoice(text, document.getElementById("voiceBtn"));
     document.getElementById("ctaBtn").addEventListener("click", function(){
       if (revealAudio) revealAudio.pause();
-      location.href = ctaDestination();
+      openPurchaseModal();
     });
   }
 
@@ -1139,13 +1774,15 @@
       html += '<p>' + escapeHtml(s.body) + '</p></div>';
     });
     html += '<button class="quiz-cta" id="ctaBtn">' + t().cta + '</button>';
+    html += '<div class="quiz-pack-hint">' + t().purchase_pack + '</div>';
+    html += '<div class="quiz-trust-note">🔒 ' + t().purchase_note + '</div>';
     html += '<div class="quiz-disclaimer">' + t().disclaimer + '</div>';
     html += legalLinksHtml();
     setCard(html);
     loadVoice(sections[0].body, document.getElementById("voiceBtn"));
     document.getElementById("ctaBtn").addEventListener("click", function(){
       if (revealAudio) revealAudio.pause();
-      location.href = ctaDestination();
+      openPurchaseModal();
     });
   }
 
@@ -1159,6 +1796,8 @@
     updateProgress(100);
 
     if (answers.palmImage) {
+      lastQuestion = answers.insight || "";
+      lastTopic = REVEAL_TOPIC[lang];
       renderLoading(t().loading_phrases_palm);
       var minWaitPalm = new Promise(function(resolve){ setTimeout(resolve, 3600); });
       var palmRequest = fetch("/api/palm", {
@@ -1192,6 +1831,8 @@
       .replace("{birthdate}", answers.birthdate)
       .replace("{insight}", answers.insight)
       .replace("{focus}", answers.focus);
+    lastQuestion = question;
+    lastTopic = REVEAL_TOPIC[lang];
 
     var minWait = new Promise(function(resolve){ setTimeout(resolve, 3200); });
     var request = fetch("/api/oracle", {
