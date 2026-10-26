@@ -42,10 +42,12 @@ detail — read it at the start of any new session on this repo.
 - **2026-10-26: CCBill's compliance/underwriting team sent their first
   review.** Open items from that review (ask Yoel for current status if not
   obvious from recent conversation):
-  - Underwriting: proof-of-address document (Yoel's own, not something
-    Claude can produce) and confirming `info@degaja.com` as a secondary
-    account email, CC'd on all future CCBill correspondence (ceo@degaja.com
-    stays primary).
+  - Underwriting: proof-of-address document — **already sent by Yoel**
+    (confirmed received by CCBill Sales Support rep Marija Mitic, forwarded
+    to their Compliance team for review, response pending as of 2026-10-26
+    evening). Also confirming `info@degaja.com` as a secondary account
+    email, CC'd on all future CCBill correspondence (ceo@degaja.com stays
+    primary) — sent in the same reply.
   - Compliance: a written consumer purchase flow and a full services/products
     list were drafted and sent back (same lists belong here if a future
     session needs them again — see git history around this date, or ask
