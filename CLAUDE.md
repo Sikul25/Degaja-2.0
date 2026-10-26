@@ -108,11 +108,19 @@ DEGAJA should contrast against, not emulate. The established pattern:
   loads it. Check with `grep -rn 'scriptname.js?v=' *.html` first — not all
   shared scripts are loaded by all pages (e.g. only `index.html` loads
   `script.js`; the legal pages don't).
-- **Standalone quiz pages** (`quiz.html`, `love-quiz.html`, `time-tunnel.html`) do **not** load
-  `script.js` or `i18n.js` — each is fully self-contained with its own
-  embedded `STR` object, language detection, and mini purchase flow. They
-  call the same shared backend endpoints (`/api/oracle`, `/api/palm`,
-  `/api/checkout`) as the main site.
+- **Standalone pages** (`quiz.html`, `love-quiz.html`, `time-tunnel.html`,
+  `dream.html`) do **not** load `script.js` or `i18n.js` — each is fully
+  self-contained with its own embedded `STR` object, language detection,
+  and mini purchase flow. They call the same shared backend endpoints
+  (`/api/oracle`, `/api/palm`, `/api/dream`, `/api/checkout`) as the main
+  site. `dream.html` was converted from an inline `#dream` section on the
+  homepage (2026-10-26, for symmetry with the other three) — it calls
+  `/api/dream` directly for the free reading (to keep its dedicated
+  non-denominational system prompt), but the paid "go deeper" reading
+  still goes through `/api/oracle` like every other feature's deep flow,
+  seeded by a synthetic question built from what the user actually typed.
+  Any future conversion of another inline main-site section into its own
+  standalone page should follow this same pattern.
 - **Cross-page payment resumption**: `localStorage["degajaPendingReading"]`
   — set by `stashPendingReading()` (main site) or inline in a standalone
   page before redirecting to checkout — is read automatically by the main
