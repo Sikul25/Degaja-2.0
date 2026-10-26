@@ -50,3 +50,11 @@ footer{text-align:center;padding:45px 22px 65px;border-top:1px solid var(--line)
   .tab-label{font-size:10.5px}
   .tab-btn.active{color:var(--blue)}
 }
+.dream-loading{display:flex;flex-direction:column;align-items:center;gap:12px;padding:8px 0 4px}
+.dream-orbit-wrap{position:relative;width:76px;height:76px;display:grid;place-items:center}
+.dream-orbit-ring{position:absolute;inset:0;border-radius:50%;border:2px solid rgba(74,160,224,.4);animation:dreamSpin 6s linear infinite}
+.dream-orbit-ring.r2{inset:-10px;border-color:rgba(231,195,114,.55);animation-duration:9s;animation-direction:reverse}
+.dream-orbit-core{width:48px;height:48px;border-radius:50%;background:radial-gradient(circle at 38% 32%,#ffffff 0%,#eaf6ff 20%,#9fd8ff 42%,#4aa0e0 62%,#e7c372 82%,#1c3450 100%);box-shadow:0 0 30px rgba(159,216,255,.5),0 0 20px rgba(231,195,114,.35);animation:dreamPulse 1.7s ease-in-out infinite}
+@keyframes dreamSpin{to{transform:rotate(360deg)}}
+@keyframes dreamPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.08)}}
+@media(prefers-reduced-motion:reduce){.dream-orbit-ring,.dream-orbit-core{animation:none}}

@@ -1124,7 +1124,11 @@
       button.textContent = t("dream.analyzing");
     }
     if (result) {
-      result.innerHTML = `<strong>${t("dream.analyzing")}</strong>`;
+      result.innerHTML = `
+        <div class="dream-loading">
+          <div class="dream-orbit-wrap"><div class="dream-orbit-ring"></div><div class="dream-orbit-ring r2"></div><div class="dream-orbit-core"></div></div>
+          <strong>${t("dream.analyzing")}</strong>
+        </div>`;
       result.classList.add("show");
     }
 
