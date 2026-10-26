@@ -1685,11 +1685,6 @@
     }).catch(function(){ btn.style.display = "none"; });
   }
 
-  function ctaDestination(){
-    var dest = lang === "de" ? "/" : "/" + lang;
-    return dest + (dest.indexOf("?") === -1 ? "?" : "&") + "utm_source=" + encodeURIComponent(ref) + "&utm_campaign=love-quiz";
-  }
-
   // Deep-reading upsell, matching the main site's price/wording exactly.
   // On success, Stripe redirects to the homepage; stashing the pending
   // question in the same localStorage key the main site's script.js reads
