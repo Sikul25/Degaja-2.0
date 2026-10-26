@@ -99,6 +99,8 @@
       "dream.disclaimer": "Traumdeutung dient der persönlichen Unterhaltung und Reflexion und ersetzt keine professionelle Beratung. Diese Deutung wird von DEGAJA AI erstellt.",
       "dream.syntheticQuestion": "Was bedeutet mein Traum?",
       "dream.topic": "Traumdeutung",
+      "services.timetunnel.title": "Zeittunnel",
+      "services.timetunnel.desc": "Entdecke in wenigen Fragen deine Reise durch Vergangenheit, Gegenwart und Zukunft.",
       "hypnosis.eyebrow": "✦ DEGAJA™ ENTSPANNUNG™ ✦",
       "hypnosis.title": "Dein Atem. Deine Ruhe.",
       "hypnosis.intro": "Wähle deinen Fokus – DEGAJA erstellt dir eine persönliche geführte Entspannungsreise zum Anhören oder Lesen.",
@@ -557,6 +559,8 @@
       "dream.disclaimer": "Dream interpretation is for personal entertainment and reflection and does not replace professional advice. This reading is created by DEGAJA AI.",
       "dream.syntheticQuestion": "What does my dream mean?",
       "dream.topic": "Dream interpretation",
+      "services.timetunnel.title": "Time Tunnel",
+      "services.timetunnel.desc": "Discover in a few questions your journey through past, present and future.",
       "hypnosis.eyebrow": "✦ DEGAJA™ RELAXATION™ ✦",
       "hypnosis.title": "Your Breath. Your Calm.",
       "hypnosis.intro": "Choose your focus – DEGAJA creates a personal guided relaxation journey for you to listen to or read.",
@@ -999,6 +1003,8 @@
       "dream.disclaimer": "L'interprétation des rêves sert au divertissement personnel et à la réflexion et ne remplace pas un conseil professionnel. Cette interprétation est générée par DEGAJA AI.",
       "dream.syntheticQuestion": "Que signifie mon rêve ?",
       "dream.topic": "Interprétation des rêves",
+      "services.timetunnel.title": "Tunnel temporel",
+      "services.timetunnel.desc": "Découvre en quelques questions ton voyage à travers le passé, le présent et le futur.",
       "numerology.topic": "Numérologie",
       "hypnosis.eyebrow": "✦ DÉTENTE™ DEGAJA™ ✦",
       "hypnosis.title": "Ton souffle. Ton calme.",
@@ -1442,6 +1448,8 @@
       "dream.disclaimer": "La interpretación de sueños es para entretenimiento personal y reflexión y no sustituye el asesoramiento profesional. Esta interpretación es creada por DEGAJA AI.",
       "dream.syntheticQuestion": "¿Qué significa mi sueño?",
       "dream.topic": "Interpretación de sueños",
+      "services.timetunnel.title": "Túnel del tiempo",
+      "services.timetunnel.desc": "Descubre en pocas preguntas tu viaje a través del pasado, el presente y el futuro.",
       "numerology.topic": "Numerología",
       "hypnosis.eyebrow": "✦ RELAJACIÓN™ DEGAJA™ ✦",
       "hypnosis.title": "Tu respiración. Tu calma.",
@@ -1885,6 +1893,8 @@
       "dream.disclaimer": "L'interpretazione dei sogni serve all'intrattenimento personale e alla riflessione e non sostituisce una consulenza professionale. Questa interpretazione è creata da DEGAJA AI.",
       "dream.syntheticQuestion": "Cosa significa il mio sogno?",
       "dream.topic": "Interpretazione dei sogni",
+      "services.timetunnel.title": "Tunnel del tempo",
+      "services.timetunnel.desc": "Scopri in poche domande il tuo viaggio tra passato, presente e futuro.",
       "numerology.topic": "Numerologia",
       "hypnosis.eyebrow": "✦ RILASSAMENTO™ DEGAJA™ ✦",
       "hypnosis.title": "Il tuo respiro. La tua calma.",
@@ -2328,6 +2338,8 @@
       "dream.disclaimer": "A interpretação de sonhos serve para entretenimento pessoal e reflexão e não substitui aconselhamento profissional. Esta interpretação é criada pela DEGAJA AI.",
       "dream.syntheticQuestion": "O que significa o meu sonho?",
       "dream.topic": "Interpretação de sonhos",
+      "services.timetunnel.title": "Túnel do tempo",
+      "services.timetunnel.desc": "Descobre em poucas perguntas a tua viagem pelo passado, presente e futuro.",
       "numerology.topic": "Numerologia",
       "hypnosis.eyebrow": "✦ RELAXAMENTO™ DEGAJA™ ✦",
       "hypnosis.title": "A tua respiração. A tua calma.",
@@ -2771,6 +2783,8 @@
       "dream.disclaimer": "Толкование снов предназначено для личного развлечения и размышлений и не заменяет профессиональную консультацию. Эта трактовка создана DEGAJA AI.",
       "dream.syntheticQuestion": "Что означает мой сон?",
       "dream.topic": "Толкование снов",
+      "services.timetunnel.title": "Туннель времени",
+      "services.timetunnel.desc": "Узнай всего за несколько вопросов своё путешествие сквозь прошлое, настоящее и будущее.",
       "numerology.topic": "Нумерология",
       "hypnosis.eyebrow": "✦ РЕЛАКСАЦИЯ™ DEGAJA™ ✦",
       "hypnosis.title": "Твоё дыхание. Твой покой.",
@@ -3216,6 +3230,8 @@
       "dream.disclaimer": "Тлумачення снів призначене для особистої розваги та роздумів і не замінює професійну консультацію. Це тлумачення створено DEGAJA AI.",
       "dream.syntheticQuestion": "Що означає мій сон?",
       "dream.topic": "Тлумачення снів",
+      "services.timetunnel.title": "Тунель часу",
+      "services.timetunnel.desc": "Дізнайся всього за кілька запитань свою подорож крізь минуле, теперішнє і майбутнє.",
       "numerology.topic": "Нумерологія",
       "hypnosis.eyebrow": "✦ РЕЛАКСАЦІЯ™ DEGAJA™ ✦",
       "hypnosis.title": "Твоє дихання. Твій спокій.",
@@ -3675,6 +3691,8 @@
       "dream.disclaimer": "夢占いは個人的な娯楽と自己観察を目的としており、専門家による助言の代わりにはなりません。この鑑定はDEGAJA AIによって作成されます。",
       "dream.syntheticQuestion": "私の夢はどんな意味がありますか？",
       "dream.topic": "夢占い",
+      "services.timetunnel.title": "タイムトンネル",
+      "services.timetunnel.desc": "いくつかの質問で、過去・現在・未来を巡るあなたの旅を発見しましょう。",
       "hypnosis.eyebrow": "✦ DEGAJA™ リラクゼーション™ ✦",
       "hypnosis.title": "あなたの呼吸。あなたの安らぎ。",
       "hypnosis.intro": "フォーカスしたいことを選んでください – DEGAJAが聴いたり読んだりできる個人的な誘導リラクゼーションの旅を作成します。",
@@ -4071,6 +4089,8 @@
       "dream.disclaimer": "解梦仅供个人娱乐与反思之用，不能替代专业建议。此解读由DEGAJA AI生成。",
       "dream.syntheticQuestion": "我的梦意味着什么？",
       "dream.topic": "解梦",
+      "services.timetunnel.title": "时间隧道",
+      "services.timetunnel.desc": "通过几个简单问题，发现你穿越过去、现在与未来的旅程。",
       "hypnosis.eyebrow": "✦ DEGAJA™ 身心放松™ ✦",
       "hypnosis.title": "你的呼吸。你的平静。",
       "hypnosis.intro": "选择你的关注点——DEGAJA将为你打造一段专属的引导式放松之旅，供你聆听或阅读。",
@@ -4453,6 +4473,8 @@
       "dream.disclaimer": "स्वप्न व्याख्या व्यक्तिगत मनोरंजन और आत्म-चिंतन के लिए है और पेशेवर सलाह की जगह नहीं लेती। यह रीडिंग DEGAJA AI द्वारा बनाई जाती है।",
       "dream.syntheticQuestion": "मेरे सपने का क्या मतलब है?",
       "dream.topic": "स्वप्न व्याख्या",
+      "services.timetunnel.title": "समय सुरंग",
+      "services.timetunnel.desc": "कुछ सवालों में जानो अतीत, वर्तमान और भविष्य से होकर तुम्हारी यात्रा।",
       "numerology.topic": "अंकशास्त्र",
       "hypnosis.eyebrow": "✦ DEGAJA™ रिलैक्सेशन™ ✦",
       "hypnosis.title": "तुम्हारी सांस। तुम्हारा सुकून।",
@@ -5041,12 +5063,13 @@
       loveQuizBanner.setAttribute("href", "love-quiz.html?lang=" + loveQuizLang);
     }
 
-    // Same again for time-tunnel.html.
-    const timeTunnelBanner = document.querySelector(".time-tunnel-trend-bar");
-    if (timeTunnelBanner) {
+    // Same again for time-tunnel.html — both the homepage banner and the
+    // services-grid card link to it, so rewrite both.
+    const timeTunnelLinks = document.querySelectorAll(".time-tunnel-trend-bar, .time-tunnel-card");
+    if (timeTunnelLinks.length) {
       const mapped3 = QUIZ_LANG_ALIAS[getLang()] || getLang();
       const timeTunnelLang = QUIZ_SUPPORTED.includes(mapped3) ? mapped3 : "en";
-      timeTunnelBanner.setAttribute("href", "time-tunnel.html?lang=" + timeTunnelLang);
+      timeTunnelLinks.forEach(el => el.setAttribute("href", "time-tunnel.html?lang=" + timeTunnelLang));
     }
   }
 
