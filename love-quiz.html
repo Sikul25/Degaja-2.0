@@ -48,7 +48,7 @@
     .quiz-opt .arrow{margin-left:auto;opacity:0;transform:translateX(-4px);transition:.2s;color:#e7c372}
     .quiz-opt:hover .arrow{opacity:1;transform:translateX(0)}
 
-    .quiz-input{width:100%;padding:17px 18px;border-radius:18px;border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.05);color:#fff;font-size:17px;text-align:center;outline:0;transition:.2s}
+    .quiz-input{width:100%;padding:17px 18px;border-radius:18px;border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.05);color:#fff;font-size:17px;text-align:center;outline:0;transition:.2s;color-scheme:dark}
     .quiz-input::placeholder{color:rgba(255,255,255,.35)}
     .quiz-input:focus{border-color:#e7c372;background:rgba(255,255,255,.08);box-shadow:0 0 0 4px rgba(231,195,114,.12)}
 
@@ -1530,7 +1530,7 @@
         step = 2; render();
       });
     } else if (step === 2) {
-      renderInputStep(t().q2_eyebrow, t().q2_h1, t().q2_placeholder, "text", function(val){
+      renderInputStep(t().q2_eyebrow, t().q2_h1, t().q2_placeholder, "date", function(val){
         answers.birthdate = val;
         step = 3; render();
       }, answers.birthdate);
