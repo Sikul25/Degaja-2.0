@@ -132,6 +132,19 @@ DEGAJA should contrast against, not emulate. The established pattern:
   actual deployed file (Vercel tools) to check source-of-truth when a
   reported bug seems inconsistent with the code — several "bugs" turned out
   to be the reporter's own browser cache.
+- **Birthdate fields must be `<input type="date">`, never free text.** A
+  free-text birthdate field with a locale placeholder (e.g. "JJ/MM/AAAA",
+  "TT.MM.JJJJ") relies on the user typing a day-first or dot-separated date,
+  which JS's `new Date(str)` cannot parse reliably: `new Date("14/05/1990")`
+  is `Invalid Date` whenever the day is >12, and silently swaps day/month
+  the rest of the time. Since `api/checkout.js`'s 18+ check runs
+  `new Date(birthDate)`, a free-text field here makes checkout reject real
+  adult users with a generic error — this was a real, live bug on both
+  `quiz.html` and `love-quiz.html` (found 2026-10-26 via a user screenshot).
+  A native `<input type="date">` sidesteps this entirely: its `.value` is
+  always ISO `yyyy-mm-dd` regardless of display locale. The main site's
+  numerology/palm birthdate inputs already did this correctly — match that
+  pattern for any new birthdate field.
 - Mixing an RTL character (e.g. Hebrew ה) directly next to a Latin digit/word
   in plain text can render reversed in-browser (bidi algorithm artifact).
   Don't try to force direction with Unicode control characters — use an
