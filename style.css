@@ -50,3 +50,7 @@ footer{text-align:center;padding:45px 22px 65px;border-top:1px solid var(--line)
   .tab-label{font-size:10.5px}
   .tab-btn.active{color:var(--blue)}
 }
+.ai-loading{display:flex;align-items:center;gap:12px}
+.ai-loading-spinner{width:22px;height:22px;border-radius:50%;border:3px solid rgba(57,143,194,.22);border-top-color:var(--blue);flex:0 0 auto;animation:aiSpin .85s linear infinite}
+@keyframes aiSpin{to{transform:rotate(360deg)}}
+@media(prefers-reduced-motion:reduce){.ai-loading-spinner{animation:none}}

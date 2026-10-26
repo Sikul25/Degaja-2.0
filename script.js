@@ -886,7 +886,7 @@
       button.textContent = t("palm.analyzing");
     }
     if (result) {
-      result.innerHTML = `<strong>${t("palm.analyzing")}</strong>`;
+      result.innerHTML = `<div class="ai-loading"><div class="ai-loading-spinner"></div><strong>${t("palm.analyzing")}</strong></div>`;
       result.classList.add("show");
     }
     previewWrap?.classList.add("scanning");
@@ -966,7 +966,7 @@
       button.textContent = t("coffee.analyzing");
     }
     if (result) {
-      result.innerHTML = `<strong>${t("coffee.analyzing")}</strong>`;
+      result.innerHTML = `<div class="ai-loading"><div class="ai-loading-spinner"></div><strong>${t("coffee.analyzing")}</strong></div>`;
       result.classList.add("show");
     }
     previewWrap?.classList.add("scanning");
@@ -1012,7 +1012,7 @@
       button.textContent = t("gematria.analyzing");
     }
     if (result) {
-      result.innerHTML = `<strong>${t("gematria.analyzing")}</strong>`;
+      result.innerHTML = `<div class="ai-loading"><div class="ai-loading-spinner"></div><strong>${t("gematria.analyzing")}</strong></div>`;
       result.classList.add("show");
     }
 
@@ -1056,7 +1056,7 @@
       button.textContent = t("numerology.analyzing");
     }
     if (result) {
-      result.innerHTML = `<strong>${t("numerology.analyzing")}</strong>`;
+      result.innerHTML = `<div class="ai-loading"><div class="ai-loading-spinner"></div><strong>${t("numerology.analyzing")}</strong></div>`;
       result.classList.add("show");
     }
 
@@ -1101,7 +1101,7 @@
       button.textContent = t("bazi.analyzing");
     }
     if (result) {
-      result.innerHTML = `<strong>${t("bazi.analyzing")}</strong>`;
+      result.innerHTML = `<div class="ai-loading"><div class="ai-loading-spinner"></div><strong>${t("bazi.analyzing")}</strong></div>`;
       result.classList.add("show");
     }
 
@@ -1147,7 +1147,7 @@
       button.textContent = t("horoscope.analyzing");
     }
     if (result) {
-      result.innerHTML = `<strong>${t("horoscope.analyzing")}</strong>`;
+      result.innerHTML = `<div class="ai-loading"><div class="ai-loading-spinner"></div><strong>${t("horoscope.analyzing")}</strong></div>`;
       result.classList.add("show");
     }
 
@@ -1209,7 +1209,7 @@
 
     if (quiz) quiz.style.display = "none";
     if (result) {
-      result.innerHTML = `<strong>${t("hypnosis.analyzing")}</strong>`;
+      result.innerHTML = `<div class="ai-loading"><div class="ai-loading-spinner"></div><strong>${t("hypnosis.analyzing")}</strong></div>`;
       result.classList.add("show");
       result.scrollIntoView({ behavior: "smooth", block: "nearest" });
     }
