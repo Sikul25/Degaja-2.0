@@ -33,9 +33,13 @@
   const doFetch = (url,opts,ms) => (window.degajaFetch ? window.degajaFetch(url,opts,ms) : fetch(url,opts));
   const getAdvisors = () => (remoteAdvisors && remoteAdvisors.length ? remoteAdvisors : fallbackAdvisors);
 
+  // Mirrors api/checkout.js's CURRENCY_BY_LANG — kept in sync manually since
+  // this is a plain browser script (not a module) with no shared import.
+  const CURRENCY_BY_LANG = { en: 'gbp', us: 'usd', br: 'brl', mx: 'mxn', ja: 'jpy', zh: 'cny', hi: 'inr' };
+
   async function loadRemoteData(){
     try{
-      const currency = lang() === 'br' ? 'brl' : '';
+      const currency = CURRENCY_BY_LANG[lang()] || '';
       const r = await doFetch('/api/advisors' + (currency ? `?currency=${currency}` : ''), {}, 8000);
       if(!r.ok) return;
       const d = await r.json();

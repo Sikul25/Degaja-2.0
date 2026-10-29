@@ -292,7 +292,7 @@
 
     const result = $("#aiResult");
     if (result) {
-      result.innerHTML = `<strong>${t("result.paidTitle")}</strong><p style="margin:8px 0;color:#596273">${t("result.readingDeeper")}</p>`;
+      result.innerHTML = `<div class="ai-loading"><div class="ai-loading-spinner"></div><strong>${t("result.readingDeeper")}</strong></div>`;
       result.classList.add("show");
       result.scrollIntoView({ behavior: "smooth", block: "nearest" });
     }
@@ -318,10 +318,23 @@
       const data = await response.json();
       if (!response.ok || !data.paid || data.type !== "ai") return;
 
-      setAiCredits(getAiCredits() + (Number(data.credits) || 1));
+      history.replaceState({}, document.title, location.pathname + location.hash);
       state.paidAccess = true;
       localStorage.setItem("degajaPaidAccess", "1");
-      history.replaceState({}, document.title, location.pathname + location.hash);
+
+      if (data.alreadyRedeemed) {
+        // This exact success URL already granted its credits on an earlier
+        // visit (back-button, a shared/bookmarked link, a different browser
+        // or private window). Clean up quietly instead of handing out free
+        // credits again or auto-running the stashed reading a second time —
+        // unlockDeepReading() below doesn't require a positive balance, it
+        // only opportunistically decrements one, so calling it here would
+        // just give away a full paid reading for free.
+        localStorage.removeItem(PENDING_READING_KEY);
+        return;
+      }
+
+      setAiCredits(getAiCredits() + (Number(data.credits) || 1));
 
       let pending = null;
       try { pending = JSON.parse(localStorage.getItem(PENDING_READING_KEY) || "null"); } catch (_) { /* ignore */ }
@@ -350,7 +363,15 @@
     }
   }
 
+  // Guards every call site (showPurchaseModal's price buttons, the
+  // [data-buy] buttons, and voice checkout) against a fast double-click/tap
+  // firing two concurrent /api/checkout calls — which would create two live
+  // Stripe sessions before the first redirect lands.
+  let checkoutInFlight = false;
+
   async function startCheckout(product, birthDate) {
+    if (checkoutInFlight) return;
+    checkoutInFlight = true;
     try {
       const response = await fetchWithTimeout("/api/checkout", {
         method: "POST",
@@ -362,6 +383,7 @@
       if (!response.ok || !data.url) throw new Error(data.error || "Zahlung nicht verfügbar");
       window.location.href = data.url;
     } catch (error) {
+      checkoutInFlight = false;
       openModal(`
         <div class="eyebrow">${t("checkout.eyebrow")}</div>
         <h2>${t("checkout.title")}</h2>
@@ -566,6 +588,12 @@
     const apiQuestion = drawnCards.length
       ? `${question}\n\n(${t("oracle.drawnCards")}: ${drawnCards.join(", ")})`
       : question;
+
+    if (result) {
+      result.innerHTML = `<div class="ai-loading"><div class="ai-loading-spinner"></div><strong>${t("result.reading")}</strong></div>`;
+      result.classList.add("show");
+      result.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    }
 
     state.conversationHistory = [];
     const text = await getOracle(apiQuestion, topic, "free", state.conversationHistory, oracleQuizAnswers);

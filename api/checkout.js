@@ -69,7 +69,7 @@ export default async function handler(req, res) {
   if (product === "voice") {
     voiceTopics = Number(topics);
     const price = VOICE_PRICES[voiceTopics];
-    const priceForCurrency = price && currency === "brl" && price.brl ? price.brl : price;
+    const priceForCurrency = price && price[currency] ? price[currency] : price;
     item = priceForCurrency ? { name: names.voice(voiceTopics), amount: priceForCurrency.amount } : null;
     type = "voice";
   }

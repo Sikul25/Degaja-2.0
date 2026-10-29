@@ -1,3 +1,5 @@
+import { wasAlreadyRedeemed } from "./_redeemed.js";
+
 export default async function handler(req, res) {
   if (req.method !== "GET") return res.status(405).json({ error: "Method not allowed" });
 
@@ -22,12 +24,21 @@ export default async function handler(req, res) {
     const advisorId = session.metadata?.advisorId || null;
     const credits = Number(session.metadata?.credits || 0);
 
+    // Stripe will keep confirming this exact session as "paid" forever — it
+    // has no concept of "already handed the credits out". Without tracking
+    // redemption ourselves, reopening this same success URL later (or in
+    // another browser/private window) would grant the credits again, for
+    // free, indefinitely. Only check/mark this once we know it's genuinely
+    // paid, so a cancelled/incomplete session never gets written.
+    const alreadyRedeemed = paid && (await wasAlreadyRedeemed(sessionId));
+
     return res.status(200).json({
       paid,
+      alreadyRedeemed,
       type,
       topics: topics || null,
       advisorId,
-      credits: credits || null,
+      credits: alreadyRedeemed ? 0 : credits || null,
       customerEmail: session.customer_details?.email || session.customer_email || null
     });
   } catch (error) {

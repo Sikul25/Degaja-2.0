@@ -26,6 +26,15 @@ function edgeConfigParts() {
   return match ? { host: match[1], id: match[2], readToken: match[3] } : null;
 }
 
+async function fetchFresh(parts) {
+  try {
+    const r = await fetch(`https://${parts.host}.vercel.com/${parts.id}/item/advisorStatus?token=${parts.readToken}`);
+    return r.ok ? (await r.json()) || {} : {};
+  } catch (_) {
+    return {};
+  }
+}
+
 async function readAll() {
   const now = Date.now();
   if (cache && now - cachedAt < CACHE_MS) return cache;
@@ -35,12 +44,7 @@ async function readAll() {
     cachedAt = now;
     return cache;
   }
-  try {
-    const r = await fetch(`https://${parts.host}.vercel.com/${parts.id}/item/advisorStatus?token=${parts.readToken}`);
-    cache = r.ok ? (await r.json()) || {} : {};
-  } catch (_) {
-    cache = cache || {};
-  }
+  cache = await fetchFresh(parts);
   cachedAt = now;
   return cache;
 }
@@ -65,7 +69,13 @@ export async function setAvailable(advisorId, available) {
       .join(", ");
     throw new Error(`Not configured: missing ${missing}`);
   }
-  const current = await readAll();
+  // A fresh read right before merging, not the up-to-20s-old module cache —
+  // two advisors toggling availability within that window would otherwise
+  // race on readAll()'s cached value and the second write could silently
+  // clobber the first advisor's just-made update. Only one advisor exists
+  // today so this hasn't bitten anyone yet, but the code is written to
+  // generalize to more.
+  const current = await fetchFresh(parts);
   const next = { ...current, [advisorId]: { available: !!available, since: Date.now() } };
   const res = await fetch(`https://api.vercel.com/v1/edge-config/${parts.id}/items?teamId=${TEAM_ID}`, {
     method: "PATCH",

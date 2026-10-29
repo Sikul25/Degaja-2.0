@@ -105,12 +105,15 @@ DEGAJA should contrast against, not emulate. The established pattern:
   with 🔒 — this is deliberately positioned to read as "we are not like
   [unnamed predatory competitors]" without naming anyone.
 - This is implemented once in `script.js`'s shared `renderResult()` (covers
-  oracle/palm/coffee/gematria/numerology/bazi/horoscope/hypnosis), once more
-  in the dream decoder's own inline handler (also in `script.js`, since it
-  doesn't use the shared `#aiResult` panel), and separately in
-  `love-quiz.html`'s own `renderReveal()`/`renderPalmReveal()` (standalone
-  page, own i18n). Any new feature with a paid "deepen" step must follow the
-  same three-part pattern.
+  oracle/palm/coffee/gematria/numerology/bazi/horoscope/hypnosis), and
+  separately in each standalone page's own purchase modal (`dream.html`,
+  `love-quiz.html`'s `renderReveal()`/`renderPalmReveal()`, `quiz.html`,
+  `time-tunnel.html` — each has its own i18n, not shared with the main
+  site). There is no dream-related code in `script.js` itself — `dream.html`
+  became a fully standalone page on 2026-10-26 (see below) and this note
+  previously said otherwise; verified during the 2026-10-29 bug audit that
+  there's zero dream-related code left in script.js. Any new feature with a
+  paid "deepen" step must follow the same three-part pattern.
 
 ## Architecture notes that keep needing rediscovery
 
@@ -201,6 +204,72 @@ DEGAJA should contrast against, not emulate. The established pattern:
   in plain text can render reversed in-browser (bidi algorithm artifact).
   Don't try to force direction with Unicode control characters — use an
   image instead if the mixed script is unavoidable.
+- **2026-10-29: full-site bug audit (Yoel asked for one thorough pass instead
+  of reactive one-at-a-time discovery) found and fixed a batch of real bugs.**
+  Worth knowing about if something in this area seems off again:
+  - **Payment-verification replay (critical, fixed):** `api/verify-payment.js`
+    was a stateless proxy to Stripe's session lookup with no server-side
+    redemption tracking — reopening the same `?payment=success&session_id=...`
+    URL (different browser, private window, cleared localStorage) granted AI
+    credits again, indefinitely, off one real charge. Fixed by tracking
+    redeemed session IDs in Edge Config (`api/_redeemed.js`, same store
+    pattern as `_availability.js`/`_pending.js`) and having `script.js`'s
+    `verifyAiPayment()` skip granting credits (and skip auto-running the
+    stashed reading) when `data.alreadyRedeemed` comes back true. Best-effort
+    read-then-write, not atomic — see that file's own comment.
+  - **Voice/live-advisor pricing (critical, fixed):** `VOICE_PRICES` in
+    `api/_data.js` only had a currency override for `brl`; `mx`/`ja`/`zh`/`hi`
+    customers were silently charged the raw EUR-cent number in their own
+    currency (e.g. ₹49.99 instead of ₹2,500 for a live session — less than a
+    single text reading). Added `mxn`/`jpy`/`cny`/`inr` entries computed with
+    the same per-currency ratio already used for the AI single-reading price,
+    and generalized the `currency === "brl"` special-case in both
+    `api/checkout.js` and `api/advisors.js` to `price[currency] || price` so
+    a missed currency fails safe instead of silently mispricing. Also fixed
+    `live-consult.js`, which only ever requested `currency=brl` and defaulted
+    to EUR pricing display for every other non-German language.
+  - **Oracle/Tarot — the highest-traffic feature — never got the loading-
+    spinner fix** described below (both the free `#aiBtn` handler and the
+    paid `unlockDeepReading()` in `script.js` were left out when the spinner
+    was added everywhere else). Fixed; if you're adding a new AI call site,
+    double-check it actually got the spinner, don't assume "everywhere else
+    has it" means this one does too.
+  - **`api/tts.js` was missing `maxDuration: 60`** — same root cause as the
+    numerology-spinner bug, just never caught here. Fixed.
+  - **Standalone pages had copy-pasted-then-diverged bugs:** the geo-language
+    race condition fixed the same day in `quiz.html`/`love-quiz.html`/
+    `time-tunnel.html` (see the "Standalone pages" note above — actually
+    logged there) was NOT fixed in `dream.html` in that pass; it had the
+    identical bug under a different stage-name gate (`stage !== "input"`)
+    and was fixed separately. Also: `quiz.html`/`love-quiz.html`/
+    `time-tunnel.html` collected birthdate early (as its own quiz step) with
+    **zero age validation** — unlike `dream.html`, which validates inside its
+    purchase modal. A real underage visitor (or a mistyped year) completed
+    the entire quiz, photo upload included, only to hit a generic "payment
+    unavailable, try again later" alert at the very last step with no
+    explanation. Fixed by validating at the birthdate step itself (added
+    `isAdultBirthDate()` + a `birthdate_error` i18n key, reusing `dream.html`'s
+    existing translations, to all three files) — catches it immediately
+    instead of at the end. When adding a new quiz-style standalone page,
+    validate age where birthdate is collected, not only server-side.
+  - **Double-submit on checkout buttons:** none of the purchase buttons
+    (main site's `showPurchaseModal`/`[data-buy]`, or any standalone page's
+    `startXChectout`-style function) guarded against a fast double-click/tap
+    firing two concurrent `/api/checkout` calls. Fixed with a simple
+    in-flight flag on each checkout function. Any new checkout entry point
+    needs the same guard.
+  - **Silent failure on a broken palm photo upload** (`quiz.html`,
+    `love-quiz.html`): if `resizeImage()` failed to decode the file, the
+    change handler did nothing at all — no error, no re-render — which reads
+    as a frozen page (the same failure *mode* as the numerology-spinner bug,
+    different cause). Fixed with a `photo_error` message and resetting the
+    file input so re-picking retries.
+  - **`api/ccbill-webhook.js`** was a live, unauthenticated POST endpoint
+    that wrote arbitrary request bodies into the shared Edge Config store —
+    low-impact today since nothing reads that key yet, but still an open
+    write-abuse surface sitting in prod ahead of the real CCBill cutover.
+    Now 503s until `CCBILL_WEBHOOK_SALT` is set; wire the real signature
+    check in when CCBill provides it, per the TODO already in that file.
 
 ## Language / routing
 

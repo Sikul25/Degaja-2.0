@@ -1,3 +1,5 @@
+export const config = { maxDuration: 60 };
+
 // Preferred ElevenLabs voice NAME per language — matched case-insensitively
 // against the account's voice library. Update as the user auditions voices
 // per language; "fr" is set first as that's the one already chosen.
@@ -13,6 +15,10 @@ const VOICE_NAME_BY_LANG = {
   it: "rossana",
   us: "natasha",
   en: "daisy"
+  // ja/zh/hi: no voice chosen yet — falls back to DEFAULT_VOICE_NAME ("zen",
+  // the German voice) below. Needs Yoel to audition a voice for each before
+  // adding an entry here; picking one without him would just swap one wrong
+  // default for another guess.
 };
 const DEFAULT_VOICE_NAME = "zen";
 

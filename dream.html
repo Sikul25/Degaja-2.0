@@ -535,8 +535,15 @@
       .then(function(r){ return r.ok ? r.json() : null; })
       .then(function(data){
         clearTimeout(timeout);
+        // Re-check here, not just on entry: the visitor may have submitted
+        // their dream (past "input" stage) or picked a language manually
+        // while this request was in flight. Correcting `lang` now still
+        // matters even if render() itself is a no-op past "input" stage —
+        // it fixes the language for whatever renders next (the reveal
+        // screen's CTA/purchase text, a later interaction).
+        if (langWasExplicit) return;
         var geoLang = data && COUNTRY_LANG[String(data.country || "").toUpperCase()];
-        if (!geoLang || geoLang === lang || stage !== "input") return;
+        if (!geoLang || geoLang === lang) return;
         lang = geoLang;
         langSelect.value = lang;
         render();
@@ -575,6 +582,7 @@
   langSelect.value = lang;
   langSelect.addEventListener("change", function(){
     lang = langSelect.value;
+    langWasExplicit = true;
     render();
   });
 
@@ -676,7 +684,13 @@
     }).catch(function(){ btn.style.display = "none"; });
   }
 
+  // Guards against a fast double-tap on a price button firing two concurrent
+  // /api/checkout calls (two live Stripe sessions before the first redirect).
+  var checkoutInFlight = false;
+
   function startDreamCheckout(product, birthDate){
+    if (checkoutInFlight) return;
+    checkoutInFlight = true;
     var question = t().deepen_prompt.replace("{dream}", dreamText);
     try {
       localStorage.setItem("degajaPendingReading", JSON.stringify({ question: question, topic: t().topic }));
@@ -691,6 +705,7 @@
       if (!result.ok || !result.data.url) throw new Error("checkout failed");
       window.location.href = result.data.url;
     }).catch(function(){
+      checkoutInFlight = false;
       alert(t().purchase_error);
     });
   }

@@ -53,9 +53,18 @@ async function storeResult(orderId, result) {
 export default async function handler(req, res) {
   if (req.method !== "POST") return res.status(405).json({ error: "Method not allowed" });
 
-  // TODO: verify this request genuinely came from CCBill (signature/digest
-  // check, and/or restrict by CCBill's published postback IP ranges) before
-  // trusting any of the fields below.
+  // Until the real CCBill webhook salt arrives, this endpoint has no way to
+  // tell a genuine CCBill postback apart from anyone who finds the URL and
+  // POSTs to it — which would otherwise get written straight into the
+  // shared Edge Config store unauthenticated. Refuse outright rather than
+  // accept-and-trust in the meantime; nothing reads ccbillOrders yet, so
+  // there's no functional loss, only a closed write-abuse surface.
+  // TODO once CCBILL_WEBHOOK_SALT is set: verify the postback's
+  // signature/digest against it (exact field/algorithm per CCBill's
+  // dashboard config) instead of this placeholder check.
+  if (!process.env.CCBILL_WEBHOOK_SALT) {
+    return res.status(503).json({ error: "CCBill webhook not yet configured" });
+  }
 
   const body = req.body || {};
   const orderId = body.orderId || body.clientAccnum || null;

@@ -150,6 +150,7 @@
     "q2_eyebrow": "SCHRITT 2",
     "q2_h1": "Wann bist du geboren?",
     "q2_placeholder": "TT.MM.JJJJ",
+    "birthdate_error": "Bitte gib dein Geburtsdatum ein – du musst 18 Jahre oder älter sein.",
     "q3_eyebrow": "SCHRITT 3",
     "q3_h1": "Wie dürfen wir dich nennen?",
     "q3_placeholder": "Dein Vorname",
@@ -229,6 +230,7 @@
     "q2_eyebrow": "STEP 2",
     "q2_h1": "When were you born?",
     "q2_placeholder": "DD/MM/YYYY",
+    "birthdate_error": "Please enter your date of birth – you must be 18 or older.",
     "q3_eyebrow": "STEP 3",
     "q3_h1": "What should we call you?",
     "q3_placeholder": "Your first name",
@@ -308,6 +310,7 @@
     "q2_eyebrow": "ÉTAPE 2",
     "q2_h1": "Quand es-tu né(e) ?",
     "q2_placeholder": "JJ/MM/AAAA",
+    "birthdate_error": "Merci d'indiquer ta date de naissance – tu dois avoir 18 ans ou plus.",
     "q3_eyebrow": "ÉTAPE 3",
     "q3_h1": "Comment devons-nous t'appeler ?",
     "q3_placeholder": "Ton prénom",
@@ -387,6 +390,7 @@
     "q2_eyebrow": "PASO 2",
     "q2_h1": "¿Cuándo naciste?",
     "q2_placeholder": "DD/MM/AAAA",
+    "birthdate_error": "Introduce tu fecha de nacimiento – debes tener 18 años o más.",
     "q3_eyebrow": "PASO 3",
     "q3_h1": "¿Cómo deberíamos llamarte?",
     "q3_placeholder": "Tu nombre",
@@ -466,6 +470,7 @@
     "q2_eyebrow": "PASSO 2",
     "q2_h1": "Quando sei nato/a?",
     "q2_placeholder": "GG/MM/AAAA",
+    "birthdate_error": "Inserisci la tua data di nascita – devi avere almeno 18 anni.",
     "q3_eyebrow": "PASSO 3",
     "q3_h1": "Come dobbiamo chiamarti?",
     "q3_placeholder": "Il tuo nome",
@@ -545,6 +550,7 @@
     "q2_eyebrow": "PASSO 2",
     "q2_h1": "Quando nasceste?",
     "q2_placeholder": "DD/MM/AAAA",
+    "birthdate_error": "Indica a tua data de nascimento – tens de ter 18 anos ou mais.",
     "q3_eyebrow": "PASSO 3",
     "q3_h1": "Como devemos chamar-te?",
     "q3_placeholder": "O teu primeiro nome",
@@ -624,6 +630,7 @@
     "q2_eyebrow": "PASSO 2",
     "q2_h1": "Quando você nasceu?",
     "q2_placeholder": "DD/MM/AAAA",
+    "birthdate_error": "Indique sua data de nascimento – você precisa ter 18 anos ou mais.",
     "q3_eyebrow": "PASSO 3",
     "q3_h1": "Como podemos te chamar?",
     "q3_placeholder": "Seu primeiro nome",
@@ -703,6 +710,7 @@
     "q2_eyebrow": "ШАГ 2",
     "q2_h1": "Когда ты родилась?",
     "q2_placeholder": "ДД.ММ.ГГГГ",
+    "birthdate_error": "Укажи дату рождения – тебе должно быть не менее 18 лет.",
     "q3_eyebrow": "ШАГ 3",
     "q3_h1": "Как нам тебя называть?",
     "q3_placeholder": "Твоё имя",
@@ -782,6 +790,7 @@
     "q2_eyebrow": "КРОК 2",
     "q2_h1": "Коли ти народилася?",
     "q2_placeholder": "ДД.ММ.РРРР",
+    "birthdate_error": "Вкажи дату народження – тобі має бути щонайменше 18 років.",
     "q3_eyebrow": "КРОК 3",
     "q3_h1": "Як нам тебе називати?",
     "q3_placeholder": "Твоє ім'я",
@@ -861,6 +870,7 @@
     "q2_eyebrow": "ステップ2",
     "q2_h1": "生年月日は？",
     "q2_placeholder": "年/月/日",
+    "birthdate_error": "生年月日を入力してください – 18歳以上である必要があります。",
     "q3_eyebrow": "ステップ3",
     "q3_h1": "お名前を教えてください",
     "q3_placeholder": "お名前",
@@ -940,6 +950,7 @@
     "q2_eyebrow": "第2步",
     "q2_h1": "你的出生日期是？",
     "q2_placeholder": "年/月/日",
+    "birthdate_error": "请输入你的出生日期——你必须年满18岁。",
     "q3_eyebrow": "第3步",
     "q3_h1": "我们该怎么称呼你？",
     "q3_placeholder": "你的名字",
@@ -1019,6 +1030,7 @@
     "q2_eyebrow": "चरण 2",
     "q2_h1": "आपका जन्म कब हुआ था?",
     "q2_placeholder": "दिन/माह/वर्ष",
+    "birthdate_error": "कृपया अपनी जन्मतिथि दर्ज करो – तुम्हारी उम्र 18 साल या उससे ज़्यादा होनी चाहिए।",
     "q3_eyebrow": "चरण 3",
     "q3_h1": "हम आपको क्या कहकर पुकारें?",
     "q3_placeholder": "आपका पहला नाम",
@@ -1270,19 +1282,38 @@
     if (backBtn) backBtn.addEventListener("click", goBack);
   }
 
-  function renderInputStep(eyebrow, h1, placeholder, type, onNext, currentValue){
+  function isAdultBirthDate(dateStr){
+    if (!dateStr) return false;
+    var dob = new Date(dateStr);
+    if (isNaN(dob.getTime())) return false;
+    var today = new Date();
+    var age = today.getFullYear() - dob.getFullYear();
+    var hadBirthdayThisYear = (today.getMonth() > dob.getMonth()) || (today.getMonth() === dob.getMonth() && today.getDate() >= dob.getDate());
+    if (!hadBirthdayThisYear) age -= 1;
+    return age >= 18;
+  }
+
+  function renderInputStep(eyebrow, h1, placeholder, type, onNext, currentValue, validate, errorText){
     var html = '<div class="quiz-eyebrow">' + eyebrow + '</div>';
     html += '<h1 class="quiz-h1">' + h1 + '</h1>';
     html += '<input class="quiz-input" id="stepInput" type="' + type + '" placeholder="' + placeholder + '" value="' + escapeHtml(currentValue || "") + '">';
+    if (validate) html += '<div id="stepInputError" style="display:none;color:#e35b5b;font-size:13px;margin-top:8px;text-align:center">' + escapeHtml(errorText || "") + '</div>';
     html += '<button class="quiz-cta" id="nextBtn">' + t().next + '</button>';
     html += '<button class="quiz-back" id="backBtn">' + t().back + '</button>';
     setCard(html);
     var input = document.getElementById("stepInput");
     var nextBtn = document.getElementById("nextBtn");
+    var errorEl = document.getElementById("stepInputError");
     input.focus();
+    input.addEventListener("input", function(){ input.style.borderColor = ""; if (errorEl) errorEl.style.display = "none"; });
     function tryNext(){
       var val = input.value.trim();
       if (!val) { input.style.borderColor = "#e35b5b"; return; }
+      if (validate && !validate(val)) {
+        input.style.borderColor = "#e35b5b";
+        if (errorEl) errorEl.style.display = "block";
+        return;
+      }
       onNext(val);
     }
     nextBtn.addEventListener("click", tryNext);
@@ -1307,7 +1338,7 @@
       renderInputStep(t().q2_eyebrow, t().q2_h1, t().q2_placeholder, "date", function(val){
         answers.birthdate = val;
         step = 3; render();
-      }, answers.birthdate);
+      }, answers.birthdate, isAdultBirthDate, t().birthdate_error);
     } else if (step === 3) {
       renderInputStep(t().q3_eyebrow, t().q3_h1, t().q3_placeholder, "text", function(val){
         answers.name = val;
@@ -1402,7 +1433,13 @@
   // question in the same localStorage key the main site's script.js reads
   // (degajaPendingReading) means it auto-resumes this exact reading there
   // via its existing verifyAiPayment() -> unlockDeepReading() flow.
+  // Guards against a fast double-tap on a price button firing two concurrent
+  // /api/checkout calls (two live Stripe sessions before the first redirect).
+  var checkoutInFlight = false;
+
   function startTimeTunnelCheckout(product){
+    if (checkoutInFlight) return;
+    checkoutInFlight = true;
     try {
       localStorage.setItem("degajaPendingReading", JSON.stringify({ question: lastQuestion, topic: lastTopic }));
     } catch (_) {}
@@ -1416,6 +1453,7 @@
       if (!result.ok || !result.data.url) throw new Error("checkout failed");
       window.location.href = result.data.url;
     }).catch(function(){
+      checkoutInFlight = false;
       alert(t().purchase_error);
     });
   }

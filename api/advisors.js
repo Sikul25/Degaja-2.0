@@ -7,7 +7,7 @@ export default async function handler(req, res) {
   const currency = String(req.query.currency || "").toLowerCase();
   const prices = Object.fromEntries(
     Object.entries(VOICE_PRICES).map(([topics, price]) => {
-      const forCurrency = currency === "brl" && price.brl ? price.brl : price;
+      const forCurrency = price[currency] || price;
       return [topics, forCurrency.label];
     })
   );
