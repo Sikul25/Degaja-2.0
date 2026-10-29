@@ -516,7 +516,7 @@
         </div>` : `
         <div style="margin-top:14px">
           <button class="price-btn" id="deepBtn">${t("result.deepBtn")}</button>
-          <div style="text-align:center;color:#b48a2e;font-size:12.5px;font-weight:700;margin-top:8px">${t("purchase.pack")}</div>
+          <div id="packHint" role="button" tabindex="0" style="text-align:center;color:#b48a2e;font-size:12.5px;font-weight:700;margin-top:8px;cursor:pointer;text-decoration:underline">${t("purchase.pack")}</div>
           <div style="text-align:center;color:#8a93a3;font-size:11px;margin-top:4px">🔒 ${t("purchase.note")}</div>
         </div>`}
     `;
@@ -524,6 +524,16 @@
     result.classList.add("show");
     result.scrollIntoView({ behavior: "smooth", block: "nearest" });
     result.querySelector("#deepBtn")?.addEventListener("click", () => showPurchaseModal(question, topic));
+    // The "3 readings · X" line below the button looked clickable (price,
+    // bold, gold) but previously did nothing when tapped — confusing on
+    // mobile, where it's the most visually prominent price on the card.
+    // Routes to the same modal as the button; the modal itself is where the
+    // user actually picks single vs. pack, after confirming their birthdate.
+    const packHint = result.querySelector("#packHint");
+    packHint?.addEventListener("click", () => showPurchaseModal(question, topic));
+    packHint?.addEventListener("keydown", e => {
+      if (e.key === "Enter" || e.key === " ") { e.preventDefault(); showPurchaseModal(question, topic); }
+    });
     result.querySelector("#speakBtn")?.addEventListener("click", event => speakText(text, event.currentTarget));
 
     if (paid) {
