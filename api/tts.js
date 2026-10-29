@@ -14,11 +14,10 @@ const VOICE_NAME_BY_LANG = {
   de: "zen",
   it: "rossana",
   us: "natasha",
-  en: "daisy"
-  // ja/zh/hi: no voice chosen yet — falls back to DEFAULT_VOICE_NAME ("zen",
-  // the German voice) below. Needs Yoel to audition a voice for each before
-  // adding an entry here; picking one without him would just swap one wrong
-  // default for another guess.
+  en: "daisy",
+  ja: "sakura",
+  zh: "xiao fan",
+  hi: "shanaya"
 };
 const DEFAULT_VOICE_NAME = "zen";
 
