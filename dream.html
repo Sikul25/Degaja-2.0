@@ -728,13 +728,18 @@
         '<div class="eyebrow">' + t().purchase_eyebrow + '</div>' +
         '<h2>' + t().purchase_title + '</h2>' +
         '<p>' + t().purchase_desc + '</p>' +
+        // Pricing shown before the birthdate field, not after: on a short
+        // mobile viewport (especially once the date-picker keyboard opens),
+        // a birthdate-field-first layout pushed both price buttons below
+        // the fold — someone who specifically wanted the 3-reading pack
+        // never saw it was an option and dropped off before checkout.
+        '<button class="quiz-modal-btn" id="pmSingle">' + t().purchase_single + '</button>' +
+        '<button class="quiz-modal-btn" id="pmPack">' + t().purchase_pack + '</button>' +
         '<div class="quiz-modal-field">' +
           '<label for="pmBirthDate">' + t().birthdate_label + '</label>' +
           '<input type="date" class="quiz-input" id="pmBirthDate">' +
           '<div class="quiz-modal-error" id="pmBirthDateError">' + t().birthdate_error + '</div>' +
         '</div>' +
-        '<button class="quiz-modal-btn" id="pmSingle">' + t().purchase_single + '</button>' +
-        '<button class="quiz-modal-btn" id="pmPack">' + t().purchase_pack + '</button>' +
         '<div class="quiz-modal-note">' + t().purchase_note + '</div>' +
         '<button class="quiz-modal-close" id="pmClose">' + t().purchase_back + '</button>' +
       '</div>';

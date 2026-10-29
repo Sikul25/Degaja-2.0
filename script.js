@@ -240,18 +240,24 @@
     }
 
     stashPendingReading(question, topic);
+    // Pricing shown before the birthdate field, not after: on a short mobile
+    // viewport (especially once the date-picker keyboard opens), a
+    // birthdate-field-first layout pushed both price buttons below the
+    // fold — someone who specifically wanted the 3-reading pack never saw
+    // it was an option and dropped off before reaching checkout. Matches
+    // the #prices section's own (already-correct) ordering.
     openModal(`
       <div class="eyebrow">${t("purchase.eyebrow")}</div>
       <h2>${t("purchase.title")}</h2>
       <p style="color:#687384">${t("purchase.desc")}</p>
-      <div style="text-align:left;margin-bottom:14px">
-        <label for="purchaseBirthDate" style="display:block;font-size:12px;font-weight:700;color:#18334a;margin-bottom:5px">${t("checkout.birthDateLabel")}</label>
-        <input type="date" id="purchaseBirthDate" class="palm-quiz-input" style="width:100%">
-        <div class="palm-quiz-error" id="purchaseBirthDateError">${t("checkout.birthDateError")}</div>
-      </div>
       <div class="pricing-grid" style="grid-template-columns:1fr;gap:10px">
         <button class="price-btn" data-checkout="single">${t("purchase.single")}</button>
         <button class="price-btn" data-checkout="pack">${t("purchase.pack")}</button>
+      </div>
+      <div style="text-align:left;margin:14px 0">
+        <label for="purchaseBirthDate" style="display:block;font-size:12px;font-weight:700;color:#18334a;margin-bottom:5px">${t("checkout.birthDateLabel")}</label>
+        <input type="date" id="purchaseBirthDate" class="palm-quiz-input" style="width:100%">
+        <div class="palm-quiz-error" id="purchaseBirthDateError">${t("checkout.birthDateError")}</div>
       </div>
       <p class="pay-note">${t("purchase.note")}</p>
     `);
