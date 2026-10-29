@@ -9,7 +9,7 @@
 
   const T = {
     de: {
-      "nav.start": "Start", "nav.oracle": "Orakel", "nav.palm": "Handlesen", "nav.prices": "Preise", "nav.human": "Beratung", "nav.rituale": "Rituale", "nav.login": "Anmelden", "nav.installApp": "📲 App installieren",
+      "nav.start": "Start", "nav.oracle": "Orakel", "nav.palm": "Handlesen", "nav.prices": "Preise", "nav.human": "Beratung", "nav.rituale": "Rituale", "nav.login": "Anmelden", "nav.installApp": "📲 App installieren", "pwa.iosInstructions": "So installierst du DEGAJA auf dem iPhone/iPad:<br>1. Tippe unten auf das Teilen-Symbol ⬆️<br>2. Wähle Zum Home-Bildschirm",
       "tab.start": "Start", "tab.readings": "Lesungen", "tab.horoscope": "Horoskop", "tab.advisor": "Beratung", "tab.more": "Mehr",
       "quizBanner.text": "Jetzt im Trend: Entdecke dein vergangenes Leben",
       "loveQuizBanner.text": "Neu: Erfahre, wie deine nächste Beziehung sein wird",
@@ -476,7 +476,7 @@
       "partner.nudge.cta": "Jetzt Partner werden →"
     },
     en: {
-      "nav.start": "Home", "nav.oracle": "Oracle", "nav.palm": "Palm Reading", "nav.prices": "Pricing", "nav.human": "Advisors", "nav.rituale": "Rituals", "nav.login": "Sign in", "nav.installApp": "📲 Install App",
+      "nav.start": "Home", "nav.oracle": "Oracle", "nav.palm": "Palm Reading", "nav.prices": "Pricing", "nav.human": "Advisors", "nav.rituale": "Rituals", "nav.login": "Sign in", "nav.installApp": "📲 Install App", "pwa.iosInstructions": "To install DEGAJA on iPhone/iPad:<br>1. Tap the Share icon ⬆️ at the bottom<br>2. Choose Add to Home Screen",
       "tab.start": "Start", "tab.readings": "Readings", "tab.horoscope": "Horoscope", "tab.advisor": "Advisor", "tab.more": "More",
       "quizBanner.text": "Trending now: Discover your past life",
       "loveQuizBanner.text": "New: Find out what your next relationship will be",
@@ -941,7 +941,7 @@
       "partner.nudge.cta": "Become a partner →"
     },
     fr: {
-      "nav.start": "Accueil", "nav.oracle": "Oracle", "nav.palm": "Lecture de main", "nav.prices": "Tarifs", "nav.human": "Conseil", "nav.rituale": "Rituels", "nav.login": "Connexion", "nav.installApp": "📲 Installer l'app",
+      "nav.start": "Accueil", "nav.oracle": "Oracle", "nav.palm": "Lecture de main", "nav.prices": "Tarifs", "nav.human": "Conseil", "nav.rituale": "Rituels", "nav.login": "Connexion", "nav.installApp": "📲 Installer l'app", "pwa.iosInstructions": "Pour installer DEGAJA sur iPhone/iPad :<br>1. Appuie sur l'icône Partager ⬆️ en bas<br>2. Choisis Sur l'écran d'accueil",
       "tab.start": "Accueil", "tab.readings": "Lectures", "tab.horoscope": "Horoscope", "tab.advisor": "Conseil", "tab.more": "Plus",
       "quizBanner.text": "Tendance du moment : découvre ta vie antérieure",
       "loveQuizBanner.text": "Nouveau : découvre à quoi ressemblera ta prochaine relation",
@@ -1393,7 +1393,7 @@
       "partner.nudge.cta": "Devenir partenaire →"
     },
     es: {
-      "nav.start": "Inicio", "nav.oracle": "Oráculo", "nav.palm": "Lectura de manos", "nav.prices": "Precios", "nav.human": "Asesoría", "nav.rituale": "Rituales", "nav.login": "Acceder", "nav.installApp": "📲 Instalar app",
+      "nav.start": "Inicio", "nav.oracle": "Oráculo", "nav.palm": "Lectura de manos", "nav.prices": "Precios", "nav.human": "Asesoría", "nav.rituale": "Rituales", "nav.login": "Acceder", "nav.installApp": "📲 Instalar app", "pwa.iosInstructions": "Para instalar DEGAJA en iPhone/iPad:<br>1. Toca el icono Compartir ⬆️ abajo<br>2. Elige Añadir a pantalla de inicio",
       "tab.start": "Inicio", "tab.readings": "Lecturas", "tab.horoscope": "Horóscopo", "tab.advisor": "Asesoría", "tab.more": "Más",
       "quizBanner.text": "Tendencia ahora: descubre tu vida pasada",
       "loveQuizBanner.text": "Nuevo: descubre cómo será tu próxima relación",
@@ -1845,7 +1845,7 @@
       "partner.nudge.cta": "Convertirme en socio/a →"
     },
     it: {
-      "nav.start": "Home", "nav.oracle": "Oracolo", "nav.palm": "Lettura della mano", "nav.prices": "Prezzi", "nav.human": "Consulenza", "nav.rituale": "Rituali", "nav.login": "Accedi", "nav.installApp": "📲 Installa app",
+      "nav.start": "Home", "nav.oracle": "Oracolo", "nav.palm": "Lettura della mano", "nav.prices": "Prezzi", "nav.human": "Consulenza", "nav.rituale": "Rituali", "nav.login": "Accedi", "nav.installApp": "📲 Installa app", "pwa.iosInstructions": "Per installare DEGAJA su iPhone/iPad:<br>1. Tocca l'icona Condividi ⬆️ in basso<br>2. Scegli Aggiungi alla schermata Home",
       "tab.start": "Home", "tab.readings": "Letture", "tab.horoscope": "Oroscopo", "tab.advisor": "Consulenza", "tab.more": "Altro",
       "quizBanner.text": "Di tendenza ora: scopri la tua vita passata",
       "loveQuizBanner.text": "Novità: scopri come sarà la tua prossima relazione",
@@ -2297,7 +2297,7 @@
       "partner.nudge.cta": "Diventa partner →"
     },
     pt: {
-      "nav.start": "Início", "nav.oracle": "Oráculo", "nav.palm": "Leitura da mão", "nav.prices": "Preços", "nav.human": "Aconselhamento", "nav.rituale": "Rituais", "nav.login": "Entrar", "nav.installApp": "📲 Instalar app",
+      "nav.start": "Início", "nav.oracle": "Oráculo", "nav.palm": "Leitura da mão", "nav.prices": "Preços", "nav.human": "Aconselhamento", "nav.rituale": "Rituais", "nav.login": "Entrar", "nav.installApp": "📲 Instalar app", "pwa.iosInstructions": "Para instalar o DEGAJA no iPhone/iPad:<br>1. Toca no ícone Partilhar ⬆️ em baixo<br>2. Escolhe Adicionar ao ecrã principal",
       "tab.start": "Início", "tab.readings": "Leituras", "tab.horoscope": "Horóscopo", "tab.advisor": "Consultoria", "tab.more": "Mais",
       "quizBanner.text": "Tendência agora: descobre a tua vida passada",
       "loveQuizBanner.text": "Novo: descobre como vai ser a tua próxima relação",
@@ -2749,7 +2749,7 @@
       "partner.nudge.cta": "Tornar-me parceiro/a →"
     },
     ru: {
-      "nav.start": "Главная", "nav.oracle": "Оракул", "nav.palm": "Хиромантия", "nav.prices": "Цены", "nav.human": "Консультанты", "nav.rituale": "Ритуалы", "nav.login": "Войти", "nav.installApp": "📲 Установить",
+      "nav.start": "Главная", "nav.oracle": "Оракул", "nav.palm": "Хиромантия", "nav.prices": "Цены", "nav.human": "Консультанты", "nav.rituale": "Ритуалы", "nav.login": "Войти", "nav.installApp": "📲 Установить", "pwa.iosInstructions": "Чтобы установить DEGAJA на iPhone/iPad:<br>1. Нажми на значок «Поделиться» ⬆️ внизу<br>2. Выбери На экран «Домой»",
       "tab.start": "Главная", "tab.readings": "Расклады", "tab.horoscope": "Гороскоп", "tab.advisor": "Консультация", "tab.more": "Ещё",
       "quizBanner.text": "Сейчас в тренде: узнай свою прошлую жизнь",
       "loveQuizBanner.text": "Новое: узнай, какими будут твои следующие отношения",
@@ -3203,7 +3203,7 @@
       "partner.nudge.cta": "Стать партнёром →"
     },
     uk: {
-      "nav.start": "Головна", "nav.oracle": "Оракул", "nav.palm": "Хіромантія", "nav.prices": "Ціни", "nav.human": "Консультантки", "nav.rituale": "Ритуали", "nav.login": "Увійти", "nav.installApp": "📲 Встановити",
+      "nav.start": "Головна", "nav.oracle": "Оракул", "nav.palm": "Хіромантія", "nav.prices": "Ціни", "nav.human": "Консультантки", "nav.rituale": "Ритуали", "nav.login": "Увійти", "nav.installApp": "📲 Встановити", "pwa.iosInstructions": "Щоб встановити DEGAJA на iPhone/iPad:<br>1. Натисни значок «Поділитися» ⬆️ внизу<br>2. Обери На головний екран",
       "tab.start": "Головна", "tab.readings": "Розклади", "tab.horoscope": "Гороскоп", "tab.advisor": "Консультація", "tab.more": "Ще",
       "quizBanner.text": "Зараз у тренді: дізнайся про своє минуле життя",
       "loveQuizBanner.text": "Нове: дізнайся, якими будуть твої наступні стосунки",
@@ -3657,7 +3657,7 @@
       "partner.nudge.cta": "Стати партнером →"
     },
     ja: {
-      "nav.start": "ホーム", "nav.oracle": "オラクル", "nav.palm": "手相占い", "nav.prices": "料金", "nav.login": "ログイン", "nav.installApp": "📲 アプリを追加",
+      "nav.start": "ホーム", "nav.oracle": "オラクル", "nav.palm": "手相占い", "nav.prices": "料金", "nav.login": "ログイン", "nav.installApp": "📲 アプリを追加", "pwa.iosInstructions": "iPhone/iPadにDEGAJAをインストールするには：<br>1. 下部の共有アイコン⬆️をタップ<br>2. ホーム画面に追加を選択",
       "tab.start": "スタート", "tab.readings": "占い", "tab.horoscope": "ホロスコープ", "tab.advisor": "アドバイザー", "tab.more": "もっと見る",
       "quizBanner.text": "今話題:前世を発見しよう",
       "loveQuizBanner.text": "新登場：次の恋愛がどうなるか知ろう",
@@ -4062,7 +4062,7 @@
       "partner.nudge.cta": "パートナーになる →"
     },
     zh: {
-      "nav.start": "首页", "nav.oracle": "神谕", "nav.palm": "手相解读", "nav.prices": "价格", "nav.login": "登录", "nav.installApp": "📲 安装应用",
+      "nav.start": "首页", "nav.oracle": "神谕", "nav.palm": "手相解读", "nav.prices": "价格", "nav.login": "登录", "nav.installApp": "📲 安装应用", "pwa.iosInstructions": "在iPhone/iPad上安装DEGAJA：<br>1. 点击底部的分享图标⬆️<br>2. 选择添加到主屏幕",
       "tab.start": "开始", "tab.readings": "占卜", "tab.horoscope": "星座", "tab.advisor": "咨询", "tab.more": "更多",
       "quizBanner.text": "热门推荐：探索你的前世",
       "loveQuizBanner.text": "全新上线：了解你的下一段感情会是什么样子",
@@ -4467,7 +4467,7 @@
       "partner.nudge.cta": "成为合作伙伴 →"
     },
     hi: {
-      "nav.start": "होम", "nav.oracle": "ओरेकल", "nav.palm": "हस्तरेखा पढ़ाई", "nav.prices": "मूल्य", "nav.login": "साइन इन करें", "nav.installApp": "📲 ऐप इंस्टॉल करें",
+      "nav.start": "होम", "nav.oracle": "ओरेकल", "nav.palm": "हस्तरेखा पढ़ाई", "nav.prices": "मूल्य", "nav.login": "साइन इन करें", "nav.installApp": "📲 ऐप इंस्टॉल करें", "pwa.iosInstructions": "iPhone/iPad पर DEGAJA इंस्टॉल करने के लिए:<br>1. नीचे शेयर आइकन ⬆️ पर टैप करें<br>2. होम स्क्रीन पर जोड़ें चुनें",
       "tab.start": "होम", "tab.readings": "रीडिंग्स", "tab.horoscope": "राशिफल", "tab.advisor": "सलाहकार", "tab.more": "और",
       "quizBanner.text": "अभी ट्रेंड में: अपने पूर्वजन्म के बारे में जानो",
       "loveQuizBanner.text": "नया: जानो तुम्हारा अगला रिश्ता कैसा होगा",

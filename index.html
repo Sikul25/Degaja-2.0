@@ -335,7 +335,7 @@
 <nav class="app-tabbar" id="appTabbar" aria-label="Hauptnavigation"><button type="button" class="tab-btn" data-go-tab="start"><span class="tab-icon">🏠</span><span class="tab-label" data-i18n="tab.start">Start</span></button><button type="button" class="tab-btn" data-go-tab="readings"><span class="tab-icon">🔮</span><span class="tab-label" data-i18n="tab.readings">Lesungen</span></button><button type="button" class="tab-btn" data-go-tab="horoscope"><span class="tab-icon">♈</span><span class="tab-label" data-i18n="tab.horoscope">Horoskop</span></button><button type="button" class="tab-btn" data-go-tab="advisor"><span class="tab-icon">💬</span><span class="tab-label" data-i18n="tab.advisor">Beratung</span></button><button type="button" class="tab-btn" data-go-tab="more"><span class="tab-icon">☰</span><span class="tab-label" data-i18n="tab.more">Mehr</span></button></nav>
 <script defer src="/_vercel/insights/script.js?v=2"></script>
 <script src="/entropy-bg.js?v=1"></script>
-<script src="/i18n.js?v=57"></script>
+<script src="/i18n.js?v=58"></script>
 <script src="/tarot-i18n.js?v=5"></script>
 <script src="/tabs.js?v=2"></script>
 <script src="script.js?v=28"></script>
@@ -361,11 +361,21 @@
     window.addEventListener('load', () => navigator.serviceWorker.register('/sw.js').catch(() => {}));
   }
 
-  // Shows the "Install App" button only on browsers that actually offer a
-  // native install prompt (Chrome/Edge/Android) — it stays hidden everywhere
-  // else (notably iOS Safari, which has no such event) rather than showing
-  // a button that would do nothing when clicked.
+  // Shows the "Install App" button on browsers that offer a native install
+  // prompt (Chrome/Edge/Android) — clicking it triggers that prompt. iOS
+  // Safari never fires beforeinstallprompt (Apple has no such API), so it
+  // gets the button too, but clicking it shows how to add the site to the
+  // home screen manually (Share icon -> Add to Home Screen) instead of a
+  // button that would otherwise just do nothing. Already-installed visits
+  // (standalone display mode) never show the button at all.
   let deferredInstallPrompt = null;
+  const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+  const isStandalone = window.navigator.standalone === true ||
+    (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches);
+  if (isIOS && !isStandalone) {
+    const btn = document.getElementById('installAppBtn');
+    if (btn) btn.style.display = '';
+  }
   window.addEventListener('beforeinstallprompt', (e) => {
     e.preventDefault();
     deferredInstallPrompt = e;
@@ -373,12 +383,24 @@
     if (btn) btn.style.display = '';
   });
   document.getElementById('installAppBtn')?.addEventListener('click', async () => {
-    if (!deferredInstallPrompt) return;
-    deferredInstallPrompt.prompt();
-    try { await deferredInstallPrompt.userChoice; } catch (_) { /* ignore */ }
-    deferredInstallPrompt = null;
-    const btn = document.getElementById('installAppBtn');
-    if (btn) btn.style.display = 'none';
+    if (deferredInstallPrompt) {
+      deferredInstallPrompt.prompt();
+      try { await deferredInstallPrompt.userChoice; } catch (_) { /* ignore */ }
+      deferredInstallPrompt = null;
+      const btn = document.getElementById('installAppBtn');
+      if (btn) btn.style.display = 'none';
+      return;
+    }
+    if (isIOS) {
+      const modal = document.getElementById('modal');
+      const content = document.getElementById('modalContent');
+      if (modal && content) {
+        const t = window.degajaI18n?.t || (k => k);
+        content.innerHTML = `<div class="eyebrow">📲 DEGAJA</div><p>${t('pwa.iosInstructions')}</p>`;
+        modal.classList.add('show');
+        modal.setAttribute('aria-hidden', 'false');
+      }
+    }
   });
   window.addEventListener('appinstalled', () => {
     const btn = document.getElementById('installAppBtn');
