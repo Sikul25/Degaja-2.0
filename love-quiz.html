@@ -1412,8 +1412,14 @@
       .then(function(r){ return r.ok ? r.json() : null; })
       .then(function(data){
         clearTimeout(timeout);
+        // Re-check here, not just on entry: the quiz may have advanced past
+        // step 1, or the visitor may have picked a language manually, while
+        // this request was in flight. Applying the detected language to
+        // whatever step they're now on (via render()) still beats leaving
+        // them stuck on the German default for the rest of the quiz.
+        if (langWasExplicit) return;
         var geoLang = data && COUNTRY_LANG[String(data.country || "").toUpperCase()];
-        if (!geoLang || geoLang === lang || step !== 1) return;
+        if (!geoLang || geoLang === lang) return;
         lang = geoLang;
         langSelect.value = lang;
         render();
@@ -1456,6 +1462,7 @@
   langSelect.value = lang;
   langSelect.addEventListener("change", function(){
     lang = langSelect.value;
+    langWasExplicit = true;
     render();
   });
 
