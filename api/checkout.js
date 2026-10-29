@@ -26,20 +26,20 @@ export default async function handler(req, res) {
   const currency = CURRENCY_BY_LANG[lang] || "eur";
   const stripeLocale = LOCALE_BY_LANG[lang] || "de";
   const PRODUCT_NAMES = {
-    de: { single: "Degaja.com – Einzelne Lesung", pack: "Degaja.com – 3 Lesungen", voice: n => `DEGAJA Live Audio – ${n} ${n === 1 ? "Thema" : "Themen"}` },
-    en: { single: "Degaja.com – Single Reading", pack: "Degaja.com – 3 Readings", voice: n => `DEGAJA Live Audio – ${n} ${n === 1 ? "Topic" : "Topics"}` },
-    us: { single: "Degaja.com – Single Reading", pack: "Degaja.com – 3 Readings", voice: n => `DEGAJA Live Audio – ${n} ${n === 1 ? "Topic" : "Topics"}` },
-    fr: { single: "Degaja.com – Lecture unique", pack: "Degaja.com – 3 Lectures", voice: n => `DEGAJA Live Audio – ${n} ${n === 1 ? "Sujet" : "Sujets"}` },
-    es: { single: "Degaja.com – Lectura individual", pack: "Degaja.com – 3 Lecturas", voice: n => `DEGAJA Live Audio – ${n} ${n === 1 ? "Tema" : "Temas"}` },
-    it: { single: "Degaja.com – Lettura singola", pack: "Degaja.com – 3 Letture", voice: n => `DEGAJA Live Audio – ${n} ${n === 1 ? "Argomento" : "Argomenti"}` },
-    pt: { single: "Degaja.com – Leitura única", pack: "Degaja.com – 3 Leituras", voice: n => `DEGAJA Live Audio – ${n} ${n === 1 ? "Tema" : "Temas"}` },
-    ru: { single: "Degaja.com – Разовый расклад", pack: "Degaja.com – 3 расклада", voice: n => `DEGAJA Live Audio – ${n} ${n === 1 ? "тема" : "темы"}` },
-    uk: { single: "Degaja.com – Одноразовий розклад", pack: "Degaja.com – 3 розклади", voice: n => `DEGAJA Live Audio – ${n} ${n === 1 ? "тема" : "теми"}` },
-    br: { single: "Degaja.com – Leitura única", pack: "Degaja.com – 3 Leituras", voice: n => `DEGAJA Live Audio – ${n} ${n === 1 ? "Tema" : "Temas"}` },
-    mx: { single: "Degaja.com – Lectura individual", pack: "Degaja.com – 3 Lecturas", voice: n => `DEGAJA Live Audio – ${n} ${n === 1 ? "Tema" : "Temas"}` },
-    ja: { single: "Degaja.com – 単発鑑定", pack: "Degaja.com – 3回鑑定パック", voice: n => `DEGAJA ライブ音声 – ${n}テーマ` },
-    zh: { single: "Degaja.com – 单次解读", pack: "Degaja.com – 3次解读", voice: n => `DEGAJA 实时语音 – ${n}个主题` },
-    hi: { single: "Degaja.com – सिंगल रीडिंग", pack: "Degaja.com – 3 रीडिंग्स", voice: n => `DEGAJA लाइव ऑडियो – ${n} विषय` }
+    de: { single: "degaja.com – Einzelne Lesung", pack: "degaja.com – 3 Lesungen", voice: n => `DEGAJA Live Audio – ${n} ${n === 1 ? "Thema" : "Themen"}` },
+    en: { single: "degaja.com – Single Reading", pack: "degaja.com – 3 Readings", voice: n => `DEGAJA Live Audio – ${n} ${n === 1 ? "Topic" : "Topics"}` },
+    us: { single: "degaja.com – Single Reading", pack: "degaja.com – 3 Readings", voice: n => `DEGAJA Live Audio – ${n} ${n === 1 ? "Topic" : "Topics"}` },
+    fr: { single: "degaja.com – Lecture unique", pack: "degaja.com – 3 Lectures", voice: n => `DEGAJA Live Audio – ${n} ${n === 1 ? "Sujet" : "Sujets"}` },
+    es: { single: "degaja.com – Lectura individual", pack: "degaja.com – 3 Lecturas", voice: n => `DEGAJA Live Audio – ${n} ${n === 1 ? "Tema" : "Temas"}` },
+    it: { single: "degaja.com – Lettura singola", pack: "degaja.com – 3 Letture", voice: n => `DEGAJA Live Audio – ${n} ${n === 1 ? "Argomento" : "Argomenti"}` },
+    pt: { single: "degaja.com – Leitura única", pack: "degaja.com – 3 Leituras", voice: n => `DEGAJA Live Audio – ${n} ${n === 1 ? "Tema" : "Temas"}` },
+    ru: { single: "degaja.com – Разовый расклад", pack: "degaja.com – 3 расклада", voice: n => `DEGAJA Live Audio – ${n} ${n === 1 ? "тема" : "темы"}` },
+    uk: { single: "degaja.com – Одноразовий розклад", pack: "degaja.com – 3 розклади", voice: n => `DEGAJA Live Audio – ${n} ${n === 1 ? "тема" : "теми"}` },
+    br: { single: "degaja.com – Leitura única", pack: "degaja.com – 3 Leituras", voice: n => `DEGAJA Live Audio – ${n} ${n === 1 ? "Tema" : "Temas"}` },
+    mx: { single: "degaja.com – Lectura individual", pack: "degaja.com – 3 Lecturas", voice: n => `DEGAJA Live Audio – ${n} ${n === 1 ? "Tema" : "Temas"}` },
+    ja: { single: "degaja.com – 単発鑑定", pack: "degaja.com – 3回鑑定パック", voice: n => `DEGAJA ライブ音声 – ${n}テーマ` },
+    zh: { single: "degaja.com – 单次解读", pack: "degaja.com – 3次解读", voice: n => `DEGAJA 实时语音 – ${n}个主题` },
+    hi: { single: "degaja.com – सिंगल रीडिंग", pack: "degaja.com – 3 रीडिंग्स", voice: n => `DEGAJA लाइव ऑडियो – ${n} विषय` }
   };
   const names = PRODUCT_NAMES[lang] || PRODUCT_NAMES.de;
 
