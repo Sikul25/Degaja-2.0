@@ -100,6 +100,10 @@
     .quiz-disclaimer{margin-top:18px;color:rgba(255,255,255,.35);font-size:11px;line-height:1.5}
     .quiz-legal-links{margin-top:8px;text-align:center;font-size:11px}
     .quiz-legal-links a{color:rgba(255,255,255,.45);text-decoration:underline}
+    .quiz-cross-links{margin-top:20px;padding-top:16px;border-top:1px solid rgba(255,255,255,.1)}
+    .quiz-cross-heading{text-align:center;color:rgba(255,255,255,.4);font-size:11px;margin-bottom:10px}
+    .quiz-cross-grid{display:flex;flex-wrap:wrap;justify-content:center;gap:8px}
+    .quiz-cross-grid a{border:1px solid rgba(240,212,143,.3);border-radius:999px;padding:8px 14px;color:#f0d48f;font-size:12px;font-weight:700;text-decoration:none}
     .quiz-lang{position:absolute;top:16px;right:16px;z-index:3;color:rgba(255,255,255,.7);font-size:12px;font-weight:700;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.16);border-radius:999px;padding:6px 26px 6px 13px;cursor:pointer;transition:.2s;-webkit-appearance:none;appearance:none;background-image:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 6"><path d="M1 1l4 4 4-4" stroke="%23e7c372" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>');background-repeat:no-repeat;background-position:right 10px center}
     .quiz-lang:hover{border-color:rgba(231,195,114,.5);color:#f0d48f}
     .quiz-lang option{background:#101d30;color:#fff}
@@ -143,7 +147,7 @@
     <option value="hi">HI</option>
   </select>
   <div class="quiz-top">
-    <img src="assets/degaja-logo.png" alt="DEGAJA" class="quiz-logo">
+    <a href="index.html" aria-label="DEGAJA"><img src="assets/degaja-logo.png" alt="DEGAJA" class="quiz-logo"></a>
     <div class="quiz-progress-wrap"><div class="quiz-progress-bar" id="progressBar"></div></div>
     <div class="quiz-step-count" id="stepCount">1/4</div>
   </div>
@@ -235,6 +239,11 @@
     "share_btn": "📤 Teilen",
     "share_text": "Ich habe gerade meine Zeitreise bei DEGAJA entdeckt — probier's auch aus:",
     "share_copied": "Link kopiert!",
+    "cross_heading": "Entdecke mehr:",
+    "cross_dream": "🌙 Traumdeutung",
+    "cross_quiz": "⏳ Vergangenes Leben",
+    "cross_love": "❤️ Nächste Beziehung",
+    "cross_time": "🕰️ Zeittunnel",
     "purchase_eyebrow": "DEGAJA™ · 24/7",
     "purchase_title": "Geh tiefer",
     "purchase_desc": "Deine erste Antwort war kostenlos. Schalte jetzt eine tiefere persönliche Lesung frei – inklusive 5 Minuten Nachfragen danach.",
@@ -318,6 +327,11 @@
     "share_btn": "📤 Share",
     "share_text": "I just discovered my time journey on DEGAJA — try it yourself:",
     "share_copied": "Link copied!",
+    "cross_heading": "Discover more:",
+    "cross_dream": "🌙 Dream Decoder",
+    "cross_quiz": "⏳ Past Life",
+    "cross_love": "❤️ Next Relationship",
+    "cross_time": "🕰️ Time Tunnel",
     "purchase_eyebrow": "DEGAJA™ · 24/7",
     "purchase_title": "Go deeper",
     "purchase_desc": "Your first answer was free. Unlock a deeper personal reading, plus 5 minutes of follow-up questions.",
@@ -401,6 +415,11 @@
     "share_btn": "📤 Partager",
     "share_text": "Je viens de découvrir mon voyage dans le temps sur DEGAJA — essaie aussi :",
     "share_copied": "Lien copié !",
+    "cross_heading": "Découvre aussi :",
+    "cross_dream": "🌙 Décodeur de rêves",
+    "cross_quiz": "⏳ Vie antérieure",
+    "cross_love": "❤️ Prochaine relation",
+    "cross_time": "🕰️ Tunnel temporel",
     "purchase_eyebrow": "DEGAJA™ · 24/7",
     "purchase_title": "Aller plus loin",
     "purchase_desc": "Ta première réponse était gratuite. Débloque maintenant une lecture personnelle plus approfondie, avec 5 minutes de questions supplémentaires.",
@@ -484,6 +503,11 @@
     "share_btn": "📤 Compartir",
     "share_text": "Acabo de descubrir mi viaje en el tiempo en DEGAJA — pruébalo tú también:",
     "share_copied": "¡Enlace copiado!",
+    "cross_heading": "Descubre más:",
+    "cross_dream": "🌙 Descifrador de sueños",
+    "cross_quiz": "⏳ Vida pasada",
+    "cross_love": "❤️ Próxima relación",
+    "cross_time": "🕰️ Túnel del tiempo",
     "purchase_eyebrow": "DEGAJA™ · 24/7",
     "purchase_title": "Profundiza",
     "purchase_desc": "Tu primera respuesta fue gratuita. Desbloquea ahora una lectura personal más profunda, con 5 minutos de preguntas adicionales.",
@@ -567,6 +591,11 @@
     "share_btn": "📤 Condividi",
     "share_text": "Ho appena scoperto il mio viaggio nel tempo su DEGAJA — provaci anche tu:",
     "share_copied": "Link copiato!",
+    "cross_heading": "Scopri anche:",
+    "cross_dream": "🌙 Decodificatore dei sogni",
+    "cross_quiz": "⏳ Vita passata",
+    "cross_love": "❤️ Prossima relazione",
+    "cross_time": "🕰️ Tunnel del tempo",
     "purchase_eyebrow": "DEGAJA™ · 24/7",
     "purchase_title": "Approfondisci",
     "purchase_desc": "La tua prima risposta era gratuita. Sblocca ora una lettura personale più approfondita, con 5 minuti di domande aggiuntive.",
@@ -650,6 +679,11 @@
     "share_btn": "📤 Partilhar",
     "share_text": "Acabei de descobrir a minha viagem no tempo na DEGAJA — experimenta também:",
     "share_copied": "Link copiado!",
+    "cross_heading": "Descobre mais:",
+    "cross_dream": "🌙 Descodificador de sonhos",
+    "cross_quiz": "⏳ Vida passada",
+    "cross_love": "❤️ Próximo relacionamento",
+    "cross_time": "🕰️ Túnel do tempo",
     "purchase_eyebrow": "DEGAJA™ · 24/7",
     "purchase_title": "Aprofundar",
     "purchase_desc": "A tua primeira resposta foi gratuita. Desbloqueia agora uma leitura pessoal mais profunda, com 5 minutos de perguntas adicionais.",
@@ -733,6 +767,11 @@
     "share_btn": "📤 Compartilhar",
     "share_text": "Acabei de descobrir minha viagem no tempo na DEGAJA — experimente também:",
     "share_copied": "Link copiado!",
+    "cross_heading": "Descubra mais:",
+    "cross_dream": "🌙 Decodificador de sonhos",
+    "cross_quiz": "⏳ Vida passada",
+    "cross_love": "❤️ Próximo relacionamento",
+    "cross_time": "🕰️ Túnel do tempo",
     "purchase_eyebrow": "DEGAJA™ · 24/7",
     "purchase_title": "Aprofundar",
     "purchase_desc": "Sua primeira resposta foi gratuita. Desbloqueie agora uma leitura pessoal mais profunda, com 5 minutos de perguntas adicionais.",
@@ -816,6 +855,11 @@
     "share_btn": "📤 Поделиться",
     "share_text": "Я только что узнал(а) о своём путешествии во времени на DEGAJA — попробуй тоже:",
     "share_copied": "Ссылка скопирована!",
+    "cross_heading": "Узнай больше:",
+    "cross_dream": "🌙 Расшифровка снов",
+    "cross_quiz": "⏳ Прошлая жизнь",
+    "cross_love": "❤️ Будущие отношения",
+    "cross_time": "🕰️ Туннель времени",
     "purchase_eyebrow": "DEGAJA™ · 24/7",
     "purchase_title": "Углубиться",
     "purchase_desc": "Твой первый ответ был бесплатным. Разблокируй более глубокий персональный расклад и 5 минут дополнительных вопросов.",
@@ -899,6 +943,11 @@
     "share_btn": "📤 Поділитися",
     "share_text": "Я щойно дізнався/дізналася про свою подорож у часі на DEGAJA — спробуй теж:",
     "share_copied": "Посилання скопійовано!",
+    "cross_heading": "Дізнайся більше:",
+    "cross_dream": "🌙 Розшифрування снів",
+    "cross_quiz": "⏳ Минуле життя",
+    "cross_love": "❤️ Майбутні стосунки",
+    "cross_time": "🕰️ Тунель часу",
     "purchase_eyebrow": "DEGAJA™ · 24/7",
     "purchase_title": "Заглибитися",
     "purchase_desc": "Твоя перша відповідь була безкоштовною. Розблокуй глибший особистий розклад і 5 хвилин додаткових запитань.",
@@ -982,6 +1031,11 @@
     "share_btn": "📤 シェアする",
     "share_text": "DEGAJAで自分のタイムトラベルを体験しました — あなたも試してみて：",
     "share_copied": "リンクをコピーしました！",
+    "cross_heading": "もっと見る：",
+    "cross_dream": "🌙 夢解読",
+    "cross_quiz": "⏳ 前世",
+    "cross_love": "❤️ 次の恋愛",
+    "cross_time": "🕰️ タイムトンネル",
     "purchase_eyebrow": "DEGAJA™ · 24時間対応",
     "purchase_title": "さらに深く",
     "purchase_desc": "最初の回答は無料でした。より深いパーソナル鑑定と、5分間の追加質問をアンロックしましょう。",
@@ -1065,6 +1119,11 @@
     "share_btn": "📤 分享",
     "share_text": "我刚在DEGAJA上体验了我的时间之旅——你也试试吧：",
     "share_copied": "链接已复制！",
+    "cross_heading": "探索更多：",
+    "cross_dream": "🌙 解梦",
+    "cross_quiz": "⏳ 前世",
+    "cross_love": "❤️ 下一段感情",
+    "cross_time": "🕰️ 时间隧道",
     "purchase_eyebrow": "DEGAJA™ · 24/7",
     "purchase_title": "深入解读",
     "purchase_desc": "你的第一次解答是免费的。现在解锁更深入的专属解读，并可追加5分钟提问。",
@@ -1148,6 +1207,11 @@
     "share_btn": "📤 शेयर करें",
     "share_text": "मैंने अभी-अभी DEGAJA पर अपनी टाइम जर्नी के बारे में जाना — तुम भी ट्राई करो:",
     "share_copied": "लिंक कॉपी हो गया!",
+    "cross_heading": "और जानो:",
+    "cross_dream": "🌙 सपनों का डिकोडर",
+    "cross_quiz": "⏳ पिछला जन्म",
+    "cross_love": "❤️ अगला रिश्ता",
+    "cross_time": "🕰️ टाइम टनल",
     "purchase_eyebrow": "DEGAJA™ · 24/7",
     "purchase_title": "और गहराई में जाओ",
     "purchase_desc": "तुम्हारा पहला जवाब मुफ़्त था। अभी एक गहरी व्यक्तिगत रीडिंग अनलॉक करो, साथ में 5 मिनट के अतिरिक्त सवाल।",
@@ -1529,6 +1593,18 @@
     document.getElementById("pmPack").addEventListener("click", function(){ startTimeTunnelCheckout("pack"); });
   }
 
+  // Cross-links to the other 3 standalone feature pages. None of these
+  // pages linked anywhere outside the legal pages — a visitor arriving
+  // straight from search had no way to discover the rest of the site, and
+  // none of the pages' SEO value flowed to each other either.
+  function crossLinksHtml(){
+    return '<div class="quiz-cross-links"><div class="quiz-cross-heading">' + t().cross_heading + '</div><div class="quiz-cross-grid">' +
+      '<a href="dream.html">' + t().cross_dream + '</a>' +
+      '<a href="quiz.html">' + t().cross_quiz + '</a>' +
+      '<a href="love-quiz.html">' + t().cross_love + '</a>' +
+      '</div></div>';
+  }
+
   function legalLinksHtml(){
     var l = t().legal || {};
     return '<div class="quiz-legal-links">' +
@@ -1570,6 +1646,7 @@
     html += '<div class="quiz-pack-hint" role="button" tabindex="0">' + t().purchase_pack + '</div>';
     html += '<div class="quiz-trust-note">🔒 ' + t().purchase_note + '</div>';
     html += '<div class="quiz-disclaimer">' + t().disclaimer + '</div>';
+    html += crossLinksHtml();
     html += legalLinksHtml();
     setCard(html);
     typewriter(document.getElementById("revealText"), text);
