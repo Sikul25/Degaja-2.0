@@ -56,6 +56,26 @@ detail — read it at the start of any new session on this repo.
     see the Numerology/AI-loading-spinner entry under "Architecture notes"
     below. This was the only functional issue they found — the site is
     otherwise expected to be fully testable now.
+- **2026-10-31/11-01: CCBill's AI Content Merchant Addendum.** A separate,
+  more detailed compliance document specifically about AI-generated content
+  (disclosure, consent, prohibited content, abuse detection). Handled:
+  - Verified the site already disclosed AI-generated content prominently on
+    every reading feature (inline disclaimer next to each feature's button,
+    sitewide footer, FAQ) — the T&Cs (AGB) were the one gap, so a sentence
+    disclosing AI-generated content was added to AGB section 2 in all 11
+    languages.
+  - Created `dmca.html` (prohibited-content / complaints / DMCA policy
+    page, all 11 languages, linked from the shared footer) specifically to
+    answer the Addendum's question about where CCBill can find this policy.
+  - Filled out and submitted the Addendum's 6 free-text questions plus a
+    signed `AI-Content-Merchant-Addendum-DEGAJA.docx` (generated with the
+    `docx` npm skill, verified by rendering to PDF before sending) — answers
+    emphasize that DEGAJA's AI only ever generates text (no images/video/
+    voice-cloning), so most of the Addendum's deepfake/consent/minor-content
+    concerns are architecturally inapplicable.
+  - 2026-11-03: Marija (CCBill) confirmed receipt, forwarded to Compliance
+    for review. Still pending as of this writing — ask Yoel for current
+    status if not obvious from recent conversation.
 
 ## Universal / non-denominational framing — standing design principle
 
@@ -270,6 +290,83 @@ DEGAJA should contrast against, not emulate. The established pattern:
     write-abuse surface sitting in prod ahead of the real CCBill cutover.
     Now 503s until `CCBILL_WEBHOOK_SALT` is set; wire the real signature
     check in when CCBill provides it, per the TODO already in that file.
+
+## i18n completeness — audit method and what it found (2026-11-02/03)
+
+`i18n.js`'s `t(key)` silently falls back to `T.de[key]` when a key is
+missing for the current language (see "Architecture notes" above) — this
+means a missing translation is **never visible as an error**, only as
+mystery German text to a non-German visitor. This already caused real,
+long-undetected bugs:
+- The **entire `live.*` namespace** (62 keys — every button/status message/
+  warning in the live-advisor call flow) was completely missing for
+  Japanese, Chinese and Hindi. Visitors in those languages hitting "Live
+  Audio" saw 100% German throughout the booking and call UI.
+- The **entire Advisor (`#human`) and Rituals (`#rituale`/`ritual.modal*`)
+  sections** (26 keys, including all 3 ritual cards with pricing) were also
+  completely missing for the same 3 languages — neither section is
+  language-gated (unlike BaZi, see below), so this was live and visible.
+- `bazi.*` (13 keys) was missing for es/fr/hi/it/pt/ru/uk — this one was
+  *intentional* at the time: BaZi was gated to ja/zh only via a
+  `data-ja-zh-only` HTML attribute + matching JS in `i18n.js`. Yoel decided
+  (2026-11-02) that curiosity about Eastern astrology isn't limited to
+  Japanese/Chinese speakers, so the gate was removed entirely (`api/bazi.js`
+  already supported every language correctly — it was purely a frontend
+  gate) and the missing translations were added for all 7 languages.
+
+All of the above is now fixed; a full cross-language key audit (every
+`"key.subkey": ` pattern, diffed across the 11 base-language blocks in
+`i18n.js`) shows **zero gaps** as of 2026-11-03. If this needs re-checking
+after future edits, the method that worked: find each language's block
+start line (`de: {`, `en: {`, …) and `T.br =` as the end marker, extract all
+dotted-key matches per block into a `Set`, then diff the union of all keys
+against each language's set. Don't just count total occurrences of a key
+name across the whole file — multi-dot keys (e.g. `rituale.love.title`)
+need a regex that allows more than one dot, or they're silently skipped.
+
+## SEO & Google Search Console
+
+- A Google Search Console property for `degaja.com` already exists and is
+  verified under Yoel's Google account (confirmed by Yoel 2026-11-03,
+  existing for over a month already — exact verification method, e.g. DNS
+  TXT at Porkbun vs. HTML meta tag, is not recorded anywhere in this repo,
+  since DNS for degaja.com is managed externally at Porkbun, not through
+  Vercel). Don't offer to walk Yoel through creating a new property from
+  scratch — check whether one already exists / ask him first.
+- `sitemap.xml` lives at the site root. As of 2026-11-03 it lists the
+  homepage + all per-language paths (`/en`, `/fr`, … ), `werde-beraterin.html`,
+  `werde-partner.html`, and `dream.html`/`quiz.html`/`love-quiz.html`/
+  `time-tunnel.html`. `robots.txt` references it.
+- **2026-11-03 finding (significant):** `dream.html`, `quiz.html`,
+  `love-quiz.html` and `time-tunnel.html` — the exact pages promoted via
+  "trending now" banners on the homepage, meant to drive organic search
+  traffic — were all set to `<meta name="robots" content="noindex">`,
+  despite each already having unique, search-ready titles/descriptions, and
+  none of them were in `sitemap.xml` either. This blocked Google from
+  indexing them at all. Fixed: removed `noindex`, added a `canonical` tag to
+  each (none had one), added all 4 to `sitemap.xml`. Google still needs to
+  re-crawl before this shows results — ask Yoel to use GSC's "URL
+  Inspection" → "Request Indexing" on each of the 4 URLs to speed this up
+  rather than waiting for natural re-crawl.
+- The homepage's `<script type="application/ld+json">` block (in
+  `index.html`'s `<head>`) hardcodes an `Organization`/`WebSite`/`FAQPage`
+  schema **in German only** — it is not i18n-driven. This is what Google's
+  rich results and AI Overview read directly. As of 2026-11-03 it has 6
+  Q&As mirroring `faq.q1..q6`/`faq.a1..a6` from `i18n.js`'s German block.
+  **Whenever a new `faq.qN`/`faq.aN` pair is added to the visible FAQ
+  section, add the same Q&A to this JSON-LD block too** — the two have
+  drifted out of sync before and the schema is the one that actually
+  reaches AI-generated search summaries.
+- Context for why this round of SEO work happened: Vercel Web Analytics
+  showed only ~137 visitors / ~492 pageviews for all of October 2026 —
+  traffic, not conversion, is the actual bottleneck right now (checkout/
+  payment infra has no errors and all keys are configured). An AI-generated
+  search summary was also found comparing DEGAJA's billing to predatory
+  subscription apps (e.g. Nebula) due to DEGAJA having no third-party trust
+  footprint (no Trustpilot/BBB presence) — Yoel was given this list of
+  next steps but hadn't acted on it as of this writing: set up free
+  Trustpilot + BBB + Google Business Profile listings, since these are what
+  AI search tools cite when assessing legitimacy.
 
 ## Language / routing
 
