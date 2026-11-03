@@ -11,6 +11,18 @@
   <meta property="og:description" content="Beantworte ein paar Fragen und erhalte deine persönliche mystische Enthüllung.">
   <meta property="og:image" content="https://www.degaja.com/assets/og-image.png">
   <link rel="canonical" href="https://www.degaja.com/quiz.html">
+  <script>
+    (function () {
+      var ALIAS = { us: "en", mx: "es" };
+      var SUPPORTED = ["en", "fr", "es", "it", "pt", "ru", "uk", "br", "ja", "zh", "hi"];
+      var raw = new URLSearchParams(location.search).get("lang");
+      var mapped = ALIAS[raw] || raw;
+      if (mapped && SUPPORTED.indexOf(mapped) !== -1) {
+        var link = document.querySelector('link[rel="canonical"]');
+        if (link) link.href = "https://www.degaja.com/quiz.html?lang=" + mapped;
+      }
+    })();
+  </script>
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
   <link rel="icon" href="favicon.ico" sizes="any">
   <link rel="apple-touch-icon" href="apple-touch-icon.png">
