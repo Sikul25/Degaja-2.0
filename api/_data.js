@@ -6,8 +6,11 @@
 // ADVISOR_TOKENS below, and send them their own /berater.html?advisor=<id>
 // link - the availability toggle, the live-call picker and the admin tools
 // all already work generically across however many advisors are listed here.
+// languages: ISO codes the advisor can actually hold a live conversation
+// in - shown on her public card (live-consult.js) so a visitor never books
+// a session expecting a language she doesn't speak.
 export const ADVISORS = [
-  { id: "papuli", name: "Papuli", title: "Tarot, Astrologie & Zukunft", specialty: ["Tarot", "Liebe & Beziehung", "Zukunft", "Astrologie", "Numerologie"], style: "warm, intuitiv, empathisch und direkt", active: true }
+  { id: "papuli", name: "Papuli", title: "Tarot, Astrologie & Zukunft", specialty: ["Tarot", "Liebe & Beziehung", "Zukunft", "Astrologie", "Numerologie"], style: "warm, intuitiv, empathisch und direkt", active: true, languages: ["de", "ru", "uk"] }
 ];
 
 export const ADVISOR_CAPACITY = 100;

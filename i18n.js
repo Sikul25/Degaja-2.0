@@ -3,9 +3,14 @@
 
   const LANG_KEY = "degajaLang";
   const SUPPORTED = ["de", "uk", "ru", "en", "us", "fr", "es", "it", "pt", "br", "mx", "ja", "zh", "hi"];
-  // Languages the live human advisor (Papuli) actually speaks. The live
-  // audio consultation is only shown for these.
-  const ADVISOR_LANGS = ["de", "ru", "uk"];
+  // The live audio consultation section used to be hidden outside
+  // German/Russian/Ukrainian (the only languages the advisor actually
+  // speaks), to never advertise a feature we can't deliver in a given
+  // language. Now shown everywhere (each advisor's spoken languages are
+  // displayed on their own card instead, via live-consult.js), since a
+  // payment-processor compliance review needs to see every offered
+  // service on the site regardless of browsing language.
+  const ADVISOR_LANGS = SUPPORTED;
 
   const T = {
     de: {
@@ -224,6 +229,7 @@
       "dpc.defaultTopic": "persönliches Anliegen",
       "live.eyebrow": "✦ LIVE AUDIO ✦", "live.title": "Direkt mit unserer Expertin sprechen",
       "live.badge": "🔒 Anonym · nur nach Zahlung",
+      "live.advisorSpeaks": "Spricht:",
       "live.onlineNow": "🟢 Live gerade online",
       "live.offlineNow": "⚪ Gerade nicht verfügbar",
       "live.notAvailableTitle": "Gerade nicht verfügbar",
@@ -698,6 +704,7 @@
       "dpc.defaultTopic": "personal matter",
       "live.eyebrow": "✦ LIVE AUDIO ✦", "live.title": "Talk directly with our expert",
       "live.badge": "🔒 Anonymous · payment required",
+      "live.advisorSpeaks": "Speaks:",
       "live.onlineNow": "🟢 Live online now",
       "live.offlineNow": "⚪ Not available right now",
       "live.notAvailableTitle": "Not available right now",
@@ -1172,6 +1179,7 @@
       "dpc.defaultTopic": "préoccupation personnelle",
       "live.eyebrow": "✦ AUDIO EN DIRECT ✦", "live.title": "Parler directement avec notre experte",
       "live.badge": "🔒 Anonyme · paiement requis",
+      "live.advisorSpeaks": "Parle :",
       "live.onlineNow": "🟢 En ligne maintenant",
       "live.offlineNow": "⚪ Pas disponible pour le moment",
       "live.notAvailableTitle": "Pas disponible pour le moment",
@@ -1646,6 +1654,7 @@
       "dpc.defaultTopic": "asunto personal",
       "live.eyebrow": "✦ AUDIO EN VIVO ✦", "live.title": "Habla directamente con nuestra experta",
       "live.badge": "🔒 Anónimo · requiere pago",
+      "live.advisorSpeaks": "Habla:",
       "live.onlineNow": "🟢 En línea ahora",
       "live.offlineNow": "⚪ No disponible en este momento",
       "live.notAvailableTitle": "No disponible en este momento",
@@ -2120,6 +2129,7 @@
       "dpc.defaultTopic": "questione personale",
       "live.eyebrow": "✦ AUDIO IN DIRETTA ✦", "live.title": "Parla direttamente con la nostra esperta",
       "live.badge": "🔒 Anonimo · richiede pagamento",
+      "live.advisorSpeaks": "Parla:",
       "live.onlineNow": "🟢 Online ora",
       "live.offlineNow": "⚪ Non disponibile al momento",
       "live.notAvailableTitle": "Non disponibile al momento",
@@ -2594,6 +2604,7 @@
       "dpc.defaultTopic": "assunto pessoal",
       "live.eyebrow": "✦ ÁUDIO AO VIVO ✦", "live.title": "Fala diretamente com a nossa especialista",
       "live.badge": "🔒 Anónimo · requer pagamento",
+      "live.advisorSpeaks": "Fala:",
       "live.onlineNow": "🟢 Online agora",
       "live.offlineNow": "⚪ Não disponível neste momento",
       "live.notAvailableTitle": "Não disponível neste momento",
@@ -3068,6 +3079,7 @@
       "dpc.defaultTopic": "личный вопрос",
       "live.eyebrow": "✦ ЖИВОЕ АУДИО ✦", "live.title": "Поговори напрямую с нашим экспертом",
       "live.badge": "🔒 Анонимно · требуется оплата",
+      "live.advisorSpeaks": "Говорит:",
       "live.onlineNow": "🟢 Сейчас онлайн",
       "live.offlineNow": "⚪ Сейчас недоступна",
       "live.notAvailableTitle": "Сейчас недоступна",
@@ -3542,6 +3554,7 @@
       "dpc.defaultTopic": "особисте питання",
       "live.eyebrow": "✦ ЖИВЕ АУДІО ✦", "live.title": "Поговори напряму з нашою експерткою",
       "live.badge": "🔒 Анонімно · потрібна оплата",
+      "live.advisorSpeaks": "Розмовляє:",
       "live.onlineNow": "🟢 Зараз онлайн",
       "live.offlineNow": "⚪ Зараз недоступна",
       "live.notAvailableTitle": "Зараз недоступна",
@@ -4016,6 +4029,7 @@
       "dpc.defaultTopic": "個人的な悩み",
       "live.eyebrow": "✦ ライブ音声 ✦", "live.title": "専門家と直接話す",
       "live.badge": "🔒 匿名 · お支払いが必要です",
+      "live.advisorSpeaks": "対応言語：",
       "live.onlineNow": "🟢 現在ライブでオンライン",
       "live.offlineNow": "⚪ 現在ご利用いただけません",
       "live.notAvailableTitle": "現在ご利用いただけません",
@@ -4497,6 +4511,7 @@
       "dpc.defaultTopic": "个人事务",
       "live.eyebrow": "✦ 实时语音 ✦", "live.title": "直接与我们的专家交流",
       "live.badge": "🔒 匿名 · 需付费",
+      "live.advisorSpeaks": "可用语言：",
       "live.onlineNow": "🟢 当前在线",
       "live.offlineNow": "⚪ 当前不可用",
       "live.notAvailableTitle": "当前不可用",
@@ -4978,6 +4993,7 @@
       "dpc.defaultTopic": "व्यक्तिगत मामला",
       "live.eyebrow": "✦ लाइव ऑडियो ✦", "live.title": "हमारी विशेषज्ञ से सीधे बात करो",
       "live.badge": "🔒 गुमनाम · भुगतान आवश्यक",
+      "live.advisorSpeaks": "भाषाएँ:",
       "live.onlineNow": "🟢 अभी लाइव ऑनलाइन",
       "live.offlineNow": "⚪ अभी उपलब्ध नहीं",
       "live.notAvailableTitle": "अभी उपलब्ध नहीं",
