@@ -10,6 +10,12 @@
   <meta property="og:title" content="Was verbirgt deine Zeitlinie wirklich? – DEGAJA">
   <meta property="og:description" content="Beantworte ein paar Fragen und erhalte deine persönliche Reise durch den Zeittunnel.">
   <meta property="og:image" content="https://www.degaja.com/assets/og-image.png">
+  <meta property="og:url" content="https://www.degaja.com/time-tunnel.html">
+  <meta property="og:locale" content="de_DE">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Was verbirgt deine Zeitlinie wirklich? – DEGAJA">
+  <meta name="twitter:description" content="Beantworte ein paar Fragen und erhalte deine persönliche Reise durch den Zeittunnel.">
+  <meta name="twitter:image" content="https://www.degaja.com/assets/og-image.png">
   <link rel="canonical" href="https://www.degaja.com/time-tunnel.html">
   <link rel="alternate" hreflang="de" href="https://www.degaja.com/time-tunnel.html">
   <link rel="alternate" hreflang="en" href="https://www.degaja.com/time-tunnel.html?lang=en">
@@ -94,6 +100,12 @@
           setContent('meta[name="description"]', meta.description);
           setContent('meta[property="og:title"]', meta.title);
           setContent('meta[property="og:description"]', meta.description);
+          setContent('meta[name="twitter:title"]', meta.title);
+          setContent('meta[name="twitter:description"]', meta.description);
+          setContent('meta[property="og:url"]', "https://www.degaja.com/time-tunnel.html?lang=" + mapped);
+          var OG_LOCALES = { de: "de_DE", en: "en_GB", fr: "fr_FR", es: "es_ES", it: "it_IT", pt: "pt_PT", br: "pt_BR", ru: "ru_RU", uk: "uk_UA", ja: "ja_JP", zh: "zh_CN", hi: "hi_IN" };
+          setContent('meta[property="og:locale"]', OG_LOCALES[mapped] || "de_DE");
+          document.documentElement.lang = mapped;
         }
       }
     })();
