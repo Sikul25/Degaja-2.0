@@ -28,11 +28,73 @@
     (function () {
       var ALIAS = { us: "en", mx: "es" };
       var SUPPORTED = ["en", "fr", "es", "it", "pt", "ru", "uk", "br", "ja", "zh", "hi"];
+      // Per-language <title>/description, so search engines see genuinely
+      // different content per ?lang= variant, not just a reused German page
+      // with a different URL -- the previous gap here (title/meta always
+      // stayed German) likely fed Google's "different canonical than user"
+      // verdict on these pages independently of the hreflang tags.
+      var SEO_META = {
+              "en": {
+                      "title": "Discover Your Hidden Self – DEGAJA",
+                      "description": "DEGAJA – Answer a few questions and discover a personal mystical revelation: past life, destiny and more."
+              },
+              "fr": {
+                      "title": "Découvre ton moi caché – DEGAJA",
+                      "description": "DEGAJA – Réponds à quelques questions et découvre une révélation mystique personnelle : vie antérieure, destin et plus encore."
+              },
+              "es": {
+                      "title": "Descubre tu yo oculto – DEGAJA",
+                      "description": "DEGAJA – Responde unas pocas preguntas y descubre una revelación mística personal: vida pasada, destino y mucho más."
+              },
+              "it": {
+                      "title": "Scopri il tuo io nascosto – DEGAJA",
+                      "description": "DEGAJA – Rispondi a poche domande e scopri una rivelazione mistica personale: vita passata, destino e altro ancora."
+              },
+              "pt": {
+                      "title": "Descobre o teu eu oculto – DEGAJA",
+                      "description": "DEGAJA – Responde a algumas perguntas e descobre uma revelação mística pessoal: vida passada, destino e muito mais."
+              },
+              "br": {
+                      "title": "Descubra o seu eu oculto – DEGAJA",
+                      "description": "DEGAJA – Responda a algumas perguntas e descubra uma revelação mística pessoal: vida passada, destino e muito mais."
+              },
+              "ru": {
+                      "title": "Узнай своё скрытое «я» – DEGAJA",
+                      "description": "DEGAJA – Ответь на несколько вопросов и получи личное мистическое откровение: прошлая жизнь, судьба и многое другое."
+              },
+              "uk": {
+                      "title": "Дізнайся своє приховане «я» – DEGAJA",
+                      "description": "DEGAJA – Дай відповідь на кілька запитань і отримай особисте містичне одкровення: минуле життя, доля та багато іншого."
+              },
+              "ja": {
+                      "title": "隠されたあなたを発見する – DEGAJA",
+                      "description": "DEGAJA – いくつかの質問に答えて、前世や運命など、あなただけの神秘的な啓示を見つけましょう。"
+              },
+              "zh": {
+                      "title": "探索隐藏的自我 – DEGAJA",
+                      "description": "DEGAJA——回答几个问题，获得属于你的神秘启示：前世、命运及更多。"
+              },
+              "hi": {
+                      "title": "अपने छिपे हुए स्वरूप को जानें – DEGAJA",
+                      "description": "DEGAJA – कुछ सवालों के जवाब दें और पाएं एक व्यक्तिगत रहस्यमय रहस्योद्घाटन: पिछला जन्म, भाग्य और भी बहुत कुछ।"
+              }
+      };
       var raw = new URLSearchParams(location.search).get("lang");
       var mapped = ALIAS[raw] || raw;
       if (mapped && SUPPORTED.indexOf(mapped) !== -1) {
         var link = document.querySelector('link[rel="canonical"]');
         if (link) link.href = "https://www.degaja.com/quiz.html?lang=" + mapped;
+        var meta = SEO_META[mapped];
+        if (meta) {
+          document.title = meta.title;
+          var setContent = function (selector, value) {
+            var el = document.querySelector(selector);
+            if (el) el.setAttribute("content", value);
+          };
+          setContent('meta[name="description"]', meta.description);
+          setContent('meta[property="og:title"]', meta.title);
+          setContent('meta[property="og:description"]', meta.description);
+        }
       }
     })();
   </script>

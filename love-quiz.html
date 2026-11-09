@@ -28,11 +28,73 @@
     (function () {
       var ALIAS = { us: "en", mx: "es" };
       var SUPPORTED = ["en", "fr", "es", "it", "pt", "ru", "uk", "br", "ja", "zh", "hi"];
+      // Per-language <title>/description, so search engines see genuinely
+      // different content per ?lang= variant, not just a reused German page
+      // with a different URL -- the previous gap here (title/meta always
+      // stayed German) likely fed Google's "different canonical than user"
+      // verdict on these pages independently of the hreflang tags.
+      var SEO_META = {
+              "en": {
+                      "title": "What Will Your Next Relationship Be Like? – DEGAJA",
+                      "description": "DEGAJA – Answer a few questions and discover a personal love revelation: when, how and who your next relationship will be."
+              },
+              "fr": {
+                      "title": "À quoi ressemblera ta prochaine relation ? – DEGAJA",
+                      "description": "DEGAJA – Réponds à quelques questions et découvre une révélation amoureuse personnelle : quand, comment et avec qui sera ta prochaine relation."
+              },
+              "es": {
+                      "title": "¿Cómo será tu próxima relación? – DEGAJA",
+                      "description": "DEGAJA – Responde unas pocas preguntas y descubre una revelación amorosa personal: cuándo, cómo y quién será tu próxima relación."
+              },
+              "it": {
+                      "title": "Come sarà la tua prossima relazione? – DEGAJA",
+                      "description": "DEGAJA – Rispondi a poche domande e scopri una rivelazione d'amore personale: quando, come e con chi sarà la tua prossima relazione."
+              },
+              "pt": {
+                      "title": "Como será a tua próxima relação? – DEGAJA",
+                      "description": "DEGAJA – Responde a algumas perguntas e descobre uma revelação amorosa pessoal: quando, como e quem será a tua próxima relação."
+              },
+              "br": {
+                      "title": "Como será o seu próximo relacionamento? – DEGAJA",
+                      "description": "DEGAJA – Responda a algumas perguntas e descubra uma revelação amorosa pessoal: quando, como e quem será o seu próximo relacionamento."
+              },
+              "ru": {
+                      "title": "Какими будут твои следующие отношения? – DEGAJA",
+                      "description": "DEGAJA – Ответь на несколько вопросов и получи личное любовное откровение: когда, как и с кем будут твои следующие отношения."
+              },
+              "uk": {
+                      "title": "Якими будуть твої наступні стосунки? – DEGAJA",
+                      "description": "DEGAJA – Дай відповідь на кілька запитань і отримай особисте любовне одкровення: коли, як і з ким будуть твої наступні стосунки."
+              },
+              "ja": {
+                      "title": "あなたの次の恋愛はどうなる？ – DEGAJA",
+                      "description": "DEGAJA – いくつかの質問に答えて、次の恋愛がいつ、どのように、誰と訪れるのか、あなただけの恋愛の啓示を見つけましょう。"
+              },
+              "zh": {
+                      "title": "你的下一段感情会是怎样？ – DEGAJA",
+                      "description": "DEGAJA——回答几个问题，获得属于你的爱情启示：你的下一段感情将在何时、如何、与谁展开。"
+              },
+              "hi": {
+                      "title": "तुम्हारा अगला रिश्ता कैसा होगा? – DEGAJA",
+                      "description": "DEGAJA – कुछ सवालों के जवाब दें और जानें एक व्यक्तिगत प्रेम रहस्योद्घाटन: तुम्हारा अगला रिश्ता कब, कैसे और किसके साथ होगा।"
+              }
+      };
       var raw = new URLSearchParams(location.search).get("lang");
       var mapped = ALIAS[raw] || raw;
       if (mapped && SUPPORTED.indexOf(mapped) !== -1) {
         var link = document.querySelector('link[rel="canonical"]');
         if (link) link.href = "https://www.degaja.com/love-quiz.html?lang=" + mapped;
+        var meta = SEO_META[mapped];
+        if (meta) {
+          document.title = meta.title;
+          var setContent = function (selector, value) {
+            var el = document.querySelector(selector);
+            if (el) el.setAttribute("content", value);
+          };
+          setContent('meta[name="description"]', meta.description);
+          setContent('meta[property="og:title"]', meta.title);
+          setContent('meta[property="og:description"]', meta.description);
+        }
       }
     })();
   </script>

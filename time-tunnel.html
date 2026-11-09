@@ -28,11 +28,73 @@
     (function () {
       var ALIAS = { us: "en", mx: "es" };
       var SUPPORTED = ["en", "fr", "es", "it", "pt", "ru", "uk", "br", "ja", "zh", "hi"];
+      // Per-language <title>/description, so search engines see genuinely
+      // different content per ?lang= variant, not just a reused German page
+      // with a different URL -- the previous gap here (title/meta always
+      // stayed German) likely fed Google's "different canonical than user"
+      // verdict on these pages independently of the hreflang tags.
+      var SEO_META = {
+              "en": {
+                      "title": "What Is Your Timeline Really Hiding? – DEGAJA",
+                      "description": "DEGAJA – Answer a few questions and discover your personal journey through past, present and future in the Time Tunnel."
+              },
+              "fr": {
+                      "title": "Que cache vraiment ta ligne du temps ? – DEGAJA",
+                      "description": "DEGAJA – Réponds à quelques questions et découvre ton voyage personnel à travers le passé, le présent et l'avenir dans le tunnel temporel."
+              },
+              "es": {
+                      "title": "¿Qué esconde realmente tu línea de tiempo? – DEGAJA",
+                      "description": "DEGAJA – Responde unas pocas preguntas y descubre tu viaje personal por el pasado, el presente y el futuro en el túnel del tiempo."
+              },
+              "it": {
+                      "title": "Cosa nasconde davvero la tua linea temporale? – DEGAJA",
+                      "description": "DEGAJA – Rispondi a poche domande e scopri il tuo viaggio personale tra passato, presente e futuro nel tunnel del tempo."
+              },
+              "pt": {
+                      "title": "O que a tua linha do tempo realmente esconde? – DEGAJA",
+                      "description": "DEGAJA – Responde a algumas perguntas e descobre a tua viagem pessoal pelo passado, presente e futuro no túnel do tempo."
+              },
+              "br": {
+                      "title": "O que a sua linha do tempo realmente esconde? – DEGAJA",
+                      "description": "DEGAJA – Responda a algumas perguntas e descubra sua viagem pessoal pelo passado, presente e futuro no túnel do tempo."
+              },
+              "ru": {
+                      "title": "Что на самом деле скрывает твоя линия времени? – DEGAJA",
+                      "description": "DEGAJA – Ответь на несколько вопросов и узнай о своём личном путешествии через прошлое, настоящее и будущее в туннеле времени."
+              },
+              "uk": {
+                      "title": "Що насправді приховує твоя лінія часу? – DEGAJA",
+                      "description": "DEGAJA – Дай відповідь на кілька запитань і дізнайся про свою особисту подорож крізь минуле, теперішнє та майбутнє в тунелі часу."
+              },
+              "ja": {
+                      "title": "あなたの時間軸は本当は何を隠している？ – DEGAJA",
+                      "description": "DEGAJA – いくつかの質問に答えて、タイムトンネルで過去・現在・未来を巡るあなただけの旅を見つけましょう。"
+              },
+              "zh": {
+                      "title": "你的时间线究竟隐藏着什么？ – DEGAJA",
+                      "description": "DEGAJA——回答几个问题，在时间隧道中探索属于你的过去、现在与未来之旅。"
+              },
+              "hi": {
+                      "title": "तुम्हारी टाइमलाइन असल में क्या छुपाती है? – DEGAJA",
+                      "description": "DEGAJA – कुछ सवालों के जवाब दें और टाइम टनल में अतीत, वर्तमान और भविष्य से होकर अपनी व्यक्तिगत यात्रा जानें।"
+              }
+      };
       var raw = new URLSearchParams(location.search).get("lang");
       var mapped = ALIAS[raw] || raw;
       if (mapped && SUPPORTED.indexOf(mapped) !== -1) {
         var link = document.querySelector('link[rel="canonical"]');
         if (link) link.href = "https://www.degaja.com/time-tunnel.html?lang=" + mapped;
+        var meta = SEO_META[mapped];
+        if (meta) {
+          document.title = meta.title;
+          var setContent = function (selector, value) {
+            var el = document.querySelector(selector);
+            if (el) el.setAttribute("content", value);
+          };
+          setContent('meta[name="description"]', meta.description);
+          setContent('meta[property="og:title"]', meta.title);
+          setContent('meta[property="og:description"]', meta.description);
+        }
       }
     })();
   </script>
