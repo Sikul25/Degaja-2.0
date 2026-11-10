@@ -454,35 +454,31 @@ was explicit this is about the authenticity of really being there, not a
 replicable "travel content" formula — don't plan new creative assuming he
 can manufacture more of it on demand.
 
-**Agreed split (mirrors the automatic-vs-advisor split elsewhere in this
-file):**
-- **DACH (Germany/Austria/Switzerland)** — the one market getting a funded
-  campaign that pushes both the automatic AI readings *and* the live
-  advisor (Papuli speaks de/ru/uk), since it's the only market where a
-  convert can go on to the much higher-value advisor upsell.
-- **UK** — funded, automatic-only (Yoel cited it as ~33% of the European
-  market for this category — his figure, not independently verified).
-- **France/Italy/Spain** — flagged as a promising second-phase market
-  (Yoel's reasoning: all three have a long cultural history of paid
-  phone-in psychic/fortune-telling hotlines, now shifted to digital/social
-  — pre-existing demand, not a cold market), but intentionally **not**
-  funded yet — see budget note below.
-- **US** — automatic-only, organic/SEO (the `fair-pricing.html` work),
-  not part of this paid TikTok plan.
+**Agreed split — FINAL as of 2026-11-10 (supersedes an earlier DACH+UK
+draft that was discussed and then explicitly dropped in the same
+conversation — France/Italy/Spain were also floated as a phase-2 idea and
+then dropped; do not reintroduce UK/FR/IT/ES funding without Yoel
+reopening it):**
+- **DACH (Germany/Austria/Switzerland)** — funded campaign pushing both
+  the automatic AI readings *and* the live advisor (Papuli speaks
+  de/ru/uk), since it's the only market where a convert can go on to the
+  much higher-value advisor upsell.
+- **US** — funded, automatic-only. Paired with the existing organic/SEO
+  push (the `fair-pricing.html` work) rather than separate from it.
+- Explicitly **not** funded: UK, France, Italy, Spain. Yoel declined to
+  raise the total budget to cover them, so they stay unfunded rather than
+  diluting DACH/US below TikTok's ad-delivery learning-phase threshold
+  (~$20/day per ad group — see budget note below).
 
-**Budget**: €100/day total, explicitly **not** spread evenly across every
-market at once. Split agreed: DACH €40/day, UK €25/day, €35/day held back
-unspent. Rationale given to Yoel and accepted: TikTok's own ad-delivery
-algorithm needs roughly $20/day per ad group to leave its learning phase,
-so splitting further across FR/IT/ES too (~€11-12/day each) would be below
-that threshold and likely just burn budget with no real optimization —
-phase 2 (expand into FR/IT/ES) happens once DACH/UK results justify either
-reallocating this budget or raising the total.
+**Budget**: €100/day total, split across DACH and US only — Yoel
+explicitly declined to increase the total. Exact €/day split between the
+two was not finalized in this session; ask Yoel for the current number
+before assuming an even 50/50.
 
 **Creative**: use Yoel's existing high-performing organic videos (the
 Istanbul/Galata-Tower Turkish-coffee one explicitly named) as ad creative
-even for DACH/UK targeting — the location doesn't need to match the ad's
-target country for travel/mystery content to land.
+for both DACH and US targeting — the location doesn't need to match the
+ad's target country for travel/mystery content to land.
 
 **Promo offer**: 20% off the 3-reading package. Mechanism: `api/checkout.js`
 already passes `allow_promotion_codes: true` to Stripe, so the checkout
@@ -495,21 +491,27 @@ needs separate setup; nothing here assumes it carries over automatically.
 
 **Explicitly ruled out for this campaign** (ties back to the Nebula/FTC
 discussion above): no direct reference to Nebula, the FTC case, or any
-named competitor in TikTok ad creative for DACH/UK/EU audiences. Two
-reasons given: the FTC means nothing to a non-US audience (the whole
-reason `fair-pricing.html` was built English/US-only), and naming a
-competitor in paid ad creative revives the trademark/comparative-
-advertising risk Yoel already chose not to pursue without a lawyer. The
-agreed alternative: generic pain-point messaging that doesn't name anyone
-("fixed price, no surprises," "no hidden subscription, ever," "cancel or
-refund in one click") — it resonates with the same burned-by-some-app
-audience without the legal exposure.
+named competitor in TikTok ad creative for the DACH audience. Two reasons
+given: the FTC means nothing to a non-US audience (the whole reason
+`fair-pricing.html` was built English/US-only), and naming a competitor in
+paid ad creative revives the trademark/comparative-advertising risk Yoel
+already chose not to pursue without a lawyer. The agreed alternative:
+generic pain-point messaging that doesn't name anyone ("fixed price, no
+surprises," "no hidden subscription, ever," "cancel or refund in one
+click") — it resonates with the same burned-by-some-app audience without
+the legal exposure. For the US audience specifically, the FTC v. Genesis
+Tech case (see above) can be referenced carefully (sourced, "alleges"
+framing) since it's a real public case and the US audience is the one
+`fair-pricing.html` was built for — but never name Nebula/a competitor
+directly in ad creative itself, same rule as DACH.
 
 **Not yet done as of this writing**: the actual TikTok Ads Manager campaign
-setup (Yoel has a TikTok Business account; was about to be walked through
-Ads Manager step-by-step the same way the CCBill portal was, but this
-wasn't finished in-session) and the Stripe coupon code. Ask Yoel for
-current status on both before assuming either is ready.
+setup — Yoel has a TikTok Business account and was mid-walkthrough of the
+real Ads Manager (ads.tiktok.com) at the Objectives step (after being
+stopped from paying for the in-app "Promote"/Boost tool, which does not
+support country targeting or conversion tracking and must not be used) —
+and the Stripe coupon code. Ask Yoel for current status on both before
+assuming either is ready.
 
 ## Behavioral notes
 
