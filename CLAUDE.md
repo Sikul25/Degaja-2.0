@@ -110,10 +110,9 @@ detail — read it at the start of any new session on this repo.
     800.510.2859 — sent the UBO/Ownership-Evaluation DocuSign request and
     the 2026-11-10 account-approval email (ref#: 3570107-3600150, account
     955732).
-  - A third CCBill contact was referenced by Yoel (2026-11-10) as part of
-    "three people we worked with" but not yet identified by name in this
-    file — ask Yoel who this is next time it comes up, and record it here
-    immediately, don't wait.
+  - **Sinisha Golemac** (sinishag@ccbill.com) — received the two live-advisor
+    screen recordings (German + English, sent 2026-11-05) demonstrating the
+    booking/pricing flow for the Compliance follow-up review.
 - **Dynamic Pricing — confirmed technical details (2026-11-10), for when
   CCBill's Integration team gives us the real Flex ID + Encryption Key**:
   - `clientSubacc` = **0000** (confirmed live in the CCBill portal's
