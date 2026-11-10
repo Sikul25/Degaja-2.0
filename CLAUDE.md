@@ -103,10 +103,7 @@ detail — read it at the start of any new session on this repo.
   - **Marija Mitic** — Compliance/Sales Support rep who has driven the
     entire review (AI Attestation, Content Merchant Addendum, the live
     advisor follow-up). Primary point of contact throughout.
-  - **Nicola [surname unconfirmed — appeared in her email signature as
-    "N...Kri...ic", partially obscured by UI chrome in every screenshot
-    seen so far; ask Yoel to confirm the full spelling next time he has
-    one of her emails open]**, Sales Support Representative, phone
+  - **Nicola Krezovik**, Sales Support Representative, phone
     800.510.2859 — sent the UBO/Ownership-Evaluation DocuSign request and
     the 2026-11-10 account-approval email (ref#: 3570107-3600150, account
     955732).
