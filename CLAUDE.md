@@ -443,6 +443,74 @@ English for SEO/canonical-URL reasons. English-first audience targeting is
 handled purely through marketing links (`degaja.com/en`, `/us`), not by
 changing site-wide routing.
 
+## Paid advertising — TikTok Ads plan (established 2026-11-10)
+
+Yoel has 16 existing organic TikTok videos covering all DEGAJA features.
+Organic performance data he reported: plain feature-demo videos plateau at
+~250-300 views; videos that pair a reading with a real location Yoel was
+actually visiting (a Turkish-coffee reading filmed at Galata Tower,
+Istanbul; another filmed in Rome) got ~1200-1400 views — roughly 5x. He
+was explicit this is about the authenticity of really being there, not a
+replicable "travel content" formula — don't plan new creative assuming he
+can manufacture more of it on demand.
+
+**Agreed split (mirrors the automatic-vs-advisor split elsewhere in this
+file):**
+- **DACH (Germany/Austria/Switzerland)** — the one market getting a funded
+  campaign that pushes both the automatic AI readings *and* the live
+  advisor (Papuli speaks de/ru/uk), since it's the only market where a
+  convert can go on to the much higher-value advisor upsell.
+- **UK** — funded, automatic-only (Yoel cited it as ~33% of the European
+  market for this category — his figure, not independently verified).
+- **France/Italy/Spain** — flagged as a promising second-phase market
+  (Yoel's reasoning: all three have a long cultural history of paid
+  phone-in psychic/fortune-telling hotlines, now shifted to digital/social
+  — pre-existing demand, not a cold market), but intentionally **not**
+  funded yet — see budget note below.
+- **US** — automatic-only, organic/SEO (the `fair-pricing.html` work),
+  not part of this paid TikTok plan.
+
+**Budget**: €100/day total, explicitly **not** spread evenly across every
+market at once. Split agreed: DACH €40/day, UK €25/day, €35/day held back
+unspent. Rationale given to Yoel and accepted: TikTok's own ad-delivery
+algorithm needs roughly $20/day per ad group to leave its learning phase,
+so splitting further across FR/IT/ES too (~€11-12/day each) would be below
+that threshold and likely just burn budget with no real optimization —
+phase 2 (expand into FR/IT/ES) happens once DACH/UK results justify either
+reallocating this budget or raising the total.
+
+**Creative**: use Yoel's existing high-performing organic videos (the
+Istanbul/Galata-Tower Turkish-coffee one explicitly named) as ad creative
+even for DACH/UK targeting — the location doesn't need to match the ad's
+target country for travel/mystery content to land.
+
+**Promo offer**: 20% off the 3-reading package. Mechanism: `api/checkout.js`
+already passes `allow_promotion_codes: true` to Stripe, so the checkout
+page can already accept a promo code — but the actual coupon itself has to
+be created in the Stripe Dashboard (Yoel's own action, not something doable
+from this session) before any ad can reference a working code. Note this
+runs on Stripe, not CCBill (CCBill integration isn't wired up yet) — when
+CCBill cutover happens, check whether its own discount/coupon mechanism
+needs separate setup; nothing here assumes it carries over automatically.
+
+**Explicitly ruled out for this campaign** (ties back to the Nebula/FTC
+discussion above): no direct reference to Nebula, the FTC case, or any
+named competitor in TikTok ad creative for DACH/UK/EU audiences. Two
+reasons given: the FTC means nothing to a non-US audience (the whole
+reason `fair-pricing.html` was built English/US-only), and naming a
+competitor in paid ad creative revives the trademark/comparative-
+advertising risk Yoel already chose not to pursue without a lawyer. The
+agreed alternative: generic pain-point messaging that doesn't name anyone
+("fixed price, no surprises," "no hidden subscription, ever," "cancel or
+refund in one click") — it resonates with the same burned-by-some-app
+audience without the legal exposure.
+
+**Not yet done as of this writing**: the actual TikTok Ads Manager campaign
+setup (Yoel has a TikTok Business account; was about to be walked through
+Ads Manager step-by-step the same way the CCBill portal was, but this
+wasn't finished in-session) and the Stripe coupon code. Ask Yoel for
+current status on both before assuming either is ready.
+
 ## Behavioral notes
 
 - Never reintroduce Talmud/Judaism framing, or Chinese law/regulation
