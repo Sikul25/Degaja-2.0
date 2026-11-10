@@ -76,6 +76,77 @@ detail — read it at the start of any new session on this repo.
   - 2026-11-03: Marija (CCBill) confirmed receipt, forwarded to Compliance
     for review. Still pending as of this writing — ask Yoel for current
     status if not obvious from recent conversation.
+- **2026-11-09/10: Live advisor feature opened to all languages for the
+  bank's review, then full account approval.** CCBill Compliance (via
+  Marija) came back once more asking to see the live 1:1 advisor
+  consultation feature actually working on the site (not just described),
+  "so the bank can see the complete consumer experience." Root cause this
+  surfaced: the advisor section (`#human`, gated by `hasLiveAdvisor()` in
+  i18n.js) was only ever shown for de/ru/uk — an English-browsing reviewer
+  saw nothing. Fixed by opening the section to all 11 languages
+  (`ADVISOR_LANGS = SUPPORTED` in i18n.js) while adding a "Speaks: ..."
+  language-disclosure line to each advisor's card (via a new `languages`
+  field on `ADVISORS` entries in `api/_data.js`, rendered in
+  `live-consult.js`'s `advisorCards()`), so no visitor books a session
+  expecting a language the advisor doesn't actually speak. Sent CCBill two
+  screen recordings (German — the real live version — and English, both
+  made locally since this session has no network egress to
+  www.degaja.com/ccbill.com, using the real production code + real
+  advisor/pricing data via a mocked `/api/advisors` response) showing the
+  booking flow, advisor profile, and fixed price shown before checkout.
+  **2026-11-10: CCBill confirmed the website is approved by Compliance**
+  and the account is now active — next is their Integration team reaching
+  out to connect their system with ours.
+- **CCBill contacts (keep this updated the moment a new name appears —
+  this was missed for a full day and had to be reconstructed from
+  screenshots)**:
+  - **Marija Mitic** — Compliance/Sales Support rep who has driven the
+    entire review (AI Attestation, Content Merchant Addendum, the live
+    advisor follow-up). Primary point of contact throughout.
+  - **Nicola [surname unconfirmed — appeared in her email signature as
+    "N...Kri...ic", partially obscured by UI chrome in every screenshot
+    seen so far; ask Yoel to confirm the full spelling next time he has
+    one of her emails open]**, Sales Support Representative, phone
+    800.510.2859 — sent the UBO/Ownership-Evaluation DocuSign request and
+    the 2026-11-10 account-approval email (ref#: 3570107-3600150, account
+    955732).
+  - A third CCBill contact was referenced by Yoel (2026-11-10) as part of
+    "three people we worked with" but not yet identified by name in this
+    file — ask Yoel who this is next time it comes up, and record it here
+    immediately, don't wait.
+- **Dynamic Pricing — confirmed technical details (2026-11-10), for when
+  CCBill's Integration team gives us the real Flex ID + Encryption Key**:
+  - `clientSubacc` = **0000** (confirmed live in the CCBill portal's
+    Pricing Admin screen, shown as "955732-0000").
+  - URL pattern: `https://api.ccbill.com/wap-frontflex/flexforms/{FLEX_ID}?clientSubacc=0000&initialPrice={X.XX}&initialPeriod={2-365}&currencyCode={3-digit ISO numeric}&formDigest={md5 hash}`.
+  - `formDigest` (non-recurring/Single Billing, FlexForms) = `MD5(initialPrice + initialPeriod + currencyCode + EncryptionKey)`,
+    plain string concatenation, **no separators**, in that exact order.
+    Verified against CCBill's own worked example in their docs
+    (`10.00` + `30` + `840` + their example key → their documented hash
+    matched exactly).
+  - Only Single Billing params (`initialPrice`/`initialPeriod`/
+    `currencyCode`/`formDigest`) are needed for a genuine one-time charge —
+    `recurringPrice`/`recurringPeriod`/`numRebills` belong only to
+    recurring transactions and must never be sent, to keep this a true
+    one-time payment matching the "no automatic renewal" promise.
+  - **Currency limitation found**: the CCBill portal's pricing-creation
+    screen only offered USD as a currency option (EUR was mentioned by
+    Yoel as the only other one available) — far fewer than the 8
+    currencies (EUR/GBP/USD/BRL/MXN/JPY/CNY/INR) `api/checkout.js`
+    currently prices in. Unresolved as of this writing: whether CCBill can
+    add more currencies on request, and what FX fee applies when a
+    non-USD/EUR cardholder pays. Ask Yoel for current status — if
+    unresolved, the eventual CCBill cutover of `api/checkout.js` will need
+    a currency-collapse strategy (likely: charge everyone in USD or EUR
+    instead of their local currency) that doesn't exist today.
+  - Still outstanding before real integration code can be written: the
+    actual Flex ID (needs a FlexForm created with Dynamic Pricing enabled
+    — was in progress, not confirmed finished), the Encryption Key (seen
+    partially truncated in a CCBill docs screenshot as "7d9..." — never
+    confirmed as Yoel's real key vs. a generic docs example, get the full
+    value from Account Info before using it), and the Webhook Salt
+    (separate from the Encryption Key, for verifying postbacks in
+    `api/ccbill-webhook.js` — not yet retrieved).
 
 ## Universal / non-denominational framing — standing design principle
 
