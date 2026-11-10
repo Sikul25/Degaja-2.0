@@ -511,7 +511,21 @@ real Ads Manager (ads.tiktok.com) at the Objectives step (after being
 stopped from paying for the in-app "Promote"/Boost tool, which does not
 support country targeting or conversion tracking and must not be used) —
 and the Stripe coupon code. Ask Yoel for current status on both before
-assuming either is ready.
+assuming either is ready. No TikTok pixel is installed on the site yet
+either (confirmed by grepping the codebase, not assumed) — needed before
+the "Website conversion" objective can actually measure purchases; still
+waiting on Yoel to find Events/Assets in his TikTok Ads Manager account
+and send the Pixel ID.
+
+**2026-11-10: Yoel explicitly decided to hold off launching/paying for any
+TikTok campaign until the CCBill cutover is fully live** — reasoning: no
+point spending ad budget driving traffic into a checkout flow (currently
+Stripe) that's mid-migration and carries its own account-freeze risk, and
+conversion tracking can't work correctly yet anyway (no pixel installed,
+payment details not yet entered in TikTok Ads Manager). Do not encourage
+actually launching/paying for a TikTok campaign before Yoel confirms
+CCBill is live — campaign setup/learning (objectives, pixel prep) can
+continue in the meantime, but the real spend waits.
 
 ## Behavioral notes
 
