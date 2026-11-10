@@ -690,6 +690,8 @@
       "faq.a5": "No. Every payment on DEGAJA is one-time only — there's no subscription, no automatic renewal, and no hidden fees. The consent checkbox before purchase is never pre-checked, and your credits never expire.",
       "faq.q6": "Is the free first reading really free, with no catch?",
       "faq.a6": "Yes. Your first reading is completely free, with no hidden tricks. DEGAJA and its advisors never use scare tactics — we never claim that misfortune will befall you unless you buy a ritual or service. Any additional offer is optional, with the price shown clearly upfront.",
+      "faq.q7": "Is DEGAJA like other astrology apps that hide a subscription?",
+      "faq.a7": "No. Every DEGAJA payment is a one-time purchase shown to you before checkout, never a recurring subscription.",
       "advisor.papuli.title": "Tarot, Astrology & Future",
       "dpc.badge": "💬 PRE-CHAT · ANONYMOUS",
       "dpc.title": "First, tell us what's on your mind.",
@@ -5519,6 +5521,14 @@
     const showAdvisor = hasLiveAdvisor();
     document.querySelectorAll("[data-advisor-only]").forEach(el => {
       el.style.display = showAdvisor ? "" : "none";
+    });
+
+    // The fair-pricing.html page is US-English only (it cites a US FTC
+    // case most other markets won't recognize) -- only surface the FAQ
+    // entry linking to it for en/us visitors.
+    const showEnUsOnly = getLang() === "en" || getLang() === "us";
+    document.querySelectorAll("[data-en-us-only]").forEach(el => {
+      el.style.display = showEnUsOnly ? "" : "none";
     });
 
 
