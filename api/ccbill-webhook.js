@@ -23,13 +23,39 @@
 import { recordWebhookResult } from "./_ccbillOrders.js";
 
 export default async function handler(req, res) {
-  if (req.method !== "POST") return res.status(405).json({ error: "Method not allowed" });
+  // Accept GET as well as POST: "Background Post" strongly implies POST,
+  // but this is not actually confirmed anywhere in CCBill's docs we have,
+  // and the classic signup.cgi-era postback pattern some processors use
+  // (including possibly CCBill) is a simple GET "pixel" call with query
+  // params, not a POST body. Rejecting GET with 405 would produce exactly
+  // the symptom seen on 2026-11-11's two real test payments: zero records
+  // here at all, not even a fallback-keyed one, with no error visible
+  // anywhere else either. Accepting both costs nothing (this endpoint does
+  // no mutation beyond recording) and removes that failure mode as a
+  // possibility without guessing which method CCBill actually uses.
+  if (req.method !== "POST" && req.method !== "GET") {
+    return res.status(405).json({ error: "Method not allowed" });
+  }
 
   if (!process.env.CCBILL_ENCRYPTION_KEY) {
     return res.status(503).json({ error: "CCBill not yet configured" });
   }
 
-  const body = req.body || {};
+  // Vercel auto-parses req.body into an object for json/urlencoded
+  // Content-Types, but if CCBill sends a Content-Type it doesn't recognize
+  // (or none at all), req.body arrives as an unparsed string - spreading a
+  // string directly would silently produce garbage (object-spreading a
+  // string yields one numeric key per character). Parse it defensively
+  // instead of assuming the Content-Type will always be right.
+  let parsedBody = req.body;
+  if (typeof parsedBody === "string" && parsedBody.length) {
+    try {
+      parsedBody = JSON.parse(parsedBody);
+    } catch (_) {
+      parsedBody = Object.fromEntries(new URLSearchParams(parsedBody));
+    }
+  }
+  const body = { ...(req.query || {}), ...(parsedBody && typeof parsedBody === "object" ? parsedBody : {}) };
   // Try every plausible identifier field so this keeps working whichever
   // one CCBill actually uses - confirm from a real test payload, don't
   // assume. orderId is ours (see _ccbill.js) and is the ONLY field
