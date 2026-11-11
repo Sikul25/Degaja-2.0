@@ -1100,6 +1100,10 @@ need a regex that allows more than one dot, or they're silently skipped.
   next steps but hadn't acted on it as of this writing: set up free
   Trustpilot + BBB + Google Business Profile listings, since these are what
   AI search tools cite when assessing legitimacy.
+  **2026-11-11: done for Trustpilot** — a `degaja.com` Trustpilot profile
+  now exists and has already received its first real review (5 stars, from
+  a customer named Siarta, received 2026-11-11). BBB and Google Business
+  Profile still not confirmed set up — ask Yoel for current status.
 
 ## Language / routing
 
