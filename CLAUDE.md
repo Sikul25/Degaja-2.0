@@ -66,9 +66,14 @@ detail — read it at the start of any new session on this repo.
     unexplained by this specific fix, though it may well have been a
     related/same-family price-formatting issue on whatever generated that
     specific request.
-  - **Still needed**: a fresh real test payment (or at least a fresh
-    FlexForm page load) to confirm this fix holds end-to-end in practice,
-    not just in our own local self-tests.
+  - **Confirmed end-to-end 2026-11-11 ~16:10**: Yoel opened a freshly
+    generated FlexForm URL (price=5.00/period=3/currency=840, built with
+    the fixed formula) in his real browser - loaded with **no
+    digest-mismatch error**, consistent with the local self-test fix.
+    Still not confirmed from this alone: redirect-back and webhook
+    delivery on a real completed payment (that needs an actual charge,
+    not just a loaded page - see the still-unresolved "zero webhook"
+    mystery further up this section).
 - **2026-11-11, ~14:15 (SUPERSEDED BY THE ABOVE - kept for history only,
   do not act on this entry's conclusion):** ~~CRITICAL FINDING —
   `CCBILL_ENCRYPTION_KEY` as currently set in Vercel is confirmed WRONG,
