@@ -77,10 +77,75 @@ detail — read it at the start of any new session on this repo.
       (named "Degaja Success"), Deny → `https://www.degaja.com/?payment=cancelled`
       (named "Degaja Cancelled"). Webhook URL was already correct
       (`https://www.degaja.com/api/ccbill-webhook`), untouched.
-    - **Yoel confirmed this is now done and promoted to Live** (verbally,
-      not yet independently verified from this session — no real payment
-      has round-tripped through it yet). Take this as done unless a real
-      test payment shows otherwise.
+    - **Confirmed in the admin UI as of 2026-11-11 ~12:30**: the "Degaja
+      CheckOut" flow's Status column shows **"Matches Live"** (green check)
+      in FlexForms Payment Links — the Sandbox edits above really did
+      promote. **Still not end-to-end verified**: two real payments (see
+      below) happened BEFORE the Webhooks event-subscription fix (next
+      bullet) was applied, so they don't tell us anything about the current
+      config. No real payment has been run since both fixes (redirect +
+      webhook events) were in place. Don't claim this works end-to-end
+      without a fresh real test confirming it — "Matches Live" only proves
+      the config was saved, not that the resulting behavior is correct.
+    - **Separately, on the Webhooks page** (Account Info → subaccount 0000
+      → Account Admin → Webhooks — the modern event-subscription system,
+      distinct from the Approval/Denial redirect flow above): the
+      `NewSaleSuccess` event checkbox was **not checked** by default even
+      though the Webhook URL itself was already set correctly. Yoel checked
+      it (2026-11-11). This may be the actual reason the webhook was never
+      received at all (see below) — or may be unrelated; not confirmed
+      either way without a fresh real test.
+    - **2026-11-11: two real payments were made as manual tests** (£9.99
+      GBP pack, €5.00 EUR single, both via the real live site, real cards,
+      real bank confirmation/3D-Secure) — **before** the webhook-events fix
+      above. Both: (a) did NOT redirect back to the site after approval
+      (stayed on CCBill's page), and (b) produced **zero webhook postbacks**
+      — `api/ccbill-webhook.js` has no record of either at all, not even
+      under a fallback/unmatched key, confirmable via Vercel's Edge Config
+      (`ccbillPendingOrders` has both orders under `kind: "live"`;
+      `ccbillOrderResults` doesn't exist as a key at all). The money itself
+      did arrive (Yoel confirmed via his bank app, €5.00 shown as a real
+      transaction). This is consistent with the webhook-events checkbox
+      being unchecked at the time — but **don't assume that was the sole
+      cause** until a fresh real payment (after both fixes) is confirmed
+      working. CCBill's own Reports → Transaction Reports → Lookup
+      (search by Credit Card / Days to Look Back) returned **no results**
+      for either transaction when tried same-day — unclear whether this is
+      normal reporting lag, wrong search criteria, or something else; not
+      resolved.
+    - **CCBill API Guide excerpt obtained 2026-11-11** (Yoel screenshotted
+      it) — real, confirmed Datalink API details for future use (e.g. to
+      check a transaction's status without needing the webhook or another
+      real payment):
+      - Base URL: `https://datalink.ccbill.com/utils/subscriptionManagement.cgi`
+      - Auth params (always required): `clientAccnum` (6-digit main
+        account, `955732` for us), `username`, `password` (the Datalink
+        credentials — already set in Vercel as `CCBILL_DATALINK_USERNAME`/
+        `CCBILL_DATALINK_PASSWORD`, never put the plaintext value in this
+        file or any code comment).
+      - Subaccount scoping: `usingSubacc` (authenticate as main account,
+        operate on a specific subaccount — this is the one used in CCBill's
+        own worked example, `usingSubacc=0005`) vs. `clientSubacc`
+        (authenticate directly as that subaccount — requires Datalink
+        credentials created at the subaccount level, not confirmed which
+        kind ours are). Use `usingSubacc=0000` first; only try
+        `clientSubacc=0000` if that's rejected.
+      - `action=viewSubscriptionStatus` (one of several supported actions,
+        others not yet catalogued): requires a `subscriptionId` — reports
+        whether active, cancellation date, recurring vs. single-billing,
+        next-billing/expiration date, void/refund/chargeback counts/flags,
+        and a `subscriptionStatus` code (0=inactive, 1=active-but-cancelled
+        [recurring only], 2=active-and-not-cancelled-or-nonrecurring).
+        Response is CSV by default (add `returnXML` param for XML instead).
+      - **Not yet done**: writing `api/ccbill-datalink-test.js` (an isolated
+        test endpoint, same pattern as `ccbill-checkout-test.js`, reading
+        the two Vercel secrets server-side) to actually call this — blocked
+        on getting a real `subscriptionId` for one of the two live orders
+        above, which the Lookup report search didn't surface (see above).
+        Also still unconfirmed per the earlier Datalink note: whether our
+        server's outbound IP needs whitelisting with CCBill for this user —
+        don't assume it's fine; expect this call might fail with an
+        authorization error for that unrelated reason.
   - **Unconfirmed, flagged rather than guessed: whether CCBill's "$5–$300"
     Dynamic Pricing range (confirmed 2026-11-11 via the real
     `SubscriptionRuleException`) is a blanket literal-number check
