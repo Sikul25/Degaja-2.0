@@ -135,6 +135,39 @@ detail — read it at the start of any new session on this repo.
     unresolved, the eventual CCBill cutover of `api/checkout.js` will need
     a currency-collapse strategy (likely: charge everyone in USD or EUR
     instead of their local currency) that doesn't exist today.
+  - **2026-11-11: found a separate "Regional Pricing - CCBill Recommended"
+    table** on the Account Info → View Subaccount Info → General page,
+    showing a $4.99 USD base price auto-converted per region via CCBill's
+    own ratios: U.K. → £4.50 (ratio 0.9022923), Japan → ¥887 (ratio
+    177.6802035), Europe → €5.47 (ratio 1.0959422), Canada → $7.86 (ratio
+    1.5745619). This genuinely shows CCBill supports billing in GBP/JPY/
+    EUR/CAD at least, via automatic regional conversion of one base USD
+    price. **Important: this looks like a DIFFERENT mechanism from our
+    Dynamic Pricing FlexForms URLs** (which specify `currencyCode`/
+    `initialPrice` explicitly per request) — there's an "Accept Regional
+    Pricing" button, **not clicked, on purpose**: unclear whether this
+    Regional Pricing feature works alongside Dynamic Pricing or is a
+    conflicting/alternative pricing mode. Do not enable it without
+    understanding that first. Separately: the "Billing Options" field
+    listing "Visa,Mastercard,JCB,On-line Check,Maestro" is accepted **card
+    networks**, not currencies (JCB is a Japanese card brand, not evidence
+    of JPY billing by itself) — don't conflate the two when reasoning about
+    this.
+  - **CRITICAL correction, same session**: the "Encryption key" field
+    found under Account Info → Modify Subaccount → Advanced →
+    "Upgrade Security Setup Information" (a real 24-character value was
+    seen there — not recorded here, same reason no other credential in
+    this file is: it's a live security key, just for the wrong feature)
+    is **NOT** the Dynamic Pricing
+    formDigest key — that section's own description says it's for the
+    **Subscription Upgrade system** and uses **TripleDES**, not the MD5
+    `formDigest` our FlexForms integration needs. Do not use this value
+    for `CCBILL_ENCRYPTION_KEY` under any circumstances — it would silently
+    produce wrong hashes. The real Dynamic Pricing encryption key must be
+    somewhere under the **"FlexForms Systems"** top-nav tab instead
+    (possibly "Pricing Admin," which CLAUDE.md already references as
+    where `clientSubacc=0000` was confirmed) — still being located as of
+    this writing.
   - Still outstanding before real integration code can be written: the
     actual Flex ID (needs a FlexForm created with Dynamic Pricing enabled
     — was in progress, not confirmed finished), the Encryption Key (seen
