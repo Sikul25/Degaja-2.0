@@ -169,6 +169,60 @@ detail — read it at the start of any new session on this repo.
     Yoel still needs to go into the portal himself and copy the actual key
     value (not yet in this repo/session) before any integration code can
     use it.
+  - **2026-11-11: CCBill's Integration team sent "This concludes your
+    integration" — the full setup email.** New facts from it:
+    - A **real worked FlexForm URL** was included: Flex ID
+      `f33155c3-8961-4ede-8da7-0ff3c5d56c4f`, `clientSubacc=0000`,
+      `initialPrice=3`, `initialPeriod=3`, `currencyCode=840`, with
+      `formDigest=4f59294f73f2e73cccae42870619cbb6`. **This is a ready-made
+      test vector**: once Yoel retrieves the real Encryption Key from the
+      portal, verify it by computing
+      `MD5("3" + "3" + "840" + EncryptionKey)` and checking it equals
+      `4f59294f73f2e73cccae42870619cbb6` — confirms the key is correct
+      before it's used in any real checkout, without needing network
+      access to CCBill.
+    - CCBill is asking us to **confirm the Approval/Denial Redirect URLs
+      and the Webhook URL** for subaccount 0000 — this is an open decision
+      this repo needs to make (likely `api/ccbill-webhook.js`'s route for
+      the webhook, and new/adapted success/failure pages for the
+      redirects, mirroring how `verifyAiPayment()` currently handles
+      Stripe's `?payment=success&session_id=...` redirect) — not yet
+      decided or sent back to CCBill.
+    - **Datalink API credentials were issued** (username + password) for
+      programmatic access (refunds/voids/subscription status — see below).
+      **The password is NOT recorded here or anywhere in this git repo**
+      — it was sent in plain chat and must go into Vercel's environment
+      variables instead (e.g. `CCBILL_DATALINK_USERNAME` /
+      `CCBILL_DATALINK_PASSWORD`), never committed. If a future session
+      needs it, ask Yoel to re-paste it or pull it from Vercel's env vars
+      directly — do not search git history for it either.
+    - CCBill needs **our server's outbound IP address/range whitelisted**
+      for the Datalink user, or Datalink API calls will fail with
+      authorization errors. Unresolved: whether Vercel serverless
+      functions on this project have a static/predictable outbound IP, or
+      whether Vercel's Secure Compute (a paid add-on for a fixed egress
+      IP) would be needed — needs checking before Datalink calls are
+      wired up.
+    - CCBill offered to enable optional Datalink/API functionality:
+      Datalink Extract, and Subscription Manager endpoints
+      `cancelSubscription`/`viewSubscriptionStatus`/
+      `voidOrRefundTransaction`/`refundTransaction`/`voidTransaction`.
+      Since DEGAJA has no subscriptions (one-time payments only, per the
+      "no automatic renewal" promise), the subscription-status/cancel
+      endpoints are probably irrelevant — but refund/void capability
+      (`voidOrRefundTransaction`/`refundTransaction`/`voidTransaction`)
+      and Datalink Extract (transaction reporting) look genuinely useful
+      for customer-service refund requests and reconciliation. Not yet
+      decided/confirmed back to CCBill — ask Yoel.
+    - Several CCBill doc links were provided (formDigest value, webhooks
+      overview/user guide, dynamic pricing user guide/errors, FlexForms
+      quick start/FAQs, pricing admin, Datalink extract system user guide,
+      CCBill API guide, transaction test settings, admin portal FAQ) —
+      this session cannot fetch any of them directly (no network access to
+      ccbill.com). If a specific technical question needs one of these
+      (e.g. the still-open Encryption-Key-vs-Webhook-Salt question above),
+      ask Yoel to open the relevant page and screenshot/paste the exact
+      text rather than guessing from the URL slug alone.
 
 ## Universal / non-denominational framing — standing design principle
 
