@@ -110,6 +110,12 @@ detail — read it at the start of any new session on this repo.
   - **Sinisha Golemac** (sinishag@ccbill.com) — received the two live-advisor
     screen recordings (German + English, sent 2026-11-05) demonstrating the
     booking/pricing flow for the Compliance follow-up review.
+  - **Sabina V.**, Merchant Support Specialist (merchantsupport@ccbill.com,
+    phone 800.510.2859 option #1) — this is the real name/signature on the
+    2026-11-11 "This concludes your integration" email (previously
+    attributed here to an anonymous "Integration team"; correcting that).
+    Ref#: 3600833-36... (full ref not fully visible, get it from Yoel's
+    inbox if needed later).
 - **Dynamic Pricing — confirmed technical details (2026-11-10), for when
   CCBill's Integration team gives us the real Flex ID + Encryption Key**:
   - `clientSubacc` = **0000** (confirmed live in the CCBill portal's
