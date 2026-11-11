@@ -57,7 +57,7 @@ export default async function handler(req, res) {
     cny: { single: 3900, pack: 7900 },
     inr: { single: 24900, pack: 49900 }
   };
-  const aiAmounts = AI_AMOUNTS_BY_CURRENCY[currency] || { single: 499, pack: 999 };
+  const aiAmounts = AI_AMOUNTS_BY_CURRENCY[currency] || { single: 500, pack: 999 };
   const products = {
     single: { name: names.single, amount: aiAmounts.single, quantity: 1, type: "ai", credits: 1 },
     pack: { name: names.pack, amount: aiAmounts.pack, quantity: 1, type: "ai", credits: 3 }

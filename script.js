@@ -26,7 +26,7 @@
     chatCount: 0
   };
 
-  // The 4.99 reading's follow-up chat is capped both ways: a 5-minute
+  // The single-reading follow-up chat is capped both ways: a 5-minute
   // window from unlock, and a message count within that window.
   const CHAT_ACCESS_MS = 5 * 60 * 1000;
   const CHAT_EXPIRES_KEY = "degajaChatExpiresAt";

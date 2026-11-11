@@ -7,6 +7,18 @@ detail — read it at the start of any new session on this repo.
 
 ## Payments: Stripe → CCBill (in progress)
 
+- **2026-11-11: `STRIPE_SECRET_KEY` was emptied in Vercel (production) at
+  Yoel's explicit instruction, and the site redeployed** — the real site
+  currently has **no working payment processor at all** (every real
+  `/api/checkout` call now 503s "Stripe is not configured"; CCBill is
+  still test-only, not wired into `api/checkout.js`/`script.js`). This was
+  a deliberate decision, made after I flagged the consequence clearly and
+  Yoel confirmed (reasoning: no real traffic at that hour, and he didn't
+  want to re-enable Stripe once CCBill is this close). **To restore
+  Stripe**, Yoel must paste the real secret key from the Stripe Dashboard
+  into Vercel's env var again — it is not recoverable from this session or
+  from git. Do not restore it without Yoel explicitly asking — he was
+  clear he doesn't want to go back to Stripe.
 - **Stripe's Acceptable Use Policy explicitly prohibits "fortune-telling"
   businesses.** Keeping Stripe live is a real, ongoing risk: the account can be
   frozen (with funds held) at any time. This is not a hypothetical — it is the
@@ -454,6 +466,29 @@ detail — read it at the start of any new session on this repo.
     (`api/checkout.js`/`script.js`/`love-quiz.html`, replacing the
     test-only redirect/webhook URLs with the live site's own) is still
     separate, deliberate future work.
+  - **2026-11-11: raised the single-reading price from $4.99/€4,99/£4.99 to
+    $5.00/€5,00/£5.00** (EUR/GBP/USD only — BRL/MXN/JPY/CNY/INR left
+    unchanged, no evidence their minimums are affected) specifically
+    because this is **below CCBill's $5.00 Dynamic Pricing minimum**
+    confirmed above — the real cutover would otherwise reject every
+    single-reading purchase in these currencies. The 3-reading pack
+    ($9.99/€9,99/£9.99) was already above the minimum and was **not**
+    changed. Updated everywhere the price is charged or displayed:
+    `api/checkout.js`'s default `AI_AMOUNTS_BY_CURRENCY` fallback,
+    `i18n.js` (all of `prices.single.btn`/`priceLabel`,
+    `purchase.single`, `result.deepBtn` across de/en/fr/es/it/pt/ru/uk/us
+    — bumped to `?v=69` across every HTML file that loads it, per the
+    cache-busting discipline above), `index.html`'s hardcoded pre-JS
+    fallback text, and each standalone page's own embedded strings
+    (`quiz.html`, `love-quiz.html`, `dream.html`, `time-tunnel.html`).
+    This is a real pricing decision Yoel made explicitly (weighed against
+    keeping "$4.99" for the charm-pricing psychology, decided the round
+    $5.00 was simpler than negotiating the minimum with CCBill) — not
+    something to revert without him reopening it. This was safe to change
+    immediately despite being "production" code because Stripe is
+    currently disconnected (see below) and CCBill isn't wired into the
+    real checkout yet, so nothing live was charging real customers at the
+    old price at the moment of this change.
   - **2026-11-11: found "CCBill EU-Debit" (free setup, no monthly minimum)**
     while browsing the portal — lets German/Austrian customers pay by
     direct bank debit (routing + checking account number, German customers
