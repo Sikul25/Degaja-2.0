@@ -52,6 +52,42 @@ export function encryptionKeyMatchesVector2() {
   return computeFormDigest(KNOWN_VECTOR_2.price, KNOWN_VECTOR_2.period, KNOWN_VECTOR_2.currency, key) === KNOWN_VECTOR_2.digest;
 }
 
+// Both known vectors failing against the stored key as-is could mean the key
+// itself is wrong, OR it could mean the key is right but got mangled in
+// transit into Vercel (a trailing newline/space from copy-pasting out of a
+// textarea is a very common real-world cause of exactly this symptom).
+// Try a few cheap, lossless transforms of the SAME stored value and report
+// only which transform (if any) matches which vector - never the key value
+// itself - so this is safe to call and log without exposing the secret.
+export function diagnoseEncryptionKey() {
+  const raw = process.env.CCBILL_ENCRYPTION_KEY;
+  if (!raw) return { configured: false };
+  const variants = {
+    asStored: raw,
+    trimmed: raw.trim(),
+    noWhitespace: raw.replace(/\s+/g, ""),
+    noTrailingNewlineOnly: raw.replace(/[\r\n]+$/, "")
+  };
+  const vectors = { vector1: KNOWN_VECTOR, vector2: KNOWN_VECTOR_2 };
+  const matches = [];
+  for (const [variantName, variantValue] of Object.entries(variants)) {
+    for (const [vectorName, v] of Object.entries(vectors)) {
+      if (computeFormDigest(v.price, v.period, v.currency, variantValue) === v.digest) {
+        matches.push(`${variantName}+${vectorName}`);
+      }
+    }
+  }
+  return {
+    configured: true,
+    rawLength: raw.length,
+    trimmedLength: raw.trim().length,
+    hasLeadingWhitespace: /^\s/.test(raw),
+    hasTrailingWhitespace: /\s$/.test(raw),
+    hasInternalWhitespace: /\s/.test(raw.trim()),
+    matches
+  };
+}
+
 // price: decimal string/number in whole currency units (e.g. "4.99"), NOT
 // cents - CCBill's initialPrice is not the same shape as Stripe's
 // unit_amount. period: days, 2-365 per CCBill's documented range; using the
