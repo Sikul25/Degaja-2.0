@@ -19,11 +19,28 @@ export const CCBILL_CURRENCY_NUMERIC = {
 
 // formDigest (Single Billing / non-recurring) = MD5(initialPrice + initialPeriod
 // + currencyCode + EncryptionKey), plain concatenation, no separators, in
-// this exact order - verified against two separate CCBill worked examples
-// (their general docs' 10.00/30/840 example, and the Integration team's own
-// 2026-11-11 email for this exact account, below).
+// this exact order.
+//
+// CRITICAL, empirically-confirmed 2026-11-11: the initialPrice used INSIDE
+// the digest must be formatted with exactly two decimal places (e.g.
+// "3.00"), even when CCBill's own worked-example URL displays
+// initialPrice=3 with NO decimals in the query string itself. Found by
+// brute-forcing field order/price-format combinations against the real,
+// portal-confirmed CCBILL_ENCRYPTION_KEY (same value found in both the
+// "Upgrade Security Setup Information" and "Background Post" sections of
+// admin.ccbill.com) across BOTH of CCBill's own confirmed vectors
+// (price=3/period=3/currency=840 -> 4f59294f73f2e73cccae42870619cbb6, and
+// price=15/period=30/currency=840 -> 03c5dcbaa5ed14c53be64dc51239f15e) -
+// only price formatted to 2 decimals reproduced both simultaneously; the
+// literal un-padded price never did, no matter the key. This means the key
+// was right all along - the bug was purely in how WE computed the digest
+// for verification, not in CCBill's account setup.
+function toDigestPrice(price) {
+  return Number(price).toFixed(2);
+}
+
 export function computeFormDigest(initialPrice, initialPeriod, currencyCode, encryptionKey) {
-  const input = `${initialPrice}${initialPeriod}${currencyCode}${encryptionKey}`;
+  const input = `${toDigestPrice(initialPrice)}${initialPeriod}${currencyCode}${encryptionKey}`;
   return crypto.createHash("md5").update(input).digest("hex");
 }
 
