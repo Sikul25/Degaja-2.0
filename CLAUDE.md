@@ -244,8 +244,13 @@ detail — read it at the start of any new session on this repo.
     Yoel still needs to go into the portal himself and copy the actual key
     value (not yet in this repo/session) before any integration code can
     use it.
-  - **2026-11-11: CCBill's Integration team sent "This concludes your
-    integration" — the full setup email.** New facts from it:
+    **Correction**: this and the entry just below ("This concludes your
+    integration") are the SAME single email, not two separate ones — Yoel
+    originally pasted it in two parts. It's signed **Sabina V., Merchant
+    Support Specialist** (merchantsupport@ccbill.com, 800.510.2859 option
+    #1) — see the contacts list above.
+  - **The rest of that same "This concludes your integration" email.**
+    New facts from it:
     - A **real worked FlexForm URL** was included: Flex ID
       `f33155c3-8961-4ede-8da7-0ff3c5d56c4f`, `clientSubacc=0000`,
       `initialPrice=3`, `initialPeriod=3`, `currencyCode=840`, with
