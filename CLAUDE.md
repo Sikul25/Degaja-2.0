@@ -244,10 +244,39 @@ detail — read it at the start of any new session on this repo.
     "Webhook URL" - note CCBill's own integration email asked us to confirm
     **both** an "Approval and Denial Redirect URLs" *and* a separate
     "Webhook URL," implying these may not be the same thing as this
-    document's "Approval/Denial Post URL"). This document also says
-    nothing at all about any signature/salt verification for the
-    postback — the open Encryption-Key-vs-Webhook-Salt question (above)
-    remains unresolved by it.
+    document's "Approval/Denial Post URL"). When the text first seemed to
+    stop at "referringUrl," initial read was that this doc has no
+    transaction/subscription identifier field at all — **wrong, corrected
+    below** once Yoel sent screenshots of the rest of the same table.
+  - **2026-11-11: the "Background Post" variable table, completed via
+    screenshots, is now fully read end to end** (accountingAmount through
+    zipcode, alphabetical). Two new, important fields that the earlier
+    text paste had cut off before:
+    - **`subscription_id`** (snake_case — NOT `subscriptionId`, which
+      `api/ccbill-webhook.js` incorrectly guessed at first and has now been
+      corrected to check). This is very likely CCBill's real transaction
+      identifier for the postback, confirming this document probably *does*
+      apply to our actual integration after all (walking back the earlier
+      "this is legacy/irrelevant" read above) — CCBill's dynamic-pricing
+      FlexForms still appears to be built on the same underlying
+      "subscription" concept even for one-time, non-recurring charges.
+    - **`responseDigest`** — a field whose *name* strongly suggests it's
+      the mechanism to verify a postback is genuinely from CCBill (most
+      likely a digest computed from returned fields + the Encryption Key,
+      analogous to `formDigest`) — i.e. this may be the actual answer to
+      the long-open Encryption-Key-vs-Webhook-Salt question. **Not
+      confirmed**: Yoel's screenshots only showed the left ("Variable
+      Name") column — the description/example describing the exact
+      formula was cut off on the right and still needs to be gotten (ask
+      Yoel to screenshot wider/zoomed-out, or scroll right, on the
+      `responseDigest` row specifically). Do not guess the formula from
+      the name alone.
+    - Two more fields seen but not yet understood: `reservationId`,
+      `typeId` (likely short for `subscriptionTypeId`) — lower priority.
+    - `api/ccbill-webhook.js` updated: now matches on `subscription_id`
+      (not the wrong `subscriptionId` guess) and stores `responseDigest`
+      from every postback it receives, so the first real test payment's
+      actual value is available once the formula is confirmed.
   - **2026-11-11: built an isolated CCBill test harness** (separate from the
     live Stripe checkout real visitors use — `api/checkout.js`/`script.js`
     are untouched):

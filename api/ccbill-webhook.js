@@ -32,16 +32,28 @@ export default async function handler(req, res) {
   const body = req.body || {};
   // Try every plausible identifier field so this keeps working whichever
   // one CCBill actually uses - confirm from a real test payload, don't
-  // assume. orderId is ours (see _ccbill.js); the rest are CCBill's own
-  // field names per their general docs, unconfirmed for this exact event.
-  const orderId = body.orderId || body.subscriptionId || body.transactionId || `unmatched_${Date.now()}`;
+  // assume. orderId is ours (see _ccbill.js); subscription_id (snake_case,
+  // NOT subscriptionId) is CCBill's own confirmed Postback field name per
+  // their "Background Post" doc's full variable table (Yoel pasted it
+  // 2026-11-11 - see CLAUDE.md). That doc has no "transactionId" field at
+  // all, so it's kept here only as a last-resort fallback, not a confirmed
+  // field name.
+  const orderId = body.orderId || body.subscription_id || body.transactionId || `unmatched_${Date.now()}`;
 
   const eventType = body.denialId ? "denial" : (body.eventType || "approval");
 
   await recordWebhookResult(orderId, {
     eventType,
-    transactionId: body.transactionId || null,
-    subscriptionId: body.subscriptionId || null,
+    subscriptionId: body.subscription_id || null,
+    // Confirmed field from the same doc - very likely the mechanism to
+    // verify this postback is genuinely from CCBill (probably a digest
+    // computed from returned fields + the Encryption Key, analogous to
+    // formDigest), but its exact formula wasn't in what Yoel could screenshot
+    // (description column was cut off) - asked him for it; do NOT assume a
+    // formula and start "verifying" against a guess. Stored here so the
+    // first real test payment's actual value is available to work out the
+    // real formula from.
+    responseDigest: body.responseDigest || null,
     email: body.email || null,
     raw: body
   });
