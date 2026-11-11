@@ -286,7 +286,7 @@
     });
   }
 
-  async function unlockDeepReading(question, topic, fromOtherPage = false) {
+  async function unlockDeepReading(question, topic) {
     if (!question) {
       (window.degajaGoTo || (s => document.querySelector(s)?.scrollIntoView({ behavior: "smooth", block: "center" })))("#oracle");
       return;
@@ -315,7 +315,7 @@
     state.conversationHistory.push({ role: "assistant", content: text });
     state.paidAccess = true;
     localStorage.setItem("degajaPaidAccess", "1");
-    renderResult(text, question, topic, true, null, fromOtherPage);
+    renderResult(text, question, topic, true);
   }
 
   function sleep(ms) { return new Promise(resolve => setTimeout(resolve, ms)); }
@@ -369,10 +369,24 @@
 
       let pending = null;
       try { pending = JSON.parse(localStorage.getItem(PENDING_READING_KEY) || "null"); } catch (_) { /* ignore */ }
+
+      // A pending reading whose `source` names one of the standalone pages
+      // means the purchase actually started there, not on the homepage -
+      // send the browser back to that exact page (which resumes and renders
+      // its own paid reading, see its own inline script) instead of
+      // delivering the result here on the Oracle section, where it would
+      // look disconnected from the feature actually bought. Leave
+      // PENDING_READING_KEY in place so the target page can read it.
+      const STANDALONE_PAGES = ["quiz.html", "love-quiz.html", "dream.html", "time-tunnel.html"];
+      if (pending?.question && STANDALONE_PAGES.includes(pending.source)) {
+        location.href = pending.source;
+        return;
+      }
+
       localStorage.removeItem(PENDING_READING_KEY);
 
       if (pending?.question) {
-        await unlockDeepReading(pending.question, pending.topic || "", !!pending.source);
+        await unlockDeepReading(pending.question, pending.topic || "");
         return;
       }
 
@@ -524,7 +538,7 @@
     }
   }
 
-  function renderResult(text, question, topic, paid = false, target = null, fromOtherPage = false) {
+  function renderResult(text, question, topic, paid = false, target = null) {
     const result = target || $("#aiResult");
     if (!result) return;
 
@@ -533,7 +547,6 @@
       .replace(/\n/g, "<br>");
 
     result.innerHTML = `
-      ${fromOtherPage ? `<div style="margin-bottom:8px;color:#398fc2;font-weight:700;font-size:13px">${t("result.fromSource")}</div>` : ""}
       <strong>${paid ? t("result.paidTitle") : t("result.freeTitle")}</strong>
       <button type="button" id="speakBtn" class="text-button" style="display:block;margin:6px 0;font-size:13px">${t("result.speak")}</button>
       <p style="margin:8px 0;color:#596273">${safeText}</p>
