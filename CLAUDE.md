@@ -436,10 +436,24 @@ detail — read it at the start of any new session on this repo.
     below their own $5.00 Dynamic Pricing minimum — completely unrelated
     to the Encryption Key, formDigest, or anything else investigated
     above. `api/ccbill-checkout-test.js` and `ccbill-test.html` updated to
-    use $5.00 instead of $3.00. **Not yet confirmed working end-to-end**
-    (this fix was deployed but not yet re-tested as of this writing) — the
-    next test run is what confirms whether the Encryption Key is actually
-    correct and the whole flow completes.
+    use $5.00 instead of $3.00.
+    **CONFIRMED WORKING 2026-11-11**: Yoel re-ran the test at $5.00 and the
+    real CCBill FlexForm payment page loaded successfully showing
+    "$5.00 (USD) For Your Purchase" with no digest-mismatch error and no
+    F5/WAF block. This confirms, end to end: the Flex ID, the Live
+    promotion, and critically **`CCBILL_ENCRYPTION_KEY` is the correct
+    value** (the "Upgrade Security Setup Information" field, despite its
+    TripleDES/Subscription-Upgrade UI labeling). The test was stopped
+    before entering real card details/completing the purchase (no need to
+    actually charge a real card to confirm the integration works).
+    **Still not confirmed from this**: whether the webhook
+    (`api/ccbill-webhook.js`) actually receives a postback with our
+    `orderId` echoed back, and what `responseDigest`'s real formula is —
+    those need an actual completed transaction (approval or denial), not
+    just the payment page loading. The real cutover
+    (`api/checkout.js`/`script.js`/`love-quiz.html`, replacing the
+    test-only redirect/webhook URLs with the live site's own) is still
+    separate, deliberate future work.
   - **2026-11-11: found "CCBill EU-Debit" (free setup, no monthly minimum)**
     while browsing the portal — lets German/Austrian customers pay by
     direct bank debit (routing + checking account number, German customers
