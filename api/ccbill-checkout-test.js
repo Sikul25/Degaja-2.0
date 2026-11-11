@@ -27,10 +27,12 @@ export default async function handler(req, res) {
     const orderId = crypto.randomUUID();
     await createOrder(orderId, { kind: "test", note: "Manual test payment from ccbill-test.html", selfTestPassed });
 
-    // Deliberately the EXACT same price/period/currency as CCBill's own
-    // worked example in their 2026-11-11 email (price=3, period=3,
-    // currency=840/USD).
-    const url = buildFlexFormUrl({ price: "3", period: "3", currencyCode: CCBILL_CURRENCY_NUMERIC.usd, orderId });
+    // CCBill's own worked example (price=3) turned out to be invalid -
+    // their real app returned "SubscriptionRuleException: Initial price:
+    // [3] is not in valid price range [5 - 300]" once the F5/WAF block was
+    // cleared (by promoting the payment flow to Live). $5.00 is the
+    // documented minimum for Dynamic Pricing.
+    const url = buildFlexFormUrl({ price: "5.00", period: "3", currencyCode: CCBILL_CURRENCY_NUMERIC.usd, orderId });
 
     return res.status(200).json({ url, orderId, selfTestPassed });
   } catch (error) {

@@ -21,8 +21,8 @@
 <body>
   <div class="card">
     <h1>CCBill integration test (internal, not linked anywhere)</h1>
-    <p>Runs one real $3.00 USD test charge through the real CCBill FlexForm, using the exact price/period CCBill's own worked example used. Does not touch the live site's real checkout (Stripe stays live for all real visitors).</p>
-    <button id="startBtn">Run $3 test payment</button>
+    <p>Runs one real $5.00 USD test charge through the real CCBill FlexForm (CCBill's own worked example used $3, but that's below their $5 Dynamic Pricing minimum). Does not touch the live site's real checkout (Stripe stays live for all real visitors).</p>
+    <button id="startBtn">Run $5 test payment</button>
     <div id="status" class="status hidden"></div>
   </div>
 <script>

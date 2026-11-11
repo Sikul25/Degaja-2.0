@@ -417,6 +417,29 @@ detail — read it at the start of any new session on this repo.
       `api/checkout.js`/`script.js`/`love-quiz.html` for real, per the
       numbered plan at the top of this section) is still separate,
       deliberate future work — not done yet.
+  - **2026-11-11: root cause of the F5/WAF "Error 503" found and fixed.**
+    The checkout test ($3, matching CCBill's own worked example) kept
+    hitting an F5 WAF rejection ("The requested URL was rejected... Error
+    503... F5 site: md2-mad") on every attempt. Root cause, found via
+    CCBill's own `dynamic-pricing-errors` doc (Yoel screenshotted it): the
+    "Degaja CheckOut" payment flow existed only in **SANDBOX**, never
+    promoted to **LIVE** (confirmed by switching the portal's SANDBOX/LIVE
+    toggle — the LIVE tab showed zero payment flows). Hitting the LIVE
+    `api.ccbill.com` endpoint with a sandbox-only Flex ID is what the WAF
+    was rejecting. **Fixed**: clicked "Promote to Live" on the flow in
+    FlexForms Systems → FlexForms Payment Links (status now shows
+    "Matches Live"). This cleared the WAF block — the next test attempt
+    got a real, legible CCBill application error instead:
+    **`com.ccbill.frontflex.common.exception.SubscriptionRuleException:
+    Initial price: [3] is not in valid price range [5 - 300]`**. So
+    **CCBill's own worked example price ($3) was invalid all along** —
+    below their own $5.00 Dynamic Pricing minimum — completely unrelated
+    to the Encryption Key, formDigest, or anything else investigated
+    above. `api/ccbill-checkout-test.js` and `ccbill-test.html` updated to
+    use $5.00 instead of $3.00. **Not yet confirmed working end-to-end**
+    (this fix was deployed but not yet re-tested as of this writing) — the
+    next test run is what confirms whether the Encryption Key is actually
+    correct and the whole flow completes.
   - **2026-11-11: found "CCBill EU-Debit" (free setup, no monthly minimum)**
     while browsing the portal — lets German/Austrian customers pay by
     direct bank debit (routing + checking account number, German customers
