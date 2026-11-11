@@ -260,19 +260,34 @@ detail — read it at the start of any new session on this repo.
       "this is legacy/irrelevant" read above) — CCBill's dynamic-pricing
       FlexForms still appears to be built on the same underlying
       "subscription" concept even for one-time, non-recurring charges.
-    - **`responseDigest`** — a field whose *name* strongly suggests it's
-      the mechanism to verify a postback is genuinely from CCBill (most
-      likely a digest computed from returned fields + the Encryption Key,
-      analogous to `formDigest`) — i.e. this may be the actual answer to
-      the long-open Encryption-Key-vs-Webhook-Salt question. **Not
-      confirmed**: Yoel's screenshots only showed the left ("Variable
-      Name") column — the description/example describing the exact
-      formula was cut off on the right and still needs to be gotten (ask
-      Yoel to screenshot wider/zoomed-out, or scroll right, on the
-      `responseDigest` row specifically). Do not guess the formula from
-      the name alone.
-    - Two more fields seen but not yet understood: `reservationId`,
-      `typeId` (likely short for `subscriptionTypeId`) — lower priority.
+    - **`responseDigest`** — now confirmed via its full description: **"Hash
+      digest of a Dynamic Pricing response. If not using Dynamic Pricing,
+      this value will return as a blank string."** This confirms (a) it's
+      specifically relevant to us since we use Dynamic Pricing, and (b) it
+      is indeed a verification digest. **Still not confirmed: the exact
+      input formula** (which fields get hashed, in what order, whether the
+      Encryption Key is part of it) — the doc gives only the description
+      above, no formula, unlike `formDigest` which had a fully worked
+      example. The example value given
+      (`s4f5198jgd21a4pk1p2s7sd23lm58937`) contains letters outside a-f, so
+      it is **not** plain MD5 hex — whatever hash/encoding it is, don't
+      assume MD5 here the way `formDigest` is MD5. Do not attempt to
+      "verify" against a guessed formula; the first real test payment's
+      actual `responseDigest` value (now captured by
+      `api/ccbill-webhook.js`) is the starting point for working this out
+      empirically, or ask CCBill support directly for the formula.
+    - **`subscription_id` is "(Approval Post URL only)"** per its full
+      description — it will be **blank/absent on Denial posts** (where
+      `denialId` is present instead). This means our own `orderId` custom
+      variable (if it round-trips at all — still unconfirmed) is the only
+      identifier reliable across **both** approval and denial events;
+      `subscription_id`/`denialId` alone can't correlate a denial back to
+      which pending order it was.
+    - Two more fields now fully described: `reservationId` ("Consumer's
+      subscription Reservation ID number" — a pre-transaction concept,
+      low priority for us) and `typeId` ("Subscription Type ID number
+      identifying the price point used in the transaction" — ties to a
+      fixed price point, less relevant to Dynamic Pricing).
     - `api/ccbill-webhook.js` updated: now matches on `subscription_id`
       (not the wrong `subscriptionId` guess) and stores `responseDigest`
       from every postback it receives, so the first real test payment's

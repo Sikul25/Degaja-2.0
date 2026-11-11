@@ -32,12 +32,13 @@ export default async function handler(req, res) {
   const body = req.body || {};
   // Try every plausible identifier field so this keeps working whichever
   // one CCBill actually uses - confirm from a real test payload, don't
-  // assume. orderId is ours (see _ccbill.js); subscription_id (snake_case,
-  // NOT subscriptionId) is CCBill's own confirmed Postback field name per
-  // their "Background Post" doc's full variable table (Yoel pasted it
-  // 2026-11-11 - see CLAUDE.md). That doc has no "transactionId" field at
-  // all, so it's kept here only as a last-resort fallback, not a confirmed
-  // field name.
+  // assume. orderId is ours (see _ccbill.js) and is the ONLY field
+  // confirmed present on both approval and denial events - subscription_id
+  // (snake_case, NOT subscriptionId) is confirmed real but "Approval Post
+  // URL only" per CCBill's own doc, so it's blank on denials (where
+  // denialId shows up instead). transactionId isn't a confirmed field name
+  // at all (not in CCBill's own variable table) - kept only as a
+  // last-resort fallback.
   const orderId = body.orderId || body.subscription_id || body.transactionId || `unmatched_${Date.now()}`;
 
   const eventType = body.denialId ? "denial" : (body.eventType || "approval");
