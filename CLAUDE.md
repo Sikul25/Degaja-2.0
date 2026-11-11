@@ -52,29 +52,35 @@ detail — read it at the start of any new session on this repo.
     `api/verify-payment.js`, `api/_redeemed.js`.
   - Deployed and `node --check`/inline-script-syntax verified on every
     touched file before deploy.
-  - **CRITICAL REMAINING BLOCKER, NOT YET DONE — only Yoel can do this, it's
-    not something achievable via code:** CCBill's Approval Redirect URL,
-    Denial Redirect URL, and Webhook URL are configured **per subaccount in
-    CCBill's own portal**, not passed per-request the way Stripe's
-    `success_url`/`cancel_url` were — confirmed by CCBill's own 2026-11-11
-    email asking us to "confirm" these for subaccount 0000, and by there
-    being no such parameter anywhere in `buildFlexFormUrl()`. **Right now
-    these are still set to the TEST phase's values**
-    (`https://www.degaja.com/ccbill-test.html?ccbill=success` /
-    `?ccbill=cancelled`) from the earlier CCBill test harness work. **Until
-    Yoel (or CCBill's Integration team, on his request) updates these in
-    the portal to:**
-    - Approval → `https://www.degaja.com/?payment=success`
-    - Denial → `https://www.degaja.com/?payment=cancelled`
-    - Webhook → `https://www.degaja.com/api/ccbill-webhook` (unchanged,
-      already correct for the real site too)
-
-    **a real customer who completes a CCBill payment will be redirected to
-    the internal, noindex test page instead of back to the real site.** The
-    webhook will still fire correctly either way (its URL is already right),
-    so the order/credits data isn't lost, but the customer-facing experience
-    is broken until this portal change is made. This is the #1 thing to
-    check/ask Yoel about before telling him checkout is fully live.
+  - **2026-11-11, resolved by Yoel directly in the portal:** the Approval/
+    Denial Redirect URLs are NOT the classic per-subaccount Background Post
+    fields this entry originally assumed — they're configured per payment
+    **flow**, in **FlexForms Systems → FlexForms Payment Links → "Degaja
+    CheckOut" → click the flow open → click the "No-Redirect" tile under
+    Approve or Deny → Modify → pick "A URL" on the left (not "No Redirect")
+    → "Add A New URL" / "Select a Saved URL"**. Two real gotchas hit along
+    the way, in case this ever needs revisiting:
+    - Saving a new URL under "No Redirect" mode's "Select a Saved URL"
+      sub-option does NOT set up an automatic redirect — that only makes the
+      URL available for the consumer to *manually click*. The actual
+      automatic-redirect mode is the separate top-level **"A URL"** tile
+      (under "Redirect To"), not "No Redirect" with a saved URL attached.
+    - Edits to a flow's Approve/Deny tiles only persist while the
+      **Sandbox/Live toggle is set to Sandbox** — CCBill's own in-app
+      message confirms this ("To make changes to this Tile switch to
+      SANDBOX mode using the toggle above"). Editing while toggled to Live
+      silently fails to save (reopening the tile reverts to "No Redirect"
+      with no error shown) — this cost real time before the message was
+      spotted. The real sequence: toggle to Sandbox → edit both the Approve
+      and Deny tiles → **Promote to Live**.
+    - Saved URLs used: Approve → `https://www.degaja.com/?payment=success`
+      (named "Degaja Success"), Deny → `https://www.degaja.com/?payment=cancelled`
+      (named "Degaja Cancelled"). Webhook URL was already correct
+      (`https://www.degaja.com/api/ccbill-webhook`), untouched.
+    - **Yoel confirmed this is now done and promoted to Live** (verbally,
+      not yet independently verified from this session — no real payment
+      has round-tripped through it yet). Take this as done unless a real
+      test payment shows otherwise.
   - **Unconfirmed, flagged rather than guessed: whether CCBill's "$5–$300"
     Dynamic Pricing range (confirmed 2026-11-11 via the real
     `SubscriptionRuleException`) is a blanket literal-number check
