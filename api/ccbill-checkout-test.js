@@ -4,7 +4,7 @@
 // payment without touching the live payment path at all. See
 // api/_ccbill.js and CLAUDE.md's "Payments: Stripe -> CCBill" section.
 import crypto from "node:crypto";
-import { encryptionKeyLooksValid, buildFlexFormUrl, CCBILL_CURRENCY_NUMERIC } from "./_ccbill.js";
+import { encryptionKeyLooksValid, encryptionKeyMatchesVector2, buildFlexFormUrl, CCBILL_CURRENCY_NUMERIC } from "./_ccbill.js";
 import { createOrder } from "./_ccbillOrders.js";
 
 export default async function handler(req, res) {
@@ -22,10 +22,11 @@ export default async function handler(req, res) {
   // own checkout page accepts the formDigest built below without a
   // "digest mismatch" error - that's what this endpoint is for.
   const selfTestPassed = encryptionKeyLooksValid();
+  const selfTestPassedVector2 = encryptionKeyMatchesVector2();
 
   try {
     const orderId = crypto.randomUUID();
-    await createOrder(orderId, { kind: "test", note: "Manual test payment from ccbill-test.html", selfTestPassed });
+    await createOrder(orderId, { kind: "test", note: "Manual test payment from ccbill-test.html", selfTestPassed, selfTestPassedVector2 });
 
     // CCBill's own worked example (price=3) turned out to be invalid -
     // their real app returned "SubscriptionRuleException: Initial price:
@@ -34,7 +35,7 @@ export default async function handler(req, res) {
     // documented minimum for Dynamic Pricing.
     const url = buildFlexFormUrl({ price: "5.00", period: "3", currencyCode: CCBILL_CURRENCY_NUMERIC.usd, orderId });
 
-    return res.status(200).json({ url, orderId, selfTestPassed });
+    return res.status(200).json({ url, orderId, selfTestPassed, selfTestPassedVector2 });
   } catch (error) {
     return res.status(500).json({ error: String(error.message || error) });
   }

@@ -27,16 +27,29 @@ export function computeFormDigest(initialPrice, initialPeriod, currencyCode, enc
   return crypto.createHash("md5").update(input).digest("hex");
 }
 
-// Real worked example from CCBill's Integration team email (2026-11-11), for
-// THIS account/Flex ID - lets us verify CCBILL_ENCRYPTION_KEY is the actual
-// key before it's ever used on a real checkout link, with no network access
-// to CCBill needed.
+// Real worked examples from CCBill's own Merchant Support team, for THIS
+// account/Flex ID - let us verify CCBILL_ENCRYPTION_KEY is the actual key
+// before it's ever used on a real checkout link, with no network access to
+// CCBill needed. Two independent vectors from two separate emails - if both
+// match, the key is confirmed beyond doubt; if only one matches, the key
+// changed between the two emails (ask Merchant Support which is current).
 const KNOWN_VECTOR = { price: "3", period: "3", currency: "840", digest: "4f59294f73f2e73cccae42870619cbb6" };
+// From Andrea K. (Merchant Support), sent in response to a real "Error 503 -
+// Service Unavailable" report - their email states this exact URL "is
+// loading the Form without any issues", and that 503 on our side is most
+// commonly caused by an incorrect formDigest.
+const KNOWN_VECTOR_2 = { price: "15", period: "30", currency: "840", digest: "03c5dcbaa5ed14c53be64dc51239f15e" };
 
 export function encryptionKeyLooksValid() {
   const key = process.env.CCBILL_ENCRYPTION_KEY;
   if (!key) return false;
   return computeFormDigest(KNOWN_VECTOR.price, KNOWN_VECTOR.period, KNOWN_VECTOR.currency, key) === KNOWN_VECTOR.digest;
+}
+
+export function encryptionKeyMatchesVector2() {
+  const key = process.env.CCBILL_ENCRYPTION_KEY;
+  if (!key) return false;
+  return computeFormDigest(KNOWN_VECTOR_2.price, KNOWN_VECTOR_2.period, KNOWN_VECTOR_2.currency, key) === KNOWN_VECTOR_2.digest;
 }
 
 // price: decimal string/number in whole currency units (e.g. "4.99"), NOT
