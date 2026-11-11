@@ -223,6 +223,51 @@ detail — read it at the start of any new session on this repo.
       (e.g. the still-open Encryption-Key-vs-Webhook-Salt question above),
       ask Yoel to open the relevant page and screenshot/paste the exact
       text rather than guessing from the URL slug alone.
+  - **2026-11-11: built an isolated CCBill test harness** (separate from the
+    live Stripe checkout real visitors use — `api/checkout.js`/`script.js`
+    are untouched):
+    - `api/_ccbill.js` — Flex ID, `clientSubacc`, ISO 4217 currency map,
+      `computeFormDigest()`, and `encryptionKeyLooksValid()` which
+      self-tests `CCBILL_ENCRYPTION_KEY` against the Integration team's own
+      worked example (price=3/period=3/currency=840 →
+      `4f59294f73f2e73cccae42870619cbb6`) — confirms the key is right
+      before it's ever used on a real link, no network access needed.
+    - `api/_ccbillOrders.js` — Edge Config storage for test orders/webhook
+      results, mirroring `_pending.js`/`_redeemed.js`'s pattern, under its
+      own keys so it can't collide with the live payment path.
+    - `api/ccbill-webhook.js` — rewritten from the dormant scaffold to
+      actually store every incoming postback's full raw body (matched by
+      our own `orderId` query param when present, falling back to
+      `subscriptionId`/`transactionId`/a timestamp). Gated on
+      `CCBILL_ENCRYPTION_KEY` being set rather than a `CCBILL_WEBHOOK_SALT`
+      we don't have confirmed yet — **no real signature verification
+      exists yet**, this is intentionally test-only until the
+      Encryption-Key-vs-Webhook-Salt question above is resolved.
+    - `api/ccbill-checkout-test.js` + `api/verify-ccbill-payment.js` +
+      `ccbill-test.html` (noindex, unlinked) — lets Yoel run one real
+      $3.00 USD test charge and watch the result, without any real site
+      visitor ever touching CCBill.
+    - **Deployed and confirmed live** (`https://www.degaja.com/ccbill-test.html`
+      returns 200; the test checkout endpoint returns 405 on GET as
+      expected — both verified via Vercel's deployment tools, not assumed).
+    - **The one remaining hard blocker to actually run a test payment**:
+      `CCBILL_ENCRYPTION_KEY` is not set anywhere yet (Yoel has not yet
+      retrieved/sent the real value from the portal path given in the
+      Integration team's email, above). Nothing can charge a real test
+      amount until this is set as a Vercel env var.
+    - **Redirect/webhook URLs to register with CCBill for subaccount 0000,
+      for this TEST phase** (deliberately pointing at the isolated test
+      page, not the real site, until the flow is proven):
+      - Approval: `https://www.degaja.com/ccbill-test.html?ccbill=success`
+      - Denial: `https://www.degaja.com/ccbill-test.html?ccbill=cancelled`
+      - Webhook: `https://www.degaja.com/api/ccbill-webhook`
+      Once a real test payment round-trips successfully (and in
+      particular, once the real webhook payload is inspected to confirm
+      whether `orderId` actually comes through), the **real** cutover step
+      (replacing these with the live site's own URLs, and wiring
+      `api/checkout.js`/`script.js`/`love-quiz.html` for real, per the
+      numbered plan at the top of this section) is still separate,
+      deliberate future work — not done yet.
 
 ## Universal / non-denominational framing — standing design principle
 
