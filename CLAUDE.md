@@ -7,6 +7,40 @@ detail — read it at the start of any new session on this repo.
 
 ## Payments: Stripe → CCBill (in progress)
 
+- **2026-11-11, ~14:15: CRITICAL FINDING — `CCBILL_ENCRYPTION_KEY` as
+  currently set in Vercel is confirmed WRONG, via CCBill's own fresh test
+  vector.** CCBill Merchant Support (Andrea K., merchantsupport@ccbill.com)
+  emailed in response to a real "Error 503 - Service Unavailable" report
+  (exact URL Yoel hit not yet captured - Andrea asked for it too, still
+  unanswered), stating 503 is most commonly caused by an incorrect
+  `formDigest`, and gave a fresh worked example confirmed to load fine on
+  their end: `price=15, period=30, currency=840 (USD)` →
+  `formDigest=03c5dcbaa5ed14c53be64dc51239f15e`, for the same Flex ID
+  (`f33155c3-8961-4ede-8da7-0ff3c5d56c4f`)/subaccount (`0000`) we use.
+  Added this as a second self-test vector (`encryptionKeyMatchesVector2()`
+  in `api/_ccbill.js`, surfaced via `api/ccbill-checkout-test.js`'s
+  `selfTestPassedVector2` field) and called the deployed endpoint (via a
+  throwaway Vercel Sandbox running curl, since this session's own egress
+  proxy blocks `www.degaja.com` directly and `web_fetch_vercel_url` only
+  supports GET) to check our *actual* stored key against it, without ever
+  printing the key itself. **Result: `selfTestPassedVector2: false`** - our
+  current `CCBILL_ENCRYPTION_KEY` does NOT reproduce CCBill's own confirmed
+  digest. (The older vector, `selfTestPassed`, is also still `false` - that
+  one was already expected to fail per the "key was regenerated" theory
+  below, so it alone isn't new information; vector2 failing is what's new
+  and alarming, since it's today's fresh confirmed-working example.)
+  **This contradicts the earlier 2026-11-11 "CONFIRMED WORKING" entry
+  below** (where Yoel loaded a real $5.00 FlexForm page with no digest
+  error) - either the key changed again since then, Vercel's env var was
+  edited/reverted, or that earlier "confirmation" was wrong for some other
+  reason not yet understood. **Do not trust the current
+  `CCBILL_ENCRYPTION_KEY` value until this is resolved.** Next step: ask
+  Yoel to go back into the portal (Account info → Sub account admin → View
+  Subaccount Detail → Advanced → Encryption key) and re-copy the value
+  fresh, character by character, and re-set it in Vercel - do not assume
+  the existing stored value is still correct. Also still need the exact
+  URL/timestamp of the real 503 Yoel hit, to answer Andrea's question and
+  to confirm this is in fact the same root cause.
 - **2026-11-11: real cutover executed — `api/checkout.js` now builds CCBill
   FlexForm URLs directly; Stripe code removed from the checkout path
   entirely** (per Yoel's explicit instruction "תעשה את זה תוריד את סטריפ" —
