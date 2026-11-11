@@ -7,9 +7,72 @@ detail — read it at the start of any new session on this repo.
 
 ## Payments: Stripe → CCBill (in progress)
 
-- **2026-11-11, ~14:15: CRITICAL FINDING — `CCBILL_ENCRYPTION_KEY` as
-  currently set in Vercel is confirmed WRONG, via CCBill's own fresh test
-  vector.** CCBill Merchant Support (Andrea K., merchantsupport@ccbill.com)
+- **2026-11-11, ~16:00: RESOLVED — the "critical finding" below was wrong
+  about WHERE the bug was. `CCBILL_ENCRYPTION_KEY` is correct. The bug was
+  in our own `computeFormDigest()`.** Full resolution, after much back-
+  and-forth that this entry corrects:
+  - Yoel confirmed via screenshots that the exact same 24-character key
+    value appears in BOTH the "Upgrade Security Setup Information"
+    (TripleDES/Subscription Upgrade) section AND the "Background Post"
+    section of admin.ccbill.com (Account Info → View Subaccount Info →
+    Feature Summary → Data Tools → Background Post → Modify). One real,
+    consistent, account-wide value - strong evidence it's genuinely
+    correct, not stale or mistyped.
+  - Yet it still failed both of CCBill's own confirmed formDigest vectors
+    under our documented formula. Rather than keep guessing at portal
+    navigation, brute-forced every plausible field order (24 permutations)
+    × price-formatting variant × optional-subaccount-inclusion (96 total
+    formulas) against the REAL stored key, for both vectors simultaneously
+    - implemented as `bruteForceFormDigestFormula()` in `api/_ccbill.js`,
+    called via `api/ccbill-checkout-test.js`, run through a throwaway
+    Vercel Sandbox (curl POST, since this session's egress proxy blocks
+    `www.degaja.com` directly and `web_fetch_vercel_url` only supports
+    GET). Reports only which formula matched, never the key or any hash
+    input - safe to run and log.
+  - **Found it**: `order=price,period,currency,key|price=decimal|subacc=false`
+    - i.e. the documented field order was already right, but **the price
+    used INSIDE the MD5 input must be formatted to exactly 2 decimal
+    places** (e.g. `"3.00"`, `"15.00"`), even though CCBill's own
+    worked-example URLs show `initialPrice=3`/`initialPrice=15` with NO
+    decimals in the query string itself. The URL's displayed value and the
+    digest's internal input value are independent - CCBill's backend
+    evidently normalizes the price to 2 decimals before hashing regardless
+    of how it's written in the URL. This was never guessed at or
+    documented anywhere in CCBill's own docs we have access to; found
+    purely empirically.
+  - **Fixed in `api/_ccbill.js`**: `computeFormDigest()` now always runs
+    the price argument through `Number(price).toFixed(2)` before hashing,
+    independent of what string is used for the URL's own `initialPrice`
+    display value. `encryptionKeyLooksValid()`/`encryptionKeyMatchesVector2()`
+    now both correctly return `true` against CCBill's two real confirmed
+    vectors (verified live, via the same Sandbox+curl method).
+  - **Practical impact on the real production checkout path
+    (`api/checkout.js`/`buildFlexFormUrl`)**: for every non-JPY currency,
+    `priceDecimal` was ALREADY computed via `.toFixed(2)` (see
+    `AI_AMOUNTS_BY_CURRENCY`/cents-to-decimal conversion above) and used
+    for BOTH the URL and the digest - so real production digests for
+    EUR/GBP/USD/BRL/MXN/CNY/INR were very likely already correct all
+    along. JPY (zero-decimal, passed as a bare integer string like
+    `"750"`) now gets `.00` appended inside the digest only (via the fix
+    above) while the URL still shows the bare integer, matching the
+    pattern CCBill's own vectors demonstrated - previously this would have
+    been wrong for JPY specifically. **Net effect: this fix mainly
+    protects JPY and any future un-padded price, and correctly resolves
+    our own local self-test/diagnostic tooling** - it does not necessarily
+    explain the original unresolved mystery of the one real completed
+    payment (EUR, 2026-11-11 earlier) producing no webhook, since that
+    payment's own digest was likely already correct. The real 503 Andrea
+    K. responded to (exact URL never captured - still unknown) remains
+    unexplained by this specific fix, though it may well have been a
+    related/same-family price-formatting issue on whatever generated that
+    specific request.
+  - **Still needed**: a fresh real test payment (or at least a fresh
+    FlexForm page load) to confirm this fix holds end-to-end in practice,
+    not just in our own local self-tests.
+- **2026-11-11, ~14:15 (SUPERSEDED BY THE ABOVE - kept for history only,
+  do not act on this entry's conclusion):** ~~CRITICAL FINDING —
+  `CCBILL_ENCRYPTION_KEY` as currently set in Vercel is confirmed WRONG,
+  via CCBill's own fresh test vector.~~ CCBill Merchant Support (Andrea K., merchantsupport@ccbill.com)
   emailed in response to a real "Error 503 - Service Unavailable" report
   (exact URL Yoel hit not yet captured - Andrea asked for it too, still
   unanswered), stating 503 is most commonly caused by an incorrect
