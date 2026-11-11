@@ -95,24 +95,50 @@ detail — read it at the start of any new session on this repo.
       it (2026-11-11). This may be the actual reason the webhook was never
       received at all (see below) — or may be unrelated; not confirmed
       either way without a fresh real test.
-    - **2026-11-11: two real payments were made as manual tests** (£9.99
-      GBP pack, €5.00 EUR single, both via the real live site, real cards,
-      real bank confirmation/3D-Secure) — **before** the webhook-events fix
-      above. Both: (a) did NOT redirect back to the site after approval
-      (stayed on CCBill's page), and (b) produced **zero webhook postbacks**
-      — `api/ccbill-webhook.js` has no record of either at all, not even
-      under a fallback/unmatched key, confirmable via Vercel's Edge Config
-      (`ccbillPendingOrders` has both orders under `kind: "live"`;
-      `ccbillOrderResults` doesn't exist as a key at all). The money itself
-      did arrive (Yoel confirmed via his bank app, €5.00 shown as a real
-      transaction). This is consistent with the webhook-events checkbox
-      being unchecked at the time — but **don't assume that was the sole
-      cause** until a fresh real payment (after both fixes) is confirmed
-      working. CCBill's own Reports → Transaction Reports → Lookup
-      (search by Credit Card / Days to Look Back) returned **no results**
-      for either transaction when tried same-day — unclear whether this is
-      normal reporting lag, wrong search criteria, or something else; not
-      resolved.
+    - **2026-11-11: two checkouts were started as manual tests on the real
+      live site** (£9.99 GBP pack, €5.00 EUR single) — both created an
+      order record in our system (`ccbillPendingOrders`, `kind: "live"`),
+      but **only the €5.00 EUR one was actually completed/charged** (Yoel
+      confirmed real money left his account, via his bank app, for that one
+      specifically - corrected here after initially mis-stating both as
+      charged). The £9.99 GBP one was only started, not completed - normal
+      and expected, an order record is created the moment checkout begins,
+      before the consumer finishes paying on CCBill's page, so this isn't
+      itself evidence of a bug. Both happened **before** the webhook-events
+      fix below. For the one real completed payment: (a) it did NOT redirect
+      back to the site after approval (stayed on CCBill's page), and (b)
+      produced **zero webhook postbacks** — `api/ccbill-webhook.js` has no
+      record of it at all, not even under a fallback/unmatched key,
+      confirmable via Vercel's Edge Config (`ccbillOrderResults` doesn't
+      exist as a key at all). This is consistent with the webhook-events
+      checkbox being unchecked at the time — but **don't assume that was the
+      sole cause** until a fresh real payment (after all fixes, including
+      the 2026-11-11 `api/ccbill-webhook.js` GET/POST hardening below) is
+      confirmed working. CCBill's own Reports → Transaction Reports →
+      Lookup (search by Credit Card / Days to Look Back) returned **no
+      results** for the transaction when tried same-day — unclear whether
+      this is normal reporting lag, wrong search criteria, or something
+      else; not resolved.
+    - **2026-11-11: found and fixed a real code bug in `api/ccbill-webhook.js`
+      during a full review of the integration** (done after the above,
+      prompted by "check the whole process from scratch"): the endpoint
+      only accepted `POST` and returned a bare 405 on anything else, with
+      nothing recorded — so if CCBill's postback actually arrives as a
+      `GET` request (a pattern some payment processors use for simple
+      "pixel"-style postbacks, and never actually confirmed either way for
+      CCBill in anything we have), this would silently produce exactly the
+      symptom observed above: zero records, no visible error anywhere.
+      Fixed to accept both GET and query-string params. Also hardened body
+      parsing: spreading `req.body` when it arrives as an unparsed string
+      (wrong/missing Content-Type) previously produced garbage instead of
+      the postback's real fields - now parsed defensively (tries JSON, then
+      falls back to `URLSearchParams`). Checked and ruled out as causes
+      while in there: Vercel's SSO/deployment protection (confirmed
+      disabled for the custom domain `www.degaja.com`, only applies to
+      `*.vercel.app` URLs) and project-level firewall rules (none
+      configured at all). Deployed and live. **Still not end-to-end
+      verified** - needs a fresh real payment to confirm any of this
+      actually fixed the missing-webhook symptom.
     - **CCBill API Guide excerpt obtained 2026-11-11** (Yoel screenshotted
       it) — real, confirmed Datalink API details for future use (e.g. to
       check a transaction's status without needing the webhook or another
