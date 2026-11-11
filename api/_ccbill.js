@@ -88,6 +88,70 @@ export function diagnoseEncryptionKey() {
   };
 }
 
+// Yoel confirmed (2026-11-11) that the SAME key value appears in both the
+// "Upgrade Security Setup Information" (TripleDES/Subscription Upgrade)
+// field AND the "Background Post" section's own key field - strong evidence
+// it's one real, correct, account-wide value, not a wrong/stale one. Yet it
+// fails both known formDigest vectors under our documented formula. That
+// shifts the likely bug from "wrong key" to "wrong formula" - the
+// price/period/currency+key concatenation order, or price's string format
+// (e.g. "3" vs "3.00"), may not match what CCBill's backend actually hashed
+// when it generated these two vectors. Brute-force every plausible
+// permutation of the four fields, crossed with a couple of price-formatting
+// variants, against the REAL stored key, for BOTH vectors at once - only a
+// formula that reproduces BOTH confirms the true formula. Reports only
+// which formula name(s) matched, never the key or any intermediate hash
+// input.
+function permutations(arr) {
+  if (arr.length <= 1) return [arr];
+  const result = [];
+  for (let i = 0; i < arr.length; i++) {
+    const rest = arr.slice(0, i).concat(arr.slice(i + 1));
+    for (const p of permutations(rest)) result.push([arr[i], ...p]);
+  }
+  return result;
+}
+
+export function bruteForceFormDigestFormula() {
+  const key = process.env.CCBILL_ENCRYPTION_KEY;
+  if (!key) return { configured: false };
+
+  const vectors = [
+    { name: "vector1", price: "3", priceDecimal: "3.00", period: "3", currency: "840", digest: KNOWN_VECTOR.digest },
+    { name: "vector2", price: "15", priceDecimal: "15.00", period: "30", currency: "840", digest: KNOWN_VECTOR_2.digest }
+  ];
+
+  const fieldNames = ["price", "period", "currency", "key"];
+  const orders = permutations(fieldNames);
+  const priceModes = ["plain", "decimal"];
+  const includeSubaccOptions = [false, true];
+
+  const matchedBoth = [];
+  for (const order of orders) {
+    for (const priceMode of priceModes) {
+      for (const includeSubacc of includeSubaccOptions) {
+        let allMatch = true;
+        for (const v of vectors) {
+          const values = {
+            price: priceMode === "decimal" ? v.priceDecimal : v.price,
+            period: v.period,
+            currency: v.currency,
+            key
+          };
+          let input = order.map(f => values[f]).join("");
+          if (includeSubacc) input += CCBILL_CLIENT_SUBACC;
+          const digest = crypto.createHash("md5").update(input).digest("hex");
+          if (digest !== v.digest) { allMatch = false; break; }
+        }
+        if (allMatch) {
+          matchedBoth.push(`order=${order.join(",")}|price=${priceMode}|subacc=${includeSubacc}`);
+        }
+      }
+    }
+  }
+  return { configured: true, matchedBoth, totalFormulasTried: orders.length * priceModes.length * includeSubaccOptions.length };
+}
+
 // price: decimal string/number in whole currency units (e.g. "4.99"), NOT
 // cents - CCBill's initialPrice is not the same shape as Stripe's
 // unit_amount. period: days, 2-365 per CCBill's documented range; using the

@@ -4,7 +4,7 @@
 // payment without touching the live payment path at all. See
 // api/_ccbill.js and CLAUDE.md's "Payments: Stripe -> CCBill" section.
 import crypto from "node:crypto";
-import { encryptionKeyLooksValid, encryptionKeyMatchesVector2, diagnoseEncryptionKey, buildFlexFormUrl, CCBILL_CURRENCY_NUMERIC } from "./_ccbill.js";
+import { encryptionKeyLooksValid, encryptionKeyMatchesVector2, diagnoseEncryptionKey, bruteForceFormDigestFormula, buildFlexFormUrl, CCBILL_CURRENCY_NUMERIC } from "./_ccbill.js";
 import { createOrder } from "./_ccbillOrders.js";
 
 export default async function handler(req, res) {
@@ -35,7 +35,7 @@ export default async function handler(req, res) {
     // documented minimum for Dynamic Pricing.
     const url = buildFlexFormUrl({ price: "5.00", period: "3", currencyCode: CCBILL_CURRENCY_NUMERIC.usd, orderId });
 
-    return res.status(200).json({ url, orderId, selfTestPassed, selfTestPassedVector2, keyDiagnosis: diagnoseEncryptionKey() });
+    return res.status(200).json({ url, orderId, selfTestPassed, selfTestPassedVector2, keyDiagnosis: diagnoseEncryptionKey(), formulaSearch: bruteForceFormDigestFormula() });
   } catch (error) {
     return res.status(500).json({ error: String(error.message || error) });
   }
