@@ -370,6 +370,19 @@ detail — read it at the start of any new session on this repo.
       `api/checkout.js`/`script.js`/`love-quiz.html` for real, per the
       numbered plan at the top of this section) is still separate,
       deliberate future work — not done yet.
+  - **2026-11-11: found "CCBill EU-Debit" (free setup, no monthly minimum)**
+    while browsing the portal — lets German/Austrian customers pay by
+    direct bank debit (routing + checking account number, German customers
+    also need a Country ID Card Number) instead of a credit card. Yoel's
+    reasoning, worth keeping: many Germans are reluctant to put a credit
+    card number "out on the internet" and prefer direct bank debit — and
+    DACH is literally the one funded, highest-value ad market (see the
+    TikTok Ads section below), so this could be a real incremental-revenue
+    lever, not just a nice-to-have. **Not signed up for or acted on yet**
+    — requires the Main Account Principal to log into System5 and agree to
+    a separate CCBill EU-Debit Contract Addendum (print/initial/fax back
+    per CCBill's process) before any check-form signup can be built. Revisit
+    once the Dynamic Pricing cutover itself is done and tested.
 
 ## Universal / non-denominational framing — standing design principle
 
