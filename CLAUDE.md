@@ -143,6 +143,32 @@ detail — read it at the start of any new session on this repo.
     value from Account Info before using it), and the Webhook Salt
     (separate from the Encryption Key, for verifying postbacks in
     `api/ccbill-webhook.js` — not yet retrieved).
+  - **2026-11-11: CCBill's Integration team emailed that "Basic setup" is
+    complete on account 955732, subaccount 0000** ("Subaccount 0000 should
+    be used for one-time payments" — confirms the clientSubacc=0000 finding
+    above). The email gives the portal path to the key: **Account info →
+    Sub account admin → View Subaccount Detail → Advanced → scroll to
+    "Encryption key"**. It also says they regenerated this key to remove
+    special characters ("we have updated the salt key to not contain any
+    special characters as these can cause issues").
+    **Open terminology question, not yet resolved**: the email calls this
+    the "salt key" in prose but points at a portal field literally named
+    "Encryption key" — and CCBill's own doc URL for it is
+    `ccbill.com/doc/encryption-key-salt`, i.e. CCBill's own naming bundles
+    "encryption key" and "salt" together. This session has no network
+    access to ccbill.com to read that doc and settle it, so **do not
+    assume** this single value covers both: (a) the FlexForms Dynamic
+    Pricing `formDigest` MD5 input (documented above as needing the
+    Encryption Key), and (b) verifying postback signatures in
+    `api/ccbill-webhook.js` (previously tracked here as a separate
+    "Webhook Salt"). Ask Marija/the Integration team directly whether one
+    value serves both purposes, or whether a second, separate postback
+    signature value still needs to be retrieved — do not guess and wire up
+    `api/ccbill-webhook.js`'s verification against an unconfirmed
+    assumption.
+    Yoel still needs to go into the portal himself and copy the actual key
+    value (not yet in this repo/session) before any integration code can
+    use it.
 
 ## Universal / non-denominational framing — standing design principle
 
