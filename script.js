@@ -286,7 +286,7 @@
     });
   }
 
-  async function unlockDeepReading(question, topic) {
+  async function unlockDeepReading(question, topic, fromOtherPage = false) {
     if (!question) {
       (window.degajaGoTo || (s => document.querySelector(s)?.scrollIntoView({ behavior: "smooth", block: "center" })))("#oracle");
       return;
@@ -315,7 +315,7 @@
     state.conversationHistory.push({ role: "assistant", content: text });
     state.paidAccess = true;
     localStorage.setItem("degajaPaidAccess", "1");
-    renderResult(text, question, topic, true);
+    renderResult(text, question, topic, true, null, fromOtherPage);
   }
 
   function sleep(ms) { return new Promise(resolve => setTimeout(resolve, ms)); }
@@ -372,7 +372,7 @@
       localStorage.removeItem(PENDING_READING_KEY);
 
       if (pending?.question) {
-        await unlockDeepReading(pending.question, pending.topic || "");
+        await unlockDeepReading(pending.question, pending.topic || "", !!pending.source);
         return;
       }
 
@@ -524,7 +524,7 @@
     }
   }
 
-  function renderResult(text, question, topic, paid = false, target = null) {
+  function renderResult(text, question, topic, paid = false, target = null, fromOtherPage = false) {
     const result = target || $("#aiResult");
     if (!result) return;
 
@@ -533,6 +533,7 @@
       .replace(/\n/g, "<br>");
 
     result.innerHTML = `
+      ${fromOtherPage ? `<div style="margin-bottom:8px;color:#398fc2;font-weight:700;font-size:13px">${t("result.fromSource")}</div>` : ""}
       <strong>${paid ? t("result.paidTitle") : t("result.freeTitle")}</strong>
       <button type="button" id="speakBtn" class="text-button" style="display:block;margin:6px 0;font-size:13px">${t("result.speak")}</button>
       <p style="margin:8px 0;color:#596273">${safeText}</p>

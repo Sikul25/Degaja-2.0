@@ -909,7 +909,7 @@
     checkoutInFlight = true;
     var question = t().deepen_prompt.replace("{dream}", dreamText);
     try {
-      localStorage.setItem("degajaPendingReading", JSON.stringify({ question: question, topic: t().topic }));
+      localStorage.setItem("degajaPendingReading", JSON.stringify({ question: question, topic: t().topic, source: true }));
     } catch (_) {}
     fetch("/api/checkout", {
       method: "POST",

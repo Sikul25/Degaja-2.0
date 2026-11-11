@@ -1974,7 +1974,7 @@
     if (checkoutInFlight) return;
     checkoutInFlight = true;
     try {
-      localStorage.setItem("degajaPendingReading", JSON.stringify({ question: lastQuestion, topic: lastTopic }));
+      localStorage.setItem("degajaPendingReading", JSON.stringify({ question: lastQuestion, topic: lastTopic, source: true }));
     } catch (_) {}
     fetch("/api/checkout", {
       method: "POST",
