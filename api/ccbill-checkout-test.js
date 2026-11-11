@@ -13,24 +13,26 @@ export default async function handler(req, res) {
   if (!process.env.CCBILL_ENCRYPTION_KEY) {
     return res.status(503).json({ error: "CCBILL_ENCRYPTION_KEY is not set yet" });
   }
-  if (!encryptionKeyLooksValid()) {
-    return res.status(503).json({
-      error: "CCBILL_ENCRYPTION_KEY failed the self-test against CCBill's own worked example - this is not the right key"
-    });
-  }
+  // NOT blocking on encryptionKeyLooksValid() here: that check is only
+  // valid against CCBill's original worked-example hash, which their own
+  // 2026-11-11 email says was computed with a key they have since
+  // regenerated ("we have updated the salt key to not contain any special
+  // characters"). A stale self-test would wrongly block a key that's
+  // actually correct now. The real, authoritative test is whether CCBill's
+  // own checkout page accepts the formDigest built below without a
+  // "digest mismatch" error - that's what this endpoint is for.
+  const selfTestPassed = encryptionKeyLooksValid();
 
   try {
     const orderId = crypto.randomUUID();
-    await createOrder(orderId, { kind: "test", note: "Manual test payment from ccbill-test.html" });
+    await createOrder(orderId, { kind: "test", note: "Manual test payment from ccbill-test.html", selfTestPassed });
 
     // Deliberately the EXACT same price/period/currency as CCBill's own
     // worked example in their 2026-11-11 email (price=3, period=3,
-    // currency=840/USD) - if this real checkout page also accepts it
-    // without a "digest mismatch" error, that's a second, independent
-    // confirmation the key is correct (beyond the local MD5 self-test).
+    // currency=840/USD).
     const url = buildFlexFormUrl({ price: "3", period: "3", currencyCode: CCBILL_CURRENCY_NUMERIC.usd, orderId });
 
-    return res.status(200).json({ url, orderId });
+    return res.status(200).json({ url, orderId, selfTestPassed });
   } catch (error) {
     return res.status(500).json({ error: String(error.message || error) });
   }

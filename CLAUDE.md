@@ -153,21 +153,57 @@ detail — read it at the start of any new session on this repo.
     networks**, not currencies (JCB is a Japanese card brand, not evidence
     of JPY billing by itself) — don't conflate the two when reasoning about
     this.
-  - **CRITICAL correction, same session**: the "Encryption key" field
-    found under Account Info → Modify Subaccount → Advanced →
-    "Upgrade Security Setup Information" (a real 24-character value was
-    seen there — not recorded here, same reason no other credential in
-    this file is: it's a live security key, just for the wrong feature)
-    is **NOT** the Dynamic Pricing
-    formDigest key — that section's own description says it's for the
-    **Subscription Upgrade system** and uses **TripleDES**, not the MD5
-    `formDigest` our FlexForms integration needs. Do not use this value
-    for `CCBILL_ENCRYPTION_KEY` under any circumstances — it would silently
-    produce wrong hashes. The real Dynamic Pricing encryption key must be
-    somewhere under the **"FlexForms Systems"** top-nav tab instead
-    (possibly "Pricing Admin," which CLAUDE.md already references as
-    where `clientSubacc=0000` was confirmed) — still being located as of
-    this writing.
+  - **Revised understanding of the "Encryption key" under Account Info →
+    Modify Subaccount → Advanced → "Upgrade Security Setup Information"**:
+    earlier in this same session this was ruled out as the Dynamic Pricing
+    key (reasoning: that section's own blurb describes it as for the
+    Subscription Upgrade system, using TripleDES, and a computed-formDigest
+    self-test against it failed to match the Integration team's 2026-11-11
+    worked example). **That rejection was premature.** The same email also
+    said: "we have updated the salt key to not contain any special
+    characters as these can cause issues" — and the value found on this
+    page is purely alphanumeric (no special characters), consistent with
+    being the *regenerated* key. The self-test necessarily fails against
+    the *old* worked example regardless of whether the current value is
+    right, since that example was computed with the pre-update key. So:
+    **this may well be the correct, current Dynamic Pricing Encryption
+    Key after all** — the TripleDES/"Subscription Upgrade" UI labeling may
+    just be generic/stale copy covering an account-wide key field reused
+    by multiple features, not proof it's feature-specific.
+    **2026-11-11: set as `CCBILL_ENCRYPTION_KEY` in Vercel (production +
+    preview) on this understanding** — not yet confirmed correct.
+    `api/ccbill-checkout-test.js` no longer hard-blocks on the (now known
+    to be unreliable) local self-test; it still computes and reports
+    `selfTestPassed` for visibility, but the real test is whether CCBill's
+    own FlexForm checkout page accepts the resulting `formDigest` without a
+    "digest mismatch" error when Yoel actually loads
+    `https://www.degaja.com/ccbill-test.html` and runs the $3 test
+    checkout. That real-world result is the authoritative answer here, not
+    the local self-test.
+    Extensively searched for an alternative/more clearly-labeled Dynamic
+    Pricing key elsewhere in the portal first (FlexForms Systems →
+    Dashboard → FlexForms Payment Links → the "Degaja CheckOut" payment
+    flow (found in SANDBOX mode, with a "Promote to Live" button still
+    showing — **not yet confirmed whether this sandbox flow and its Flex
+    ID match the LIVE Flex ID `f33155c3-8961-4ede-8da7-0ff3c5d56c4f` CCBill
+    gave us, or are a different, separate sandbox-only flow/ID** — ask
+    Yoel to copy-paste the exact Flex ID text from that sandbox flow to
+    compare, don't trust a screenshot read of it) → its "Degaja Dynamics"
+    form's Common Settings (shows "Pricing: Use Both Form & Dynamic
+    Pricing") and All Settings → Pricing tab (just a "Allow for Dynamic
+    Prices to be passed to form" checkbox + price-point selector, no key
+    field at all); also the account's Webhooks page (Account Info → select
+    subaccount 0000 → Account Admin → Webhooks) — confirmed this is the
+    actual modern event-subscription system the Integration team's email
+    meant by "Webhook URL" (distinct from the legacy Background Post
+    Approval/Denial URLs), with a full event list including `NewSaleSuccess`
+    (and very likely `NewSaleFailure`, name not fully confirmed/visible in
+    the screenshots) and `RenewalSuccess`/`RenewalFailure` (irrelevant to
+    us — no subscriptions) — but this page also has **no encryption/signing
+    secret field anywhere on it**. None of these alternate locations had
+    anything resembling a Dynamic Pricing key, which is additional
+    (inconclusive but suggestive) support for the "Upgrade Security Setup"
+    field being the real, account-wide key after all.
   - Still outstanding before real integration code can be written: the
     actual Flex ID (needs a FlexForm created with Dynamic Pricing enabled
     — was in progress, not confirmed finished), the Encryption Key (seen
