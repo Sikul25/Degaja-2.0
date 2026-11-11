@@ -43,6 +43,10 @@
 
   const AI_CREDIT_KEY = "degajaAiCredits";
   const PENDING_READING_KEY = "degajaPendingReading";
+  // Shared across every standalone checkout page too (quiz/love-quiz/dream/
+  // time-tunnel.html, live-consult.js) - set right before redirecting to
+  // CCBill's FlexForm page, read back here once CCBill redirects back.
+  const CCBILL_ORDER_KEY = "degajaCcbillOrderId";
   const getAiCredits = () => Math.max(0, Number(localStorage.getItem(AI_CREDIT_KEY) || 0));
   const setAiCredits = n => localStorage.setItem(AI_CREDIT_KEY, String(Math.max(0, n)));
 
@@ -314,24 +318,45 @@
     renderResult(text, question, topic, true);
   }
 
+  function sleep(ms) { return new Promise(resolve => setTimeout(resolve, ms)); }
+
   async function verifyAiPayment() {
     const params = new URLSearchParams(location.search);
-    const sessionId = params.get("session_id");
-    if (params.get("payment") !== "success" || !sessionId) return;
+    const flag = params.get("payment");
+    if (flag !== "success" && flag !== "cancelled") return;
+    history.replaceState({}, document.title, location.pathname + location.hash);
 
-    try {
-      const response = await fetchWithTimeout(`/api/verify-payment?session_id=${encodeURIComponent(sessionId)}`, {}, 15000);
-      const data = await response.json();
-      if (!response.ok || !data.paid || data.type !== "ai") return;
+    let orderId = null;
+    try { orderId = localStorage.getItem(CCBILL_ORDER_KEY); } catch (_) { /* ignore */ }
+    try { localStorage.removeItem(CCBILL_ORDER_KEY); } catch (_) { /* ignore */ }
 
-      history.replaceState({}, document.title, location.pathname + location.hash);
+    if (flag === "cancelled" || !orderId) return;
+
+    // CCBill's webhook postback can arrive a little after the browser is
+    // redirected back here, so poll briefly rather than giving up on the
+    // first miss (same pattern as ccbill-test.html).
+    for (let attempt = 0; attempt < 12; attempt++) {
+      let data;
+      try {
+        const response = await fetchWithTimeout(`/api/verify-ccbill-payment?order_id=${encodeURIComponent(orderId)}`, {}, 15000);
+        data = await response.json();
+      } catch (error) {
+        await sleep(2500);
+        continue;
+      }
+      if (!data.found) {
+        await sleep(2500);
+        continue;
+      }
+      if (!data.approved || data.type !== "ai") return;
+
       state.paidAccess = true;
       localStorage.setItem("degajaPaidAccess", "1");
 
       if (data.alreadyRedeemed) {
-        // This exact success URL already granted its credits on an earlier
-        // visit (back-button, a shared/bookmarked link, a different browser
-        // or private window). Clean up quietly instead of handing out free
+        // This exact order already granted its credits on an earlier visit
+        // (back-button, a shared/bookmarked link, a different browser or
+        // private window). Clean up quietly instead of handing out free
         // credits again or auto-running the stashed reading a second time —
         // unlockDeepReading() below doesn't require a positive balance, it
         // only opportunistically decrements one, so calling it here would
@@ -364,15 +389,17 @@
         result.classList.add("show");
       }
       (window.degajaGoTo || (s => document.querySelector(s)?.scrollIntoView({ behavior: "smooth", block: "center" })))("#oracle");
-    } catch (error) {
-      // Payment already went through on Stripe's side; nothing to recover client-side here.
+      return;
     }
+    // Gave up waiting for the webhook after ~30s - the payment may still be
+    // genuine (CCBill's own postback can be delayed further), it's just not
+    // confirmed yet. Nothing more to do client-side here.
   }
 
   // Guards every call site (showPurchaseModal's price buttons, the
   // [data-buy] buttons, and voice checkout) against a fast double-click/tap
-  // firing two concurrent /api/checkout calls — which would create two live
-  // Stripe sessions before the first redirect lands.
+  // firing two concurrent /api/checkout calls — which would create two
+  // pending CCBill orders before the first redirect lands.
   let checkoutInFlight = false;
 
   async function startCheckout(product, birthDate) {
@@ -387,6 +414,7 @@
 
       const data = await response.json();
       if (!response.ok || !data.url) throw new Error(data.error || "Zahlung nicht verfügbar");
+      try { localStorage.setItem(CCBILL_ORDER_KEY, data.orderId || ""); } catch (_) { /* ignore */ }
       window.location.href = data.url;
     } catch (error) {
       checkoutInFlight = false;

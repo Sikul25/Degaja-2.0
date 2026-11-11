@@ -1967,7 +1967,7 @@
   }
 
   // Guards against a fast double-tap on a price button firing two concurrent
-  // /api/checkout calls (two live Stripe sessions before the first redirect).
+  // /api/checkout calls (two pending CCBill orders before the first redirect).
   var checkoutInFlight = false;
 
   function startQuizCheckout(product){
@@ -1984,6 +1984,7 @@
       return r.json().then(function(data){ return { ok: r.ok, data: data }; });
     }).then(function(result){
       if (!result.ok || !result.data.url) throw new Error("checkout failed");
+      try { localStorage.setItem("degajaCcbillOrderId", result.data.orderId || ""); } catch (_) {}
       window.location.href = result.data.url;
     }).catch(function(){
       checkoutInFlight = false;

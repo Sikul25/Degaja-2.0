@@ -1645,12 +1645,14 @@
   }
 
   // Deep-reading upsell, matching the main site's price/wording exactly.
-  // On success, Stripe redirects to the homepage; stashing the pending
+  // On success, CCBill redirects to the homepage; stashing the pending
   // question in the same localStorage key the main site's script.js reads
   // (degajaPendingReading) means it auto-resumes this exact reading there
-  // via its existing verifyAiPayment() -> unlockDeepReading() flow.
+  // via its existing verifyAiPayment() -> unlockDeepReading() flow. The
+  // orderId is stashed the same way (degajaCcbillOrderId) so script.js can
+  // poll for this order's webhook result once CCBill redirects back.
   // Guards against a fast double-tap on a price button firing two concurrent
-  // /api/checkout calls (two live Stripe sessions before the first redirect).
+  // /api/checkout calls (two pending CCBill orders before the first redirect).
   var checkoutInFlight = false;
 
   function startTimeTunnelCheckout(product){
@@ -1667,6 +1669,7 @@
       return r.json().then(function(data){ return { ok: r.ok, data: data }; });
     }).then(function(result){
       if (!result.ok || !result.data.url) throw new Error("checkout failed");
+      try { localStorage.setItem("degajaCcbillOrderId", result.data.orderId || ""); } catch (_) {}
       window.location.href = result.data.url;
     }).catch(function(){
       checkoutInFlight = false;

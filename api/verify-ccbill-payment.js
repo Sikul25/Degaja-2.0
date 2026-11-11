@@ -1,8 +1,13 @@
-// Test-only: lets ccbill-test.html poll whether api/ccbill-webhook.js has
-// recorded a result yet for a given orderId. Mirrors api/verify-payment.js's
-// shape loosely, but reads from the CCBill-specific Edge Config keys
-// (api/_ccbillOrders.js) so this cannot interact with the live Stripe path.
-import { getOrderResult, wasAlreadyRedeemed } from "./_ccbillOrders.js";
+// Polled by the frontend (script.js's verifyAiPayment, live-consult.js's
+// verify, and each standalone page's checkout flow, plus ccbill-test.html)
+// to find out whether api/ccbill-webhook.js has recorded an approval/denial
+// yet for a given orderId. Reads from the CCBill-specific Edge Config keys
+// (api/_ccbillOrders.js). getOrder() returns what WE stored at checkout time
+// (product/credits/topics/advisorId/email) - the webhook payload itself
+// isn't confirmed to echo those back, so this is the source of truth for
+// "what was purchased," while getOrderResult() is the source of truth for
+// "did CCBill approve or deny it."
+import { getOrder, getOrderResult, wasAlreadyRedeemed } from "./_ccbillOrders.js";
 
 export default async function handler(req, res) {
   if (req.method !== "GET") return res.status(405).json({ error: "Method not allowed" });
@@ -14,6 +19,7 @@ export default async function handler(req, res) {
   if (!result) return res.status(200).json({ found: false });
 
   const approved = result.eventType === "approval";
+  const order = (await getOrder(orderId)) || {};
   const alreadyRedeemed = approved && (await wasAlreadyRedeemed(orderId));
 
   return res.status(200).json({
@@ -21,6 +27,11 @@ export default async function handler(req, res) {
     approved,
     alreadyRedeemed,
     eventType: result.eventType,
+    type: order.type || "ai",
+    credits: alreadyRedeemed ? 0 : (order.credits || 0),
+    topics: order.topics || null,
+    advisorId: order.advisorId || null,
+    customerEmail: order.email || result.email || null,
     raw: result.raw
   });
 }

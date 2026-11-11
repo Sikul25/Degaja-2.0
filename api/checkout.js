@@ -1,4 +1,7 @@
+import crypto from "node:crypto";
 import { VOICE_PRICES } from "./_data.js";
+import { buildFlexFormUrl, CCBILL_CURRENCY_NUMERIC } from "./_ccbill.js";
+import { createOrder } from "./_ccbillOrders.js";
 
 export default async function handler(req, res) {
   if (req.method !== "POST") return res.status(405).json({ error: "Method not allowed" });
@@ -7,8 +10,8 @@ export default async function handler(req, res) {
 
   // Self-attested date of birth, required for every paid product. Checked
   // server-side (not just client-side) so there's an enforced, timestamped
-  // record tied to the actual Stripe payment if age is ever disputed later
-  // (e.g. a chargeback claiming the buyer was a minor).
+  // record tied to the actual payment if age is ever disputed later (e.g. a
+  // chargeback claiming the buyer was a minor).
   function isAdultBirthDate(dateStr) {
     const parsed = new Date(dateStr);
     if (!dateStr || isNaN(parsed.getTime())) return false;
@@ -22,9 +25,7 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: "A valid date of birth confirming you are 18 or older is required." });
   }
   const CURRENCY_BY_LANG = { en: "gbp", us: "usd", br: "brl", mx: "mxn", ja: "jpy", zh: "cny", hi: "inr" };
-  const LOCALE_BY_LANG = { de: "de", en: "en-GB", us: "en", fr: "fr", es: "es", it: "it", pt: "pt", ru: "ru", uk: "auto", br: "pt-BR", mx: "es", ja: "ja", zh: "zh", hi: "auto" };
   const currency = CURRENCY_BY_LANG[lang] || "eur";
-  const stripeLocale = LOCALE_BY_LANG[lang] || "de";
   const PRODUCT_NAMES = {
     de: { single: "degaja.com – Einzelne Lesung", pack: "degaja.com – 3 Lesungen", voice: n => `DEGAJA Live Audio – ${n} ${n === 1 ? "Thema" : "Themen"}` },
     en: { single: "degaja.com – Single Reading", pack: "degaja.com – 3 Readings", voice: n => `DEGAJA Live Audio – ${n} ${n === 1 ? "Topic" : "Topics"}` },
@@ -75,44 +76,39 @@ export default async function handler(req, res) {
   }
   if (!item) return res.status(400).json({ error: "Invalid product" });
 
-  const secret = process.env.STRIPE_SECRET_KEY;
-  if (!secret) return res.status(503).json({ error: "Stripe is not configured" });
+  if (!process.env.CCBILL_ENCRYPTION_KEY) {
+    return res.status(503).json({ error: "Payments are not configured" });
+  }
+  const currencyNumeric = CCBILL_CURRENCY_NUMERIC[currency];
+  if (!currencyNumeric) return res.status(400).json({ error: "Unsupported currency" });
 
-  const origin = req.headers.origin || `https://${req.headers.host}`;
-  const body = new URLSearchParams();
-  body.set("mode", "payment");
-  body.set("locale", stripeLocale);
-  body.set("success_url", `${origin}/?payment=success&session_id={CHECKOUT_SESSION_ID}`);
-  body.set("cancel_url", `${origin}/?payment=cancelled`);
-  body.set("allow_promotion_codes", "true");
-  // Card only: without this Stripe also offers Link, which can prompt
-  // returning customers for an identity-verification code mid-checkout.
-  body.set("payment_method_types[0]", "card");
-  body.set("line_items[0][price_data][currency]", currency);
-  body.set("line_items[0][price_data][product_data][name]", item.name);
-  body.set("line_items[0][price_data][unit_amount]", String(item.amount));
-  body.set("line_items[0][quantity]", String(item.quantity || 1));
-  body.set("metadata[type]", type);
-  body.set("metadata[product]", String(product));
-  body.set("metadata[lang]", String(lang));
-  if (voiceTopics) body.set("metadata[topics]", String(voiceTopics));
-  if (item.credits) body.set("metadata[credits]", String(item.credits));
-  if (advisorId) body.set("metadata[advisorId]", String(advisorId).slice(0, 100));
-  if (ref) body.set("metadata[ref]", String(ref).slice(0, 40));
-  if (email) body.set("customer_email", String(email));
-  if (email) body.set("client_reference_id", String(email).slice(0, 200));
-  if (name) body.set("metadata[name]", String(name).slice(0, 200));
-  body.set("metadata[birthDateAttested]", String(birthDate).slice(0, 20));
+  // CCBill's initialPrice is a decimal string in whole currency units (e.g.
+  // "5.00"), not Stripe's smallest-unit integer - item.amount above is in
+  // cents except for JPY, which (like Stripe) is already the literal
+  // whole-unit amount (see api/_data.js's own comment on this).
+  const isZeroDecimal = currency === "jpy";
+  const priceDecimal = isZeroDecimal ? String(item.amount) : (item.amount / 100).toFixed(2);
 
+  const orderId = crypto.randomUUID();
   try {
-    const response = await fetch("https://api.stripe.com/v1/checkout/sessions", {
-      method: "POST",
-      headers: { Authorization: `Bearer ${secret}`, "Content-Type": "application/x-www-form-urlencoded" },
-      body
+    await createOrder(orderId, {
+      kind: "live",
+      type,
+      product: String(product),
+      credits: item.credits || 0,
+      topics: voiceTopics || null,
+      advisorId: advisorId ? String(advisorId).slice(0, 100) : null,
+      lang: String(lang),
+      ref: ref ? String(ref).slice(0, 40) : null,
+      email: email ? String(email) : null,
+      name: name ? String(name).slice(0, 200) : null,
+      birthDateAttested: String(birthDate).slice(0, 20),
+      currency,
+      amount: item.amount
     });
-    const data = await response.json();
-    if (!response.ok || !data.url) return res.status(502).json({ error: "Stripe checkout failed" });
-    return res.status(200).json({ url: data.url });
+
+    const url = buildFlexFormUrl({ price: priceDecimal, currencyCode: currencyNumeric, orderId });
+    return res.status(200).json({ url, orderId });
   } catch (error) {
     return res.status(500).json({ error: "Checkout service error" });
   }

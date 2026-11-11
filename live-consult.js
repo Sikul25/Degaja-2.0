@@ -197,14 +197,41 @@
     return age>=18;
   }
 
+  // Shared with script.js and every standalone checkout page - set right
+  // before redirecting to CCBill's FlexForm page, read back here once
+  // CCBill redirects to the homepage (the account's Approval/Denial
+  // Redirect URLs are configured per subaccount, not per request, so every
+  // product's checkout lands back on the same homepage URL regardless of
+  // which page/flow started it).
+  const CCBILL_ORDER_KEY = 'degajaCcbillOrderId';
+
   async function checkout(topics,advisor,birthDate){
     const u=getUser(); if(!u||!advisor)return;
-    try{const r=await doFetch('/api/checkout',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({product:'voice',topics,birthDate,email:u.email,name:u.name||'',advisorId:advisor.id,lang:lang(),ref:window.degajaI18n?window.degajaI18n.getRef():''})},15000);const d=await r.json();if(!r.ok||!d.url)throw new Error(d.error||'Checkout');localStorage.setItem(SESSION_KEY,JSON.stringify({type:'voice',topics,advisorId:advisor.id}));location.href=d.url}catch(_){const e=$('#degajaCall');if(e)e.innerHTML=`<div class="degaja-call-panel"><b>${t('live.checkoutFailTitle')}</b><p class="degaja-live-copy">${t('live.checkoutFailDesc')}</p></div>`;}
+    try{const r=await doFetch('/api/checkout',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({product:'voice',topics,birthDate,email:u.email,name:u.name||'',advisorId:advisor.id,lang:lang(),ref:window.degajaI18n?window.degajaI18n.getRef():''})},15000);const d=await r.json();if(!r.ok||!d.url)throw new Error(d.error||'Checkout');localStorage.setItem(SESSION_KEY,JSON.stringify({type:'voice',topics,advisorId:advisor.id}));try{localStorage.setItem(CCBILL_ORDER_KEY,d.orderId||'')}catch(_){}location.href=d.url}catch(_){const e=$('#degajaCall');if(e)e.innerHTML=`<div class="degaja-call-panel"><b>${t('live.checkoutFailTitle')}</b><p class="degaja-live-copy">${t('live.checkoutFailDesc')}</p></div>`;}
   }
 
   async function verify(){
-    const p=new URLSearchParams(location.search), id=p.get('session_id'); if(p.get('payment')!=='success'||!id)return;
-    try{const r=await doFetch('/api/verify-payment?session_id='+encodeURIComponent(id),{},15000);const d=await r.json();if(!r.ok||!d.paid||d.type!=='voice')throw new Error('not paid');const advisor=d.advisorId?setSelectedAdvisor(d.advisorId):getSelectedAdvisor();localStorage.setItem('degajaPaidVoice','1');localStorage.setItem(SESSION_KEY,JSON.stringify({type:'voice',topics:d.topics||1,advisorId:advisor.id,sessionId:id,verifiedAt:Date.now()}));history.replaceState({},document.title,location.pathname+location.hash);call('paid',d.topics||1,advisor)}catch(_){console.warn('DEGAJA payment verification failed');}
+    const p=new URLSearchParams(location.search), flag=p.get('payment');
+    if(flag!=='success'&&flag!=='cancelled')return;
+    history.replaceState({},document.title,location.pathname+location.hash);
+    let orderId=null; try{orderId=localStorage.getItem(CCBILL_ORDER_KEY)}catch(_){}
+    try{localStorage.removeItem(CCBILL_ORDER_KEY)}catch(_){}
+    if(flag==='cancelled'||!orderId)return;
+    // CCBill's webhook postback can arrive a little after the browser is
+    // redirected back here, so poll briefly rather than giving up on the
+    // first miss (same pattern as ccbill-test.html/script.js).
+    for(let attempt=0; attempt<12; attempt++){
+      let d;
+      try{const r=await doFetch('/api/verify-ccbill-payment?order_id='+encodeURIComponent(orderId),{},15000);d=await r.json();}
+      catch(_){await new Promise(res=>setTimeout(res,2500));continue;}
+      if(!d.found){await new Promise(res=>setTimeout(res,2500));continue;}
+      if(!d.approved||d.type!=='voice'){console.warn('DEGAJA payment verification failed');return;}
+      const advisor=d.advisorId?setSelectedAdvisor(d.advisorId):getSelectedAdvisor();
+      localStorage.setItem('degajaPaidVoice','1');
+      localStorage.setItem(SESSION_KEY,JSON.stringify({type:'voice',topics:d.topics||1,advisorId:advisor.id,orderId,verifiedAt:Date.now()}));
+      call('paid',d.topics||1,advisor);
+      return;
+    }
   }
 
   function peerScript(){return new Promise((ok,no)=>{if(window.Peer)return ok();const s=document.createElement('script');s.src='https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js';s.onload=ok;s.onerror=no;document.head.appendChild(s)})}

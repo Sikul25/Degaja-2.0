@@ -7,6 +7,96 @@ detail — read it at the start of any new session on this repo.
 
 ## Payments: Stripe → CCBill (in progress)
 
+- **2026-11-11: real cutover executed — `api/checkout.js` now builds CCBill
+  FlexForm URLs directly; Stripe code removed from the checkout path
+  entirely** (per Yoel's explicit instruction "תעשה את זה תוריד את סטריפ" —
+  do it, remove Stripe). What changed:
+  - `api/checkout.js`: all Stripe calls (`api.stripe.com/v1/checkout/sessions`,
+    `STRIPE_SECRET_KEY`) removed. Now converts the existing cents-based
+    `item.amount` (already used for Stripe) to CCBill's decimal-string
+    `initialPrice` (e.g. `"5.00"`; JPY stays a literal whole-unit number per
+    its existing zero-decimal handling), generates an `orderId`
+    (`crypto.randomUUID()`), stores the full purchase intent (type, product,
+    credits, topics, advisorId, lang, ref, email, name, birthDateAttested,
+    currency, amount) via `api/_ccbillOrders.js`'s `createOrder()`, and
+    returns `{ url, orderId }` via `buildFlexFormUrl()` (`api/_ccbill.js`).
+    Dead `LOCALE_BY_LANG`/`stripeLocale` (Stripe-only) removed.
+  - `api/verify-ccbill-payment.js` upgraded from test-only (just the webhook
+    result) to the real production verify endpoint: now also calls
+    `getOrder(orderId)` to return what WAS actually purchased
+    (credits/type/topics/advisorId/email) alongside whether CCBill approved
+    or denied it — the webhook payload itself isn't confirmed to echo our
+    metadata back, only `orderId` is confirmed round-tripped, so our own
+    stored order is the source of truth for "what to grant," not the
+    webhook body. Still used by `ccbill-test.html` too (backward compatible).
+  - `script.js`: `startCheckout()` now stashes the returned `orderId` in
+    `localStorage["degajaCcbillOrderId"]` before redirecting (mirrors the
+    already-existing `degajaPendingReading` pattern). `verifyAiPayment()`
+    rewritten: no more `session_id` URL param (CCBill doesn't support
+    Stripe-style URL templating for its redirect) — reads the stashed
+    `orderId` from localStorage instead, and polls
+    `/api/verify-ccbill-payment` up to 12× every 2.5s (CCBill's webhook can
+    arrive after the browser redirect lands, same pattern already proven in
+    `ccbill-test.html`).
+  - `quiz.html`, `love-quiz.html`, `dream.html`, `time-tunnel.html`: each
+    standalone page's own checkout function now also stashes
+    `degajaCcbillOrderId` before redirecting (one-line addition each, same
+    key `script.js` reads — all of them still land back on the homepage via
+    `degajaPendingReading`, unchanged).
+  - `live-consult.js` (live-advisor/voice booking, a separate flow from the
+    AI readings above but sharing the same `api/checkout.js`): `checkout()`
+    now stashes `orderId` too; `verify()` rewritten the same way as
+    `script.js`'s `verifyAiPayment()` (poll by orderId instead of a
+    Stripe `session_id`).
+  - Deleted (dead, Stripe-only code made obsolete by this change):
+    `api/verify-payment.js`, `api/_redeemed.js`.
+  - Deployed and `node --check`/inline-script-syntax verified on every
+    touched file before deploy.
+  - **CRITICAL REMAINING BLOCKER, NOT YET DONE — only Yoel can do this, it's
+    not something achievable via code:** CCBill's Approval Redirect URL,
+    Denial Redirect URL, and Webhook URL are configured **per subaccount in
+    CCBill's own portal**, not passed per-request the way Stripe's
+    `success_url`/`cancel_url` were — confirmed by CCBill's own 2026-11-11
+    email asking us to "confirm" these for subaccount 0000, and by there
+    being no such parameter anywhere in `buildFlexFormUrl()`. **Right now
+    these are still set to the TEST phase's values**
+    (`https://www.degaja.com/ccbill-test.html?ccbill=success` /
+    `?ccbill=cancelled`) from the earlier CCBill test harness work. **Until
+    Yoel (or CCBill's Integration team, on his request) updates these in
+    the portal to:**
+    - Approval → `https://www.degaja.com/?payment=success`
+    - Denial → `https://www.degaja.com/?payment=cancelled`
+    - Webhook → `https://www.degaja.com/api/ccbill-webhook` (unchanged,
+      already correct for the real site too)
+
+    **a real customer who completes a CCBill payment will be redirected to
+    the internal, noindex test page instead of back to the real site.** The
+    webhook will still fire correctly either way (its URL is already right),
+    so the order/credits data isn't lost, but the customer-facing experience
+    is broken until this portal change is made. This is the #1 thing to
+    check/ask Yoel about before telling him checkout is fully live.
+  - **Unconfirmed, flagged rather than guessed: whether CCBill's "$5–$300"
+    Dynamic Pricing range (confirmed 2026-11-11 via the real
+    `SubscriptionRuleException`) is a blanket literal-number check
+    regardless of currency, or converted to a USD-equivalent.** The only
+    confirmed data point used `currencyCode=840` (USD). If it's
+    currency-blind: EUR/GBP/USD (covering 9 of the 11 site
+    languages/markets — de/fr/es/it/pt/ru/uk→eur, en→gbp, us→usd) are
+    confirmed fine for every product (single/pack/voice, all ≥5 and ≤300).
+    But JPY's single reading (¥750) and pack (¥1,490) would exceed 300; INR's
+    pack (₹499.00) would exceed 300; and almost every live-advisor/voice
+    tier in BRL/MXN/JPY/CNY/INR would exceed 300 (up to ¥18,000 / ₹6,000 /
+    MX$2,140 for the 3-topic tier). Not fixed/repriced here — that would be
+    guessing at a business decision analogous to the EUR/GBP/USD $5 fix
+    above, which was Yoel's explicit call each time. Before promoting any
+    paid feature to ja/zh/hi/mx/br traffic, either ask CCBill directly
+    whether the range is currency-aware, or run one real test purchase in
+    each flagged currency/tier and see whether CCBill's page accepts it.
+  - Still unconfirmed (same as before this cutover, unchanged by it): the
+    real `responseDigest` formula, and whether `orderId` reliably survives
+    CCBill's own round trip — both need a REAL completed transaction (not
+    just a loaded payment page) to verify from `api/ccbill-webhook.js`'s
+    stored raw payload.
 - **2026-11-11: `STRIPE_SECRET_KEY` was emptied in Vercel (production) at
   Yoel's explicit instruction, and the site redeployed** — the real site
   currently has **no working payment processor at all** (every real
