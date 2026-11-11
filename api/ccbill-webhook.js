@@ -1,80 +1,47 @@
-// Scaffold for CCBill's server-to-server postback/webhook, built ahead of
-// receiving the real CCBill account details. Deliberately NOT wired into
-// checkout.js, verify-payment.js, or the frontend — this file is dormant
-// until CCBill account numbers + webhook secret/salt arrive, so it carries
-// zero risk to the live Stripe checkout.
+// CCBill's server-to-server postback/webhook receiver.
 //
-// CCBill sends approval/denial/cancellation events as an HTTP POST
-// (form-encoded) to a URL you register in their admin portal. Fields vary by
-// event type, but commonly include: subscriptionId, transactionId,
-// clientAccnum, clientSubacc, initialPrice, initialPeriod, currencyCode,
-// email, and a digest/signature for verifying the postback is genuinely
-// from CCBill (exact field name/algorithm depends on the integration CCBill
-// provisions — confirm with Sinisha once the account is set up).
+// STATUS: wired up for TESTING ONLY (api/ccbill-checkout-test.js +
+// ccbill-test.html), NOT connected to the live site's real checkout path
+// (api/checkout.js/script.js still use Stripe for every real visitor - see
+// CLAUDE.md's "Payments: Stripe -> CCBill" section for the full cutover
+// plan, which this is one step of, not the whole thing).
 //
-// TODO once real CCBill details arrive:
-//   1. Set CCBILL_WEBHOOK_SALT (or whatever CCBill calls their shared
-//      secret) as a Vercel env var and verify the postback signature below.
-//   2. Confirm the exact event/field names from CCBill's dashboard config
-//      (this differs between FlexForms and the Advanced Widget).
-//   3. Decide the order-reference scheme (e.g. pass our own orderId through
-//      as a custom field so this webhook can map it back to a DEGAJA order).
-
-const TEAM_ID = "team_fnwR6mhKjhFrsnKW36UPriM5";
-
-// Duplicated from _pending.js (not imported) so this file touches nothing
-// in the existing, live payment/session code paths.
-function edgeConfigParts() {
-  const raw = process.env.GLOBAL_CONFIG || process.env.EDGE_CONFIG || "";
-  const match = raw.match(/^https:\/\/(global-config|edge-config)\.vercel\.com\/([^?]+)\?token=([^&]+)/);
-  return match ? { host: match[1], id: match[2], readToken: match[3] } : null;
-}
-
-async function storeResult(orderId, result) {
-  const parts = edgeConfigParts();
-  const token = process.env.VERCEL_API_TOKEN;
-  if (!parts || !token) return false;
-  try {
-    const current = await fetch(`https://${parts.host}.vercel.com/${parts.id}/item/ccbillOrders?token=${parts.readToken}`)
-      .then(r => (r.ok ? r.json() : {}))
-      .catch(() => ({}));
-    const next = { ...current, [orderId]: { ...result, updatedAt: Date.now() } };
-    const res = await fetch(`https://api.vercel.com/v1/edge-config/${parts.id}/items?teamId=${TEAM_ID}`, {
-      method: "PATCH",
-      headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
-      body: JSON.stringify({ items: [{ operation: "upsert", key: "ccbillOrders", value: next }] })
-    });
-    return res.ok;
-  } catch (_) {
-    return false;
-  }
-}
+// We do NOT yet have a confirmed signature/digest scheme for verifying a
+// postback is genuinely from CCBill (CCBill's Integration team's
+// 2026-11-11 email gave us the Encryption Key - used for FlexForms'
+// formDigest - but it's unconfirmed whether that same value also signs
+// webhook postbacks, or whether a separate value is needed; see CLAUDE.md).
+// Rather than guess a verification scheme, this endpoint instead: (1)
+// requires CCBILL_ENCRYPTION_KEY to be configured at all (closes the
+// "anyone who finds this URL can write anything" surface while CCBill
+// hasn't been set up yet), and (2) stores the FULL raw body of every
+// postback it receives, matched to our own orderId when present. The first
+// real test payment's raw stored payload is what tells us which fields
+// CCBill actually sends and whether our orderId passthrough (see
+// _ccbill.js's buildFlexFormUrl) survived the round trip - inspect it
+// before trusting this endpoint with real production credit-granting.
+import { recordWebhookResult } from "./_ccbillOrders.js";
 
 export default async function handler(req, res) {
   if (req.method !== "POST") return res.status(405).json({ error: "Method not allowed" });
 
-  // Until the real CCBill webhook salt arrives, this endpoint has no way to
-  // tell a genuine CCBill postback apart from anyone who finds the URL and
-  // POSTs to it — which would otherwise get written straight into the
-  // shared Edge Config store unauthenticated. Refuse outright rather than
-  // accept-and-trust in the meantime; nothing reads ccbillOrders yet, so
-  // there's no functional loss, only a closed write-abuse surface.
-  // TODO once CCBILL_WEBHOOK_SALT is set: verify the postback's
-  // signature/digest against it (exact field/algorithm per CCBill's
-  // dashboard config) instead of this placeholder check.
-  if (!process.env.CCBILL_WEBHOOK_SALT) {
-    return res.status(503).json({ error: "CCBill webhook not yet configured" });
+  if (!process.env.CCBILL_ENCRYPTION_KEY) {
+    return res.status(503).json({ error: "CCBill not yet configured" });
   }
 
   const body = req.body || {};
-  const orderId = body.orderId || body.clientAccnum || null;
-  if (!orderId) return res.status(400).json({ error: "Missing order reference" });
+  // Try every plausible identifier field so this keeps working whichever
+  // one CCBill actually uses - confirm from a real test payload, don't
+  // assume. orderId is ours (see _ccbill.js); the rest are CCBill's own
+  // field names per their general docs, unconfirmed for this exact event.
+  const orderId = body.orderId || body.subscriptionId || body.transactionId || `unmatched_${Date.now()}`;
 
-  const eventType = body.eventType || body.denialId ? "denial" : "approval";
+  const eventType = body.denialId ? "denial" : (body.eventType || "approval");
 
-  await storeResult(orderId, {
+  await recordWebhookResult(orderId, {
     eventType,
     transactionId: body.transactionId || null,
+    subscriptionId: body.subscriptionId || null,
     email: body.email || null,
     raw: body
   });
