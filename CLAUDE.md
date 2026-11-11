@@ -882,6 +882,24 @@ DEGAJA should contrast against, not emulate. The established pattern:
   site's `verifyAiPayment()` on every homepage load after a payment-provider
   redirect. Reuse this instead of building a new result-delivery mechanism
   for any new standalone page.
+  **2026-11-11 update**: a standalone page now gets its OWN paid reading
+  rendered on itself, not on the homepage. Each standalone page stashes its
+  own filename as `source` in the pending object. `verifyAiPayment()` checks
+  `source` against a known list (`quiz.html`/`love-quiz.html`/`dream.html`/
+  `time-tunnel.html`) and, if it matches, does `location.href = source`
+  instead of rendering anything, leaving the pending object in place. Each
+  standalone page's own inline script checks on load whether a pending
+  reading names itself and, if so, skips its normal quiz flow and re-asks
+  the same question via `/api/oracle` (mode: "paid") itself, rendering the
+  result with its own `renderReveal(text, true)` (a `paid` flag that swaps
+  the badge to a `paid_badge` STR key and omits the purchase CTA/pack hint,
+  since it's already paid). `dream.html`'s resume calls `/api/oracle`, not
+  `/api/dream` - its paid "go deeper" step was always a synthetic oracle
+  question (see the "Standalone pages" note above), never the dream
+  endpoint. Any FUTURE standalone page's checkout flow must add itself to
+  both the `source` stash and `verifyAiPayment()`'s `STANDALONE_PAGES` list,
+  or its paid reading will silently fall back to rendering on the homepage
+  instead of coming back to itself.
 - **Every AI serverless endpoint needs `export const config = { maxDuration: 60 };`**
   as its first line. Vercel's platform default (~10s) is shorter than the
   client's own fetch timeout (25-45s), so without this, slow AI responses
