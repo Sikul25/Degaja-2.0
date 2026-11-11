@@ -223,6 +223,31 @@ detail — read it at the start of any new session on this repo.
       (e.g. the still-open Encryption-Key-vs-Webhook-Salt question above),
       ask Yoel to open the relevant page and screenshot/paste the exact
       text rather than guessing from the URL slug alone.
+  - **2026-11-11: read CCBill's "Background Post" doc (Yoel pasted the full
+    text).** Confirms the general mechanism we'd already designed for
+    (`api/_ccbill.js`'s `orderId` query param): "Custom tracking variables
+    can also be sent to the form... These values will be posted back using
+    Background Post when the transaction is complete," and "[Approval/Denial
+    Post] data sent will include everything passed into the signup form
+    through Background Post." **Important caveat, not glossed over**: this
+    document's own code examples are for the **classic/Advanced-Widget
+    signup form** (`bill.ccbill.com/jpost/signup.cgi`, with
+    `clientAccnum`/`formName`/`subscriptionTypeId`/`allowedTypes` params) —
+    a different URL/param family than the **FlexForms Dynamic Pricing** URL
+    we actually use (`api.ccbill.com/wap-frontflex/flexforms/{FLEX_ID}`).
+    So the *concept* (custom var in → echoed back on Approval/Denial) is
+    now confirmed system-wide, which validates the design, but this
+    specific document does not 100% confirm the identical query-string
+    syntax works unchanged on a FlexForms URL - that still wants the real
+    test payment (or the `webhooks-user-guide`/`webhooks-overview` docs,
+    which may describe a newer/different mechanism specifically named
+    "Webhook URL" - note CCBill's own integration email asked us to confirm
+    **both** an "Approval and Denial Redirect URLs" *and* a separate
+    "Webhook URL," implying these may not be the same thing as this
+    document's "Approval/Denial Post URL"). This document also says
+    nothing at all about any signature/salt verification for the
+    postback — the open Encryption-Key-vs-Webhook-Salt question (above)
+    remains unresolved by it.
   - **2026-11-11: built an isolated CCBill test harness** (separate from the
     live Stripe checkout real visitors use — `api/checkout.js`/`script.js`
     are untouched):
