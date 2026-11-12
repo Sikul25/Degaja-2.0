@@ -1809,6 +1809,18 @@
     if (pctEl) pctEl.textContent = "100%";
   }
 
+  // Plain fetch() with no timeout meant a hung AI response (slow backend,
+  // flaky mobile network) left the loading screen stuck at ~96% forever -
+  // no error, no fallback, nothing the visitor could do but close the page.
+  // Aborts after ms and falls through to the caller's fallback reading text.
+  function fetchWithTimeout(url, opts, ms){
+    var controller = new AbortController();
+    var timer = setTimeout(function(){ controller.abort(); }, ms);
+    opts = opts || {};
+    opts.signal = controller.signal;
+    return fetch(url, opts).then(function(r){ clearTimeout(timer); return r; }, function(e){ clearTimeout(timer); throw e; });
+  }
+
   function runReveal(){
     updateProgress(100);
     renderLoading(t().loading_phrases);
@@ -1821,7 +1833,7 @@
     lastTopic = REVEAL_TOPIC[lang];
 
     var minWait = new Promise(function(resolve){ setTimeout(resolve, 3200); });
-    var request = fetch("/api/oracle", {
+    var request = fetchWithTimeout("/api/oracle", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -1830,7 +1842,7 @@
         mode: "paid",
         lang: lang
       })
-    }).then(function(r){ return r.ok ? r.json() : null; }).catch(function(){ return null; });
+    }, 45000).then(function(r){ return r.ok ? r.json() : null; }).catch(function(){ return null; });
 
     Promise.all([request, minWait]).then(function(results){
       finishLoadingBar();
@@ -1852,11 +1864,11 @@
     lastTopic = pending.topic || "";
     renderLoading(t().loading_phrases);
     var minWait = new Promise(function(resolve){ setTimeout(resolve, 1200); });
-    var request = fetch("/api/oracle", {
+    var request = fetchWithTimeout("/api/oracle", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ question: pending.question, topic: pending.topic || "", mode: "paid", lang: lang })
-    }).then(function(r){ return r.ok ? r.json() : null; }).catch(function(){ return null; });
+    }, 45000).then(function(r){ return r.ok ? r.json() : null; }).catch(function(){ return null; });
 
     Promise.all([request, minWait]).then(function(results){
       finishLoadingBar();
