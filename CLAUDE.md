@@ -833,6 +833,88 @@ fixed, both in `live-consult.js`:
   assumed; `berater.html` doesn't load it at all, the advisor-join flow it
   triggers runs entirely through `index.html`'s own query-param handling).
 
+## CCBill: first real test payment succeeded end-to-end (2026-11-12) — major milestone
+
+After a long troubleshooting session, Yoel ran a real $5.00 USD test
+payment through CCBill's free Test Transaction User mechanism and got
+"Thank you for your purchase, you have been approved!" (CCBill order/
+subscription ID `0526316402000000041`). This is the first fully
+successful test since the CCBill integration began. Root causes of every
+earlier failure, now resolved:
+
+- **The real blocker all along: Apple's iCloud Private Relay.** Yoel's
+  iPhone had Private Relay on (Settings → [name] → iCloud → Private
+  Relay), which deliberately gives a DIFFERENT, rotating exit IP to every
+  destination specifically to prevent this exact kind of IP-based
+  correlation - confirmed by the apparent IP being in a Cloudflare range
+  for one checker, an Akamai range for another, and CCBill's own LiveChat
+  seeing a third, totally different IP, all within the same few minutes,
+  with no VPN active. **Turning Private Relay off made the IP stable and
+  consistent everywhere** (confirmed as a real Spanish ISP, Avatel, via
+  reverse DNS). Registering that stable IP in CCBill's Transaction Test
+  Settings (Account Info → Transaction Test Settings → Lookup/Create New
+  User) is what finally let the test card simulate an approval. **If this
+  free test mechanism is ever needed again and starts failing the same
+  way (IP looks different on every check, "looks like VPN" warnings),
+  check Private Relay first** before suspecting CCBill's side again.
+- Also used along the way (kept here in case needed again): test card
+  `4444444444446666`, any CVV > 300, any future expiry; the dedicated
+  "Degaja Test Only" FlexForm flow (Flex ID
+  `5d37ffb5-1ffb-4c67-b36f-1ac512740e43`, must be promoted to Live, not
+  Sandbox-only); `api/_ccbill.js`'s `buildFlexFormUrl()` now takes an
+  optional `flexId` override so `api/ccbill-checkout-test.js` can target
+  this test-only flow instead of the real "Degaja CheckOut" flow.
+- A postal code that doesn't match the selected country (e.g. a
+  non-existent Spanish code) and billing-address mismatches did NOT
+  independently cause a decline in our testing - don't chase that as a
+  cause again, it was ruled out by testing with a real, valid foreign
+  (French) billing address too and still getting declined on the wrong
+  IP.
+
+### Critical webhook bugs found and fixed from this real payload
+
+Inspecting the real postback's raw body (stored by `api/ccbill-webhook.js`
+in Edge Config under `ccbillOrderResults`) revealed **two bugs that would
+have silently broken payment confirmation for every real customer** after
+the real cutover - caught here only because this was the first payload we
+could actually inspect. Both fixed in `api/ccbill-webhook.js` and
+`api/verify-ccbill-payment.js` 2026-11-12:
+
+1. **Our own `orderId` comes back prefixed `X-orderId`, not `orderId`.**
+   CCBill prefixes every pass-through FlexForm URL param with `X-` on the
+   way back (also confirmed: `X-formDigest`, `X-currencyCode` come back
+   the same way) - this was never documented anywhere we had access to,
+   only visible in a real payload. The webhook was checking plain
+   `orderId` first, which is always absent, so it fell through to
+   `transactionId`/`subscriptionId` and filed the result under CCBill's
+   own id instead of ours. Since `verify-ccbill-payment.js` looks up by
+   OUR orderId, this means it would never have found a real customer's
+   result - credits would never be granted even on a genuine approval.
+2. **CCBill's real `eventType` is its own literal event name -
+   `"NewSaleSuccess"` on approval, `"NewSaleFailure"` on denial** - not
+   the generic `"approval"`/`"denial"` strings `verify-ccbill-payment.js`
+   was checking for (a guess that was never actually confirmed).
+   `approved` was therefore always `false` even on a genuine success.
+   `denialId` never appeared in any real payload we've seen (success or
+   failure) - `eventType` alone reliably distinguishes them.
+
+Two other field-name guesses, also now corrected from the real payload:
+- `subscriptionId` is **camelCase**, not `subscription_id` snake_case as
+  CCBill's own "Background Post" doc table seemed to imply (that doc may
+  describe an older/different postback format than what Dynamic Pricing
+  FlexForms actually sends).
+- The validation-digest field is named **`dynamicPricingValidationDigest`**,
+  not `responseDigest` (the name `responseDigest`'s own doc entry implied) -
+  its exact formula is still not confirmed, only the real field name.
+
+**Still not done**: the real cutover itself (`api/checkout.js`/`script.js`/
+`live-consult.js`/standalone pages already build CCBill URLs and poll
+`verify-ccbill-payment.js` the same way the test harness does - per the
+2026-11-11 cutover entry above - so these webhook fixes apply directly to
+production code, not just the test harness). No REAL customer payment has
+been run since these fixes landed - only the test-card payment above.
+Confirm the fixes hold on a real charge before fully trusting this path.
+
 ## Universal / non-denominational framing — standing design principle
 
 Yoel has repeatedly and explicitly required that DEGAJA features never be
