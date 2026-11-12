@@ -224,15 +224,25 @@
     .quiz-modal-close{display:block;margin:18px auto 0;background:none;border:0;color:rgba(255,255,255,.4);font-size:13px;cursor:pointer}
     .quiz-modal-close:hover{color:rgba(255,255,255,.7)}
 
-    .zw-wheel-wrap{position:relative;width:260px;height:260px;margin:0 auto 26px}
-    .zw-wheel-pointer{position:absolute;top:-16px;left:50%;transform:translateX(-50%);font-size:24px;color:#e7c372;z-index:4;filter:drop-shadow(0 2px 6px rgba(0,0,0,.5))}
-    .zw-wheel{position:relative;width:100%;height:100%;border-radius:50%;will-change:transform}
-    .zw-wheel-bg{position:absolute;inset:0;border-radius:50%;box-shadow:0 14px 44px rgba(0,0,0,.5), inset 0 0 0 4px rgba(255,255,255,.14)}
-    .zw-wheel-seg{position:absolute;inset:0;display:flex;justify-content:center;padding-top:16px;pointer-events:none}
-    .zw-wheel-seg span{font-size:20px;filter:drop-shadow(0 1px 3px rgba(0,0,0,.5))}
-    .zw-wheel-hub{position:absolute;left:50%;top:50%;width:62px;height:62px;transform:translate(-50%,-50%);border-radius:50%;background:radial-gradient(circle at 38% 32%,#fff8e6 0%,#f3dca3 25%,#e7c372 55%,#8a5a1f 85%);box-shadow:0 0 30px rgba(231,195,114,.6),inset 0 0 10px rgba(255,255,255,.4);z-index:3;display:flex;align-items:center;justify-content:center}
-    .zw-wheel-hub:before{content:"✦";font-size:22px;color:#3a2410}
-    .zw-wheel-ring{position:absolute;inset:-10px;border-radius:50%;border:2px solid rgba(231,195,114,.35);pointer-events:none}
+    .zw-wheel-wrap{position:relative;width:min(320px,82vw);height:min(320px,82vw);margin:0 auto 22px;filter:drop-shadow(0 18px 40px rgba(0,0,0,.55))}
+    .zw-wheel-pointer{position:absolute;top:-20px;left:50%;transform:translateX(-50%);width:26px;height:30px;z-index:5}
+    .zw-wheel-pointer:before{content:"";position:absolute;inset:0;background:linear-gradient(160deg,#fff8e6,#e7c372 45%,#8a5a1f 100%);clip-path:polygon(50% 100%,0 0,100% 0);box-shadow:0 2px 8px rgba(0,0,0,.5)}
+    .zw-wheel-outer{position:absolute;inset:-14px;border-radius:50%;background:conic-gradient(from 0deg,#8a5a1f,#f3dca3,#e7c372,#8a5a1f 25%,#f3dca3 50%,#e7c372 75%,#8a5a1f 100%);box-shadow:0 0 0 2px rgba(0,0,0,.3),0 18px 50px rgba(0,0,0,.5)}
+    .zw-wheel-outer:before{content:"";position:absolute;inset:7px;border-radius:50%;background:#1a0f2e}
+    .zw-wheel{position:absolute;inset:0;border-radius:50%;will-change:transform;overflow:hidden;box-shadow:0 0 0 3px rgba(231,195,114,.5),inset 0 0 0 2px rgba(255,255,255,.1)}
+    .zw-wheel-bg{position:absolute;inset:0;border-radius:50%}
+    .zw-wheel-dividers{position:absolute;inset:0;border-radius:50%;pointer-events:none}
+    .zw-wheel-seg{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;gap:4px;padding-top:14px;pointer-events:none}
+    .zw-wheel-seg span.ic{font-size:21px;filter:drop-shadow(0 1px 3px rgba(0,0,0,.6))}
+    .zw-wheel-seg span.lbl{font-size:9.5px;font-weight:800;letter-spacing:.02em;color:#fff8e6;text-shadow:0 1px 3px rgba(0,0,0,.7);max-width:58px;text-align:center;line-height:1.15}
+    .zw-wheel-hub{position:absolute;left:50%;top:50%;width:58px;height:58px;transform:translate(-50%,-50%);border-radius:50%;background:radial-gradient(circle at 38% 32%,#fff8e6 0%,#f3dca3 25%,#e7c372 55%,#8a5a1f 85%);box-shadow:0 0 0 3px #1a0f2e,0 0 26px rgba(231,195,114,.75),inset 0 0 10px rgba(255,255,255,.4);z-index:3;display:flex;align-items:center;justify-content:center}
+    .zw-wheel-hub:before{content:"✦";font-size:21px;color:#3a2410}
+    .zw-wheel.spinning{box-shadow:0 0 0 3px rgba(231,195,114,.9),0 0 50px rgba(231,195,114,.5),inset 0 0 0 2px rgba(255,255,255,.1)}
+    .zw-landed{display:flex;flex-direction:column;align-items:center;gap:4px;margin:0 0 16px;animation:zwLandedIn .45s cubic-bezier(.2,.9,.3,1.3)}
+    @keyframes zwLandedIn{from{opacity:0;transform:scale(.85) translateY(6px)}to{opacity:1;transform:scale(1) translateY(0)}}
+    .zw-landed-ic{font-size:34px;filter:drop-shadow(0 2px 10px rgba(231,195,114,.5))}
+    .zw-landed-prefix{color:rgba(255,255,255,.5);font-size:12px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;margin-top:2px}
+    .zw-landed-name{color:#e7c372;font-family:Georgia,"Times New Roman",serif;font-size:20px;font-weight:600}
 
   </style>
 </head>
@@ -277,6 +287,7 @@
     "q1_eyebrow": "RAD DER TUGENDEN™",
     "q1_h1": "Dreh das Rad der Sohar-Segulot",
     "spin_btn": "Drehen →",
+    "landed_prefix": "Du hast gezogen:",
     "themes": [
       { "ic": "🛡️", "name": "Schutz vor Schaden" },
       { "ic": "🌿", "name": "Gesundheit & Vitalität" },
@@ -347,6 +358,7 @@
     "q1_eyebrow": "WHEEL OF VIRTUES™",
     "q1_h1": "Spin the wheel of Zohar blessings",
     "spin_btn": "Spin →",
+    "landed_prefix": "You got:",
     "themes": [
       { "ic": "🛡️", "name": "Protection from Harm" },
       { "ic": "🌿", "name": "Health & Vitality" },
@@ -417,6 +429,7 @@
     "q1_eyebrow": "ROUE DES VERTUS™",
     "q1_h1": "Fais tourner la roue des bénédictions du Zohar",
     "spin_btn": "Tourner →",
+    "landed_prefix": "Tu as obtenu :",
     "themes": [
       { "ic": "🛡️", "name": "Protection contre le mal" },
       { "ic": "🌿", "name": "Santé et vitalité" },
@@ -487,6 +500,7 @@
     "q1_eyebrow": "RUEDA DE LAS VIRTUDES™",
     "q1_h1": "Gira la rueda de bendiciones del Zóhar",
     "spin_btn": "Girar →",
+    "landed_prefix": "Has obtenido:",
     "themes": [
       { "ic": "🛡️", "name": "Protección contra el mal" },
       { "ic": "🌿", "name": "Salud y vitalidad" },
@@ -557,6 +571,7 @@
     "q1_eyebrow": "RUOTA DELLE VIRTÙ™",
     "q1_h1": "Gira la ruota delle benedizioni dello Zohar",
     "spin_btn": "Gira →",
+    "landed_prefix": "Hai ottenuto:",
     "themes": [
       { "ic": "🛡️", "name": "Protezione dal male" },
       { "ic": "🌿", "name": "Salute e vitalità" },
@@ -627,6 +642,7 @@
     "q1_eyebrow": "RODA DAS VIRTUDES™",
     "q1_h1": "Roda a roda das bênçãos do Zohar",
     "spin_btn": "Girar →",
+    "landed_prefix": "Obtiveste:",
     "themes": [
       { "ic": "🛡️", "name": "Proteção contra o mal" },
       { "ic": "🌿", "name": "Saúde e vitalidade" },
@@ -697,6 +713,7 @@
     "q1_eyebrow": "RODA DAS VIRTUDES™",
     "q1_h1": "Gire a roda das bênçãos do Zohar",
     "spin_btn": "Girar →",
+    "landed_prefix": "Você tirou:",
     "themes": [
       { "ic": "🛡️", "name": "Proteção contra o mal" },
       { "ic": "🌿", "name": "Saúde e vitalidade" },
@@ -767,6 +784,7 @@
     "q1_eyebrow": "КОЛЕСО ДОБРОДЕТЕЛЕЙ™",
     "q1_h1": "Крути колесо благословений Зоар",
     "spin_btn": "Крутить →",
+    "landed_prefix": "Вам выпало:",
     "themes": [
       { "ic": "🛡️", "name": "Защита от вреда" },
       { "ic": "🌿", "name": "Здоровье и жизненная сила" },
@@ -837,6 +855,7 @@
     "q1_eyebrow": "КОЛЕСО ЧЕСНОТ™",
     "q1_h1": "Крути колесо благословень Зоар",
     "spin_btn": "Крутити →",
+    "landed_prefix": "Вам випало:",
     "themes": [
       { "ic": "🛡️", "name": "Захист від шкоди" },
       { "ic": "🌿", "name": "Здоров'я та життєва сила" },
@@ -907,6 +926,7 @@
     "q1_eyebrow": "美徳の輪™",
     "q1_h1": "ゾーハルの祝福の輪を回そう",
     "spin_btn": "回す →",
+    "landed_prefix": "引き当てたのは:",
     "themes": [
       { "ic": "🛡️", "name": "害からの守り" },
       { "ic": "🌿", "name": "健康と活力" },
@@ -977,6 +997,7 @@
     "q1_eyebrow": "美德之轮™",
     "q1_h1": "转动佐哈尔经的祝福之轮",
     "spin_btn": "转动 →",
+    "landed_prefix": "你抽中了:",
     "themes": [
       { "ic": "🛡️", "name": "免受伤害的守护" },
       { "ic": "🌿", "name": "健康与活力" },
@@ -1047,6 +1068,7 @@
     "q1_eyebrow": "सद्गुण चक्र™",
     "q1_h1": "ज़ोहर के आशीर्वादों का चक्र घुमाओ",
     "spin_btn": "घुमाओ →",
+    "landed_prefix": "आपको मिला:",
     "themes": [
       { "ic": "🛡️", "name": "नुकसान से सुरक्षा" },
       { "ic": "🌿", "name": "स्वास्थ्य और जीवनशक्ति" },
@@ -1284,7 +1306,7 @@
   // wheel several full turns plus an offset so the chosen segment's center
   // lands under the fixed top pointer (plus a small random jitter so it
   // never looks mechanically exact).
-  var SEGMENT_COLORS = ["#6b21a8","#8a3fc4","#b86ae0","#e7c372","#d9a73e","#3f7fc4","#60a5fa","#2f9e6b","#ec4899","#c2410c"];
+  var SEGMENT_COLORS = ["#7c2d8f","#a83fc9","#1e5fa8","#2f9e6b","#c2410c","#b8862e","#9e2b4e","#2d6b7a","#6b3fa0","#1f7a3f"];
 
   function renderWheelStep(){
     var html = '<div class="quiz-eyebrow">' + t().q1_eyebrow + '</div>';
@@ -1292,37 +1314,51 @@
     var themes = t().themes;
     var n = themes.length;
     var segAngle = 360 / n;
-    html += '<div class="zw-wheel-wrap"><div class="zw-wheel-pointer">▼</div><div class="zw-wheel-ring"></div><div class="zw-wheel" id="zwWheel">';
+    html += '<div class="zw-wheel-wrap"><div class="zw-wheel-outer"></div><div class="zw-wheel-pointer"></div><div class="zw-wheel" id="zwWheel">';
     var gradientParts = [];
     for (var i = 0; i < n; i++) {
       gradientParts.push(SEGMENT_COLORS[i % SEGMENT_COLORS.length] + " " + (i * segAngle) + "deg " + ((i + 1) * segAngle) + "deg");
     }
     html += '<div class="zw-wheel-bg" style="background:conic-gradient(' + gradientParts.join(",") + ')"></div>';
+    var halfLine = 0.7;
+    html += '<div class="zw-wheel-dividers" style="background:repeating-conic-gradient(from ' + (-halfLine) + 'deg,rgba(247,223,160,.95) 0deg ' + (halfLine * 2) + 'deg,transparent ' + (halfLine * 2) + 'deg ' + segAngle + 'deg)"></div>';
     for (var j = 0; j < n; j++) {
       var mid = j * segAngle + segAngle / 2;
-      html += '<div class="zw-wheel-seg" style="transform:rotate(' + mid + 'deg)"><span style="display:inline-block;transform:rotate(' + (-mid) + 'deg)">' + themes[j].ic + '</span></div>';
+      html += '<div class="zw-wheel-seg" style="transform:rotate(' + mid + 'deg)" data-idx="' + j + '">' +
+        '<span class="ic" style="display:inline-block;transform:rotate(' + (-mid) + 'deg)">' + themes[j].ic + '</span>' +
+        '<span class="lbl" style="display:inline-block;transform:rotate(' + (-mid) + 'deg)">' + escapeHtml(themes[j].name) + '</span>' +
+        '</div>';
     }
     html += '<div class="zw-wheel-hub"></div>';
     html += '</div></div>';
+    html += '<div class="zw-landed" id="zwLanded" style="display:none"></div>';
     html += '<button class="quiz-cta" id="spinBtn">' + t().spin_btn + '</button>';
     setCard(html);
     var wheel = document.getElementById("zwWheel");
     var spinBtn = document.getElementById("spinBtn");
+    var landedEl = document.getElementById("zwLanded");
     spinBtn.addEventListener("click", function(){
       if (card.dataset.locked) return;
       card.dataset.locked = "1";
       spinBtn.disabled = true;
+      wheel.classList.add("spinning");
       var idx = Math.floor(Math.random() * n);
       var mid = idx * segAngle + segAngle / 2;
       var jitter = (Math.random() * segAngle * 0.5) - (segAngle * 0.25);
-      var spins = 5;
+      var spins = 7;
       var rotation = spins * 360 + (360 - mid) + jitter;
-      wheel.style.transition = "transform 3.6s cubic-bezier(.12,.72,.14,1)";
+      wheel.style.transition = "transform 4.2s cubic-bezier(.1,.82,.08,1)";
       wheel.style.transform = "rotate(" + rotation + "deg)";
       setTimeout(function(){
+        wheel.classList.remove("spinning");
         answers.theme = themes[idx];
+        landedEl.innerHTML = '<span class="zw-landed-ic">' + themes[idx].ic + '</span><span class="zw-landed-prefix">' + t().landed_prefix + '</span><span class="zw-landed-name">' + escapeHtml(themes[idx].name) + '</span>';
+        landedEl.style.display = "flex";
+        spinBtn.style.visibility = "hidden";
+      }, 4300);
+      setTimeout(function(){
         step = 2; render();
-      }, 3700);
+      }, 6000);
     });
   }
 
