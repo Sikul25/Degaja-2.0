@@ -957,6 +957,25 @@ DEGAJA should contrast against, not emulate. The established pattern:
   in plain text can render reversed in-browser (bidi algorithm artifact).
   Don't try to force direction with Unicode control characters — use an
   image instead if the mixed script is unavoidable.
+- **2026-11-12: US/Mexico pricing display bug (real, user-reported, fixed).**
+  All 4 standalone pages (`quiz.html`/`love-quiz.html`/`dream.html`/
+  `time-tunnel.html`) had `LANG_ALIAS = { us: "en", mx: "es" }` and
+  `COUNTRY_LANG`'s geo-IP map sending `US`→`en`/`MX`→`es` — aliasing the
+  WHOLE language, text and currency together. Since these files' `en`
+  block is priced in GBP (£) and `es` in EUR (€), a US or Mexican visitor
+  saw £/€ on every price button and purchase modal, even though the real
+  charge (`api/checkout.js`'s `CURRENCY_BY_LANG`) was already correctly
+  USD/MXN — the displayed price was simply wrong for the amount actually
+  charged. Yoel found this by reporting it from a real "en"-mapped US
+  session. Fixed by giving `us`/`mx` their own `STR` entries (reusing
+  `en`/`es` for every key except the 3 price-bearing ones:
+  `cta`/`purchase_single`/`purchase_pack`), mirroring `i18n.js`'s own
+  already-correct `T.us`/`T.mx` pattern on the main site (which was
+  NEVER affected — only these 4 standalone pages, since they maintain
+  their own separate `STR` objects per the "Standalone pages" note
+  above). Also fixed `COUNTRY_LANG` (`US`→`us`, `MX`→`mx`) so first-time
+  geo-detected visitors get it right without needing an explicit
+  `?lang=` param.
 - **2026-10-29: full-site bug audit (Yoel asked for one thorough pass instead
   of reactive one-at-a-time discovery) found and fixed a batch of real bugs.**
   Worth knowing about if something in this area seems off again:
