@@ -385,7 +385,7 @@
       // delivering the result here on the Oracle section, where it would
       // look disconnected from the feature actually bought. Leave
       // PENDING_READING_KEY in place so the target page can read it.
-      const STANDALONE_PAGES = ["quiz.html", "love-quiz.html", "dream.html", "time-tunnel.html", "aura.html", "mind-clinic.html"];
+      const STANDALONE_PAGES = ["quiz.html", "love-quiz.html", "dream.html", "time-tunnel.html", "aura.html", "mind-clinic.html", "zohar-wheel.html"];
       if (pending?.question && STANDALONE_PAGES.includes(pending.source)) {
         location.href = pending.source;
         return;
