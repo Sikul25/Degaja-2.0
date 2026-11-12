@@ -232,18 +232,25 @@
     }
   }
 
-  function stashPendingReading(question, topic) {
-    if (question) localStorage.setItem(PENDING_READING_KEY, JSON.stringify({ question, topic: topic || "" }));
+  function stashPendingReading(question, topic, resultId) {
+    if (question) localStorage.setItem(PENDING_READING_KEY, JSON.stringify({ question, topic: topic || "", resultId: resultId || "" }));
     else localStorage.removeItem(PENDING_READING_KEY);
   }
 
-  function showPurchaseModal(question = "", topic = "") {
+  // resultId: the id of the result panel the free reading was shown in
+  // (e.g. "palmResult", "gematriaResult") - every feature's "go deeper"
+  // button shares this one modal/checkout flow, but without tracking which
+  // panel started it, the paid reading always landed in the Oracle
+  // section's #aiResult regardless of which feature the user was actually
+  // on - confusing and read as "it didn't bring me back to the one I
+  // picked." Defaults to #aiResult (Oracle) when omitted.
+  function showPurchaseModal(question = "", topic = "", resultId = "") {
     if (getAiCredits() > 0) {
-      unlockDeepReading(question, topic);
+      unlockDeepReading(question, topic, resultId);
       return;
     }
 
-    stashPendingReading(question, topic);
+    stashPendingReading(question, topic, resultId);
     // Pricing shown before the birthdate field, not after: on a short mobile
     // viewport (especially once the date-picker keyboard opens), a
     // birthdate-field-first layout pushed both price buttons below the
@@ -286,7 +293,7 @@
     });
   }
 
-  async function unlockDeepReading(question, topic) {
+  async function unlockDeepReading(question, topic, resultId = "") {
     if (!question) {
       (window.degajaGoTo || (s => document.querySelector(s)?.scrollIntoView({ behavior: "smooth", block: "center" })))("#oracle");
       return;
@@ -300,7 +307,7 @@
     if (questionField) questionField.value = question;
     if (topicField) topicField.value = topic || "";
 
-    const result = $("#aiResult");
+    const result = (resultId && $("#" + resultId)) || $("#aiResult");
     if (result) {
       result.innerHTML = `<div class="ai-loading"><div class="ai-loading-spinner"></div><strong>${t("result.readingDeeper")}</strong></div>`;
       result.classList.add("show");
@@ -315,7 +322,7 @@
     state.conversationHistory.push({ role: "assistant", content: text });
     state.paidAccess = true;
     localStorage.setItem("degajaPaidAccess", "1");
-    renderResult(text, question, topic, true);
+    renderResult(text, question, topic, true, result);
   }
 
   function sleep(ms) { return new Promise(resolve => setTimeout(resolve, ms)); }
@@ -386,7 +393,7 @@
       localStorage.removeItem(PENDING_READING_KEY);
 
       if (pending?.question) {
-        await unlockDeepReading(pending.question, pending.topic || "");
+        await unlockDeepReading(pending.question, pending.topic || "", pending.resultId || "");
         return;
       }
 
@@ -571,16 +578,16 @@
 
     result.classList.add("show");
     result.scrollIntoView({ behavior: "smooth", block: "nearest" });
-    result.querySelector("#deepBtn")?.addEventListener("click", () => showPurchaseModal(question, topic));
+    result.querySelector("#deepBtn")?.addEventListener("click", () => showPurchaseModal(question, topic, result.id));
     // The "3 readings · X" line below the button looked clickable (price,
     // bold, gold) but previously did nothing when tapped — confusing on
     // mobile, where it's the most visually prominent price on the card.
     // Routes to the same modal as the button; the modal itself is where the
     // user actually picks single vs. pack, after confirming their birthdate.
     const packHint = result.querySelector("#packHint");
-    packHint?.addEventListener("click", () => showPurchaseModal(question, topic));
+    packHint?.addEventListener("click", () => showPurchaseModal(question, topic, result.id));
     packHint?.addEventListener("keydown", e => {
-      if (e.key === "Enter" || e.key === " ") { e.preventDefault(); showPurchaseModal(question, topic); }
+      if (e.key === "Enter" || e.key === " ") { e.preventDefault(); showPurchaseModal(question, topic, result.id); }
     });
     result.querySelector("#speakBtn")?.addEventListener("click", event => speakText(text, event.currentTarget));
 
