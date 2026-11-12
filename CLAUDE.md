@@ -817,6 +817,26 @@ deeper analysis + exercise. Deliberately sequenced AFTER aura.html shipped
 to avoid both features editing the same cross-link/sitemap/i18n sections at
 once. Not started as of this entry.
 
+## Standalone pages: stale stored "en"/"es" permanently blocked US/MX currency fix (2026-11-12)
+
+Yoel reported £ still showing instead of $ in the app (US, love-quiz.html)
+— right after the 2026-11-12 US/MX pricing-display fix above, meaning that
+fix alone didn't cover every case. Root cause: all 5 standalone pages
+(quiz/love-quiz/dream/time-tunnel/aura) treat ANY existing
+`localStorage.degajaLang` value as permanently "explicit," blocking all
+future geo re-detection — so anyone whose stored value was ever plain
+"en"/"es" (a bare browser-locale guess from before the us/mx split existed,
+or written by an older bug) stays on GBP/EUR forever, even after the code
+is fixed, because the stale stored value itself never gets corrected. The
+main site's own i18n.js already avoids this (its `degajaLangSource` tracks
+"browser" vs "geo" vs "explicit" and only locks on the last two) — the
+standalone pages never had that distinction. Fixed: "en"/"es" no longer
+count as locking; geo-IP can still upgrade them to "us"/"mx", and the
+result is now persisted back to `degajaLang`/`degajaLangSource` (previously
+only held in a page-local JS variable, so it didn't survive a reload or
+propagate to other pages). Self-heals automatically on a user's next visit
+— no action needed from already-affected visitors.
+
 ## Live advisor (Papuli) — real bugs found and fixed 2026-11-12
 
 Yoel reported "יש בעיה לדבר עם היועצת פפולי" (trouble reaching Papuli for a
