@@ -915,6 +915,30 @@ production code, not just the test harness). No REAL customer payment has
 been run since these fixes landed - only the test-card payment above.
 Confirm the fixes hold on a real charge before fully trusting this path.
 
+## Main site: paid deep-reading always landed in Oracle, not the feature it came from (2026-11-12)
+
+Yoel reported, after testing a real purchase from one of the main site's
+lower feature cards (not the 4 standalone "trending" pages, which were
+unaffected): "it didn't bring me back to the one I picked, it's a mess."
+Root cause confirmed in `script.js`: `showPurchaseModal()` /
+`stashPendingReading()` / `unlockDeepReading()` only ever tracked
+`question`/`topic`, never which result panel (`#palmResult`,
+`#gematriaResult`, `#numerologyResult`, etc.) the free reading was shown
+in - so after the CCBill redirect, the paid "go deeper" result was always
+written into the Oracle section's `#aiResult` and the page always
+scrolled to `#oracle`, regardless of which feature the visitor actually
+paid from. **Fixed**: the originating result div's `id` (`resultId`) is
+now threaded through the whole flow (stashed in
+`localStorage["degajaPendingReading"]` alongside question/topic, read
+back in `verifyAiPayment()`, used in `unlockDeepReading()` to resolve the
+correct target element) - defaults to `#aiResult` when absent, which is
+still correct for the Oracle section's own direct purchase flow (the
+`[data-buy]`/`#prices` section, which reads `#aiQuestion`/`#aiTopic`
+directly and was never affected). `index.html`'s `script.js?v=` bumped
+30→31 (only file that loads the real `script.js`, confirmed via grep -
+`werde-beraterin.html`/`werde-partner.html` only load Vercel's own
+unrelated `_vercel/insights/script.js`).
+
 ## Universal / non-denominational framing — standing design principle
 
 Yoel has repeatedly and explicitly required that DEGAJA features never be
