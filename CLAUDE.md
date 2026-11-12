@@ -957,6 +957,40 @@ DEGAJA should contrast against, not emulate. The established pattern:
   in plain text can render reversed in-browser (bidi algorithm artifact).
   Don't try to force direction with Unicode control characters — use an
   image instead if the mixed script is unavoidable.
+- **2026-11-12: full currency audit, requested by Yoel before any TikTok ad
+  spend begins ("it needs to be perfect regarding CCBill before we start
+  advertising").** Went through every currency-display surface site-wide,
+  not just the standalone-page bug below. Findings:
+  - **Main site (`i18n.js`)**: `currency.symbol`, AI single/pack pricing
+    (`prices.single/pack.*`, `purchase.single/pack`, `result.deepBtn`) are
+    all correct for every one of the 14 language/currency variants
+    (de/fr/es/it/pt/ru/uk/en→eur×7+gbp; ja→jpy; zh→cny; hi→inr; br→brl;
+    us→usd; mx→mxn) - cross-checked digit-for-digit against
+    `api/checkout.js`'s `AI_AMOUNTS_BY_CURRENCY`. No bug found here.
+  - **Voice/live-advisor pricing** (`VOICE_PRICES` in `api/_data.js`,
+    rendered via `api/advisors.js`'s `price[currency] || price` fallback):
+    amounts were always correct (GBP/USD intentionally match EUR's digits,
+    same pattern as the single-reading price), but the fallback reused the
+    EUR-style comma-decimal label ("49,99") on English-language pages
+    instead of the period convention ("49.99") the rest of the English UI
+    uses. **Fixed**: added explicit `gbp`/`usd` entries with the same
+    amount, period-formatted label.
+  - **Rituale pricing** (`rituale.love/success/balance.price`): `T.us`
+    never overrode these, so US visitors saw "From £49" (inherited from
+    `T.en`) instead of "$49". **Fixed** with the same digit-swap already
+    used for every other US price. `T.mx` has the same gap but **left
+    unfixed**: Mexican ritual pricing needs a real converted MXN amount
+    (like the main MX$89/MX$179 reading price), not a digit swap - that's
+    a business pricing decision for Yoel to make, not something to guess.
+  - **`werde-partner.html`'s commission calculator**: hardcodes `€` in its
+    JS (`result.textContent = '€' + ...`) regardless of visitor language,
+    even though the page's other text IS translated via `data-i18n`. Not
+    changed - unclear whether partner payouts are always in EUR regardless
+    of the partner's country (in which case this is correct) or should
+    follow the visitor's currency. **Ask Yoel** before touching this.
+  - Everything else checked (standalone pages, `fair-pricing.html`'s
+    Nebula/FTC $ citations - those are quoting the real case, not our own
+    pricing) was already correct or is covered by the entry just below.
 - **2026-11-12: US/Mexico pricing display bug (real, user-reported, fixed).**
   All 4 standalone pages (`quiz.html`/`love-quiz.html`/`dream.html`/
   `time-tunnel.html`) had `LANG_ALIAS = { us: "en", mx: "es" }` and
