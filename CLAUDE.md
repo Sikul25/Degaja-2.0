@@ -792,6 +792,47 @@ detail — read it at the start of any new session on this repo.
     per CCBill's process) before any check-form signup can be built. Revisit
     once the Dynamic Pricing cutover itself is done and tested.
 
+## Live advisor (Papuli) — real bugs found and fixed 2026-11-12
+
+Yoel reported "יש בעיה לדבר עם היועצת פפולי" (trouble reaching Papuli for a
+live call) and separately, while testing the booking flow himself, that
+choosing Papuli's "1:1 at 49" option didn't trigger CCBill checkout the
+first time, then worked on a retry. Two real, distinct issues found and
+fixed, both in `live-consult.js`:
+- **WebRTC connection reliability**: the voice call uses PeerJS with ICE
+  servers that included only one STUN server (CoTURN via metered.ca) plus
+  the "openrelayproject" TURN credentials — the exact same publicly-shared
+  free demo username/password used in nearly every WebRTC tutorial online,
+  meaning that relay is heavily shared/congested. Server-side logs (7 days)
+  showed zero errors for notify-advisor/pending-session, consistent with
+  the failure being client-side (WebRTC negotiation), not our backend.
+  **Fixed**: added Google's public STUN server (`stun:stun.l.google.com:19302`)
+  as an extra, more reliable fallback in `PEER_CONFIG`. This doesn't
+  eliminate the shared-TURN-congestion risk entirely — if calls keep
+  failing after this, the real fix is a dedicated (ideally paid) TURN
+  account instead of the public demo credentials, which needs Yoel to sign
+  up for one (e.g. metered.ca's own paid tier) — not something to do
+  unilaterally since it may need billing info.
+- **Silent checkout failure on missing birthdate/consent (the "1:1 at 49
+  doesn't activate CCBill" report, very likely the actual explanation)**:
+  `start()`'s price-button click handler requires both an adult birthdate
+  AND a checked service-consent checkbox before calling `checkout()` — if
+  either is missing, it silently returns with only a subtle visual change
+  (red error text below the birthdate field, or a color change on the
+  consent label) and no scroll-to or otherwise obvious feedback. Exactly
+  the same "silent failure reads as broken/frozen" pattern documented
+  repeatedly elsewhere in this file (numerology spinner, palm upload).
+  **Fixed**: both validation failures now `scrollIntoView` the relevant
+  field so the user actually sees why nothing happened. Also added a
+  `checkoutInFlight` guard to `checkout()` (same pattern already used in
+  `script.js`'s `startCheckout`) — this entry point didn't have one yet,
+  so a fast double-click could have fired two concurrent `/api/checkout`
+  calls (two CCBill orders for one booking).
+- `index.html`'s `live-consult.js?v=` cache-bust bumped 28→30 across both
+  fixes (only `index.html` loads this file — confirmed via grep, not
+  assumed; `berater.html` doesn't load it at all, the advisor-join flow it
+  triggers runs entirely through `index.html`'s own query-param handling).
+
 ## Universal / non-denominational framing — standing design principle
 
 Yoel has repeatedly and explicitly required that DEGAJA features never be
