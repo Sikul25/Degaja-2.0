@@ -70,18 +70,21 @@
 
   function set(available, pin) {
     msg.textContent = '…';
+    var controller = new AbortController();
+    var timer = setTimeout(function () { controller.abort(); }, 15000);
     fetch('/api/advisor-availability', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ advisorId: id, token: pin, available: available })
+      body: JSON.stringify({ advisorId: id, token: pin, available: available }),
+      signal: controller.signal
     })
-      .then(function (r) { return r.json().then(function (d) { return { ok: r.ok, d: d }; }); })
+      .then(function (r) { clearTimeout(timer); return r.json().then(function (d) { return { ok: r.ok, d: d }; }); })
       .then(function (res) {
         if (res.ok && res.d.ok) { render(available); msg.textContent = 'Gespeichert.'; }
         else if (res.d.error === 'Invalid token') { clearPin(); showLogin('Falscher Code. Bitte erneut eingeben.'); }
         else { msg.textContent = 'Fehler: ' + (res.d.error || ''); }
       })
-      .catch(function () { msg.textContent = 'Netzwerkfehler.'; });
+      .catch(function () { clearTimeout(timer); msg.textContent = 'Netzwerkfehler.'; });
   }
 
   var incomingCall = document.getElementById('incomingCall'), incomingJoinBtn = document.getElementById('incomingJoinBtn');

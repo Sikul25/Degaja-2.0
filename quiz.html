@@ -1966,11 +1966,11 @@
   function loadVoice(text, btn){
     btn.disabled = true;
     btn.textContent = t().voice_loading;
-    fetch("/api/tts", {
+    fetchWithTimeout("/api/tts", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ text: text, lang: lang })
-    }).then(function(r){ return r.ok ? r.blob() : null; }).then(function(blob){
+    }, 20000).then(function(r){ return r.ok ? r.blob() : null; }).then(function(blob){
       if (!blob) { btn.style.display = "none"; return; }
       var url = URL.createObjectURL(blob);
       revealAudio = new Audio(url);
@@ -2004,11 +2004,11 @@
     try {
       localStorage.setItem("degajaPendingReading", JSON.stringify({ question: lastQuestion, topic: lastTopic, source: "quiz.html" }));
     } catch (_) {}
-    fetch("/api/checkout", {
+    fetchWithTimeout("/api/checkout", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ product: product, birthDate: answers.birthdate, lang: lang, ref: ref })
-    }).then(function(r){
+    }, 20000).then(function(r){
       return r.json().then(function(data){ return { ok: r.ok, data: data }; });
     }).then(function(result){
       if (!result.ok || !result.data.url) throw new Error("checkout failed");
