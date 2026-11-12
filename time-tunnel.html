@@ -1323,14 +1323,29 @@
     "purchase_error": "अभी भुगतान उपलब्ध नहीं है। कृपया बाद में फिर कोशिश करो।"
   }
 };
-  var SUPPORTED_LANGS = ["de", "en", "fr", "es", "it", "pt", "ru", "uk", "br", "ja", "zh", "hi"];
-  // Brazilian Portuguese gets its own translation above (real differences
-  // from European Portuguese: você vs tu, different verb constructions).
-  // Mexican Spanish is left aliased to es: in neutral written UI text like
-  // this quiz, the two are close enough that a separate translation would
-  // mostly just restate the same sentences — unlike pt-BR vs pt-PT, which
-  // genuinely diverge here. US English is aliased for the same reason.
-  var LANG_ALIAS = { us: "en", mx: "es" };
+
+  // US English and Mexican Spanish reuse every "en"/"es" string EXCEPT the
+  // price-bearing keys: "en" is priced in GBP (£) and "es" in EUR (€), but
+  // US checkout charges USD ($) and Mexican checkout charges MXN
+  // (MX$89/MX$179) - see api/checkout.js's CURRENCY_BY_LANG/
+  // AI_AMOUNTS_BY_CURRENCY. Aliasing the whole language silently showed US
+  // visitors £ pricing and Mexican visitors € pricing while still correctly
+  // charging $/MX$ at actual checkout - a real, confirmed bug (found
+  // 2026-11-12). Fixed with dedicated STR.us/STR.mx entries, same pattern
+  // i18n.js already uses for the main site's T.us/T.mx.
+  STR.us = Object.assign({}, STR.en, {
+    "cta": "Unlock your full journey · $5.00 →",
+    "purchase_single": "One reading · $5.00",
+    "purchase_pack": "3 readings · $9.99"
+  });
+  STR.mx = Object.assign({}, STR.es, {
+    "cta": "Desbloquea tu viaje completo · MX$89 →",
+    "purchase_single": "Una lectura · MX$89",
+    "purchase_pack": "3 lecturas · MX$179"
+  });
+
+  var SUPPORTED_LANGS = ["de", "en", "fr", "es", "it", "pt", "ru", "uk", "br", "ja", "zh", "hi", "us", "mx"];
+  var LANG_ALIAS = {};
 
   var REVEAL_TOPIC = {
   "de": "Zeittunnel",
@@ -1387,11 +1402,11 @@
   var COUNTRY_LANG = {
     DE: "de", AT: "de", CH: "de", LI: "de",
     FR: "fr", MC: "fr",
-    ES: "es", AR: "es", CO: "es", CL: "es", PE: "es", MX: "es", VE: "es",
+    ES: "es", AR: "es", CO: "es", CL: "es", PE: "es", MX: "mx", VE: "es",
     IT: "it",
     PT: "pt", BR: "pt",
     RU: "ru", BY: "ru", KZ: "ru", UA: "ru",
-    GB: "en", IE: "en", US: "en", CA: "en", AU: "en", NZ: "en", ZA: "en", SG: "en",
+    GB: "en", IE: "en", US: "us", CA: "en", AU: "en", NZ: "en", ZA: "en", SG: "en",
     JP: "ja", CN: "zh", TW: "zh", HK: "zh", MO: "zh",
     IN: "hi"
   };
