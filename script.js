@@ -284,6 +284,7 @@
         const birthDate = birthDateInput?.value || "";
         if (!isAdultBirthDate(birthDate)) {
           birthDateError?.classList.add("show");
+          birthDateInput?.scrollIntoView({ behavior: "smooth", block: "center" });
           birthDateInput?.focus();
           return;
         }
@@ -692,6 +693,7 @@
       const birthDate = birthDateInput?.value || "";
       if (!isAdultBirthDate(birthDate)) {
         birthDateError?.classList.add("show");
+        birthDateInput?.scrollIntoView({ behavior: "smooth", block: "center" });
         birthDateInput?.focus();
         return;
       }
@@ -699,7 +701,9 @@
 
       const consent = $("#withdrawalConsent");
       if (consent && !consent.checked) {
-        consent.closest("label")?.classList.add("needs-attention");
+        const label = consent.closest("label");
+        label?.classList.add("needs-attention");
+        label?.scrollIntoView({ behavior: "smooth", block: "center" });
         consent.focus();
         return;
       }
