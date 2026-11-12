@@ -1661,13 +1661,20 @@
   // key as i18n.js) before falling back to German/geo-guessing — covers a
   // direct visit, a bookmark, or an old cached banner link with no ?lang=.
   var storedLang = null;
+  var storedLangIsAmbiguous = false;
   try {
     var storedRaw = localStorage.getItem("degajaLang");
     var storedMapped = LANG_ALIAS[storedRaw] || storedRaw;
     if (SUPPORTED_LANGS.indexOf(storedMapped) !== -1) storedLang = storedMapped;
+    // "en"/"es" are currency-ambiguous (GBP vs USD, EUR vs MXN) - a value
+    // stored before this visitor's country was ever confirmed (a bare
+    // browser-locale guess, or a value saved before the us/mx split
+    // existed) must not permanently block the geo upgrade below, or a
+    // US/MX visitor stays on the wrong currency forever with no way back.
+    storedLangIsAmbiguous = storedLang === "en" || storedLang === "es";
   } catch (_) {}
   var lang = langWasExplicit ? mappedLang : (storedLang || "de");
-  langWasExplicit = langWasExplicit || !!storedLang;
+  langWasExplicit = langWasExplicit || (!!storedLang && !storedLangIsAmbiguous);
   var ref = qs.get("ref") || qs.get("utm_source") || "quiz";
 
   // Same spirit as i18n.js on the main site: a real visitor-country guess
@@ -1703,6 +1710,7 @@
         if (!geoLang || geoLang === lang) return;
         lang = geoLang;
         langSelect.value = lang;
+        try { localStorage.setItem("degajaLang", geoLang); localStorage.setItem("degajaLangSource", "geo"); } catch (_) {}
         render();
       })
       .catch(function(){});
