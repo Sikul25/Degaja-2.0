@@ -792,6 +792,31 @@ detail — read it at the start of any new session on this repo.
     per CCBill's process) before any check-form signup can be built. Revisit
     once the Dynamic Pricing cutover itself is done and tested.
 
+## New feature: Aura Reading (2026-11-12)
+
+Added `aura.html`, a 5th standalone page (same architecture as quiz/love-quiz/
+dream/time-tunnel: fetchWithTimeout, checkoutInFlight, type="date" birthdate +
+18+ validation, resumePaidReading, all 12 languages + us/mx overlays). Built
+after Yoel saw a competitor (Nebula) aura-reading feature and said to add our
+own version. Two explicit directives he gave, both applied: **keep all copy
+short** (every quiz question/option/loading phrase/modal line trimmed — he's
+repeatedly said not to write long text), and **hero visual = an abstract glow/
+halo of light only** (he referenced the religious halo-around-the-head look
+as inspiration, but per the standing non-denominational rule there is zero
+figure/religious imagery — just a CSS conic-gradient ring + glow, no symbol).
+Pricing reuses the existing €5/£5/$5 single + €9.99/etc. pack amounts, no new
+pricing decision. Wired into `sitemap.xml`, a new homepage trend-banner card
++ services-grid card (i18n.js bumped `?v=72`), `script.js`'s
+`STANDALONE_PAGES` list, and a `cross_aura` link added to all 4 existing
+standalone pages (script.js bumped `?v=33`). Deployed and confirmed live.
+
+Also requested same day, not yet built: a second new feature, a short
+"subconscious mind" quiz/game (working title "קליניקת המוח" / Mind Clinic) —
+reveals a short "subconscious pattern" from a few questions, with a paid
+deeper analysis + exercise. Deliberately sequenced AFTER aura.html shipped
+to avoid both features editing the same cross-link/sitemap/i18n sections at
+once. Not started as of this entry.
+
 ## Live advisor (Papuli) — real bugs found and fixed 2026-11-12
 
 Yoel reported "יש בעיה לדבר עם היועצת פפולי" (trouble reaching Papuli for a
