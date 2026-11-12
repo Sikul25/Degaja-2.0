@@ -959,6 +959,22 @@ language blocks across all 4 files (translated, not just English) - `us`/
 own logo (`<a href="index.html">` at the top) always worked correctly and
 still does - this was specifically about the bottom-of-result banner.
 
+## Standalone pages: loading screen could hang forever on a stalled AI call (2026-11-12)
+
+Yoel hit this live: a time-tunnel.html reading stuck at 96% indefinitely
+("your reveal is taking shape..." never resolving). Root cause: every AI
+`fetch()` call across all 4 standalone pages (`/api/oracle`/`/api/palm`/
+`/api/dream`, 8 call sites total) had **no client-side timeout at all** -
+the server-side `maxDuration: 60` was already correctly set on all three
+endpoints, but if the response never arrives (a genuinely slow backend
+run, or a flaky mobile connection that never completes the request),
+nothing on the client side gives up - the loading screen just spins
+forever with no error and no fallback. **Fixed**: added a
+`fetchWithTimeout()` helper (`AbortController`, 45s) to each of the 4
+files, wired into every AI call site - past 45s it aborts and falls
+through to the page's own existing fallback reading text (already
+written for a *failed* response, just never reached for a *hung* one).
+
 ## Universal / non-denominational framing — standing design principle
 
 Yoel has repeatedly and explicitly required that DEGAJA features never be
