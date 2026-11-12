@@ -18,7 +18,10 @@ export default async function handler(req, res) {
   const result = await getOrderResult(orderId);
   if (!result) return res.status(200).json({ found: false });
 
-  const approved = result.eventType === "approval";
+  // CONFIRMED 2026-11-12: CCBill's real eventType is "NewSaleSuccess" on
+  // approval (ccbill-webhook.js stores it verbatim) - "approval" was never
+  // a real value and this check was always false for a genuine postback.
+  const approved = result.eventType === "NewSaleSuccess" || result.eventType === "approval";
   const order = (await getOrder(orderId)) || {};
   const alreadyRedeemed = approved && (await wasAlreadyRedeemed(orderId));
 

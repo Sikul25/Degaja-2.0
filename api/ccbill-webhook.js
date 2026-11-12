@@ -56,31 +56,34 @@ export default async function handler(req, res) {
     }
   }
   const body = { ...(req.query || {}), ...(parsedBody && typeof parsedBody === "object" ? parsedBody : {}) };
-  // Try every plausible identifier field so this keeps working whichever
-  // one CCBill actually uses - confirm from a real test payload, don't
-  // assume. orderId is ours (see _ccbill.js) and is the ONLY field
-  // confirmed present on both approval and denial events - subscription_id
-  // (snake_case, NOT subscriptionId) is confirmed real but "Approval Post
-  // URL only" per CCBill's own doc, so it's blank on denials (where
-  // denialId shows up instead). transactionId isn't a confirmed field name
-  // at all (not in CCBill's own variable table) - kept only as a
-  // last-resort fallback.
-  const orderId = body.orderId || body.subscription_id || body.transactionId || `unmatched_${Date.now()}`;
+  // CONFIRMED 2026-11-12 via a real successful test payment's raw postback
+  // body (see CLAUDE.md): CCBill prefixes every custom pass-through field
+  // from the FlexForm URL with "X-" - our own orderId comes back as
+  // "X-orderId", NOT "orderId" as originally guessed. That guess meant this
+  // matched on transactionId/subscriptionId instead and silently filed the
+  // result under CCBill's own id rather than ours - exactly the kind of
+  // bug that would have broken every real customer's payment confirmation
+  // after the real cutover (verify-ccbill-payment.js looks up by OUR
+  // orderId). Also confirmed real and camelCase: "subscriptionId" (NOT
+  // "subscription_id" snake_case, which the docs implied but a real
+  // payload never contained).
+  const orderId = body["X-orderId"] || body.orderId || body.subscriptionId || body.subscription_id || body.transactionId || `unmatched_${Date.now()}`;
 
-  const eventType = body.denialId ? "denial" : (body.eventType || "approval");
+  // CONFIRMED 2026-11-12 via real postbacks: CCBill sends its own literal
+  // event name here - "NewSaleSuccess" on approval, "NewSaleFailure" on
+  // denial (both seen in real payloads, denialId never appeared in either) -
+  // not the generic "approval"/"denial" strings this previously invented.
+  // Stored as-is; verify-ccbill-payment.js derives "approved" from it.
+  const eventType = body.eventType || (body.denialId ? "denial" : "unknown");
 
   await recordWebhookResult(orderId, {
     eventType,
-    subscriptionId: body.subscription_id || null,
-    // Confirmed field from the same doc - very likely the mechanism to
-    // verify this postback is genuinely from CCBill (probably a digest
-    // computed from returned fields + the Encryption Key, analogous to
-    // formDigest), but its exact formula wasn't in what Yoel could screenshot
-    // (description column was cut off) - asked him for it; do NOT assume a
-    // formula and start "verifying" against a guess. Stored here so the
-    // first real test payment's actual value is available to work out the
-    // real formula from.
-    responseDigest: body.responseDigest || null,
+    subscriptionId: body.subscriptionId || body.subscription_id || null,
+    // CONFIRMED 2026-11-12: on a real NewSaleSuccess postback this field is
+    // named "dynamicPricingValidationDigest", not "responseDigest" (which
+    // was a guess from CCBill's own doc table and never actually appeared).
+    // Formula still not confirmed - just the real field name.
+    responseDigest: body.dynamicPricingValidationDigest || body.responseDigest || null,
     email: body.email || null,
     raw: body
   });
