@@ -863,6 +863,51 @@ intersects the standing "never attribute a feature to a specific
 religion" rule above. Do not build this without Yoel explicitly resolving
 that framing question first - he said "אחר כך" (later, after this).
 
+## New feature: Wheel of Virtues / Zohar wheel (2026-11-12)
+
+Added `zohar-wheel.html`, a 7th standalone page. This is the "גלגל קמעות
+סגולות מבוסס על הזוהר" (Wheel of Amulets/Segulot based on the Zohar) Yoel
+previewed earlier. **Important precedent-setting exception to the
+"Universal / non-denominational framing" rule above**: I initially built
+this generic/non-denominational by default (per that standing rule, since
+Yoel's "כן תתחיל" alone didn't explicitly address the framing question I'd
+raised). He then sent a real reference image, explicitly titled "Wheel of
+Virtues - Amulets and Blessings from the Book of the Zohar" with a center
+medallion literally labeled "The Zohar" - this counts as him "explicitly
+reopening" the topic per that rule's own escape clause, so the feature was
+rebuilt with explicit Zohar naming/branding. He then clarified further:
+"אין סממנים יהודים כמו גימטריה" (no Jewish [religious] symbols, same as
+gematria) - meaning: explicit naming/text reference to the Zohar is fine,
+but the actual VISUAL iconography must still avoid Jewish religious
+symbols (no Star of David, menorah, Hebrew decorative text, ritual
+objects), mirroring the existing Gematria precedent exactly (named
+explicitly, but its icon was changed from a Star of David to a neutral
+gold emblem). **This is a one-off exception for THIS feature only** - the
+general rule (no religious/cultural attribution for any other feature)
+stays in force; do not extend this exception elsewhere without Yoel
+separately reopening it again.
+
+What was built: 10 "virtue" segments (Protection from Harm, Health &
+Vitality, Success & Prosperity, Love & Harmony, Peace of Mind, Divine
+Guidance, Cleansing & Renewal, Spiritual Connection, Strength & Courage,
+Healing & Recovery - matching Yoel's reference image exactly), a real
+interactive spinning wheel (CSS transform animation, lands on a random
+segment) built fresh in code so segment labels are properly translated
+across all 12 languages (the reference image itself has English text
+baked into its artwork, so it's used only as a static hero banner above
+the real interactive wheel, not as the wheel itself). The wheel's own
+center hub is a neutral glowing gold sphere with a ✦ star - no religious
+symbol. Hero banner image: `assets/protection-wheel-logo.png` (Yoel's own
+reference image, used as-is). AI prompt (`REVEAL_PROMPT`) explicitly
+invokes "the wisdom of the Zohar" per language, still framed as
+reflective entertainment, same disclaimer pattern as every other feature.
+
+Pricing reuses existing amounts, no new pricing decision. Wired into
+`sitemap.xml`, homepage trend-banner + services card (`i18n.js` bumped
+`?v=75`), `script.js`'s `STANDALONE_PAGES` (bumped `?v=35`), and a
+`cross_zohar` link added to all 6 other standalone pages. Deployed and
+confirmed live.
+
 ## Standalone pages: stale stored "en"/"es" permanently blocked US/MX currency fix (2026-11-12)
 
 Yoel reported £ still showing instead of $ in the app (US, love-quiz.html)
