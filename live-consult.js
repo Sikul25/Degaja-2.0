@@ -179,10 +179,10 @@
       const birthDateInput=$('#degajaBirthDate');
       const birthDateError=$('#degajaBirthDateError');
       const birthDate=birthDateInput?.value||'';
-      if(!isAdultBirthDate(birthDate)){birthDateError?.classList.add('show');birthDateInput?.focus();return}
+      if(!isAdultBirthDate(birthDate)){birthDateError?.classList.add('show');birthDateInput?.scrollIntoView({behavior:'smooth',block:'center'});birthDateInput?.focus();return}
       birthDateError?.classList.remove('show');
       const consent=$('#degajaServiceConsent');
-      if(consent && !consent.checked){consent.closest('label')?.style.setProperty('color','#a34d4d');consent.focus();return}
+      if(consent && !consent.checked){const label=consent.closest('label');label?.style.setProperty('color','#a34d4d');label?.style.setProperty('font-weight','800');label?.scrollIntoView({behavior:'smooth',block:'center'});consent.focus();return}
       checkout(Number(b.dataset.topics),a,birthDate);
     }));
   }
@@ -206,9 +206,11 @@
   // which page/flow started it).
   const CCBILL_ORDER_KEY = 'degajaCcbillOrderId';
 
+  let checkoutInFlight=false;
   async function checkout(topics,advisor,birthDate){
-    const u=getUser(); if(!u||!advisor)return;
-    try{const r=await doFetch('/api/checkout',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({product:'voice',topics,birthDate,email:u.email,name:u.name||'',advisorId:advisor.id,lang:lang(),ref:window.degajaI18n?window.degajaI18n.getRef():''})},15000);const d=await r.json();if(!r.ok||!d.url)throw new Error(d.error||'Checkout');localStorage.setItem(SESSION_KEY,JSON.stringify({type:'voice',topics,advisorId:advisor.id}));try{localStorage.setItem(CCBILL_ORDER_KEY,d.orderId||'')}catch(_){}location.href=d.url}catch(_){const e=$('#degajaCall');if(e)e.innerHTML=`<div class="degaja-call-panel"><b>${t('live.checkoutFailTitle')}</b><p class="degaja-live-copy">${t('live.checkoutFailDesc')}</p></div>`;}
+    const u=getUser(); if(!u||!advisor||checkoutInFlight)return;
+    checkoutInFlight=true;
+    try{const r=await doFetch('/api/checkout',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({product:'voice',topics,birthDate,email:u.email,name:u.name||'',advisorId:advisor.id,lang:lang(),ref:window.degajaI18n?window.degajaI18n.getRef():''})},15000);const d=await r.json();if(!r.ok||!d.url)throw new Error(d.error||'Checkout');localStorage.setItem(SESSION_KEY,JSON.stringify({type:'voice',topics,advisorId:advisor.id}));try{localStorage.setItem(CCBILL_ORDER_KEY,d.orderId||'')}catch(_){}location.href=d.url}catch(_){checkoutInFlight=false;const e=$('#degajaCall');if(e)e.innerHTML=`<div class="degaja-call-panel"><b>${t('live.checkoutFailTitle')}</b><p class="degaja-live-copy">${t('live.checkoutFailDesc')}</p></div>`;}
   }
 
   async function verify(){
