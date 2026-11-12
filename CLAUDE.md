@@ -817,6 +817,52 @@ deeper analysis + exercise. Deliberately sequenced AFTER aura.html shipped
 to avoid both features editing the same cross-link/sitemap/i18n sections at
 once. Not started as of this entry.
 
+## New feature: Mind Clinic (2026-11-12)
+
+Added `mind-clinic.html`, a 6th standalone page (same architecture as
+quiz/love-quiz/dream/time-tunnel/aura, built directly off aura.html's
+template so it already carries every fix from today - fetchWithTimeout,
+checkoutInFlight, the storedLang-ambiguous geo-upgrade fix). Built per
+Yoel's explicit request: "תמציא משחק על תת מודע איך המח עם התת מודע קובע
+מציאות או מתקן דברים, קליניקה של המח" (invent a game about the
+subconscious - how the mind/subconscious shapes reality or fixes things -
+a clinic of the mind), told explicitly to be creative rather than copy
+anything.
+
+Concept: a 4-step quiz (what keeps repeating/blocking you → birthdate →
+name → what you want revealed) leading into an AI-generated reading
+(`/api/oracle`) that invents a short, catchy, **non-clinical** name for a
+"subconscious pattern" (the AI invents it per-user each time, same way
+aura.html lets the AI invent aura colors - no fixed hardcoded pattern
+list) plus a practical reframe/next step. The `REVEAL_PROMPT` explicitly,
+strongly instructs the AI this is reflective entertainment only - never a
+real psychological/medical diagnosis, assessment, or clinical claim -
+baked into the prompt text itself, not just a UI disclaimer. Deliberately
+differentiated from the existing hypnosis feature (diagnostic quiz vs.
+guided relaxation audio) so they don't cannibalize each other.
+
+Hero image: Yoel sent a real AI-generated logo (glowing brain-in-profile
+with a gold crescent arc, "Mind Clinic / Subconscious" branding) -
+saved as `assets/mindclinic-logo.png` and wired in exactly like
+time-tunnel.html's own hero-image pattern (img + a pulsing radial-gradient
+glow overlay), replacing an initial CSS-only abstract hero built before
+the image was provided.
+
+Pricing reuses the existing €5/£5/$5 single + €9.99/etc. pack amounts, no
+new pricing decision. Wired into `sitemap.xml`, a new homepage trend-
+banner card + services-grid card (`i18n.js` bumped `?v=74`), `script.js`'s
+`STANDALONE_PAGES` list (`script.js` bumped `?v=34`), and a
+`cross_mindclinic` link added to all 5 other standalone pages (quiz/
+love-quiz/dream/time-tunnel/aura). Deployed and confirmed live.
+
+Yoel separately previewed a THIRD future feature idea, not yet started:
+a "Wheel of Amulets/Segulot" (גלגל קמעות/סגולות) inspired by the Zohar -
+explicitly flagged as needing a framing decision first (generic/universal
+presentation vs. explicit Jewish/Kabbalistic branding), since it directly
+intersects the standing "never attribute a feature to a specific
+religion" rule above. Do not build this without Yoel explicitly resolving
+that framing question first - he said "אחר כך" (later, after this).
+
 ## Standalone pages: stale stored "en"/"es" permanently blocked US/MX currency fix (2026-11-12)
 
 Yoel reported £ still showing instead of $ in the app (US, love-quiz.html)
