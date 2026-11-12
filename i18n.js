@@ -5634,23 +5634,45 @@
     US: "us", CA: "us"
   };
 
+  // Clicking the English/Spanish flag, or landing on /en or /es, is a
+  // language choice, not a currency choice - but "en"/"es" show the exact
+  // same text as "us"/"mx", just priced in GBP/EUR instead of USD/MXN. So
+  // even once "explicit"/"url" has locked the language, geo-IP must still
+  // be allowed to correct THIS ONE currency mismatch (en->us, es->mx) -
+  // otherwise a US/MX visitor who ever clicked "English"/"Español" or
+  // visited /en or /es is stuck on the wrong currency forever, with no way
+  // for the system to notice and fix it again (real bug, found 2026-11-12
+  // from a live US visitor still seeing £ after the standalone-pages-only
+  // fix above). This never allows a full language switch once locked -
+  // only this exact currency-pair upgrade.
+  const CURRENCY_UPGRADE = { en: "us", es: "mx" };
+
   function applyGeoLangIfEligible() {
-    let source;
+    let source, current;
     try { source = localStorage.getItem(LANG_SOURCE_KEY); } catch (_) { source = null; }
-    if (source === "explicit" || source === "url" || source === "geo") return;
+    try { current = localStorage.getItem(LANG_KEY); } catch (_) { current = null; }
+    const locked = source === "explicit" || source === "url" || source === "geo";
+    if (locked && !CURRENCY_UPGRADE[current]) return;
 
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), 2500);
     fetch("/api/geo", { signal: controller.signal })
       .then(r => (r.ok ? r.json() : null))
       .then(data => {
-        const lang = data && COUNTRY_LANG[String(data.country || "").toUpperCase()];
-        if (!lang || !SUPPORTED.includes(lang)) return;
+        const geoLang = data && COUNTRY_LANG[String(data.country || "").toUpperCase()];
+        if (!geoLang || !SUPPORTED.includes(geoLang)) return;
         // Re-check right before writing — a flag click may have landed
         // while the request was in flight.
-        let latestSource;
-        try { latestSource = localStorage.getItem(LANG_SOURCE_KEY); } catch (_) { latestSource = null; }
-        if (latestSource === "explicit" || latestSource === "url") return;
+        let latestSource, latestCurrent;
+        try {
+          latestSource = localStorage.getItem(LANG_SOURCE_KEY);
+          latestCurrent = localStorage.getItem(LANG_KEY);
+        } catch (_) { latestSource = null; latestCurrent = null; }
+        const latestLocked = latestSource === "explicit" || latestSource === "url";
+        const upgradeTarget = CURRENCY_UPGRADE[latestCurrent];
+        if (latestLocked && !upgradeTarget) return;
+        const lang = latestLocked ? (geoLang === upgradeTarget ? geoLang : null) : geoLang;
+        if (!lang) return;
         const changed = lang !== getLang();
         try {
           localStorage.setItem(LANG_KEY, lang);
