@@ -837,6 +837,26 @@ only held in a page-local JS variable, so it didn't survive a reload or
 propagate to other pages). Self-heals automatically on a user's next visit
 — no action needed from already-affected visitors.
 
+**Same day, same bug, one layer deeper**: Yoel re-tested live from the US
+right after the fix above and still saw £ — "on the site AND the app."
+Root cause this time: the MAIN SITE's own `i18n.js` has its own, separate,
+more sophisticated lock (`degajaLangSource`: "explicit"/"url"/"geo"/
+"browser") that the standalone-page fix never touched. Clicking the 🇬🇧
+flag, or visiting `/en` (a real crawlable URL used in marketing links),
+sets source to "explicit"/"url" and permanently blocks ALL future geo
+correction — even though picking "English" or visiting `/en` is a language
+choice, not a currency one, and most people have no idea DEGAJA ties
+currency to which of the two "English" flags (🇬🇧 vs 🇺🇸) they click. Fixed
+in i18n.js's `applyGeoLangIfEligible()`: once locked, geo-IP can still
+upgrade en→us / es→mx specifically (the `CURRENCY_UPGRADE` map) — never a
+full language switch post-lock, just this one currency correction. Bumped
+`i18n.js?v=73` (8 files). Also self-heals on next load, no manual fix
+needed. If this recurs a third time, check `werde-partner.html`'s
+hardcoded € commission calculator (flagged earlier, unresolved pending
+Yoel) and the live-advisor voice pricing path in `live-consult.js` next —
+both ultimately call `window.degajaI18n.getLang()` too so they should
+already be covered by this fix, but weren't individually re-tested live.
+
 ## Live advisor (Papuli) — real bugs found and fixed 2026-11-12
 
 Yoel reported "יש בעיה לדבר עם היועצת פפולי" (trouble reaching Papuli for a
