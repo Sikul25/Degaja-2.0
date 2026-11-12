@@ -975,6 +975,25 @@ files, wired into every AI call site - past 45s it aborts and falls
 through to the page's own existing fallback reading text (already
 written for a *failed* response, just never reached for a *hung* one).
 
+## Continued audit (2026-11-12): checkout/TTS calls and advisor toggle had the same missing-timeout gap
+
+Proactively searched the whole repo (not just the page already reported)
+for the same "no client-side timeout" pattern just fixed on the loading
+screens, per Yoel's explicit instruction to keep checking rather than
+wait for him to find the next one. Found it again, on the single most
+financially consequential call of all: **`/api/checkout` on all 4
+standalone pages had no timeout either** - only a `.catch()` for a
+genuine rejection, nothing for a hang. A stalled checkout left the buy
+button permanently disabled with zero feedback - a real customer stuck
+exactly where it matters most. Fixed the same way (`fetchWithTimeout`,
+20s). Also fixed `/api/tts` (voice playback) on all 4 pages identically.
+Separately, `berater.html` (Papuli's own availability-toggle page) had
+no timeout on its toggle request either - a hang left "…" on screen
+forever with no error; added a 15s `AbortController` timeout there too.
+`refresh()`/`pollPending()` on the same page were left as-is (they poll
+on an interval, so a single hung request self-heals on the next cycle -
+lower-value fix, not the same severity).
+
 ## Universal / non-denominational framing — standing design principle
 
 Yoel has repeatedly and explicitly required that DEGAJA features never be
