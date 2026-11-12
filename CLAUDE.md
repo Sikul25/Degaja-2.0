@@ -939,6 +939,26 @@ directly and was never affected). `index.html`'s `script.js?v=` bumped
 `werde-beraterin.html`/`werde-partner.html` only load Vercel's own
 unrelated `_vercel/insights/script.js`).
 
+## Standalone pages had no way back to the homepage (2026-11-12)
+
+Yoel reported: used the dream feature from the installed home-screen app,
+got a free reading, then tried to leave - "it didn't bring me back to the
+index page, only to the other features with the banner on top." Not a
+payment/CCBill issue (initially suspected a PWA/Safari storage-isolation
+problem, ruled out once he clarified this was a FREE reading, no checkout
+involved). Real cause: `dream.html`/`quiz.html`/`love-quiz.html`/
+`time-tunnel.html` each have a `crossLinksHtml()` "discover more" banner
+(added for SEO - see its own code comment, "None of these pages linked
+anywhere outside the legal pages") listing the other 3 standalone pages -
+but **none of the 4 pages' banners ever linked back to the homepage**.
+A visitor finishing a free reading and wanting to go home had only "jump
+to a different feature" as an option. **Fixed**: added a `cross_home`
+link (first/leftmost in the grid, pointing to `index.html`) to all 12
+language blocks across all 4 files (translated, not just English) - `us`/
+`mx` inherit it via their existing `Object.assign` overlays. Each file's
+own logo (`<a href="index.html">` at the top) always worked correctly and
+still does - this was specifically about the bottom-of-result banner.
+
 ## Universal / non-denominational framing — standing design principle
 
 Yoel has repeatedly and explicitly required that DEGAJA features never be
