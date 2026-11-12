@@ -994,6 +994,20 @@ forever with no error; added a 15s `AbortController` timeout there too.
 on an interval, so a single hung request self-heals on the next cycle -
 lower-value fix, not the same severity).
 
+## Continued audit (2026-11-12): main-site birthdate/consent errors could land off-screen
+
+One more pass over the same "silent failure, no visible feedback" family
+of bugs fixed repeatedly today. Found it in `script.js`'s own `#prices`
+section and `showPurchaseModal()`: the birthdate/consent validation
+called `.focus()` but never `.scrollIntoView()` - on the long homepage,
+a validation failure in the far-down `#prices` section could leave the
+error message off-screen with nothing visibly happening, the exact
+pattern already fixed in `live-consult.js` earlier today. Added
+`scrollIntoView` to both. Checked all 4 standalone pages too: their
+birthdate validation runs either inside a one-question-per-screen quiz
+step or a small centered modal, both already fully visible - no fix
+needed there.
+
 ## Universal / non-denominational framing — standing design principle
 
 Yoel has repeatedly and explicitly required that DEGAJA features never be
