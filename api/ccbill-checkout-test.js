@@ -4,7 +4,7 @@
 // payment without touching the live payment path at all. See
 // api/_ccbill.js and CLAUDE.md's "Payments: Stripe -> CCBill" section.
 import crypto from "node:crypto";
-import { encryptionKeyLooksValid, encryptionKeyMatchesVector2, diagnoseEncryptionKey, bruteForceFormDigestFormula, buildFlexFormUrl, CCBILL_CURRENCY_NUMERIC } from "./_ccbill.js";
+import { encryptionKeyLooksValid, encryptionKeyMatchesVector2, diagnoseEncryptionKey, bruteForceFormDigestFormula, buildFlexFormUrl, CCBILL_CURRENCY_NUMERIC, CCBILL_TEST_FLEX_ID } from "./_ccbill.js";
 import { createOrder } from "./_ccbillOrders.js";
 
 export default async function handler(req, res) {
@@ -33,7 +33,10 @@ export default async function handler(req, res) {
     // [3] is not in valid price range [5 - 300]" once the F5/WAF block was
     // cleared (by promoting the payment flow to Live). $5.00 is the
     // documented minimum for Dynamic Pricing.
-    const url = buildFlexFormUrl({ price: "5.00", period: "3", currencyCode: CCBILL_CURRENCY_NUMERIC.usd, orderId });
+    // Uses the dedicated "Degaja Test Only" flow (promoted to Live
+    // 2026-11-12) so CCBill's free Test Transaction User test-card
+    // mechanism never touches the real "Degaja CheckOut" flow's config.
+    const url = buildFlexFormUrl({ price: "5.00", period: "3", currencyCode: CCBILL_CURRENCY_NUMERIC.usd, orderId, flexId: CCBILL_TEST_FLEX_ID });
 
     return res.status(200).json({ url, orderId, selfTestPassed, selfTestPassedVector2, keyDiagnosis: diagnoseEncryptionKey(), formulaSearch: bruteForceFormDigestFormula() });
   } catch (error) {

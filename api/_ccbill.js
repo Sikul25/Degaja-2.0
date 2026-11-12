@@ -7,6 +7,14 @@ import crypto from "node:crypto";
 // Confirmed directly from Yoel's CCBill account/portal and from the
 // Integration team's 2026-11-11 emails.
 export const CCBILL_FLEX_ID = "f33155c3-8961-4ede-8da7-0ff3c5d56c4f";
+// A separate FlexForm flow Yoel created specifically for CCBill's free
+// Test Transaction User mechanism (test card numbers simulating
+// Approval/Denial with no real charge), kept apart from the real live
+// "Degaja CheckOut" flow above so manual testing never touches production
+// config. Promoted to Live 2026-11-12 (confirmed "Matches Live" in the
+// portal) - a sandbox-only flow is WAF-blocked at api.ccbill.com before a
+// request even reaches digest checking.
+export const CCBILL_TEST_FLEX_ID = "5d37ffb5-1ffb-4c67-b36f-1ac512740e43";
 export const CCBILL_CLIENT_SUBACC = "0000";
 
 // ISO 4217 numeric currency codes - a public standard, not CCBill-specific,
@@ -176,7 +184,7 @@ export function bruteForceFormDigestFormula() {
 // fields sent (recurringPrice/recurringPeriod/numRebills are deliberately
 // omitted - see CLAUDE.md) and the "correct" business value for a one-time
 // product's initialPeriod isn't confirmed anywhere yet.
-export function buildFlexFormUrl({ price, period = "2", currencyCode, orderId }) {
+export function buildFlexFormUrl({ price, period = "2", currencyCode, orderId, flexId = CCBILL_FLEX_ID }) {
   const key = process.env.CCBILL_ENCRYPTION_KEY;
   if (!key) throw new Error("CCBILL_ENCRYPTION_KEY not configured");
   const formDigest = computeFormDigest(price, period, currencyCode, key);
@@ -196,5 +204,5 @@ export function buildFlexFormUrl({ price, period = "2", currencyCode, orderId })
   // localStorage (see ccbill-test.html), just not via server-side webhook
   // matching until a confirmed alternative is found.
   if (orderId) params.set("orderId", orderId);
-  return `https://api.ccbill.com/wap-frontflex/flexforms/${CCBILL_FLEX_ID}?${params.toString()}`;
+  return `https://api.ccbill.com/wap-frontflex/flexforms/${flexId}?${params.toString()}`;
 }
