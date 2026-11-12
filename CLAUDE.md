@@ -907,13 +907,22 @@ Two other field-name guesses, also now corrected from the real payload:
   not `responseDigest` (the name `responseDigest`'s own doc entry implied) -
   its exact formula is still not confirmed, only the real field name.
 
-**Still not done**: the real cutover itself (`api/checkout.js`/`script.js`/
-`live-consult.js`/standalone pages already build CCBill URLs and poll
-`verify-ccbill-payment.js` the same way the test harness does - per the
-2026-11-11 cutover entry above - so these webhook fixes apply directly to
-production code, not just the test harness). No REAL customer payment has
-been run since these fixes landed - only the test-card payment above.
-Confirm the fixes hold on a real charge before fully trusting this path.
+**CONFIRMED 2026-11-12, ~06:20-06:27**: the webhook fix holds on the REAL
+production checkout path, not just the test harness. Two real purchases
+went through the actual live "Degaja CheckOut" flow (`flexId`
+`f33155c3-...`, `formName: "Degaja Dynamics"` - the real one, not the
+test-only form) using the test card: a $9.99 pack bought directly, and a
+$9.99 pack bought via `dream.html` (`ref: "dream"`). Both were correctly
+matched by OUR `orderId` (Edge Config key = our UUID, not CCBill's
+`subscriptionId`), both got `eventType: "NewSaleSuccess"`, and both show
+up in `ccbillRedeemedOrders` - meaning `script.js`'s `verifyAiPayment()`
+found them, granted credits, and marked them redeemed, exactly as
+designed. `dynamicPricingValidationDigest`/`responseDigest` also
+populated correctly on these (still no confirmed formula for it, just
+confirmed the field is now captured). This is real end-to-end proof, not
+just the isolated test harness - the full real checkout → CCBill →
+webhook → credit-grant chain works for an actual product purchase
+started from the real site.
 
 ## Main site: paid deep-reading always landed in Oracle, not the feature it came from (2026-11-12)
 
