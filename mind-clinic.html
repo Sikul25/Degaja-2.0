@@ -140,7 +140,7 @@
     @keyframes mindclinicPulse{0%,100%{opacity:.55;transform:translate(-50%,-50%) scale(.9)}50%{opacity:1;transform:translate(-50%,-50%) scale(1.15)}}
     @media(prefers-reduced-motion:reduce){.mindclinic-hero-glow{animation:none}}
 
-    .quiz-logo{height:26px;filter:brightness(0) invert(1);opacity:.92}
+    .quiz-logo{height:26px;filter:brightness(0) invert(1);opacity:.92}.quiz-home-link{display:flex;align-items:center;gap:8px;padding:6px 10px;margin:-6px 0 -6px -10px;border-radius:10px;transition:.15s}.quiz-home-link:active{background:rgba(255,255,255,.1)}.quiz-back-arrow{color:rgba(255,255,255,.65);font-size:19px;font-weight:700;line-height:1}
     .quiz-progress-wrap{flex:1;height:5px;background:rgba(255,255,255,.1);border-radius:99px;overflow:hidden}
     .quiz-progress-bar{height:100%;width:4%;background:linear-gradient(90deg,#3f7fc4,#9fd8ff);border-radius:99px;transition:width .5s cubic-bezier(.4,0,.2,1);box-shadow:0 0 10px rgba(123,183,255,.6)}
     .quiz-step-count{color:rgba(255,255,255,.45);font-size:11px;font-weight:700;letter-spacing:.03em;white-space:nowrap;font-variant-numeric:tabular-nums}
@@ -244,7 +244,7 @@
     <option value="hi">HI</option>
   </select>
   <div class="quiz-top">
-    <a href="index.html" aria-label="DEGAJA"><img src="assets/degaja-logo.png" alt="DEGAJA" class="quiz-logo"></a>
+    <a href="index.html" aria-label="DEGAJA" class="quiz-home-link"><span class="quiz-back-arrow">←</span><img src="assets/degaja-logo.png" alt="DEGAJA" class="quiz-logo"></a>
     <div class="quiz-progress-wrap"><div class="quiz-progress-bar" id="progressBar"></div></div>
     <div class="quiz-step-count" id="stepCount">1/4</div>
   </div>

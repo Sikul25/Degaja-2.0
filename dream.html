@@ -138,7 +138,7 @@
     .quiz-glow{position:absolute;width:480px;height:480px;border-radius:50%;left:50%;top:-180px;transform:translateX(-50%);background:radial-gradient(circle,rgba(159,216,255,.16) 0%,rgba(159,216,255,0) 70%);z-index:0;pointer-events:none}
 
     .quiz-top{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:18px 20px;max-width:620px;margin:0 auto;width:100%;position:relative;z-index:2}
-    .quiz-logo{height:26px;filter:brightness(0) invert(1);opacity:.92}
+    .quiz-logo{height:26px;filter:brightness(0) invert(1);opacity:.92}.quiz-home-link{display:flex;align-items:center;gap:8px;padding:6px 10px;margin:-6px 0 -6px -10px;border-radius:10px;transition:.15s}.quiz-home-link:active{background:rgba(255,255,255,.1)}.quiz-back-arrow{color:rgba(255,255,255,.65);font-size:19px;font-weight:700;line-height:1}
 
     .dream-hero{position:relative;width:170px;height:170px;margin:4px auto 10px;display:grid;place-items:center}
     .dream-hero-ring{position:absolute;inset:0;border-radius:50%;border:2px solid rgba(74,160,224,.4);animation:dreamHeroSpin 7s linear infinite}
@@ -227,7 +227,7 @@
   <div class="quiz-glow"></div>
   <div class="quiz-stars" id="stars"></div>
   <div class="quiz-top">
-    <a href="index.html" aria-label="DEGAJA"><img src="assets/degaja-logo.png" alt="DEGAJA" class="quiz-logo"></a>
+    <a href="index.html" aria-label="DEGAJA" class="quiz-home-link"><span class="quiz-back-arrow">←</span><img src="assets/degaja-logo.png" alt="DEGAJA" class="quiz-logo"></a>
     <select class="quiz-lang" id="langSelect">
       <option value="de">DE</option>
       <option value="en">EN</option>
