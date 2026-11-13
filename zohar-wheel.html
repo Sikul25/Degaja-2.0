@@ -140,12 +140,12 @@
     @keyframes zwPulse{0%,100%{opacity:.5;transform:translate(-50%,-50%) scale(.9)}50%{opacity:1;transform:translate(-50%,-50%) scale(1.12)}}
     @media(prefers-reduced-motion:reduce){.zw-hero-glow{animation:none}}
 
-    .quiz-logo{height:26px;filter:brightness(0) invert(1);opacity:.92}.quiz-home-link{display:flex;align-items:center;gap:8px;padding:6px 10px;margin:-6px 0 -6px -10px;border-radius:10px;transition:.15s}.quiz-home-link:active{background:rgba(255,255,255,.1)}.quiz-back-arrow{color:rgba(255,255,255,.65);font-size:19px;font-weight:700;line-height:1}
+    .quiz-logo{height:26px;filter:brightness(0) invert(1);opacity:.92}.quiz-home-link{display:flex;align-items:center;gap:8px;padding:6px 10px;margin:-6px 0 -6px -10px;border-radius:10px;transition:.15s}.quiz-home-link:active{background:rgba(255,255,255,.1)}.quiz-back-arrow{color:rgba(255,255,255,.65);font-size:19px;font-weight:700;line-height:1}.quiz-fixed-home{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);z-index:40;display:inline-flex;align-items:center;gap:6px;background:rgba(20,10,35,.78);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);border:1px solid rgba(231,195,114,.4);border-radius:999px;padding:10px 20px;color:#e7c372;font-size:13px;font-weight:800;text-decoration:none;box-shadow:0 10px 30px rgba(0,0,0,.45);white-space:nowrap}.quiz-fixed-home:active{background:rgba(231,195,114,.18)}
     .quiz-progress-wrap{flex:1;height:5px;background:rgba(255,255,255,.1);border-radius:99px;overflow:hidden}
     .quiz-progress-bar{height:100%;width:4%;background:linear-gradient(90deg,#6b21a8,#e7c372);border-radius:99px;transition:width .5s cubic-bezier(.4,0,.2,1);box-shadow:0 0 10px rgba(231,195,114,.6)}
     .quiz-step-count{color:rgba(255,255,255,.45);font-size:11px;font-weight:700;letter-spacing:.03em;white-space:nowrap;font-variant-numeric:tabular-nums}
 
-    .quiz-main{flex:1;display:flex;align-items:center;justify-content:center;padding:10px 20px 48px;position:relative;z-index:2}
+    .quiz-main{flex:1;display:flex;align-items:center;justify-content:center;padding:10px 20px 72px;position:relative;z-index:2}
     .quiz-card{width:min(540px,100%);text-align:center}
     .quiz-anim{animation:quizIn .45s cubic-bezier(.16,1,.3,1) both}
     @keyframes quizIn{from{opacity:0;transform:translateY(14px) scale(.98)}to{opacity:1;transform:translateY(0) scale(1)}}
@@ -281,6 +281,8 @@
     <div class="quiz-card" id="quizCard"></div>
   </main>
 </div>
+
+<a href="index.html" class="quiz-fixed-home" id="quizFixedHome">🏠</a>
 
 <script>
 (function(){
@@ -1441,6 +1443,7 @@
   }
 
   function render(){
+    var fixedHome = document.getElementById("quizFixedHome"); if (fixedHome) fixedHome.innerHTML = t().cross_home;
     delete card.dataset.locked;
     document.documentElement.lang = lang;
     updateProgress();

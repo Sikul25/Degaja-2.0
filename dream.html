@@ -138,7 +138,7 @@
     .quiz-glow{position:absolute;width:480px;height:480px;border-radius:50%;left:50%;top:-180px;transform:translateX(-50%);background:radial-gradient(circle,rgba(159,216,255,.16) 0%,rgba(159,216,255,0) 70%);z-index:0;pointer-events:none}
 
     .quiz-top{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:18px 20px;max-width:620px;margin:0 auto;width:100%;position:relative;z-index:2}
-    .quiz-logo{height:26px;filter:brightness(0) invert(1);opacity:.92}.quiz-home-link{display:flex;align-items:center;gap:8px;padding:6px 10px;margin:-6px 0 -6px -10px;border-radius:10px;transition:.15s}.quiz-home-link:active{background:rgba(255,255,255,.1)}.quiz-back-arrow{color:rgba(255,255,255,.65);font-size:19px;font-weight:700;line-height:1}
+    .quiz-logo{height:26px;filter:brightness(0) invert(1);opacity:.92}.quiz-home-link{display:flex;align-items:center;gap:8px;padding:6px 10px;margin:-6px 0 -6px -10px;border-radius:10px;transition:.15s}.quiz-home-link:active{background:rgba(255,255,255,.1)}.quiz-back-arrow{color:rgba(255,255,255,.65);font-size:19px;font-weight:700;line-height:1}.quiz-fixed-home{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);z-index:40;display:inline-flex;align-items:center;gap:6px;background:rgba(20,10,35,.78);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);border:1px solid rgba(231,195,114,.4);border-radius:999px;padding:10px 20px;color:#e7c372;font-size:13px;font-weight:800;text-decoration:none;box-shadow:0 10px 30px rgba(0,0,0,.45);white-space:nowrap}.quiz-fixed-home:active{background:rgba(231,195,114,.18)}
 
     .dream-hero{position:relative;width:170px;height:170px;margin:4px auto 10px;display:grid;place-items:center}
     .dream-hero-ring{position:absolute;inset:0;border-radius:50%;border:2px solid rgba(74,160,224,.4);animation:dreamHeroSpin 7s linear infinite}
@@ -148,7 +148,7 @@
     @keyframes dreamHeroPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.06)}}
     @media(prefers-reduced-motion:reduce){.dream-hero-ring,.dream-hero-core{animation:none}}
 
-    .quiz-main{flex:1;display:flex;align-items:center;justify-content:center;padding:10px 20px 48px;position:relative;z-index:2}
+    .quiz-main{flex:1;display:flex;align-items:center;justify-content:center;padding:10px 20px 72px;position:relative;z-index:2}
     .quiz-card{width:min(540px,100%);text-align:center}
     .quiz-anim{animation:quizIn .45s cubic-bezier(.16,1,.3,1) both}
     @keyframes quizIn{from{opacity:0;transform:translateY(14px) scale(.98)}to{opacity:1;transform:translateY(0) scale(1)}}
@@ -252,6 +252,8 @@
     <div class="quiz-card" id="quizCard"></div>
   </main>
 </div>
+
+<a href="index.html" class="quiz-fixed-home" id="quizFixedHome">🏠</a>
 
 <script>
 (function(){
@@ -1173,6 +1175,7 @@
   }
 
   function render(){
+    var fixedHome = document.getElementById("quizFixedHome"); if (fixedHome) fixedHome.innerHTML = t().cross_home;
     document.documentElement.lang = lang;
     if (stage === "input") renderInput();
   }
