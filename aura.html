@@ -137,14 +137,11 @@
 
     .quiz-top{display:flex;align-items:center;gap:14px;padding:18px 20px;max-width:620px;margin:0 auto;width:100%;position:relative;z-index:2}
 
-    .aura-hero{max-width:460px;margin:0 auto;padding:6px 20px 0;position:relative;z-index:2;height:168px;display:flex;align-items:center;justify-content:center}
-    /* A soft radiant halo of light - colored glow only, no figure or symbol. */
-    .aura-hero-halo{position:relative;width:156px;height:156px;border-radius:50%;background:conic-gradient(from 0deg,rgba(240,201,105,.95),rgba(159,216,255,.85),rgba(200,130,255,.85),rgba(240,201,105,.95));-webkit-mask:radial-gradient(farthest-side,transparent calc(100% - 15px),#fff calc(100% - 15px));mask:radial-gradient(farthest-side,transparent calc(100% - 15px),#fff calc(100% - 15px));filter:blur(2.5px);box-shadow:0 0 50px rgba(231,195,114,.5),0 0 90px rgba(159,216,255,.3);animation:auraPulse 3.4s ease-in-out infinite,spin 16s linear infinite}
-    .aura-hero-glow{position:absolute;inset:18px;border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,.35) 0%,rgba(255,255,255,0) 72%);animation:auraPulse 3.4s ease-in-out infinite}
-    .aura-hero-ring{position:absolute;inset:-26px;border-radius:50%;border:1px solid rgba(231,195,114,.2);animation:spin 11s linear infinite}
-    .aura-hero-ring.r2{inset:-44px;border-color:rgba(159,216,255,.16);animation-duration:17s;animation-direction:reverse}
-    @keyframes auraPulse{0%,100%{transform:scale(1);opacity:.88}50%{transform:scale(1.07);opacity:1}}
-    @media(prefers-reduced-motion:reduce){.aura-hero-halo,.aura-hero-glow,.aura-hero-ring{animation:none}}
+    .aura-hero{max-width:420px;margin:0 auto;padding:0 20px;position:relative;z-index:2}
+    .aura-hero img{width:100%;display:block;border-radius:18px;box-shadow:0 20px 50px rgba(0,0,0,.5)}
+    .aura-hero-glow{position:absolute;left:50%;top:47%;width:34%;aspect-ratio:1;transform:translate(-50%,-50%);border-radius:50%;background:radial-gradient(circle,rgba(159,216,255,.85) 0%,rgba(200,130,255,.5) 35%,rgba(231,195,114,0) 72%);pointer-events:none;animation:auraPulse 2.6s ease-in-out infinite;mix-blend-mode:screen}
+    @keyframes auraPulse{0%,100%{transform:translate(-50%,-50%) scale(1);opacity:.88}50%{transform:translate(-50%,-50%) scale(1.1);opacity:1}}
+    @media(prefers-reduced-motion:reduce){.aura-hero-glow{animation:none}}
 
     .quiz-logo{height:26px;filter:brightness(0) invert(1);opacity:.92}.quiz-home-link{display:flex;align-items:center;gap:8px;padding:6px 10px;margin:-6px 0 -6px -10px;border-radius:10px;transition:.15s}.quiz-home-link:active{background:rgba(255,255,255,.1)}.quiz-back-arrow{color:rgba(255,255,255,.65);font-size:19px;font-weight:700;line-height:1}
     .quiz-progress-wrap{flex:1;height:5px;background:rgba(255,255,255,.1);border-radius:99px;overflow:hidden}
@@ -254,11 +251,9 @@
     <div class="quiz-progress-wrap"><div class="quiz-progress-bar" id="progressBar"></div></div>
     <div class="quiz-step-count" id="stepCount">1/4</div>
   </div>
-  <div class="aura-hero" aria-hidden="true">
-    <div class="aura-hero-ring"></div>
-    <div class="aura-hero-ring r2"></div>
+  <div class="aura-hero">
+    <img src="assets/aura-glowing-logo.png" alt="Aura Reading">
     <div class="aura-hero-glow"></div>
-    <div class="aura-hero-halo"></div>
   </div>
   <main class="quiz-main">
     <div class="quiz-card" id="quizCard"></div>
