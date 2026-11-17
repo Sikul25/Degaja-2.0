@@ -20,7 +20,8 @@
 // CCBill actually sends and whether our orderId passthrough (see
 // _ccbill.js's buildFlexFormUrl) survived the round trip - inspect it
 // before trusting this endpoint with real production credit-granting.
-import { recordWebhookResult } from "./_ccbillOrders.js";
+import { recordWebhookResult, getOrder } from "./_ccbillOrders.js";
+import { sendTikTokPurchaseEvent } from "./_tiktok.js";
 
 export default async function handler(req, res) {
   // Accept GET as well as POST: "Background Post" strongly implies POST,
@@ -87,6 +88,23 @@ export default async function handler(req, res) {
     email: body.email || null,
     raw: body
   });
+
+  // Server-side Events API call - a second, more reliable path for the same
+  // Purchase conversion the browser pixel already sends (see CLAUDE.md's
+  // "TikTok Pixel installed" entry). Only on a genuine approval; never lets
+  // a TikTok API issue affect this endpoint's own 200 response to CCBill.
+  if (eventType === "NewSaleSuccess") {
+    const order = await getOrder(orderId);
+    if (order) {
+      await sendTikTokPurchaseEvent({
+        orderId,
+        email: order.email || body.email,
+        amount: order.amount,
+        currency: order.currency,
+        contentName: order.type
+      });
+    }
+  }
 
   return res.status(200).json({ received: true });
 }

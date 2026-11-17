@@ -346,7 +346,7 @@
         contents: [{ content_id: orderId, content_type: "product", content_name: data.type || "reading" }],
         value: Number(data.amount) || undefined,
         currency: (data.currency || "").toUpperCase() || undefined
-      });
+      }, { event_id: orderId });
     } catch (_) { /* never block credit granting on pixel issues */ }
   }
 

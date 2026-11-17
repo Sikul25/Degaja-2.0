@@ -12,7 +12,7 @@
         contents:[{content_id:orderId,content_type:'product',content_name:d.type||'voice'}],
         value:Number(d.amount)||undefined,
         currency:(d.currency||'').toUpperCase()||undefined
-      });
+      },{event_id:orderId});
     }catch(_){}
   }
   const CREDIT_KEY = 'degajaVoiceCredits';
