@@ -1721,6 +1721,42 @@ approval server-side), same event name/shape as the client-side one.
 `script.js?v=` bumped 35→37, `live-consult.js?v=` bumped 30→32 in
 `index.html` (only file that loads either, confirmed via grep).
 
+## Standalone pages: loading screen felt "stuck at 96%" (2026-11-17)
+
+Yoel reported zohar-wheel.html stuck at 96% and asked to shorten it.
+Tested the real production `/api/oracle` endpoint directly (Vercel
+Sandbox + curl, same technique used for CCBill testing, since this
+session has no direct network access to www.degaja.com) — got a real,
+correct reading back in **7 seconds**, no errors, confirming the backend
+itself was never the problem (same conclusion as the 2026-11-12
+loading-hang fix: that one was a genuine infinite hang on a dead
+response, already fixed by `fetchWithTimeout`; this is different — a
+real, bounded ~7-10s wait that *felt* broken).
+
+Root cause, found across **all 7 standalone pages** (same copy-pasted
+loading-screen template: quiz/love-quiz/dream/time-tunnel/aura/
+mind-clinic/zohar-wheel), every AI loading state (free reveal, paid
+resume, and the palm reveal on quiz/love-quiz):
+1. Each call added a pure artificial "minimum wait" floor (`minWait`/
+   `minWaitPalm`, 1200-3600ms depending on the call) via
+   `Promise.all([request, minWait])` — dead time with no purpose other
+   than preventing a jarringly instant reveal, directly working against
+   "make it faster."
+2. The progress-bar interval climbed to 96% in ~3 seconds
+   (`pct + Math.round(4 + Math.random()*9)` every 260ms) and then sat
+   frozen there for the rest of the real wait (~4-7s) — reads as stuck
+   even though the request is still genuinely in flight.
+
+**Fixed**: removed every `minWait`/`minWaitPalm` floor entirely
+(`Promise.all([request])` now, no second arm) and slowed the bar's climb
+rate (`pct + Math.round(1.5 + Math.random()*4)`) so it keeps visibly
+inching upward closer to the real response time instead of finishing
+early and idling. Net effect: total wait is shorter (no added dead time)
+and the loading screen never visually "stops," even though the backend
+timing itself is unchanged. If a future standalone page copies this
+loading-screen template, copy the fixed version, not an older one from
+git history.
+
 ## Behavioral notes
 
 - Never reintroduce Talmud/Judaism framing, or Chinese law/regulation
