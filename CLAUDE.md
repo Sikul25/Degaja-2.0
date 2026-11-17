@@ -1823,6 +1823,27 @@ before real ad spend begins, but didn't block this fix going out.
 `script.js?v=` bumped 37→38, `live-consult.js?v=` bumped 32→33 in
 `index.html`.
 
+## Standalone pages: tab title/meta didn't follow the real detected language (2026-11-17)
+
+Yoel noticed the Zohar wheel's browser tab title still showed German
+while the page content displayed in English (US) - a second, independent
+SEO title/meta mechanism, present in all 7 standalone pages since each
+was built: an early `<head>` script only updated `document.title`/
+`og:title`/etc. when the URL carried an explicit `?lang=` param, with no
+connection at all to the real app's own language detection (localStorage
++ geo-IP, resolved later, no URL param needed for a direct visit - the
+normal case). Any visitor who arrived without an explicit `?lang=` kept
+the static German `<title>` regardless of what language/currency they
+actually saw.
+
+**Fixed**: exposed that head-script's update logic as
+`window.__applySeoMeta(lang)` and call it from the main script right
+after the real `lang` is first determined, and again inside
+`applyGeoLangIfEligible()`'s callback whenever a later geo-IP lookup
+changes it - mapping `us`→`en` and `mx`→`es` (SEO_META has no separate
+us/mx entries, same as the content-currency aliasing elsewhere). Applied
+identically across all 7 standalone pages.
+
 ## Behavioral notes
 
 - Never reintroduce Talmud/Judaism framing, or Chinese law/regulation
