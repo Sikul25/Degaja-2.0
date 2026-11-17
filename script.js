@@ -375,6 +375,17 @@
 
       setAiCredits(getAiCredits() + (Number(data.credits) || 1));
 
+      try {
+        if (typeof window.ttq?.track === "function") {
+          window.ttq.track("CompletePayment", {
+            content_type: "product",
+            content_id: orderId,
+            value: Number(data.amount) || undefined,
+            currency: (data.currency || "").toUpperCase() || undefined
+          });
+        }
+      } catch (_) { /* ignore - never block credit granting on pixel issues */ }
+
       let pending = null;
       try { pending = JSON.parse(localStorage.getItem(PENDING_READING_KEY) || "null"); } catch (_) { /* ignore */ }
 

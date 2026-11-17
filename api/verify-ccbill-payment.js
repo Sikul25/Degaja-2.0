@@ -35,6 +35,8 @@ export default async function handler(req, res) {
     topics: order.topics || null,
     advisorId: order.advisorId || null,
     customerEmail: order.email || result.email || null,
+    amount: order.amount || null,
+    currency: order.currency || null,
     raw: result.raw
   });
 }

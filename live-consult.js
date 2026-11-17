@@ -229,6 +229,7 @@
       catch(_){await new Promise(res=>setTimeout(res,2500));continue;}
       if(!d.found){await new Promise(res=>setTimeout(res,2500));continue;}
       if(!d.approved||d.type!=='voice'){console.warn('DEGAJA payment verification failed');return;}
+      try{if(typeof window.ttq?.track==='function'){window.ttq.track('CompletePayment',{content_type:'product',content_id:orderId,value:Number(d.amount)||undefined,currency:(d.currency||'').toUpperCase()||undefined});}}catch(_){}
       const advisor=d.advisorId?setSelectedAdvisor(d.advisorId):getSelectedAdvisor();
       localStorage.setItem('degajaPaidVoice','1');
       localStorage.setItem(SESSION_KEY,JSON.stringify({type:'voice',topics:d.topics||1,advisorId:advisor.id,orderId,verifiedAt:Date.now()}));

@@ -1,6 +1,17 @@
 <!doctype html>
 <html lang="de">
 <head>
+<!-- TikTok Pixel Code Start -->
+<script>
+!function (w, d, t) {
+  w.TiktokAnalyticsObject=t;var ttq=w[t]=w[t]||[];ttq.methods=["page","track","identify","instances","debug","on","off","once","ready","alias","group","enableCookie","disableCookie","holdConsent","revokeConsent","grantConsent"],ttq.setAndDefer=function(t,e){t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}};for(var i=0;i<ttq.methods.length;i++)ttq.setAndDefer(ttq,ttq.methods[i]);ttq.instance=function(t){for(var e=ttq._i[t]||[],n=0;n<e.methods.length;n++)ttq.setAndDefer(e,e.methods[n]);return e},ttq.load=function(e,n){var i="https://analytics.tiktok.com/i18n/pixel/events.js",o=n&&n.partner;ttq._i=ttq._i||{},ttq._i[e]=[],ttq._i[e]._u=i,ttq._t=ttq._t||{},ttq._t[e]=+new Date,ttq._o=ttq._o||{},ttq._o[e]=n||{};var a=document.createElement("script");a.type="text/javascript",a.async=!0,a.src=i+"?sdkid="+e+"&lib="+t;var s=document.getElementsByTagName("script")[0];s.parentNode.insertBefore(a,s)};
+
+  ttq.load('DBU37GRC77UB463C4KE0');
+  ttq.page();
+}(window, document, 'ttq');
+</script>
+<!-- TikTok Pixel Code End -->
+
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <meta name="description" content="DEGAJA – Deine erste Tarot-Lesung und dein erstes Handlesen sind kostenlos. Kartenlegen, Astrologie und diskrete persönliche Beratung zu Liebe, Beruf und Zukunft.">
@@ -361,7 +372,7 @@
 <script src="/i18n.js?v=76"></script>
 <script src="/tarot-i18n.js?v=5"></script>
 <script src="/tabs.js?v=2"></script>
-<script src="script.js?v=35"></script>
+<script src="script.js?v=36"></script>
 <script src="/china-cards.js?v=1" defer></script>
 <script src="/pre-chat.js?v=8"></script>
 <script>
@@ -369,7 +380,7 @@
   // don't even download live-consult.js for other languages.
   if (!window.degajaI18n || window.degajaI18n.hasLiveAdvisor()) {
     const s = document.createElement('script');
-    s.src = '/live-consult.js?v=30';
+    s.src = '/live-consult.js?v=31';
     s.async = false;
     document.currentScript.after(s);
   }
