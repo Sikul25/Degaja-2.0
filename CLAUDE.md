@@ -1757,6 +1757,72 @@ timing itself is unchanged. If a future standalone page copies this
 loading-screen template, copy the fixed version, not an older one from
 git history.
 
+## Critical bug found and fixed: a lost response could permanently lock a paying customer out of their credits (2026-11-17)
+
+Yoel was (rightly) anxious that repeated bugs kept surfacing despite
+testing, and explicitly asked for a real audit of the money path before
+risking ad spend. Ran a focused audit (not a general code review) of all
+9 checkout entry points — main site + all 7 standalone pages + the
+live-advisor voice flow — specifically for anything that could lose a
+customer's money or credits, not UX issues. It found one real, serious
+bug, previously undetected:
+
+**The bug**: `api/_ccbillOrders.js`'s `wasAlreadyRedeemed(orderId)` marked
+an order "redeemed" (via Edge Config write) as a side effect of simply
+being asked whether it was redeemed — on the very first poll that saw a
+genuine approval, before the client had actually received or processed
+that HTTP response. `api/verify-ccbill-payment.js` calls this on every
+poll from `script.js`'s `verifyAiPayment()` / `live-consult.js`'s
+`verify()`, which exist specifically because CCBill's webhook can arrive
+late and the client retries every 2.5s for up to 12 attempts. If the one
+response where the server first saw `approved: true` was lost in transit
+— a mobile network blip right after returning from CCBill's external
+payment page, a backgrounded tab, the client's own 15s timeout racing a
+slow reply — the client's `catch`/`sleep`/`continue` treated it as a
+transient miss and retried, but the *next* poll would now see the order
+already marked redeemed and report `alreadyRedeemed: true` forever. The
+client then silently discards the pending reading with **zero error
+shown** to a customer who genuinely paid. This affected every AI-reading
+entry point (shared code) and, separately, `live-consult.js`'s voice
+flow never even checked `alreadyRedeemed` at all (same root cause,
+different gap).
+
+**Fixed**: split the check from the write.
+`peekAlreadyRedeemed(orderId)` (api/_ccbillOrders.js) is now read-only —
+`verify-ccbill-payment.js` uses this to decide what to report, with zero
+side effects. `markRedeemed(orderId)` is a separate explicit write,
+called only by a new endpoint, `api/ack-ccbill-redemption.js`, which the
+client hits (`fetch(..., {method:"POST", keepalive:true})` —
+fire-and-forget, `keepalive` so it survives a same-tick `location.href`
+navigation) only *after* it has already granted credits/access locally
+(`setAiCredits()` already ran, localStorage already updated). A lost ack
+now just leaves the replay-protection window open a little longer — it
+can never again cause a customer to lose credits they already paid for.
+Added the same check+ack to `live-consult.js`'s `verify()`, which was
+missing the `alreadyRedeemed` check entirely before this fix.
+
+**Confirmed NOT affected, from the same audit**: double-submit guards on
+every checkout button (all 9 entry points); the `eventType ===
+"NewSaleSuccess"` approval check (confirmed-correct from a real payload,
+not a guess); per-product credit/type correctness in `createOrder()`;
+the `orderId` round-trip and the webhook's `X-orderId` key-matching
+(both confirmed live in production 2026-11-12); and this session's
+earlier same-day changes (the `amount`/`currency` fields added to
+`verify-ccbill-payment.js`, and the TikTok `fireTikTokPurchase()` calls)
+— all pure additions, verified to run only after credit-granting and
+wrapped in their own try/catch, unable to block or skip a grant.
+
+**Separately flagged, not fixed (low severity, no customer money at
+risk)**: the TikTok pixel's `value` field is cents for every non-JPY
+currency (e.g. `500` for a $5.00 reading) — `api/checkout.js` stores
+`item.amount` as-is and it flows straight through to `ttq.track`. This
+only affects ad-bidding data quality (TikTok will see "$500 purchases"
+instead of "$5.00"), never what a customer is charged. Worth fixing
+before real ad spend begins, but didn't block this fix going out.
+
+`script.js?v=` bumped 37→38, `live-consult.js?v=` bumped 32→33 in
+`index.html`.
+
 ## Behavioral notes
 
 - Never reintroduce Talmud/Judaism framing, or Chinese law/regulation
