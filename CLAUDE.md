@@ -1676,32 +1676,49 @@ Pixel ID: `DBU37GRC77UB463C4KE0`. Base browser-side code added to
 opening tag, per TikTok's own placement guidance) — confirmed via grep
 this wasn't present anywhere before.
 
-Also wired a real `CompletePayment` event, not just page views, so the
-"Website conversion" ad objective can actually measure purchases:
-- `script.js`'s `verifyAiPayment()` fires it once CCBill confirms a
+Also wired a real conversion event, not just page views, so the
+"Website conversion" ad objective can actually measure purchases. First
+guessed the event name as `CompletePayment` — **wrong**, corrected once
+Yoel went through TikTok's own Events Manager funnel-setup wizard
+(Set up events → Set up business funnel) and it generated real sample
+code for our selected funnel (Awareness: View Content; Consideration:
+Add Payment Info, Initiate Checkout; Conversion: Place an Order), which
+also always includes `CompleteRegistration` and **`Purchase`** — `Purchase`
+is TikTok's actual standard event for a completed sale, not
+`CompletePayment` (not one of their generated events for this funnel at
+all). Their generated code also uses a `contents: [{content_id,
+content_type, content_name}]` array shape, not flat params, and shows an
+optional `ttq.identify({ email: <sha256-hashed> })` call before the
+event for Advanced Matching (better ad-click-to-purchase matching).
+
+Final implementation (`fireTikTokPurchase()` in both files, same
+pattern, `sha256Hex()` via the browser's native `crypto.subtle`):
+- `script.js`'s `verifyAiPayment()` calls it once CCBill confirms a
   genuine, non-replayed approval (after the `alreadyRedeemed` check, right
   where credits are granted) — this single place covers every AI reading
   purchase, main site AND all 7 standalone pages, since CCBill's redirect
   always lands on `index.html` first regardless of where checkout started
   (see the "Cross-page payment resumption" note above).
-- `live-consult.js`'s `verify()` fires the same event for live-advisor
-  (voice) bookings, a separate purchase type.
+- `live-consult.js`'s `verify()` calls the same helper (its own local
+  copy, since it's a separate IIFE module) for live-advisor (voice)
+  bookings, a separate purchase type.
 - `api/verify-ccbill-payment.js` now also returns `amount`/`currency`
-  from the stored order so the pixel event carries a real purchase value
-  for TikTok's bid optimization, not just a bare conversion signal.
+  from the stored order so the event carries a real purchase value for
+  TikTok's bid optimization, and `customerEmail` was already returned
+  (used for the `ttq.identify()` hash).
 
 **Still outstanding**: Yoel picked the "Pixel + Events API" (recommended)
 option in TikTok's setup, which also wants a server-side Events API call
 (more reliable than browser-only, especially on iOS) — that needs an
-Access Token from TikTok's Events API setup screen (a separate step after
-the base code), not yet retrieved. Without it, only the browser-side
-Pixel is actually active; Events API itself isn't wired up server-side
-yet. Ask Yoel for the Access Token next time TikTok comes up, then add a
-server-side call to TikTok's Events API endpoint from
+Access Token from TikTok's Events API setup screen (a later step in the
+same wizard), not yet retrieved. Without it, only the browser-side Pixel
+is actually active; Events API itself isn't wired up server-side yet.
+Ask Yoel for the Access Token next time TikTok comes up, then add a
+server-side `Purchase` call to TikTok's Events API endpoint from
 `api/ccbill-webhook.js` (the one place that already confirms a genuine
-approval server-side) mirroring this same `CompletePayment` event.
+approval server-side), same event name/shape as the client-side one.
 
-`script.js?v=` bumped 35→36, `live-consult.js?v=` bumped 30→31 in
+`script.js?v=` bumped 35→37, `live-consult.js?v=` bumped 30→32 in
 `index.html` (only file that loads either, confirmed via grep).
 
 ## Behavioral notes
