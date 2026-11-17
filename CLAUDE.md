@@ -1631,6 +1631,42 @@ actually launching/paying for a TikTok campaign before Yoel confirms
 CCBill is live — campaign setup/learning (objectives, pixel prep) can
 continue in the meantime, but the real spend waits.
 
+## Pricing: 33% pack discount made visible (2026-11-17)
+
+Yoel pointed out (correctly) that a separate CCBill coupon for the TikTok
+promo is unnecessary — the existing 3-reading pack (€9.99/£9.99/$9.99/
+R$49.99/MX$179/¥1,490/¥79/₹499) is already ~33% cheaper per reading than
+buying one single reading (€5/£5/$5/etc.) in every currency. Agreed to
+just advertise that existing discount instead of building new coupon
+infrastructure. Added a localized "(save 33%)"-style suffix to the pack
+price string shown in the purchase-modal "go deeper" flow (the
+`purchase.pack` key in `i18n.js`, main site + all 7 standalone pages'
+identical `purchase_pack` key) for all 14 language/currency variants.
+Did NOT touch the separate `prices.pack.priceLabel`/`prices.pack.perUnit`
+keys (main site's own `#prices` section, the direct Oracle purchase
+flow) — that section already shows the per-reading unit price
+("only €3.33 per reading"), which communicates the discount a different
+way; ask Yoel if he wants the explicit "33%" badge there too.
+`i18n.js?v=` bumped 75→76 across all 9 files that load it.
+
+**Git branch anomaly found and worked around while deploying this**:
+pushing to the `claude/degaja-website-947p0b` branch (per this repo's
+standing branch-development instruction) was rejected, and investigating
+showed that branch's remote tip is a stale October 31 snapshot with a
+completely disjoint commit history from `main` (no common ancestor at
+all) — missing CLAUDE.md entirely, missing the whole CCBill cutover,
+missing aura/mind-clinic/zohar-wheel. `main`, by contrast, matched
+exactly what's live on www.degaja.com. Did not force-push or touch that
+stale branch (confirmed nothing of real value would be lost — its unique
+content is all old, already-deliberately-deleted Stripe-era code — but
+didn't want to destroy 300+ commits of history unilaterally). Asked Yoel
+directly; he confirmed pushing to `main` instead, which is what actually
+deploys. **If this recurs**: check `git merge-base origin/main
+origin/claude/degaja-website-947p0b` — if it returns nothing, the branches
+are still disjoint and `main` should keep being used as the real push
+target until someone (Yoel or a future session with his explicit OK)
+resets the feature branch to match `main`.
+
 ## Behavioral notes
 
 - Never reintroduce Talmud/Judaism framing, or Chinese law/regulation
