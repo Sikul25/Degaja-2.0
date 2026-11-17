@@ -1667,6 +1667,43 @@ are still disjoint and `main` should keep being used as the real push
 target until someone (Yoel or a future session with his explicit OK)
 resets the feature branch to match `main`.
 
+## TikTok Pixel installed (2026-11-17)
+
+Yoel created the pixel in TikTok's Events Manager (Data sources → Manual
+setup → "TikTok Pixel + Events API", recommended option, named "degaja").
+Pixel ID: `DBU37GRC77UB463C4KE0`. Base browser-side code added to
+`index.html` and all 7 standalone pages' `<head>` (right after the
+opening tag, per TikTok's own placement guidance) — confirmed via grep
+this wasn't present anywhere before.
+
+Also wired a real `CompletePayment` event, not just page views, so the
+"Website conversion" ad objective can actually measure purchases:
+- `script.js`'s `verifyAiPayment()` fires it once CCBill confirms a
+  genuine, non-replayed approval (after the `alreadyRedeemed` check, right
+  where credits are granted) — this single place covers every AI reading
+  purchase, main site AND all 7 standalone pages, since CCBill's redirect
+  always lands on `index.html` first regardless of where checkout started
+  (see the "Cross-page payment resumption" note above).
+- `live-consult.js`'s `verify()` fires the same event for live-advisor
+  (voice) bookings, a separate purchase type.
+- `api/verify-ccbill-payment.js` now also returns `amount`/`currency`
+  from the stored order so the pixel event carries a real purchase value
+  for TikTok's bid optimization, not just a bare conversion signal.
+
+**Still outstanding**: Yoel picked the "Pixel + Events API" (recommended)
+option in TikTok's setup, which also wants a server-side Events API call
+(more reliable than browser-only, especially on iOS) — that needs an
+Access Token from TikTok's Events API setup screen (a separate step after
+the base code), not yet retrieved. Without it, only the browser-side
+Pixel is actually active; Events API itself isn't wired up server-side
+yet. Ask Yoel for the Access Token next time TikTok comes up, then add a
+server-side call to TikTok's Events API endpoint from
+`api/ccbill-webhook.js` (the one place that already confirms a genuine
+approval server-side) mirroring this same `CompletePayment` event.
+
+`script.js?v=` bumped 35→36, `live-consult.js?v=` bumped 30→31 in
+`index.html` (only file that loads either, confirmed via grep).
+
 ## Behavioral notes
 
 - Never reintroduce Talmud/Judaism framing, or Chinese law/regulation
