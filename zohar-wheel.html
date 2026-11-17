@@ -1496,10 +1496,14 @@
 
     var pctEl = document.getElementById("loadPct");
     var titleEl = document.getElementById("loadTitle");
-    var pct = 0, phraseIdx = 0;
+    var pct = 0, phraseIdx = 0, holdTick = 0;
     clearInterval(loadingTimer);
     loadingTimer = setInterval(function(){
-      pct = Math.min(96, pct + Math.round(1.5 + Math.random() * 4));
+      if (pct < 96) {
+        pct = Math.min(96, pct + Math.round(1.5 + Math.random() * 4));
+      } else if (++holdTick % 6 === 0) {
+        pct = 96 + Math.floor(Math.random() * 4);
+      }
       pctEl.textContent = pct + "%";
       var nextPhrase = Math.floor(pct / (100 / phrases.length));
       if (nextPhrase !== phraseIdx && nextPhrase < phrases.length) {

@@ -1757,6 +1757,36 @@ timing itself is unchanged. If a future standalone page copies this
 loading-screen template, copy the fixed version, not an older one from
 git history.
 
+**2026-11-17, same day, Yoel reported the identical "stuck at 96%" symptom
+again on aura.html** after the fix above was already live. Checked
+production runtime logs (Vercel `get_runtime_errors`/`get_runtime_logs`,
+24h and 6h windows, project-wide and scoped to `/api/oracle`) — **zero
+errors, zero fatal logs, nothing** — and two separate direct timing tests
+of `/api/oracle` both came back healthy (7s, 8.2s). So the backend was
+never broken, including this time. The real, previously-missed culprit:
+the fix above only slowed the *climb rate* — it left the hard ceiling
+`Math.min(96, ...)` in place. That ceiling is reached in ~7 seconds on
+average given the new slower rate, and the moment it's hit, the number
+(and the loading phrase, since phrase-cycling is also driven by `pct`)
+goes completely static for however much *longer* the real wait runs —
+indistinguishable from a true hang to someone watching, and a real AI
+call doesn't reliably finish in exactly 7s every time (model latency
+varies). So any wait longer than ~7s reproduces the exact "frozen number"
+complaint, by design, even though the request is still genuinely in
+flight the whole time.
+
+**Fixed, across all 7 standalone pages** (quiz/love-quiz/dream/
+time-tunnel/aura/mind-clinic/zohar-wheel — confirmed identical template
+in all 7 via grep before editing): once `pct` reaches 96, instead of
+freezing there, it now re-rolls to a random value in 96-99 every ~6 ticks
+(~1.5s) for as long as the real request takes — `holdTick` counter added
+alongside `pct`/`phraseIdx`. The number (and by extension the whole
+screen) now visibly changes at least every ~1.5s no matter how long the
+backend takes, so there is no wall-clock length of wait that can make
+this look stuck again. Syntax-verified (extracted and `node --check`'d
+every non-JSON-LD inline `<script>` block in all 7 files) before
+deploying.
+
 ## Critical bug found and fixed: a lost response could permanently lock a paying customer out of their credits (2026-11-17)
 
 Yoel was (rightly) anxious that repeated bugs kept surfacing despite
