@@ -94,8 +94,7 @@
                       "description": "DEGAJA – कुछ सवालों के जवाब दें और व्यक्तिगत आभा पाठन में अपनी आभा के रंग और ऊर्जा को जानें।"
               }
       };
-      var raw = new URLSearchParams(location.search).get("lang");
-      var mapped = ALIAS[raw] || raw;
+      function __applySeoMeta(mapped) {
       if (mapped && SUPPORTED.indexOf(mapped) !== -1) {
         var link = document.querySelector('link[rel="canonical"]');
         if (link) link.href = "https://www.degaja.com/aura.html?lang=" + mapped;
@@ -117,6 +116,11 @@
           document.documentElement.lang = mapped;
         }
       }
+      }
+      window.__applySeoMeta = __applySeoMeta;
+      var raw = new URLSearchParams(location.search).get("lang");
+      var mapped = ALIAS[raw] || raw;
+      __applySeoMeta(mapped);
     })();
   </script>
   <script type="application/ld+json">
@@ -1095,6 +1099,7 @@
   var lang = langWasExplicit ? mappedLang : (storedLang || "de");
   langWasExplicit = langWasExplicit || (!!storedLang && !storedLangIsAmbiguous);
   var ref = qs.get("ref") || qs.get("utm_source") || "aura";
+  try { window.__applySeoMeta && window.__applySeoMeta(lang === "us" ? "en" : (lang === "mx" ? "es" : lang)); } catch (_) {}
 
   // Same spirit as i18n.js on the main site: a real visitor-country guess
   // from Vercel's edge (see /api/geo.js) beats a hardcoded default — but
@@ -1129,6 +1134,7 @@
         if (!geoLang || geoLang === lang) return;
         lang = geoLang;
         langSelect.value = lang;
+        try { window.__applySeoMeta && window.__applySeoMeta(lang === "us" ? "en" : (lang === "mx" ? "es" : lang)); } catch (_) {}
         try { localStorage.setItem("degajaLang", geoLang); localStorage.setItem("degajaLangSource", "geo"); } catch (_) {}
         render();
       })

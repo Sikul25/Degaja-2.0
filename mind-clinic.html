@@ -91,8 +91,7 @@
                       "description": "DEGAJA – कुछ सवालों के जवाब दो और अपनी ज़िंदगी को आकार देने वाले अवचेतन पैटर्न को जानो।"
               }
       };
-      var raw = new URLSearchParams(location.search).get("lang");
-      var mapped = ALIAS[raw] || raw;
+      function __applySeoMeta(mapped) {
       if (mapped && SUPPORTED.indexOf(mapped) !== -1) {
         var link = document.querySelector('link[rel="canonical"]');
         if (link) link.href = "https://www.degaja.com/mind-clinic.html?lang=" + mapped;
@@ -114,6 +113,11 @@
           document.documentElement.lang = mapped;
         }
       }
+      }
+      window.__applySeoMeta = __applySeoMeta;
+      var raw = new URLSearchParams(location.search).get("lang");
+      var mapped = ALIAS[raw] || raw;
+      __applySeoMeta(mapped);
     })();
   </script>
   <script type="application/ld+json">
@@ -1092,6 +1096,7 @@
   var lang = langWasExplicit ? mappedLang : (storedLang || "de");
   langWasExplicit = langWasExplicit || (!!storedLang && !storedLangIsAmbiguous);
   var ref = qs.get("ref") || qs.get("utm_source") || "mind-clinic";
+  try { window.__applySeoMeta && window.__applySeoMeta(lang === "us" ? "en" : (lang === "mx" ? "es" : lang)); } catch (_) {}
 
   // Same spirit as i18n.js on the main site: a real visitor-country guess
   // from Vercel's edge (see /api/geo.js) beats a hardcoded default — but
@@ -1126,6 +1131,7 @@
         if (!geoLang || geoLang === lang) return;
         lang = geoLang;
         langSelect.value = lang;
+        try { window.__applySeoMeta && window.__applySeoMeta(lang === "us" ? "en" : (lang === "mx" ? "es" : lang)); } catch (_) {}
         try { localStorage.setItem("degajaLang", geoLang); localStorage.setItem("degajaLangSource", "geo"); } catch (_) {}
         render();
       })
