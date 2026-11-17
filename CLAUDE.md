@@ -1844,6 +1844,47 @@ changes it - mapping `us`→`en` and `mx`→`es` (SEO_META has no separate
 us/mx entries, same as the content-currency aliasing elsewhere). Applied
 identically across all 7 standalone pages.
 
+## TikTok Events API wired up server-side (2026-11-17)
+
+Yoel retrieved the real Events API Access Token from TikTok's Events
+Manager (Degaja pixel → Events API → Generate). Stored as
+`TIKTOK_EVENTS_API_ACCESS_TOKEN` in Vercel (production + preview) - a
+real secret, never committed to this repo, same discipline as the
+CCBill Datalink password above.
+
+`api/_tiktok.js`'s `sendTikTokPurchaseEvent()` POSTs a `Purchase` event
+to `business-api.tiktok.com/open_api/v1.3/event/track/`, called from
+`api/ccbill-webhook.js` right after it records a genuine
+`NewSaleSuccess` (looks up the order via `getOrder()` for
+amount/currency/email/type, same as `verify-ccbill-payment.js` does).
+This is a second, server-side path for the same conversion the browser
+pixel already sends - more reliable than browser-only tracking since it
+survives ad blockers and iOS tracking protection. Never blocks webhook
+processing or credit granting: wrapped in its own try/catch, a failure
+only gets `console.error`'d.
+
+Added `event_id: orderId` as the third argument to both client-side
+`ttq.track('Purchase', ...)` calls (`script.js`, `live-consult.js`) so
+TikTok can deduplicate the browser and server events into one
+conversion instead of double-counting - the server-side call uses the
+same `orderId` as `event_id` for this to actually match.
+
+**Endpoint/payload shape used** (`event_source: "web"`, `pixel_code`,
+`event`, `event_id`, `timestamp`, `context.user.email` sha256-hashed,
+`properties.contents`/`value`/`currency`) is TikTok's documented Events
+API v1.3 shape from training knowledge, not verified against a real
+TikTok-side confirmation (no network access to inspect their dashboard
+from this session). **Not yet confirmed**: whether a real postback
+actually succeeds end-to-end - check `get_runtime_logs` for
+`api/ccbill-webhook` after the next real/test CCBill payment for a
+"TikTok Events API non-OK response" or "call failed" error, and ask
+Yoel to check Events Manager's Diagnostics tab for the pixel (shows
+"Not ready for campaign" until real events land) to confirm server
+events are actually being received and matched with the browser ones.
+
+`script.js?v=` bumped 38→39, `live-consult.js?v=` bumped 33→34 in
+`index.html`.
+
 ## Behavioral notes
 
 - Never reintroduce Talmud/Judaism framing, or Chinese law/regulation
