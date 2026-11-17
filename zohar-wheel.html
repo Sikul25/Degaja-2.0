@@ -1493,7 +1493,7 @@
     var pct = 0, phraseIdx = 0;
     clearInterval(loadingTimer);
     loadingTimer = setInterval(function(){
-      pct = Math.min(96, pct + Math.round(4 + Math.random() * 9));
+      pct = Math.min(96, pct + Math.round(1.5 + Math.random() * 4));
       pctEl.textContent = pct + "%";
       var nextPhrase = Math.floor(pct / (100 / phrases.length));
       if (nextPhrase !== phraseIdx && nextPhrase < phrases.length) {
@@ -1714,7 +1714,6 @@
     lastQuestion = question;
     lastTopic = REVEAL_TOPIC[lang];
 
-    var minWait = new Promise(function(resolve){ setTimeout(resolve, 3200); });
     var request = fetchWithTimeout("/api/oracle", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -1726,7 +1725,7 @@
       })
     }, 45000).then(function(r){ return r.ok ? r.json() : null; }).catch(function(){ return null; });
 
-    Promise.all([request, minWait]).then(function(results){
+    Promise.all([request]).then(function(results){
       finishLoadingBar();
       var data = results[0];
       var text = (data && data.text) ? data.text : t().reveal_fallback;
@@ -1745,14 +1744,13 @@
     lastQuestion = pending.question;
     lastTopic = pending.topic || "";
     renderLoading(t().loading_phrases);
-    var minWait = new Promise(function(resolve){ setTimeout(resolve, 1200); });
     var request = fetchWithTimeout("/api/oracle", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ question: pending.question, topic: pending.topic || "", mode: "paid", lang: lang })
     }, 45000).then(function(r){ return r.ok ? r.json() : null; }).catch(function(){ return null; });
 
-    Promise.all([request, minWait]).then(function(results){
+    Promise.all([request]).then(function(results){
       finishLoadingBar();
       var data = results[0];
       var text = (data && data.text) ? data.text : t().reveal_fallback;
