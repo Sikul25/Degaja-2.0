@@ -7,7 +7,7 @@
 // isn't confirmed to echo those back, so this is the source of truth for
 // "what was purchased," while getOrderResult() is the source of truth for
 // "did CCBill approve or deny it."
-import { getOrder, getOrderResult, wasAlreadyRedeemed } from "./_ccbillOrders.js";
+import { getOrder, getOrderResult, peekAlreadyRedeemed } from "./_ccbillOrders.js";
 
 export default async function handler(req, res) {
   if (req.method !== "GET") return res.status(405).json({ error: "Method not allowed" });
@@ -23,7 +23,10 @@ export default async function handler(req, res) {
   // a real value and this check was always false for a genuine postback.
   const approved = result.eventType === "NewSaleSuccess" || result.eventType === "approval";
   const order = (await getOrder(orderId)) || {};
-  const alreadyRedeemed = approved && (await wasAlreadyRedeemed(orderId));
+  // Read-only - checking does NOT mark the order redeemed. The client
+  // marks it via /api/ack-ccbill-redemption, only after it has actually
+  // granted the credits, so a lost response here can safely be retried.
+  const alreadyRedeemed = approved && (await peekAlreadyRedeemed(orderId));
 
   return res.status(200).json({
     found: true,

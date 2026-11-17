@@ -243,10 +243,12 @@
       catch(_){await new Promise(res=>setTimeout(res,2500));continue;}
       if(!d.found){await new Promise(res=>setTimeout(res,2500));continue;}
       if(!d.approved||d.type!=='voice'){console.warn('DEGAJA payment verification failed');return;}
-      await fireTikTokPurchase(orderId,d);
+      if(d.alreadyRedeemed){return;}
       const advisor=d.advisorId?setSelectedAdvisor(d.advisorId):getSelectedAdvisor();
       localStorage.setItem('degajaPaidVoice','1');
       localStorage.setItem(SESSION_KEY,JSON.stringify({type:'voice',topics:d.topics||1,advisorId:advisor.id,orderId,verifiedAt:Date.now()}));
+      try{fetch('/api/ack-ccbill-redemption?order_id='+encodeURIComponent(orderId),{method:'POST',keepalive:true});}catch(_){}
+      await fireTikTokPurchase(orderId,d);
       call('paid',d.topics||1,advisor);
       return;
     }

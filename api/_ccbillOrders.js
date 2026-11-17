@@ -80,17 +80,39 @@ export async function getOrderResult(orderId) {
   return all[orderId] || null;
 }
 
-// Best-effort "already redeemed" tracking, same pattern/reasoning as
-// _redeemed.js (not atomic, but closes the realistic replay risk).
-export async function wasAlreadyRedeemed(orderId) {
+// Read-only check - never writes. Call this to decide whether to grant
+// credits. (Previously this function also wrote the "redeemed" marker on
+// every call, as a side effect of merely being asked - which meant the
+// FIRST poll that saw an approval mark the order redeemed immediately,
+// before the client had actually received/processed that response. If
+// that one HTTP response was lost (a network blip right after returning
+// from CCBill's page, a backgrounded tab, a client-side timeout racing a
+// slow reply - exactly the conditions this polling loop exists to survive
+// in the first place), every later poll would report alreadyRedeemed:true
+// forever, and the paying customer would never get their credits, with
+// no error shown. Fixed 2026-11-17: marking redeemed is now a separate,
+// explicit step (markRedeemed below) that the client calls only after it
+// has actually granted the credits locally.)
+export async function peekAlreadyRedeemed(orderId) {
+  const parts = edgeConfigParts();
+  if (!parts) return false;
+  const current = await readKey(parts, "ccbillRedeemedOrders");
+  return Boolean(current[orderId]);
+}
+
+// Explicit write, called once the client has actually granted credits for
+// this order - not merely checked whether it could. Best-effort, same
+// pattern/reasoning as _redeemed.js (not atomic, but closes the realistic
+// replay risk: reopening the same success URL/bookmark later).
+export async function markRedeemed(orderId) {
   const parts = edgeConfigParts();
   const token = process.env.VERCEL_API_TOKEN;
   if (!parts || !token) return false;
-  const current = await readKey(parts, "ccbillRedeemedOrders");
-  if (current[orderId]) return true;
-  const next = pruneOld({ ...current, [orderId]: { createdAt: Date.now() } });
   try {
-    await writeKey(parts, token, "ccbillRedeemedOrders", next);
-  } catch (_) { /* worst case this order can be replayed once more */ }
-  return false;
+    const current = await readKey(parts, "ccbillRedeemedOrders");
+    const next = pruneOld({ ...current, [orderId]: { createdAt: Date.now() } });
+    return await writeKey(parts, token, "ccbillRedeemedOrders", next);
+  } catch (_) {
+    return false;
+  }
 }

@@ -397,6 +397,11 @@
 
       setAiCredits(getAiCredits() + (Number(data.credits) || 1));
 
+      // Mark redeemed only now, after credits are actually granted locally -
+      // not as a side effect of merely checking above. keepalive so this
+      // survives the location.href navigation that can happen right after.
+      try { fetch(`/api/ack-ccbill-redemption?order_id=${encodeURIComponent(orderId)}`, { method: "POST", keepalive: true }); } catch (_) { /* best-effort */ }
+
       await fireTikTokPurchase(orderId, data);
 
       let pending = null;
