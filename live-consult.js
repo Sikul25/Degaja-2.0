@@ -1,6 +1,20 @@
 (() => {
   'use strict';
   const $ = (s,r=document) => r.querySelector(s);
+
+  async function sha256Hex(str){const bytes=new TextEncoder().encode(str);const digest=await window.crypto.subtle.digest('SHA-256',bytes);return Array.from(new Uint8Array(digest)).map(b=>b.toString(16).padStart(2,'0')).join('')}
+  async function fireTikTokPurchase(orderId,d){
+    try{
+      if(typeof window.ttq?.track!=='function')return;
+      const normalizedEmail=(d.customerEmail||'').trim().toLowerCase();
+      if(normalizedEmail&&window.crypto?.subtle){window.ttq.identify({email:await sha256Hex(normalizedEmail)});}
+      window.ttq.track('Purchase',{
+        contents:[{content_id:orderId,content_type:'product',content_name:d.type||'voice'}],
+        value:Number(d.amount)||undefined,
+        currency:(d.currency||'').toUpperCase()||undefined
+      });
+    }catch(_){}
+  }
   const CREDIT_KEY = 'degajaVoiceCredits';
   const SESSION_KEY = 'degajaVoiceSession';
   const ADVISOR_KEY = 'degajaSelectedAdvisor';
@@ -229,7 +243,7 @@
       catch(_){await new Promise(res=>setTimeout(res,2500));continue;}
       if(!d.found){await new Promise(res=>setTimeout(res,2500));continue;}
       if(!d.approved||d.type!=='voice'){console.warn('DEGAJA payment verification failed');return;}
-      try{if(typeof window.ttq?.track==='function'){window.ttq.track('CompletePayment',{content_type:'product',content_id:orderId,value:Number(d.amount)||undefined,currency:(d.currency||'').toUpperCase()||undefined});}}catch(_){}
+      await fireTikTokPurchase(orderId,d);
       const advisor=d.advisorId?setSelectedAdvisor(d.advisorId):getSelectedAdvisor();
       localStorage.setItem('degajaPaidVoice','1');
       localStorage.setItem(SESSION_KEY,JSON.stringify({type:'voice',topics:d.topics||1,advisorId:advisor.id,orderId,verifiedAt:Date.now()}));

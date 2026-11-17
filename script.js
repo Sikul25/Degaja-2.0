@@ -328,6 +328,28 @@
 
   function sleep(ms) { return new Promise(resolve => setTimeout(resolve, ms)); }
 
+  // TikTok's Advanced Matching wants PII hashed client-side before ttq.identify().
+  async function sha256Hex(str) {
+    const bytes = new TextEncoder().encode(str);
+    const digest = await window.crypto.subtle.digest("SHA-256", bytes);
+    return Array.from(new Uint8Array(digest)).map(b => b.toString(16).padStart(2, "0")).join("");
+  }
+
+  async function fireTikTokPurchase(orderId, data) {
+    try {
+      if (typeof window.ttq?.track !== "function") return;
+      const normalizedEmail = (data.customerEmail || "").trim().toLowerCase();
+      if (normalizedEmail && window.crypto?.subtle) {
+        window.ttq.identify({ email: await sha256Hex(normalizedEmail) });
+      }
+      window.ttq.track("Purchase", {
+        contents: [{ content_id: orderId, content_type: "product", content_name: data.type || "reading" }],
+        value: Number(data.amount) || undefined,
+        currency: (data.currency || "").toUpperCase() || undefined
+      });
+    } catch (_) { /* never block credit granting on pixel issues */ }
+  }
+
   async function verifyAiPayment() {
     const params = new URLSearchParams(location.search);
     const flag = params.get("payment");
@@ -375,16 +397,7 @@
 
       setAiCredits(getAiCredits() + (Number(data.credits) || 1));
 
-      try {
-        if (typeof window.ttq?.track === "function") {
-          window.ttq.track("CompletePayment", {
-            content_type: "product",
-            content_id: orderId,
-            value: Number(data.amount) || undefined,
-            currency: (data.currency || "").toUpperCase() || undefined
-          });
-        }
-      } catch (_) { /* ignore - never block credit granting on pixel issues */ }
+      await fireTikTokPurchase(orderId, data);
 
       let pending = null;
       try { pending = JSON.parse(localStorage.getItem(PENDING_READING_KEY) || "null"); } catch (_) { /* ignore */ }
