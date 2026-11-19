@@ -2684,6 +2684,41 @@ expect.
 `script.js?v=` bumped 43→44, `live-consult.js?v=` bumped 44→45, both
 in `index.html` (and `live-consult.js` also in `live-call.html`).
 
+## Live advisor: audio dying mid-call gave no feedback - ICE state was never watched (2026-11-19)
+
+Yoel reported a real test call with Papuli: they talked, then "she stopped
+hearing me and I [stopped hearing] her, that's it" - the call didn't
+visibly end or error, audio just died on both sides mid-conversation.
+
+**Root cause**: `live-consult.js`'s WebRTC layer (PeerJS) already handles
+two failure modes - the signaling socket disconnecting
+(`peer.on('disconnected')` → `peer.reconnect()`) and the MediaConnection
+itself closing (`c.on('close')`) - both update `#degajaStatus`/`status`
+with `live.reconnecting`. But neither of those necessarily fires when the
+actual media path (the underlying `RTCPeerConnection`'s ICE connection)
+degrades or dies from a NAT/TURN relay drop or a network change - the
+PeerJS-level objects can stay "open" while audio is already dead on both
+ends. Status was left stuck on whatever it last said (usually
+`live.liveConnected`) with zero indication anything had gone wrong - the
+same "looks like nothing happened" bug class found repeatedly today, this
+time in the WebRTC layer instead of a fetch/form flow.
+
+**Fixed**: both `call()` (customer side) and `advisorJoin()`'s `tryCall()`
+(advisor side) now also watch `c.peerConnection.oniceconnectionstatechange`
+directly - `disconnected` shows the existing `live.reconnecting` message
+(WebRTC can recover from this transient state on its own), `failed` shows
+a new `live.connectionLost` message ("Connection lost. Please end the
+call and try again.", all 11 languages) since that state doesn't recover
+on its own and the visitor needs to know to redial, and
+`connected`/`completed` restores `live.liveConnected`. This doesn't make
+a failed connection recover by itself (that's a real network/TURN-relay
+limitation, same congested-public-TURN risk already flagged in the
+2026-11-12 WebRTC entry above) - it only makes sure the problem is never
+invisible again.
+
+`i18n.js?v=` bumped 85→86 across all 10 files that load it;
+`live-consult.js?v=` bumped 45→46 in `index.html` and `live-call.html`.
+
 ## Behavioral notes
 
 - Never reintroduce Talmud/Judaism framing, or Chinese law/regulation

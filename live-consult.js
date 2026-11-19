@@ -367,6 +367,21 @@
           }
         });
         c.on('close',()=>{ if(!window.__degajaManualEnd){const s=$('#degajaStatus');if(s)s.textContent=t('live.reconnecting')} });
+        // The media path can die (ICE disconnected/failed - a NAT/TURN
+        // relay drop, a network change) without PeerJS's own signaling
+        // socket disconnecting and without this MediaConnection ever
+        // firing 'close' - status stayed stuck on "connected" while audio
+        // was actually dead on both ends, reading as the call just
+        // silently stopped working. Watch the underlying RTCPeerConnection
+        // directly so a real break always shows something.
+        const pc=c.peerConnection;
+        if(pc) pc.oniceconnectionstatechange=()=>{
+          if(window.__degajaManualEnd) return;
+          const s=$('#degajaStatus');if(!s) return;
+          if(pc.iceConnectionState==='disconnected') s.textContent=t('live.reconnecting');
+          else if(pc.iceConnectionState==='failed') s.textContent=t('live.connectionLost');
+          else if(pc.iceConnectionState==='connected'||pc.iceConnectionState==='completed') s.textContent=t('live.liveConnected');
+        };
       });
       peer.on('disconnected',()=>{
         if(window.__degajaManualEnd) return;
@@ -407,6 +422,17 @@
           status.textContent=t('live.reconnecting');
           setTimeout(tryCall,3000);
         });
+        // Same gap as the customer side (call()) - the media path can die
+        // without this MediaConnection ever closing, leaving status stuck
+        // on "connected" while audio is actually dead. Watch the real ICE
+        // state directly.
+        const pc=c.peerConnection;
+        if(pc) pc.oniceconnectionstatechange=()=>{
+          if(window.__degajaAdvisorManualEnd) return;
+          if(pc.iceConnectionState==='disconnected') status.textContent=t('live.reconnecting');
+          else if(pc.iceConnectionState==='failed') status.textContent=t('live.connectionLost');
+          else if(pc.iceConnectionState==='connected'||pc.iceConnectionState==='completed') status.textContent=t('live.liveConnected');
+        };
       };
       peer.on('open',tryCall);
       peer.on('disconnected',()=>{
