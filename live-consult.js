@@ -18,6 +18,11 @@
   const CREDIT_KEY = 'degajaVoiceCredits';
   const SESSION_KEY = 'degajaVoiceSession';
   const ADVISOR_KEY = 'degajaSelectedAdvisor';
+  // One-shot marker set by verify() right before redirecting a confirmed
+  // voice payment to live-call.html - resumeCall() on that page's own
+  // init() consumes it and starts the call directly (the payment is
+  // already fully resolved and redeemed by the time this flag is set).
+  const RESUME_FLAG = 'degajaResumeCall';
   const MAX_CALL_MS = 30*60*1000;
   const WARNING_MS = MAX_CALL_MS - 5*60*1000;
   // Fallback data only — the real source of truth is GET /api/advisors,
@@ -251,18 +256,40 @@
       try{const r=await doFetch('/api/verify-ccbill-payment?order_id='+encodeURIComponent(orderId),{},15000);d=await r.json();}
       catch(_){await new Promise(res=>setTimeout(res,2500));continue;}
       if(!d.found){await new Promise(res=>setTimeout(res,2500));continue;}
-      // Got a definitive answer - stop retrying and clear the pending marker.
+      if(d.type!=='voice'){
+        // Not ours - this shares CCBILL_ORDER_KEY with script.js's own
+        // poller for AI-reading orders, so leave the key untouched and let
+        // that handler resolve and clear it instead of deleting it here.
+        return;
+      }
+      // Got a definitive answer for a voice order - stop retrying and clear the pending marker.
       try{localStorage.removeItem(CCBILL_ORDER_KEY)}catch(_){}
-      if(!d.approved||d.type!=='voice'){console.warn('DEGAJA payment verification failed');return;}
+      if(!d.approved){console.warn('DEGAJA payment verification failed');return;}
       if(d.alreadyRedeemed){return;}
       const advisor=d.advisorId?setSelectedAdvisor(d.advisorId):getSelectedAdvisor();
       localStorage.setItem('degajaPaidVoice','1');
       localStorage.setItem(SESSION_KEY,JSON.stringify({type:'voice',topics:d.topics||1,advisorId:advisor.id,orderId,verifiedAt:Date.now()}));
       try{fetch('/api/ack-ccbill-redemption?order_id='+encodeURIComponent(orderId),{method:'POST',keepalive:true});}catch(_){}
       await fireTikTokPurchase(orderId,d);
-      call('paid',d.topics||1,advisor);
+      // Land the customer on a dedicated, single-feature page for the call
+      // itself instead of leaving them on the busy homepage - resumeCall()
+      // (called from init() on page load) picks this flag up there and
+      // starts the call directly, since the payment is already fully
+      // resolved and redeemed at this point.
+      try{localStorage.setItem(RESUME_FLAG,'1')}catch(_){}
+      location.href='live-call.html';
       return;
     }
+  }
+
+  function resumeCall(){
+    let flag=false; try{flag=localStorage.getItem(RESUME_FLAG)==='1'}catch(_){}
+    if(!flag)return;
+    try{localStorage.removeItem(RESUME_FLAG)}catch(_){}
+    let session=null; try{session=JSON.parse(localStorage.getItem(SESSION_KEY)||'null')}catch(_){}
+    if(!session||session.type!=='voice')return;
+    const advisor=session.advisorId?setSelectedAdvisor(session.advisorId):getSelectedAdvisor();
+    call('paid',session.topics||1,advisor);
   }
 
   function peerScript(){return new Promise((ok,no)=>{if(window.Peer)return ok();const s=document.createElement('script');s.src='https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js';s.onload=ok;s.onerror=no;document.head.appendChild(s)})}
@@ -416,7 +443,7 @@
   function init(){
     // The live human advisor only speaks German, Russian and Ukrainian.
     if(window.degajaI18n && !window.degajaI18n.hasLiveAdvisor()) return;
-    style();card();verify();openAdvisorJoinLink();
+    style();card();verify();resumeCall();openAdvisorJoinLink();
     loadRemoteData().then(()=>{
       const select=document.getElementById('degajaAdvisorSelect');
       if(select){ select.innerHTML=advisorOptions(); select.value=getSelectedAdvisor().id; }

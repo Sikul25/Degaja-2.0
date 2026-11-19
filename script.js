@@ -388,10 +388,18 @@
         continue;
       }
 
-      // Got a definitive answer - stop retrying and clear the pending marker.
+      if (data.type !== "ai") {
+        // Not ours - this shares CCBILL_ORDER_KEY with live-consult.js's own
+        // poller for voice orders, so leave the key untouched and let that
+        // handler (which owns this type) resolve and clear it, now or on a
+        // later page load, instead of us deleting it out from under it.
+        return;
+      }
+
+      // Got a definitive answer for an AI order - stop retrying and clear the pending marker.
       try { localStorage.removeItem(CCBILL_ORDER_KEY); } catch (_) { /* ignore */ }
 
-      if (!data.approved || data.type !== "ai") return;
+      if (!data.approved) return;
 
       state.paidAccess = true;
       localStorage.setItem("degajaPaidAccess", "1");

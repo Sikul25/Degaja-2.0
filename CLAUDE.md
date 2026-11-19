@@ -1973,6 +1973,64 @@ re-pay.
 `script.js?v=` bumped 39→40, `live-consult.js?v=` bumped 34→35 in
 `index.html` (only file that loads either, confirmed via grep).
 
+## New feature: dedicated live-call.html page instead of landing on the busy homepage (2026-11-19)
+
+Same day as the webhook-recovery fix above, Yoel tested the full flow end
+to end and objected to the result on UX grounds, not just the bug: even
+once the payment resolves correctly, a paying live-advisor customer was
+dropped back onto the full, busy homepage (`index.html`, with every other
+feature visible) to find their call - "אי אפשר לחזור לבלבלה עם המון
+פיצ'רים... בוצע תשלום נפתח עמוד רק עם הפיצר שבחרנו" (can't go back to a
+mess with a ton of features... once payment happens, open a page with
+only the feature they picked). This is a real architecture decision, not
+a bug - CCBill's own Approval/Denial redirect URL is fixed at the portal
+level for the whole account (always `https://www.degaja.com/?payment=success`,
+same for every product), so there's no way to have CCBill itself redirect
+straight to a different page per product type.
+
+**Fixed** by adding a client-side hop, the same pattern already used for
+AI-reading standalone pages' "resume on the page it started from" flow
+(see "Cross-page payment resumption" below), applied to voice bookings
+for the first time:
+- New `live-call.html`: a minimal, single-purpose page - just the DEGAJA
+  header/footer and an empty `#degajaCall` container (falls back to a
+  "no active call" message + link home if visited with nothing pending).
+  Loads `i18n.js` and `live-consult.js` exactly like `index.html` does.
+- `live-consult.js`'s `verify()`: once a voice payment is confirmed (same
+  resolution as before - `setSelectedAdvisor`, `SESSION_KEY` stash,
+  ack-redemption, TikTok event), it no longer calls `call('paid', ...)`
+  directly inline. It sets a new one-shot `RESUME_FLAG`
+  (`degajaResumeCall`) in localStorage and does
+  `location.href='live-call.html'` instead.
+  - New `resumeCall()`, called from `init()` right after `verify()`:
+    checks `RESUME_FLAG`, consumes it (removes it immediately, one-shot),
+    reads the already-stashed `SESSION_KEY` session, and calls
+    `call('paid', session.topics, advisor)` directly - no network
+    round-trip needed here, since the payment was already fully resolved
+    before the redirect.
+  - This means `index.html` still owns the *booking* UI (advisor cards,
+    checkout button inside `#human`) unchanged - only the *post-payment*
+    landing moved off it.
+
+**Fixed a related, previously-latent bug found while building this**:
+`script.js`'s `verifyAiPayment()` and `live-consult.js`'s `verify()` both
+poll the *same* `CCBILL_ORDER_KEY`/`/api/verify-ccbill-payment` for every
+order, each filtering by the type it owns (`"ai"` vs `"voice"`). Before
+this fix, whichever one got a "found" response first deleted the shared
+key regardless of whether the type matched its own - harmless within a
+single page load (each had already captured its own `orderId` into a
+local variable before any deletion), but it meant a mismatched-type
+delete on one visit could erase the *other* handler's only way to retry
+a still-unresolved order on a later visit, defeating the webhook-recovery
+fix above for whichever order type lost that race. Fixed: each function
+now only clears `CCBILL_ORDER_KEY` when the resolved order's type
+actually matches what it handles; a type it doesn't own is left
+completely untouched for the other handler.
+
+`live-consult.js?v=` bumped 35→36 in both `index.html` and the new
+`live-call.html`; `i18n.js?v=` already at 77 (added one new key,
+`live.noActiveCall`, translated into all 11 base languages).
+
 ## Behavioral notes
 
 - Never reintroduce Talmud/Judaism framing, or Chinese law/regulation
