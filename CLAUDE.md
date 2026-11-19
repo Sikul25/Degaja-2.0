@@ -2752,6 +2752,13 @@ dead air) remains the real safety net regardless.
 
 `live-consult.js?v=` bumped 46→47 in `index.html` and `live-call.html`.
 
+**CONFIRMED WORKING 2026-11-19**: Yoel ran a real test call with Papuli
+while she was out (moving, on a mobile network, not at home on WiFi) -
+"גם כשהיא בחוץ הקול צלול זורם ולא נקטע" (even outside, the voice is
+clear, flows, and doesn't cut out). No further changes needed here - the
+dedicated TURN credential appears to have genuinely fixed the real
+root cause, not just added better failure feedback.
+
 ## Behavioral notes
 
 - Never reintroduce Talmud/Judaism framing, or Chinese law/regulation
