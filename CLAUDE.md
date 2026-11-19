@@ -2379,6 +2379,54 @@ is ever added, their calls would silently notify the wrong
 person/number too. Remove this env var once testing is done and the
 per-advisor `ADVISOR_WHATSAPP` mapping should be trusted on its own.
 
+**2026-11-19, same day, follow-up: `META_WA_TOKEN`/`META_WA_PHONE_NUMBER_ID`
+replaced with fresh, confirmed-correct values.** Walked Yoel through
+Meta's own UI directly (screenshots at each step) since neither of us
+could find where the original September setup lived. Real findings,
+in case this needs retracing:
+- The original Meta app was never missing or owned by someone else -
+  it was sitting the whole time under Yoel's own **Sagacitas Brands**
+  business portfolio in Business Manager (confirmed: Sagacitas Ltd is
+  the same legal entity named in the site footer), just under a
+  different, forgotten business portfolio than the "Pradixium" one he
+  happened to be logged into when we first went looking.
+- Along the way, before that was found, a **second, new Meta app** (also
+  named "Degaja") was created from scratch via developers.facebook.com
+  and its WhatsApp Quickstart gave a temporary 24h token + the same
+  underlying test number (`+1 555 193 0134`) and a Phone Number ID
+  (`1416565834863284`) - both were set in Vercel first, as a working
+  stopgap. **Two "Degaja" apps now exist** - harmless (no conflict,
+  since the phone number/WABA access is tied to the System User's
+  asset assignment, not to which app a token is generated through) but
+  messy; cleanup (deleting the redundant new one) deferred, Yoel's
+  call, not urgent.
+- The **permanent fix**: found an existing System User ("Degaja WU",
+  Admin access) already under Sagacitas Brands' Business Settings ->
+  System Users, already holding Full access to the WhatsApp Business
+  Account/app assets - this was very likely the original September
+  setup. Generated a new **non-expiring** access token for it (Token
+  expiry: Never; permissions: `whatsapp_business_messaging` +
+  `whatsapp_business_management`) through Business Settings -> System
+  Users -> Degaja WU -> Generate token. One real hiccup along the way:
+  the token wizard's "Assign permissions" step first said "No
+  permissions available" when generating against the brand-new app
+  (it has no App Role assigned to this System User) - selecting the
+  **older, original** "Degaja" app entry in the "Select app" dropdown
+  instead worked immediately, confirming that's the one the System
+  User already had a proper role on.
+- Both `META_WA_TOKEN` (now the permanent System User token) and
+  `META_WA_PHONE_NUMBER_ID` (`1416565834863284`) are set in Vercel
+  (production + preview). **Still not independently confirmed**: a
+  real test call with Papuli hasn't been retried since these were set -
+  don't assume this is fully resolved until that happens. The approved
+  WhatsApp message template with a dynamic URL button (the actual fix
+  for the join-link ever being delivered, per the entry above) also
+  still hasn't been created - that's still the real remaining blocker,
+  unchanged by this token work. This token swap alone does not fix the
+  underlying `hello_world`-fallback problem; it only replaces stale/
+  temporary credentials with a correct, durable one for when the
+  template work happens.
+
 ## Behavioral notes
 
 - Never reintroduce Talmud/Judaism framing, or Chinese law/regulation
