@@ -2503,6 +2503,25 @@ don't assume today's display-only version implies that's wanted too.
 `i18n.js?v=` bumped 79→80 across all 10 files that load it;
 `live-consult.js?v=` bumped 40→41 in `index.html` and `live-call.html`.
 
+## Live advisor: "urgent? email" note added to her public card (2026-11-19)
+
+Same day as the working-hours display feature above, Yoel confirmed
+("כן לדברים דחופים אי מייל" - yes, for urgent matters, email) adding a
+second, display-only line to Papuli's card: a note telling a visitor to
+email `info@degaja.com` if something is urgent (since the hours line
+above already tells them when NOT to expect her live). New
+`live.advisorUrgent` i18n key added to all 11 base languages,
+right after the existing `live.advisorHours` key on each line (e.g. en:
+"Urgent? Email: info@degaja.com", de: "Dringend? E-Mail:
+info@degaja.com"). Rendered in `live-consult.js`'s `advisorCards()`
+right after the hours `<span>`, reusing the same `.advisor-languages`
+CSS class - no new CSS, same pattern as the hours feature. Unconditional
+(always shown, no `a.hours`-style guard) since it's a static contact
+note, not per-advisor data.
+
+`i18n.js?v=` bumped 80→81 across all 10 files that load it;
+`live-consult.js?v=` bumped 41→42 in `index.html` and `live-call.html`.
+
 ## Behavioral notes
 
 - Never reintroduce Talmud/Judaism framing, or Chinese law/regulation
