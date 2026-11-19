@@ -2074,7 +2074,7 @@ again and found two more things, both real:
 
 `live-consult.js?v=` bumped 36→37 in both files for this second round.
 
-**Same day, third round: two more real bugs caught while retesting.**
+**Same day, third round: three more real bugs caught while retesting.**
 1. **No way to sign in from `live-call.html`**: the whole sign-in
    modal/form lives only in `script.js`/`index.html` (`#modal`,
    `authView()`, etc.) - `live-call.html` doesn't load `script.js` at all.
@@ -2086,7 +2086,16 @@ again and found two more things, both real:
    init, alongside `verifyAiPayment()`) opens the sign-in modal
    automatically when that param is present, landing the visitor right at
    `#human` so they can click "Start Call" again once signed in.
-2. **Advisor cards never reflected real availability**: Yoel reported
+2. **The "Sign in" link never actually rendered gold** - it used
+   `class="gold"`, but that class only has a visual effect inside a
+   `.degaja-live` ancestor wrapper (`.degaja-live .gold{...}` in the CSS
+   `style()` injects), which only exists on `index.html` via `card()` -
+   never on `live-call.html`. So the link rendered as plain unstyled
+   text there, not a button at all. **Fixed**: styled it with inline
+   `background`/`color` directly instead of depending on that scoped
+   class, so it renders as a real gold button regardless of which page
+   it's on.
+3. **Advisor cards never reflected real availability**: Yoel reported
    Papuli showing offline on the homepage despite being online - checked
    directly against the live `/api/advisors` endpoint and Edge Config,
    both confirmed `available: true` at the time, ruling out a server bug.

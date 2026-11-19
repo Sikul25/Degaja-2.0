@@ -176,7 +176,7 @@
       // page has no copy of it, so link back there with ?login=1 (opens
       // the sign-in modal automatically) instead of leaving the visitor
       // with no way to actually sign in from here.
-      host.innerHTML=`<div class="degaja-call-panel"><b>${t('live.pleaseSignIn')}</b><p class="degaja-live-copy">${t('live.pleaseSignInDesc')}</p><a href="index.html?login=1#human" class="gold" style="display:inline-block;text-decoration:none;border-radius:999px;padding:12px 18px;font-weight:800;margin-top:10px">${t('nav.login')} →</a></div>`;
+      host.innerHTML=`<div class="degaja-call-panel"><b>${t('live.pleaseSignIn')}</b><p class="degaja-live-copy">${t('live.pleaseSignInDesc')}</p><a href="index.html?login=1#human" style="display:inline-block;text-decoration:none;border-radius:999px;padding:12px 18px;font-weight:800;margin-top:10px;background:#b88a32;color:#fff">${t('nav.login')} →</a></div>`;
       return;
     }
     const a=getSelectedAdvisor();
