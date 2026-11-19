@@ -2427,6 +2427,82 @@ in case this needs retracing:
   temporary credentials with a correct, durable one for when the
   template work happens.
 
+## CCBill/WhatsApp advisor notification saga - confirmed resolved end-to-end (2026-11-19)
+
+Closing out the long investigation above. After the permanent System User
+token + Phone Number ID were set, Yoel ran a real test: Papuli sent one
+WhatsApp message ("Hallo") to the business number first (opening
+WhatsApp's 24h customer-service window), then Yoel completed a real
+CCBill test booking through `live-call.html`. Confirmed via production
+runtime logs: `api/notify-advisor` fired at 15:18 UTC and got **two**
+"Meta WhatsApp accepted" responses (the `hello_world` opener + the real
+free-text message with the join link) - both delivered this time, unlike
+every earlier attempt. Papuli received the real message, opened the link,
+and the call auto-joined successfully. The call then dropped - but that
+was because she was driving at the time, not a technical failure.
+
+**Current working state**:
+- The underlying WhatsApp API connection (token, phone number, system
+  user) is confirmed correct and working.
+- **Interim solution, confirmed working now**: Papuli must send one
+  WhatsApp message (anything) to the business number
+  (+1 555 193 0134) at the start of each day/shift she's available -
+  this opens the 24h window so the real notification (with the
+  tappable join link) delivers via the `hello_world`+free-text fallback
+  path in `api/_whatsapp.js`. Without this, only `hello_world` arrives
+  and the link never does (per the entry above).
+- **Permanent fix, still pending**: the approved WhatsApp message
+  template (`degaja_session_code`, Utility category, dynamic URL button)
+  was submitted for Meta's review - hit a real "Category does not match"
+  validation twice before submission succeeded: Meta's own classifier
+  reads a visible 6-digit "{{2}}" number in the body as looking like an
+  authentication/OTP code, which conflicts with the Utility category.
+  **Fixed in the submitted template**: removed the numeric code variable
+  from the visible body text entirely (the code already travels via the
+  button's dynamic URL, so showing it again as `{{2}}` in the body was
+  redundant and was specifically what triggered the mismatch) - final
+  body uses only `{{1}}` (the customer's name). Once Meta approves it,
+  give the exact template name to set as `META_TEMPLATE_SESSION_CODE` in
+  Vercel - that removes the daily-message requirement above for good.
+
+Separately found in the same production log check, unrelated to the
+above and not blocking anything: `api/ccbill-webhook.js`'s TikTok
+Events API call got a 401 "Access token is incorrect or has been
+revoked" - `TIKTOK_EVENTS_API_ACCESS_TOKEN` (set 2026-11-17) appears to
+have expired or been revoked. Only affects TikTok ad-bid optimization
+data, never payment/credit granting (wrapped in its own try/catch per
+that entry above). Not fixed yet - ask Yoel to generate a fresh token
+from TikTok Events Manager next time this comes up.
+
+## Live advisor: working hours shown on her public card (2026-11-19)
+
+Yoel asked to add Papuli's working hours, explicitly for **display to
+customers only** - not enforced/blocking booking outside those hours
+(his own stated reasoning for the split hours: she's often driving
+mid-day, which is unsafe to take a call during, hence two blocks rather
+than one continuous day).
+
+Added a `hours` field to her `ADVISORS` entry in `api/_data.js`
+(`"08:00–12:00, 18:00–24:00"`) - flows straight through to the public
+`/api/advisors` response since that endpoint already spreads the whole
+entry (`{ ...a, available }`), no server change needed there. Rendered
+in `live-consult.js`'s `advisorCards()` right below the existing
+"Speaks: ..." languages line, same pattern/styling - new
+`live.advisorHours` i18n key added to all 11 base languages. Also
+mirrored in `live-consult.js`'s own `fallbackAdvisors` constant so it
+shows even before `/api/advisors` resolves.
+
+**Purely informational, as asked** - nothing in `api/checkout.js`,
+`notify-advisor.js`, or the availability toggle was changed to actually
+block or warn about booking outside these hours. If Yoel later wants
+real enforcement (e.g. hiding/disabling booking outside the stated
+hours, or auto-toggling her availability by a clock), that's a
+separate, larger feature - ask him explicitly before building it,
+don't assume today's display-only version implies that's wanted too.
+
+`i18n.js?v=` bumped 79→80 across all 10 files that load it;
+`live-consult.js?v=` bumped 40→41 in `index.html` and `live-call.html`.
+
 ## Behavioral notes
 
 - Never reintroduce Talmud/Judaism framing, or Chinese law/regulation

@@ -30,7 +30,7 @@
   // Used only if that request fails (e.g. offline).
   let prices = {1:'49,99',2:'89,90',3:'119,90'};
   const fallbackAdvisors = [
-    {id:'papuli',name:'Papuli',title:'Tarot, Astrologie & Zukunft',languages:['de','ru','uk']}
+    {id:'papuli',name:'Papuli',title:'Tarot, Astrologie & Zukunft',languages:['de','ru','uk'],hours:'08:00–12:00, 18:00–24:00'}
   ];
   // Native names, shown regardless of the viewer's own UI language so a
   // visitor always recognizes them (e.g. "Deutsch" reads the same to
@@ -128,6 +128,7 @@
           <span class="advisor-card-name">${esc(a.name)}${dotClass ? `<span class="advisor-dot ${dotClass}"></span>` : ''}</span>
           <span class="advisor-card-title">${esc(advisorTitle(a))}</span>
           ${languages ? `<span class="advisor-languages">${esc(t('live.advisorSpeaks'))} ${esc(languages)}</span>` : ''}
+          ${a.hours ? `<span class="advisor-languages">${esc(t('live.advisorHours'))} ${esc(a.hours)}</span>` : ''}
           ${tags ? `<span class="advisor-tags">${tags}</span>` : ''}
           ${statusLabel ? `<span class="advisor-card-status ${dotClass}">${esc(statusLabel)}</span>` : ''}
         </span>

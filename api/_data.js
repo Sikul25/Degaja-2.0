@@ -9,8 +9,10 @@
 // languages: ISO codes the advisor can actually hold a live conversation
 // in - shown on her public card (live-consult.js) so a visitor never books
 // a session expecting a language she doesn't speak.
+// hours: display-only working hours shown on her public card - informational,
+// not enforced server-side (booking isn't blocked outside these hours).
 export const ADVISORS = [
-  { id: "papuli", name: "Papuli", title: "Tarot, Astrologie & Zukunft", specialty: ["Tarot", "Liebe & Beziehung", "Zukunft", "Astrologie", "Numerologie"], style: "warm, intuitiv, empathisch und direkt", active: true, languages: ["de", "ru", "uk"] }
+  { id: "papuli", name: "Papuli", title: "Tarot, Astrologie & Zukunft", specialty: ["Tarot", "Liebe & Beziehung", "Zukunft", "Astrologie", "Numerologie"], style: "warm, intuitiv, empathisch und direkt", active: true, languages: ["de", "ru", "uk"], hours: "08:00–12:00, 18:00–24:00" }
 ];
 
 export const ADVISOR_CAPACITY = 100;
