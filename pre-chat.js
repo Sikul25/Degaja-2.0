@@ -19,7 +19,7 @@
   function render() {
     const old = $('#degajaPreChat');
     if (old) return;
-    const wrap = $('#human .human-wrap');
+    const wrap = $('#freechat .human-wrap');
     if (!wrap) return;
     const state = load();
     const el = document.createElement('div');
