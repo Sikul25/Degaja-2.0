@@ -2139,6 +2139,14 @@ banner. If the "consolidate features" redesign (still unresolved, see
 below) happens, this stack is a concrete, visible example of exactly the
 clutter being described and a natural first thing to address.
 
+**Same day, follow-up**: Yoel asked for the 7 banners to be pushed down a
+bit so navigation is reachable - they were the literal first thing in
+`<body>`, before even the header, so the logo/nav/login button were only
+reachable after scrolling past all 7. Reordered `index.html`'s top of
+`<body>`: `.page-glow` + `<header>` now come first, the 7 trend banners
+right after - same content, same styling, just the header is immediately
+visible on load instead of buried below a wall of banners.
+
 **Still open, not yet acted on**: Yoel separately raised a much bigger,
 genuinely ambiguous ask in the same message - consolidating "features
 under 7" into a menu on a separate page, after relaying that Papuli
