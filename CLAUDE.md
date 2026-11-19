@@ -2609,6 +2609,32 @@ without him deciding to invest in it.
 
 `script.js?v=` bumped 41→42 in `index.html` (only file that loads it).
 
+**Same day, follow-up - the fix above wasn't the whole story.** Yoel
+reported it was still broken: a customer who signed up and came back
+days later with the same saved email+password still got stuck needing
+a new account - and critically, "it doesn't give an error, it just
+doesn't let you in" (no error message at all, unlike the old
+`errNotFound` behavior). Re-reading the fix: it DID correctly restore
+the local account and call `closeModal()` - but closing the modal
+silently, with no success message and no visible change anywhere on
+the page, is indistinguishable from "nothing happened" to someone
+watching. `saveUser()` was genuinely called, `state.user` was genuinely
+set - there was no bug in the restore logic itself, but zero feedback
+made a real fix look like a non-fix. (Separately, it's also possible
+some of what Yoel re-tested was still hitting the deploy from the first
+fix landing, not a second distinct failure - but the missing-feedback
+gap is real and worth fixing regardless.)
+
+**Fixed**: added a new `auth.successSignin` i18n key (all 11 languages,
+e.g. en: "Signed in. Welcome back.") shown on successful sign-in, then
+`accountView()` opens automatically after 500ms (same timing pattern as
+signup's existing `auth.successCreate` + `setTimeout(closeModal, 500)`)
+- showing the visitor their name/email/access status is actual visible
+proof they're in, instead of the modal just closing to nothing.
+
+`i18n.js?v=` bumped 83→84 across all 10 files that load it;
+`script.js?v=` bumped 42→43 in `index.html`.
+
 ## Behavioral notes
 
 - Never reintroduce Talmud/Judaism framing, or Chinese law/regulation

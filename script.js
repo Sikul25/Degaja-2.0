@@ -191,7 +191,16 @@
         // by this anyway.
         saveUser({ name: email.split("@")[0] || email, email, createdAt: new Date().toISOString() });
       }
-      closeModal();
+      // Closing the modal silently (the old behavior) gave zero visible
+      // confirmation that sign-in actually worked - a returning visitor
+      // saw the form just vanish with nothing to show they were now
+      // logged in, which reads exactly like "it didn't let me in" even
+      // though state.user was already set. Show the same kind of success
+      // message signup already had, then land them on their account view
+      // (name/email/access) as visible proof, instead of closing to
+      // nothing.
+      message.textContent = t("auth.successSignin");
+      setTimeout(accountView, 500);
     });
   }
 
