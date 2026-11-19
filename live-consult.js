@@ -122,6 +122,11 @@
       const languages = (Array.isArray(a.languages) ? a.languages : [])
         .map(code => LANG_NATIVE_NAMES[code] || code).join(' · ');
       const isActive = String(a.id) === String(selectedId);
+      // Scheduling note only makes sense in a language she actually speaks -
+      // showing it to e.g. an English/Japanese visitor would invite an email
+      // she can't read/answer in that language. Gate on a.languages, not a
+      // hardcoded list, so it stays correct if her languages ever change.
+      const showSchedule = Array.isArray(a.languages) && a.languages.includes(lang());
       return `<button type="button" class="advisor-card${isActive ? ' active' : ''}" data-advisor-id="${esc(a.id)}" aria-pressed="${isActive}">
         <span class="advisor-avatar">${initial}</span>
         <span class="advisor-card-body">
@@ -129,7 +134,7 @@
           <span class="advisor-card-title">${esc(advisorTitle(a))}</span>
           ${languages ? `<span class="advisor-languages">${esc(t('live.advisorSpeaks'))} ${esc(languages)}</span>` : ''}
           ${a.hours ? `<span class="advisor-languages">${esc(t('live.advisorHours'))} ${esc(a.hours)}</span>` : ''}
-          <span class="advisor-languages">${esc(t('live.advisorSchedule'))}</span>
+          ${showSchedule ? `<span class="advisor-languages">${esc(t('live.advisorSchedule'))}</span>` : ''}
           ${tags ? `<span class="advisor-tags">${tags}</span>` : ''}
           ${statusLabel ? `<span class="advisor-card-status ${dotClass}">${esc(statusLabel)}</span>` : ''}
         </span>

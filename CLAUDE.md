@@ -2538,6 +2538,26 @@ booking outside those hours.
 `i18n.js?v=` bumped 81→82 across all 10 files that load it;
 `live-consult.js?v=` bumped 42→43 in `index.html` and `live-call.html`.
 
+**Same day, follow-up corrections**: Yoel pointed out two more things
+about this note. (1) The contact address is `cs@degaja.com`, not
+`info@degaja.com` - corrected in all 11 `live.advisorSchedule`
+translations. (2) "היא משרתת רק 3 שפות" (she only serves 3 languages) -
+Papuli only speaks de/ru/uk (`ADVISORS[0].languages` in `api/_data.js`),
+but the note was rendering unconditionally for every visitor regardless
+of site language, including languages she can't actually read/reply to
+an email in. **Fixed**: `advisorCards()` now gates the schedule
+`<span>` on `Array.isArray(a.languages) && a.languages.includes(lang())`
+- shows only when the visitor's current language is one the advisor
+herself speaks, generalizing correctly if a future advisor has a
+different language set (not a hardcoded de/ru/uk check). The hours line
+above it, and the "Speaks: ..." line, are intentionally NOT gated the
+same way - those are informational for every visitor regardless of
+language, unlike this one which invites an email reply she needs to be
+able to actually answer.
+
+`i18n.js?v=` bumped 82→83 across all 10 files that load it;
+`live-consult.js?v=` bumped 43→44 in `index.html` and `live-call.html`.
+
 ## Behavioral notes
 
 - Never reintroduce Talmud/Judaism framing, or Chinese law/regulation
