@@ -2759,6 +2759,35 @@ clear, flows, and doesn't cut out). No further changes needed here - the
 dedicated TURN credential appears to have genuinely fixed the real
 root cause, not just added better failure feedback.
 
+## CCBill's FlexForm checkout page has no language/locale setting (2026-11-19)
+
+Yoel asked why the CCBill checkout page stays in English when the site
+is set to German. Confirmed in our own code first: `buildFlexFormUrl()`
+in `api/_ccbill.js` sends only `clientSubacc`/`initialPrice`/
+`initialPeriod`/`currencyCode`/`formDigest` - no language parameter at
+all, so CCBill's page falls back to whatever its own default is,
+regardless of the site's language.
+
+Walked Yoel through the admin portal (admin.ccbill.com → FlexForms
+Systems → FlexForms Payment Links → "Degaja CheckOut" → the "Degaja
+Dynamics" form tile → Modify This Form → All Settings) to check for a
+Language/Locale setting there, the same place currency/pricing options
+were found before. **Confirmed by Yoel directly in the real admin UI**:
+no such setting exists anywhere in the form's full settings list
+(Address Fields through Regional Pricing, scrolled completely). Two
+real F5/WAF errors were hit along the way (421 "Misdirected Request"
+opening the form editor while still in LIVE mode, cleared by switching
+to SANDBOX first - same family of WAF rejection as the 2026-11-11
+503 entry above, not a new bug).
+
+**Not resolved**: whether CCBill's FlexForms support a language/locale
+parameter at all - the admin UI has nothing for it, but that doesn't
+rule out an undocumented URL parameter CCBill's backend might still
+honor. The only way to know for certain is asking CCBill support
+directly (support@ccbill.com or merchantsupport@ccbill.com) whether
+FlexForm pages can be localized. Do not guess at a parameter name and
+add it speculatively - ask first.
+
 ## Behavioral notes
 
 - Never reintroduce Talmud/Judaism framing, or Chinese law/regulation
