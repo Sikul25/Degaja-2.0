@@ -2031,6 +2031,59 @@ completely untouched for the other handler.
 `live-call.html`; `i18n.js?v=` already at 77 (added one new key,
 `live.noActiveCall`, translated into all 11 base languages).
 
+**Same day, follow-up: moved the whole booking step too, not just the
+post-payment landing, and fixed a real double-click bug.** Yoel tested
+again and found two more things, both real:
+1. **A genuine functional bug**: `start()`'s price-selection UI showed
+   all 3 price buttons AND the birthdate/consent fields on one screen.
+   Clicking a price button before filling birthdate+consent silently
+   aborted (scrolled to the missing field, per the 2026-11-12 fix) - but
+   nothing then continued automatically once those fields were filled,
+   so the visitor had to click the *same* price button a second time
+   before checkout actually fired. Confirmed exactly matching his report
+   ("לוחץ על מחיר... כלום לא קורה... צריך ללחוץ עוד פעם").
+   **Fixed**: birthdate + consent now render *first*, with the price
+   buttons visually disabled (`opacity:.45;pointer-events:none`) until
+   both are valid - live-updated on every input/change. Once valid, the
+   buttons are enabled and a single click goes straight to checkout; the
+   click handler's own validation is kept as a defensive fallback but
+   should never actually fire in normal use now.
+2. **The architecture ask extended further than the post-payment
+   landing**: "אני רוצה עמוד שנפתח כבר מתחילת התשלום ורואים בו רק 1:1"
+   (I want a page that opens from the *start* of the process, showing
+   only 1:1) - not just after paying. **Fixed**: `card()`'s "Start Call"
+   button on `index.html`'s `#human` section now navigates straight to
+   `live-call.html` (`location.href='live-call.html'`) instead of
+   rendering the booking form inline there. `live-call.html` now runs
+   `start()` itself on load (via `init()`, branching on whether
+   `#human .human-wrap` exists - its absence is how the same shared
+   `live-consult.js` tells the two pages apart without a second copy of
+   the file) unless `resumeCall()` already found a just-paid session to
+   resume instead. Advisor *selection* (the cards, which advisor is
+   "selected") still happens on the homepage - only the booking form
+   itself (price/birthdate/consent) and everything after it moved.
+   **Caught and fixed in the same pass**: the advisor's own join link
+   (sent to Papuli via WhatsApp/notify-advisor, built from
+   `location.pathname`) would have silently pointed at
+   `live-call.html?advisor_join=...#human` for any call that actually
+   starts from there - breaking her join flow for every real booking,
+   since `#degajaAdvisor` (her accept-call UI) only ever renders via
+   `card()` on `index.html`. Hardcoded that link to always target
+   `index.html` regardless of which page the customer's own browser is
+   on when the call starts.
+
+`live-consult.js?v=` bumped 36→37 in both files for this second round.
+
+**Still open, not yet acted on**: Yoel separately raised a much bigger,
+genuinely ambiguous ask in the same message - consolidating "features
+under 7" into a menu on a separate page, after relaying that Papuli
+herself found the current page "very cluttered" (עמוס מאוד). This is a
+real homepage information-architecture question, not a bug, and touches
+far more than the live-advisor flow - needs his own clarification on
+scope (which features, what "under 7" means, what the menu/page
+structure should look like) before any of it is built. Ask him directly
+next time this comes up rather than guessing at a full homepage redesign.
+
 ## Behavioral notes
 
 - Never reintroduce Talmud/Judaism framing, or Chinese law/regulation

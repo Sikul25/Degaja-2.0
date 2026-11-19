@@ -161,7 +161,7 @@
       });
       creditText();
     });
-    $('#degajaLiveStart').onclick=start;
+    $('#degajaLiveStart').onclick=()=>{ location.href='live-call.html'; };
     $('#degajaAdvisorJoin').onclick=advisorJoin;
     creditText();
     statusText();
@@ -191,16 +191,31 @@
     const c=getCredits();
     const liveAudioWith=fmt(t('live.liveAudioWith'),{name:esc(a.name)})+' · <span style="color:#a34d4d;font-weight:800">'+t('live.maxDurationShort')+'</span>';
     const cur=t('currency.symbol');
-    host.innerHTML=`<div class="degaja-call-panel"><h4 style="color:#18334a">${fmt(t('live.withName'),{name:esc(a.name)})}</h4><p class="degaja-live-copy">${esc(a.title)} · ${c?t('live.hasCredit'):t('live.chooseTopics')}</p>${c?`<button class="gold" id="degajaUseCredit">${t('live.useCredit')}</button>`:''}<div class="degaja-consult-options"><button class="degaja-consult-option" data-topics="1"><span><strong>${t('live.topics1')}</strong><small>${liveAudioWith}</small></span><b>${cur}${prices[1]}</b></button><button class="degaja-consult-option" data-topics="2"><span><strong>${t('live.topics2')}</strong><small>${liveAudioWith}</small></span><b>${cur}${prices[2]}</b></button><button class="degaja-consult-option" data-topics="3"><span><strong>${t('live.topics3')}</strong><small>${liveAudioWith}</small></span><b>${cur}${prices[3]}</b></button></div><div style="text-align:left;margin-top:10px"><label for="degajaBirthDate" style="display:block;font-size:12px;font-weight:700;color:#18334a;margin-bottom:5px">${t('checkout.birthDateLabel')}</label><input type="date" id="degajaBirthDate" class="palm-quiz-input" style="width:100%"><div class="palm-quiz-error" id="degajaBirthDateError">${t('checkout.birthDateError')}</div></div><label class="degaja-service-consent" style="display:flex;gap:8px;align-items:flex-start;text-align:left;font-size:12px;line-height:1.5;color:#687384;margin-top:10px"><input type="checkbox" id="degajaServiceConsent" style="margin-top:3px;flex-shrink:0"><span>${t('live.serviceConsent')}</span></label><div class="degaja-status">${esc(u.name||u.email)}</div></div>`;
+    // Birthdate + consent come first and gate the price buttons (disabled
+    // until both are valid) instead of sitting below them - previously a
+    // visitor had to click a price, get bounced down to fill these fields,
+    // then click the SAME price button again before checkout actually
+    // fired. Now the price step only becomes clickable once there's
+    // nothing left to fix, so one click is always enough.
+    host.innerHTML=`<div class="degaja-call-panel"><h4 style="color:#18334a">${fmt(t('live.withName'),{name:esc(a.name)})}</h4><p class="degaja-live-copy">${esc(a.title)} · ${c?t('live.hasCredit'):t('live.chooseTopics')}</p>${c?`<button class="gold" id="degajaUseCredit">${t('live.useCredit')}</button>`:`<div style="text-align:left;margin-top:10px"><label for="degajaBirthDate" style="display:block;font-size:12px;font-weight:700;color:#18334a;margin-bottom:5px">${t('checkout.birthDateLabel')}</label><input type="date" id="degajaBirthDate" class="palm-quiz-input" style="width:100%"><div class="palm-quiz-error" id="degajaBirthDateError">${t('checkout.birthDateError')}</div></div><label class="degaja-service-consent" style="display:flex;gap:8px;align-items:flex-start;text-align:left;font-size:12px;line-height:1.5;color:#687384;margin-top:10px"><input type="checkbox" id="degajaServiceConsent" style="margin-top:3px;flex-shrink:0"><span>${t('live.serviceConsent')}</span></label><div class="degaja-consult-options" id="degajaConsultOptions" style="margin-top:14px;opacity:.45;pointer-events:none"><button class="degaja-consult-option" data-topics="1"><span><strong>${t('live.topics1')}</strong><small>${liveAudioWith}</small></span><b>${cur}${prices[1]}</b></button><button class="degaja-consult-option" data-topics="2"><span><strong>${t('live.topics2')}</strong><small>${liveAudioWith}</small></span><b>${cur}${prices[2]}</b></button><button class="degaja-consult-option" data-topics="3"><span><strong>${t('live.topics3')}</strong><small>${liveAudioWith}</small></span><b>${cur}${prices[3]}</b></button></div>`}<div class="degaja-status">${esc(u.name||u.email)}</div></div>`;
     $('#degajaUseCredit')?.addEventListener('click',()=>{setCredits(getCredits()-1);creditText();call('credit',3,a)});
-    $('#degajaBirthDate')?.addEventListener('input',()=>{$('#degajaBirthDateError')?.classList.remove('show')});
+
+    const birthDateInput=$('#degajaBirthDate'), birthDateError=$('#degajaBirthDateError'), consent=$('#degajaServiceConsent'), options=$('#degajaConsultOptions');
+    const updateOptionsEnabled=()=>{
+      if(!options)return;
+      const ready=isAdultBirthDate(birthDateInput?.value||'') && !!consent?.checked;
+      options.style.opacity=ready?'1':'.45';
+      options.style.pointerEvents=ready?'auto':'none';
+    };
+    birthDateInput?.addEventListener('input',()=>{birthDateError?.classList.remove('show');updateOptionsEnabled()});
+    consent?.addEventListener('change',()=>{
+      const label=consent.closest('label');label?.style.removeProperty('color');label?.style.removeProperty('font-weight');
+      updateOptionsEnabled();
+    });
     host.querySelectorAll('[data-topics]').forEach(b=>b.addEventListener('click',()=>{
-      const birthDateInput=$('#degajaBirthDate');
-      const birthDateError=$('#degajaBirthDateError');
       const birthDate=birthDateInput?.value||'';
       if(!isAdultBirthDate(birthDate)){birthDateError?.classList.add('show');birthDateInput?.scrollIntoView({behavior:'smooth',block:'center'});birthDateInput?.focus();return}
       birthDateError?.classList.remove('show');
-      const consent=$('#degajaServiceConsent');
       if(consent && !consent.checked){const label=consent.closest('label');label?.style.setProperty('color','#a34d4d');label?.style.setProperty('font-weight','800');label?.scrollIntoView({behavior:'smooth',block:'center'});consent.focus();return}
       checkout(Number(b.dataset.topics),a,birthDate);
     }));
@@ -284,12 +299,13 @@
 
   function resumeCall(){
     let flag=false; try{flag=localStorage.getItem(RESUME_FLAG)==='1'}catch(_){}
-    if(!flag)return;
+    if(!flag)return false;
     try{localStorage.removeItem(RESUME_FLAG)}catch(_){}
     let session=null; try{session=JSON.parse(localStorage.getItem(SESSION_KEY)||'null')}catch(_){}
-    if(!session||session.type!=='voice')return;
+    if(!session||session.type!=='voice')return false;
     const advisor=session.advisorId?setSelectedAdvisor(session.advisorId):getSelectedAdvisor();
     call('paid',session.topics||1,advisor);
+    return true;
   }
 
   function peerScript(){return new Promise((ok,no)=>{if(window.Peer)return ok();const s=document.createElement('script');s.src='https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js';s.onload=ok;s.onerror=no;document.head.appendChild(s)})}
@@ -308,7 +324,11 @@
       $('#degajaCode').textContent=code;
       $('#degajaStatus').textContent=t('live.waitingAdvisor');
       const u=getUser();
-      const joinLink=`${location.origin}${location.pathname}?advisor_join=${code}#human`;
+      // Always points at index.html, never location.pathname - the call
+      // can now start from live-call.html (the customer's side), but the
+      // advisor's own join UI (#degajaAdvisor) only ever renders on the
+      // homepage's #human section via card().
+      const joinLink=`${location.origin}/index.html?advisor_join=${code}#human`;
       doFetch('/api/pending-session',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({advisorId:advisor.id,code,customerName:u?.name||u?.email||'',link:joinLink})},8000).catch(()=>{});
       doFetch('/api/notify-advisor',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({advisorId:advisor.id,code,customerName:u?.name||u?.email||'',link:joinLink})},8000)
         .then(async r=>{const d=await r.json().catch(()=>({}));if(!d.sent){const s=$('#degajaStatus');if(s)s.textContent=t('live.waitingAdvisor')+' ('+t('live.notifyFailed')+')';}})
@@ -443,7 +463,25 @@
   function init(){
     // The live human advisor only speaks German, Russian and Ukrainian.
     if(window.degajaI18n && !window.degajaI18n.hasLiveAdvisor()) return;
-    style();card();verify();resumeCall();openAdvisorJoinLink();
+    style();
+    // index.html's #human section only ever shows advisor selection + a
+    // "Start Call" button - clicking it now navigates to live-call.html
+    // instead of rendering the whole booking form (price, birthdate,
+    // consent) inline on the busy homepage. live-call.html has no
+    // #human section, so its absence is how this file tells which page
+    // it's running on without a second copy of itself.
+    const onHomepage = !!$('#human .human-wrap');
+    verify();
+    const resumed = resumeCall();
+    if(onHomepage){
+      card();
+    } else if(!resumed){
+      // Landed here directly from "Start Call" with nothing to resume -
+      // this page's whole purpose is the booking form for the advisor
+      // already chosen on the homepage.
+      start();
+    }
+    openAdvisorJoinLink();
     loadRemoteData().then(()=>{
       const select=document.getElementById('degajaAdvisorSelect');
       if(select){ select.innerHTML=advisorOptions(); select.value=getSelectedAdvisor().id; }
