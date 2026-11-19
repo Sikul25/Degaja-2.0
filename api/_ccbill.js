@@ -184,7 +184,15 @@ export function bruteForceFormDigestFormula() {
 // fields sent (recurringPrice/recurringPeriod/numRebills are deliberately
 // omitted - see CLAUDE.md) and the "correct" business value for a one-time
 // product's initialPeriod isn't confirmed anywhere yet.
-export function buildFlexFormUrl({ price, period = "2", currencyCode, orderId, flexId = CCBILL_FLEX_ID }) {
+// Confirmed 2026-11-19 by CCBill's own live chat support: FlexForm pages
+// accept a `language` URL param (en/de/fr/es/it confirmed by them;
+// unconfirmed codes are deliberately NOT guessed here) that changes the
+// checkout page's display language with no effect on formDigest/pricing.
+// Site languages with no confirmed CCBill code (pt/ru/uk/ja/zh/hi) fall
+// through to CCBill's own default rather than guessing a value.
+const CCBILL_LANGUAGE_MAP = { de: "de", en: "en", fr: "fr", es: "es", it: "it", us: "en", mx: "es" };
+
+export function buildFlexFormUrl({ price, period = "2", currencyCode, orderId, flexId = CCBILL_FLEX_ID, lang }) {
   const key = process.env.CCBILL_ENCRYPTION_KEY;
   if (!key) throw new Error("CCBILL_ENCRYPTION_KEY not configured");
   const formDigest = computeFormDigest(price, period, currencyCode, key);
@@ -204,5 +212,7 @@ export function buildFlexFormUrl({ price, period = "2", currencyCode, orderId, f
   // localStorage (see ccbill-test.html), just not via server-side webhook
   // matching until a confirmed alternative is found.
   if (orderId) params.set("orderId", orderId);
+  const ccbillLanguage = CCBILL_LANGUAGE_MAP[lang];
+  if (ccbillLanguage) params.set("language", ccbillLanguage);
   return `https://api.ccbill.com/wap-frontflex/flexforms/${flexId}?${params.toString()}`;
 }

@@ -107,7 +107,7 @@ export default async function handler(req, res) {
       amount: item.amount
     });
 
-    const url = buildFlexFormUrl({ price: priceDecimal, currencyCode: currencyNumeric, orderId });
+    const url = buildFlexFormUrl({ price: priceDecimal, currencyCode: currencyNumeric, orderId, lang });
     return res.status(200).json({ url, orderId });
   } catch (error) {
     return res.status(500).json({ error: "Checkout service error" });

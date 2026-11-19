@@ -2788,6 +2788,34 @@ directly (support@ccbill.com or merchantsupport@ccbill.com) whether
 FlexForm pages can be localized. Do not guess at a parameter name and
 add it speculatively - ask first.
 
+**Resolved same day via CCBill's live chat support**: confirmed there
+IS an undocumented `language` URL parameter after all (not exposed
+anywhere in the admin UI, exactly as suspected above) - appending
+`&language=de`/`fr`/`es`/`it`/`en` to the existing FlexForm URL changes
+the checkout page's display language, with **no effect on formDigest,
+pricing, or GeoIP config** (confirmed directly by CCBill support - the
+digest is still computed from price/period/currency/key only). CCBill
+gave a working example URL with `language=fr` using arbitrary
+price=$20/period=30 values - example only, not our real pricing.
+
+**Fixed**: `buildFlexFormUrl()` in `api/_ccbill.js` now accepts a `lang`
+param and appends `&language=xx` via a new `CCBILL_LANGUAGE_MAP`
+(de/en/fr/es/it confirmed by CCBill, plus us→en/mx→es since those are
+our own display-overlay languages, not a CCBill-side guess). Site
+languages with no confirmed CCBill code (pt/ru/uk/ja/zh/hi/br) are
+deliberately left unmapped - the parameter is simply omitted for them,
+falling back to CCBill's own default exactly as before, rather than
+guessing an unconfirmed code. `api/checkout.js` passes its existing
+`lang` variable (already read from the request body, used for pricing/
+product names) straight through to `buildFlexFormUrl()` - one-line
+change, no new data needed.
+
+**Not yet independently confirmed on a real checkout**: this needs a
+real test to see the CCBill page actually render in German/French/
+Spanish/Italian for a real DEGAJA order (not just CCBill's own generic
+$20 example) - ask Yoel to try a real checkout in a mapped language
+next time CCBill testing comes up.
+
 ## Behavioral notes
 
 - Never reintroduce Talmud/Judaism framing, or Chinese law/regulation
