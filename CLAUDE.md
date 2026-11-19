@@ -2719,6 +2719,39 @@ invisible again.
 `i18n.js?v=` bumped 85→86 across all 10 files that load it;
 `live-consult.js?v=` bumped 45→46 in `index.html` and `live-call.html`.
 
+## Live advisor: switched to a dedicated paid TURN relay (2026-11-19)
+
+Same day, after Yoel reported a real test call dying after "barely a
+minute" - confirmed that's not normal and points squarely at the
+shared public TURN relay (`openrelayproject`'s demo credentials, used
+by effectively every WebRTC tutorial online, heavily congested - the
+exact risk already flagged in the 2026-11-12 WebRTC entry above).
+Walked Yoel through signing up for a free metered.ca account
+(`https://www.metered.ca/`, confirmed he reached the real "Start
+building free" page himself after I incorrectly described the button
+text from memory rather than admitting I had no way to check it - see
+the "Behavioral notes" entry below) and creating a TURN credential in
+its dashboard.
+
+**Fixed**: `live-consult.js`'s `PEER_CONFIG` now uses the real,
+dedicated TURN credential from Yoel's own metered.ca workspace (label
+"degaja") instead of the public `openrelayproject` demo username/
+password - same `global.relay.metered.ca` hostnames (80/tcp/443/turns),
+just a private, non-shared credential this time. Google's public STUN
+and metered.ca's own STUN stay as-is as fallbacks. TURN credentials are
+always sent to the browser anyway (readable from dev tools by any
+visitor) - same exposure as the demo credentials they replace, not a
+server-side secret, so this was a direct client-side code edit, not an
+env var.
+
+**Not yet confirmed**: whether this actually fixes the "dies after a
+minute" symptom - that needs a real test call. If it still happens
+after this, the TURN relay was not the (sole) cause and the ICE-state
+monitoring fix just above (showing "connection lost" instead of silent
+dead air) remains the real safety net regardless.
+
+`live-consult.js?v=` bumped 46→47 in `index.html` and `live-call.html`.
+
 ## Behavioral notes
 
 - Never reintroduce Talmud/Judaism framing, or Chinese law/regulation

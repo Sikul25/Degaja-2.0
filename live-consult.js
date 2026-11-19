@@ -44,12 +44,20 @@
   // Plain STUN-only peer connections fail silently whenever either side is
   // behind a restrictive NAT (mobile data, corporate wifi) — add TURN relays
   // as a fallback so the call still connects in those cases.
+  // Dedicated metered.ca TURN credential (Yoel's own paid workspace,
+  // 2026-11-19) - replaces the public "openrelayproject" demo credentials
+  // every WebRTC tutorial online shares, which were heavily congested and
+  // the suspected cause of calls dying mid-conversation (see CLAUDE.md).
+  // TURN usernames/credentials are always sent to the browser anyway (any
+  // visitor can read them from dev tools) - same exposure as the demo
+  // credentials they replace, not a server-side secret.
   const PEER_CONFIG = { config: { iceServers: [
     { urls: 'stun:stun.l.google.com:19302' },
     { urls: 'stun:stun.relay.metered.ca:80' },
-    { urls: 'turn:global.relay.metered.ca:80', username: 'openrelayproject', credential: 'openrelayproject' },
-    { urls: 'turn:global.relay.metered.ca:443', username: 'openrelayproject', credential: 'openrelayproject' },
-    { urls: 'turn:global.relay.metered.ca:443?transport=tcp', username: 'openrelayproject', credential: 'openrelayproject' }
+    { urls: 'turn:global.relay.metered.ca:80', username: '3b2df95fe2a6133dfc81f86a', credential: 'k+BKpnLHSbclGptq' },
+    { urls: 'turn:global.relay.metered.ca:80?transport=tcp', username: '3b2df95fe2a6133dfc81f86a', credential: 'k+BKpnLHSbclGptq' },
+    { urls: 'turn:global.relay.metered.ca:443', username: '3b2df95fe2a6133dfc81f86a', credential: 'k+BKpnLHSbclGptq' },
+    { urls: 'turns:global.relay.metered.ca:443?transport=tcp', username: '3b2df95fe2a6133dfc81f86a', credential: 'k+BKpnLHSbclGptq' }
   ] } };
   const esc = v => String(v ?? '').replace(/[&<>\"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;',"'":'&#039;'}[c]));
   const t = key => (window.degajaI18n ? window.degajaI18n.t(key) : key);
