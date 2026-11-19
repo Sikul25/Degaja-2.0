@@ -26,7 +26,12 @@ export default async function handler(req, res) {
     to: toNumber,
     body,
     templateName: process.env.META_TEMPLATE_SESSION_CODE,
-    templateVars: [name, String(code)]
+    templateVars: [name, String(code)],
+    // Fills the approved template's dynamic URL button (base URL
+    // configured on the template itself + this suffix) once one exists -
+    // see api/_whatsapp.js for why this is the only reliable way to
+    // deliver a tappable join link.
+    buttonParam: code
   });
   if (!result.sent) console.error("notify-advisor: WhatsApp not sent:", result);
   else console.log("notify-advisor: WhatsApp sent to", toNumber.slice(-4));

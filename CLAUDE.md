@@ -2304,6 +2304,81 @@ paused pending CCBill per the section above) - a paid campaign goes
 through TikTok's ad-review process, not comment-spam detection, so this
 organic-comment friction doesn't block or affect that separate plan.
 
+## Critical bug found: the advisor's WhatsApp notification has likely NEVER actually delivered the join link (2026-11-19)
+
+Right after the auto-join simplification above, Yoel sent a screenshot of
+exactly what Papuli's WhatsApp actually received when a call was started:
+Meta's generic "Hello World... Welcome and congratulations!! This message
+demonstrates your ability to send a WhatsApp message notification from
+the Cloud API, hosted by Meta... WhatsApp Business Platform sample
+message" - sent twice (two call attempts), with no DEGAJA content, no
+code, no link at all ("זה הודעה שהיא קיבלה בחרטה אין לינק אין כלום").
+
+**This was never a client-side bug** - the auto-join fix, the "online
+status is separate" explanation, all of it was addressing symptoms of a
+flow that could never have worked, because the real notification never
+arrives. Root cause, confirmed by checking Vercel's actual env vars
+(`filter_project_envs`, not guessed): **`META_TEMPLATE_SESSION_CODE` is
+not set at all.** `api/notify-advisor.js` passes it as `templateName` to
+`sendWhatsApp()`; with it unset, `api/_whatsapp.js`'s `sendViaMeta()`
+always falls into its fallback branch: send Meta's pre-approved
+`hello_world` template first, then the real free-text message with the
+link right after.
+
+That fallback's own old code comment claimed sending `hello_world`
+"opens" WhatsApp's 24-hour customer-service window so the follow-up
+free-text message can then deliver. **That assumption is wrong.** The
+window only opens when the RECIPIENT messages the business number first
+- a business-initiated template, `hello_world` included, never opens it.
+So the follow-up free-text send has likely been silently dropped by
+WhatsApp on every single call, from the very start of this feature -
+confirmed now by Papuli's own screenshot showing exactly that (template
+arrived twice, real message arrived zero times).
+
+**Fixed in code**, as far as code alone can fix it: `api/_whatsapp.js`'s
+template-sending branch now supports an optional dynamic URL button
+component (`buttonParam`), and `api/notify-advisor.js` passes the
+session `code` as that button param. Corrected the misleading comment
+about the window-opening assumption. The `hello_world`+free-text fallback
+is left in place (better than total silence) but now explicitly commented
+as known-unreliable, not a real fix.
+
+**What Yoel still needs to do** - this cannot be finished from code alone,
+it needs an action in Meta Business Manager:
+1. Go to Meta Business Manager -> WhatsApp Manager -> Account tools ->
+   Message templates -> Create template.
+2. Create a template (e.g. category "Utility") with body text using two
+   placeholders, e.g.: "DEGAJA: New consultation request from {{1}}.
+   Session code: {{2}}." plus a **Call-to-action button, type "Visit
+   website", URL type "Dynamic"**, base URL
+   `https://www.degaja.com/index.html?advisor_join=` with a `{{1}}`
+   placeholder suffix (fills in with the 6-digit code via `buttonParam`
+   above).
+3. Submit for approval (usually minutes to ~1 day).
+4. Once approved, give the exact template name to set as
+   `META_TEMPLATE_SESSION_CODE` in Vercel (production + preview).
+
+Until that template exists and is approved, every advisor notification
+will keep arriving as a dead-end `hello_world` message with no way to
+accept the call - this is very likely THE actual explanation for every
+"Papuli isn't responding" report logged above, not WebRTC, not language
+gating, not the double-tap UX. Don't close out the live-advisor
+reliability investigation as resolved until a real test confirms the
+advisor's phone receives a message with a working tappable link, not
+just that CCBill's side of the payment succeeded.
+
+**Separately flagged, not changed**: `TEST_WHATSAPP_TO` is currently set
+in Vercel (production target). Per `notify-advisor.js`'s own logic
+(`process.env.TEST_WHATSAPP_TO || ADVISOR_WHATSAPP[advisor.id]`), this
+means **every** real customer's call notification, for any advisor, is
+currently being routed to this one test number instead of
+`ADVISOR_WHATSAPP[advisor.id]`'s real per-advisor mapping - harmless
+right now since Papuli is presumably the only active advisor and this is
+very likely already pointed at her real number, but if a second advisor
+is ever added, their calls would silently notify the wrong
+person/number too. Remove this env var once testing is done and the
+per-advisor `ADVISOR_WHATSAPP` mapping should be trusted on its own.
+
 ## Behavioral notes
 
 - Never reintroduce Talmud/Judaism framing, or Chinese law/regulation
