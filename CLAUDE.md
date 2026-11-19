@@ -2558,6 +2558,57 @@ able to actually answer.
 `i18n.js?v=` bumped 82→83 across all 10 files that load it;
 `live-consult.js?v=` bumped 43→44 in `index.html` and `live-call.html`.
 
+## Critical architecture finding: "sign in" was never real authentication - fixed the dead-end (2026-11-19)
+
+Yoel reported: he signed up with email+password, got logged out after
+roughly half an hour, tried to sign back in with the same email+password,
+and got stuck - the only way forward was creating a brand-new account.
+
+**Root cause, confirmed by reading the code, not guessed**: the
+email+password "auth" in `script.js`'s `authView()` was never a real
+account system and never had a backend. `saveUser()` just writes
+`{name, email, createdAt}` to `localStorage["degajaUser"]` on THIS
+browser - the password field is collected and length-checked (`auth.
+errPassword`, min 6 chars) but **never stored or checked against
+anything, on signup or sign-in**. Signing in only ever checked
+`state.user && state.user.email === email` - i.e. "is this the same
+browser that's already holding a matching local record," never a real
+credential check. So the moment that local record was gone for any
+reason (logout, cleared browser storage, a new device, or whatever
+caused Yoel's own half-hour logout), the correct email+password could
+never succeed again - it hit a hard-coded `auth.errNotFound` ("no DEGAJA
+account found with this email") with no recovery path except "create a
+new account," which just overwrites the same localStorage key.
+
+**Confirmed NOT affected**: paid credits (`degajaAiCredits`) and paid
+access (`degajaPaidAccess`) are both stored under their own separate
+localStorage keys, never tied to `state.user` - so this bug never cost
+anyone their purchased readings, only the saved name/email identity.
+
+**Fix applied (the "quick fix" Yoel chose over building a real
+backend-based account system with a database)**: removed the dead-end.
+In `script.js`'s `authForm` submit handler, when sign-in doesn't find a
+matching local record, it now silently restores one for that email
+(name derived from the email's local part) instead of showing
+`errNotFound` and refusing - since nothing was ever actually verified
+against a password anyway, there's no real security given up by this;
+it just stops trapping a returning visitor whose local data is gone.
+`auth.errNotFound`'s i18n translations were left in place (unused now,
+low-value cleanup, not touched).
+
+**Not fixed, flagged for a future decision**: this remains a local-
+browser-only identity, not a real cross-device account system - signing
+in on a different browser/device, or after clearing site data, will
+always "recreate" a fresh local identity rather than restore the same
+one, since there is still no central user database anywhere. If Yoel
+wants real persistent accounts (same login working across devices,
+actual password verification), that needs a real backend (e.g.
+Supabase, available as an MCP tool in this environment) - a materially
+bigger project than today's fix, not something to build unilaterally
+without him deciding to invest in it.
+
+`script.js?v=` bumped 41→42 in `index.html` (only file that loads it).
+
 ## Behavioral notes
 
 - Never reintroduce Talmud/Judaism framing, or Chinese law/regulation

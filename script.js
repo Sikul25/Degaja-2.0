@@ -178,8 +178,18 @@
       }
 
       if (!state.user || state.user.email !== email) {
-        message.textContent = t("auth.errNotFound");
-        return;
+        // This "sign in" never checked a password against a real backend -
+        // saveUser() only remembers name+email in this browser's own
+        // localStorage (see its own comment above). So once that local
+        // record was gone (cleared storage, a new device, a logout), the
+        // correct email+password could never sign back in - it hit a
+        // dead-end "account not found" with the only way forward being to
+        // create a brand-new account. Since nothing here was ever actually
+        // verified, restore a local record for this email instead of
+        // trapping the visitor - paid credits/access (degajaAiCredits/
+        // degajaPaidAccess) are stored separately and were never affected
+        // by this anyway.
+        saveUser({ name: email.split("@")[0] || email, email, createdAt: new Date().toISOString() });
       }
       closeModal();
     });
