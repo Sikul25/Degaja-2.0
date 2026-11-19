@@ -465,6 +465,14 @@
     playRingtone();
     const joinBtn=$('#degajaAdvisorJoin');
     if(joinBtn) joinBtn.addEventListener('click',stopRingtone,{once:true});
+    // Auto-join immediately instead of waiting for a manual tap on top of
+    // opening the WhatsApp link - that link-open is itself the advisor's
+    // explicit action, and the browser's own native mic-permission prompt
+    // is the real consent gate. The Join button stays visible/wired as a
+    // fallback in case this auto-attempt fails (e.g. a stricter in-app
+    // browser blocking the request) - she can still tap it manually.
+    stopRingtone();
+    advisorJoin();
   }
 
   function init(){
