@@ -1915,6 +1915,64 @@ events are actually being received and matched with the browser ones.
 `script.js?v=` bumped 38→39, `live-consult.js?v=` bumped 33→34 in
 `index.html`.
 
+## Critical bug found and fixed: a slow CCBill webhook permanently lost a real approved payment (2026-11-19)
+
+Yoel ran a real test booking with Papuli (live advisor, $49.99 voice
+product) and reported the payment succeeded on CCBill but never returned
+him to the 1:1 call. Investigated directly via production runtime logs
+and Edge Config (not guessed):
+
+- The webhook genuinely arrived and was processed correctly -
+  `ccbillOrderResults` shows this exact order (`69fd306d-...`) with
+  `eventType: "NewSaleSuccess"`, properly matched by our own `orderId`,
+  all fields present. The backend never failed.
+- But the webhook arrived **~107 seconds** after the order was created
+  (`createdAt` vs. the webhook's `updatedAt`) - far longer than the
+  "a little after" the original code comments assumed.
+- `ccbillRedeemedOrders` confirmed this order was never actually
+  redeemed - the client never successfully picked it up.
+
+**Root cause, found in both `script.js`'s `verifyAiPayment()` and
+`live-consult.js`'s `verify()`**: both deleted `CCBILL_ORDER_KEY` from
+localStorage immediately at the top of the function, unconditionally,
+before the retry loop even started - not after a definitive result. Both
+loops poll for only 12 × 2.5s = 30 seconds before giving up. Since
+real-world webhook latency can exceed that (confirmed: ~107s, maybe more
+under load), a real, genuinely-approved payment that outran the 30s
+window was unrecoverable: the one piece of information needed to check
+again (the orderId) was already erased, and there was no way - not a
+page reload, not returning later - to ever pick it back up. This affects
+**every** CCBill purchase on the site (AI readings via `script.js`,
+voice/live-advisor via `live-consult.js`), not just this one test - it
+was pure luck/volume that it hadn't been caught on a real customer
+before now.
+
+**Fixed** in both functions: `CCBILL_ORDER_KEY` is now only removed once
+a *definitive* answer comes back (found+approved, found+already-redeemed,
+found+denied/wrong-type, or an explicit `?payment=cancelled` redirect) -
+never just because the 30-second polling loop ran out of attempts. Both
+functions are already called unconditionally on every page load (not
+gated behind the `?payment=success` URL param check alone anymore,
+though that still triggers the `history.replaceState` URL cleanup), so
+if a visit's polling window times out without a definitive answer, the
+very next time the visitor loads the page - even much later - this same
+function picks the same pending order back up and tries again, instead
+of the payment being lost for good. The 30-second per-visit window
+itself was left unchanged (still useful for the common case where the
+webhook is fast); the real fix is that a slow webhook no longer costs
+the customer their payment.
+
+**Not yet independently confirmed**: whether Yoel's specific real order
+from this incident (`69fd306d-...`) can still be recovered automatically
+now that the fix is live - by the time it deployed, his own browser's
+`localStorage` may already differ from when he started. If he reports
+this exact booking still missing, grant it manually via
+`markRedeemed()`/the advisor-session tools rather than asking him to
+re-pay.
+
+`script.js?v=` bumped 39→40, `live-consult.js?v=` bumped 34→35 in
+`index.html` (only file that loads either, confirmed via grep).
+
 ## Behavioral notes
 
 - Never reintroduce Talmud/Judaism framing, or Chinese law/regulation

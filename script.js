@@ -353,18 +353,27 @@
   async function verifyAiPayment() {
     const params = new URLSearchParams(location.search);
     const flag = params.get("payment");
-    if (flag !== "success" && flag !== "cancelled") return;
-    history.replaceState({}, document.title, location.pathname + location.hash);
+    if (flag === "success" || flag === "cancelled") {
+      history.replaceState({}, document.title, location.pathname + location.hash);
+    }
 
     let orderId = null;
     try { orderId = localStorage.getItem(CCBILL_ORDER_KEY); } catch (_) { /* ignore */ }
-    try { localStorage.removeItem(CCBILL_ORDER_KEY); } catch (_) { /* ignore */ }
 
-    if (flag === "cancelled" || !orderId) return;
+    if (flag === "cancelled") {
+      try { localStorage.removeItem(CCBILL_ORDER_KEY); } catch (_) { /* ignore */ }
+      return;
+    }
+    if (!orderId) return;
 
-    // CCBill's webhook postback can arrive a little after the browser is
-    // redirected back here, so poll briefly rather than giving up on the
-    // first miss (same pattern as ccbill-test.html).
+    // CCBill's webhook postback can arrive well after the browser is
+    // redirected back here (observed up to ~100s in production, not just
+    // "a little after") - poll for a while, and critically, don't clear
+    // CCBILL_ORDER_KEY until we get a definitive answer. A real approved
+    // payment was previously lost for good if the webhook outran this
+    // loop, because the key was deleted up front regardless of outcome -
+    // the next page load (this same function, called unconditionally on
+    // every load) now just picks the same pending order back up instead.
     for (let attempt = 0; attempt < 12; attempt++) {
       let data;
       try {
@@ -378,6 +387,10 @@
         await sleep(2500);
         continue;
       }
+
+      // Got a definitive answer - stop retrying and clear the pending marker.
+      try { localStorage.removeItem(CCBILL_ORDER_KEY); } catch (_) { /* ignore */ }
+
       if (!data.approved || data.type !== "ai") return;
 
       state.paidAccess = true;
@@ -442,9 +455,11 @@
       (window.degajaGoTo || (s => document.querySelector(s)?.scrollIntoView({ behavior: "smooth", block: "center" })))("#oracle");
       return;
     }
-    // Gave up waiting for the webhook after ~30s - the payment may still be
-    // genuine (CCBill's own postback can be delayed further), it's just not
-    // confirmed yet. Nothing more to do client-side here.
+    // Gave up waiting for the webhook after ~30s for THIS visit - the
+    // payment may still be genuine and just not confirmed yet. CCBILL_ORDER_KEY
+    // was deliberately left untouched above, so the next time this page
+    // loads (even much later), this same function retries the same order
+    // instead of the payment being lost for good.
   }
 
   // Guards every call site (showPurchaseModal's price buttons, the

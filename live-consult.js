@@ -229,19 +229,30 @@
 
   async function verify(){
     const p=new URLSearchParams(location.search), flag=p.get('payment');
-    if(flag!=='success'&&flag!=='cancelled')return;
-    history.replaceState({},document.title,location.pathname+location.hash);
+    if(flag==='success'||flag==='cancelled'){
+      history.replaceState({},document.title,location.pathname+location.hash);
+    }
     let orderId=null; try{orderId=localStorage.getItem(CCBILL_ORDER_KEY)}catch(_){}
-    try{localStorage.removeItem(CCBILL_ORDER_KEY)}catch(_){}
-    if(flag==='cancelled'||!orderId)return;
-    // CCBill's webhook postback can arrive a little after the browser is
-    // redirected back here, so poll briefly rather than giving up on the
-    // first miss (same pattern as ccbill-test.html/script.js).
+    if(flag==='cancelled'){
+      try{localStorage.removeItem(CCBILL_ORDER_KEY)}catch(_){}
+      return;
+    }
+    if(!orderId)return;
+    // CCBill's webhook postback can arrive well after the browser is
+    // redirected back here (observed up to ~100s in production) - poll for
+    // a while, and critically, don't clear CCBILL_ORDER_KEY until we get a
+    // definitive answer. A real approved voice booking was previously lost
+    // for good if the webhook outran this loop, because the key was
+    // deleted up front regardless of outcome - the next page load (this
+    // same function, called unconditionally on every load) now just picks
+    // the same pending order back up instead.
     for(let attempt=0; attempt<12; attempt++){
       let d;
       try{const r=await doFetch('/api/verify-ccbill-payment?order_id='+encodeURIComponent(orderId),{},15000);d=await r.json();}
       catch(_){await new Promise(res=>setTimeout(res,2500));continue;}
       if(!d.found){await new Promise(res=>setTimeout(res,2500));continue;}
+      // Got a definitive answer - stop retrying and clear the pending marker.
+      try{localStorage.removeItem(CCBILL_ORDER_KEY)}catch(_){}
       if(!d.approved||d.type!=='voice'){console.warn('DEGAJA payment verification failed');return;}
       if(d.alreadyRedeemed){return;}
       const advisor=d.advisorId?setSelectedAdvisor(d.advisorId):getSelectedAdvisor();
