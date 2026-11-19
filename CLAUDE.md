@@ -2810,11 +2810,13 @@ guessing an unconfirmed code. `api/checkout.js` passes its existing
 product names) straight through to `buildFlexFormUrl()` - one-line
 change, no new data needed.
 
-**Not yet independently confirmed on a real checkout**: this needs a
-real test to see the CCBill page actually render in German/French/
-Spanish/Italian for a real DEGAJA order (not just CCBill's own generic
-$20 example) - ask Yoel to try a real checkout in a mapped language
-next time CCBill testing comes up.
+**CONFIRMED WORKING 2026-11-19**: Yoel ran a real German-language
+checkout and the CCBill page rendered fully in German - "Rechnungs-
+kontakt"/"Vorname"/"Nachname"/"Postleitzahl"/etc., with the language
+dropdown at the top showing "Deutsch" selected. Real DEGAJA pricing
+(€5,00 EUR) shown correctly alongside it. The `language` parameter
+fix works end-to-end on a real order, not just CCBill's own generic
+example.
 
 ## Behavioral notes
 
