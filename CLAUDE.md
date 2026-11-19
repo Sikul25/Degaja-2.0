@@ -2503,24 +2503,40 @@ don't assume today's display-only version implies that's wanted too.
 `i18n.js?v=` bumped 79→80 across all 10 files that load it;
 `live-consult.js?v=` bumped 40→41 in `index.html` and `live-call.html`.
 
-## Live advisor: "urgent? email" note added to her public card (2026-11-19)
+## Live advisor: scheduling-outside-hours note added to her public card (2026-11-19)
 
-Same day as the working-hours display feature above, Yoel confirmed
-("כן לדברים דחופים אי מייל" - yes, for urgent matters, email) adding a
-second, display-only line to Papuli's card: a note telling a visitor to
-email `info@degaja.com` if something is urgent (since the hours line
-above already tells them when NOT to expect her live). New
-`live.advisorUrgent` i18n key added to all 11 base languages,
-right after the existing `live.advisorHours` key on each line (e.g. en:
-"Urgent? Email: info@degaja.com", de: "Dringend? E-Mail:
-info@degaja.com"). Rendered in `live-consult.js`'s `advisorCards()`
-right after the hours `<span>`, reusing the same `.advisor-languages`
-CSS class - no new CSS, same pattern as the hours feature. Unconditional
-(always shown, no `a.hours`-style guard) since it's a static contact
-note, not per-advisor data.
+Same day as the working-hours display feature above. First built this as
+an "urgent? email" note per an initial ambiguous instruction
+("כן לדברים דחופים אי מייל"), but Yoel then clarified via AskUserQuestion
+that this was wrong - the real meaning is a scheduling mechanism, not an
+"urgent matters" contact line. His exact clarification: "הם צריכים לשלוח
+אי מייל שעה לפני השיחה המתוכננת ואז פפולי עוברת לאון ליין, הלקוח דרך
+האתר בצורה הרגילה משלם לשרות שבחר ואז מתחבר אליה" - a customer who wants
+a call outside her stated hours (08:00-12:00, 18:00-24:00) emails 1 hour
+ahead of the time they want, Papuli comes online for it, and the
+customer still pays through the site exactly as normal (price/birthdate/
+consent, CCBill checkout) and then connects to her - the email is purely
+a pre-arrangement mechanism for off-hours timing, nothing about payment
+or urgency changes.
 
-`i18n.js?v=` bumped 80→81 across all 10 files that load it;
-`live-consult.js?v=` bumped 41→42 in `index.html` and `live-call.html`.
+**Fixed**: renamed the i18n key from `live.advisorUrgent` to
+`live.advisorSchedule` and rewrote the text in all 11 base languages to
+reflect scheduling, not urgency (e.g. en: "Need another time? Email 1h
+ahead: info@degaja.com", de: "Termin außerhalb der Zeiten? 1 Std. vorher
+E-Mail: info@degaja.com"). Rendered in `live-consult.js`'s
+`advisorCards()` right after the hours `<span>`, same
+`.advisor-languages` CSS class, unconditional (static contact note, not
+per-advisor data) - unchanged from the first pass, only the key name and
+copy changed.
+
+**Purely informational/display, like the hours line above** - nothing
+in `api/checkout.js`/`notify-advisor.js`/the availability toggle enforces
+or requires this email; a customer can still book and pay within her
+stated hours with no email at all. This is just a documented path for
+booking outside those hours.
+
+`i18n.js?v=` bumped 81→82 across all 10 files that load it;
+`live-consult.js?v=` bumped 42→43 in `index.html` and `live-call.html`.
 
 ## Behavioral notes
 

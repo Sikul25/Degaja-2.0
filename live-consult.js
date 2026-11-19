@@ -129,7 +129,7 @@
           <span class="advisor-card-title">${esc(advisorTitle(a))}</span>
           ${languages ? `<span class="advisor-languages">${esc(t('live.advisorSpeaks'))} ${esc(languages)}</span>` : ''}
           ${a.hours ? `<span class="advisor-languages">${esc(t('live.advisorHours'))} ${esc(a.hours)}</span>` : ''}
-          <span class="advisor-languages">${esc(t('live.advisorUrgent'))}</span>
+          <span class="advisor-languages">${esc(t('live.advisorSchedule'))}</span>
           ${tags ? `<span class="advisor-tags">${tags}</span>` : ''}
           ${statusLabel ? `<span class="advisor-card-status ${dotClass}">${esc(statusLabel)}</span>` : ''}
         </span>
