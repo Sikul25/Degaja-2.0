@@ -2727,3 +2727,13 @@ invisible again.
 - Conversations on this project are long-running and get compacted — when
   something feels like it should be "obviously known" but isn't, say so
   plainly and ask, rather than guessing or pretending to remember.
+- **2026-11-19: Yoel explicitly said to just say "I don't know" instead of
+  guessing**, after I described exact button text on a third-party site
+  (metered.ca) I had no actual network access to - and it turned out
+  different from what was really there. This session has no browser/
+  network access to most external sites (confirmed - a web-fetch attempt
+  to metered.ca failed with DNS resolution blocked, not just slow). When
+  anything about a page/UI/tool outside this repo isn't independently
+  verifiable (no working fetch, no screenshot from Yoel yet), say plainly
+  "I don't know, I don't have access to check" rather than describing it
+  from general/training knowledge as if confirmed.
