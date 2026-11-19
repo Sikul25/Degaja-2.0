@@ -2100,6 +2100,45 @@ again and found two more things, both real:
    same callback now also re-renders `#advisorCards` with the real data,
    keeping the current selection highlighted.
 
+## Trend banners hidden/unresponsive on iPhone - missing top safe-area padding (2026-11-19)
+
+Yoel reported the first homepage trend banner (the gold "past-life quiz"
+one, `.quiz-trend-bar` - it's literally the first element in `<body>`)
+looked cut off and didn't respond to taps, specifically on iPhone.
+Root cause: `index.html`'s viewport meta already has `viewport-fit=cover`
+(needed for the bottom PWA tab bar's own `env(safe-area-inset-bottom)`
+padding, already handled in `style.css`), but **nothing anywhere
+compensated for the matching top inset** - no `padding-top:
+env(safe-area-inset-top)` on `body` or any wrapper. In a browser tab this
+is invisible (Safari's own chrome already reserves that space), but once
+installed to the home screen and run standalone/fullscreen - which this
+site is explicitly built for (`nav.installApp`) - the page content starts
+at true y=0, so whatever happens to be the very first element on the
+page renders partly or fully under the iPhone's notch/Dynamic
+Island/status bar, where it's both visually clipped and where taps are
+intercepted by iOS's own UI instead of reaching the page. Since the 7
+trend banners are literally the first 7 elements in `<body>` (stacked,
+all shown unconditionally, not just one picked by rotation - confirmed
+by grep, no hiding/rotation logic exists anywhere), the gold one being
+first is why it specifically was affected; the same would happen to
+whatever landed in that position on any other page too.
+
+**Fixed**: added `padding-top: env(safe-area-inset-top, 0px)` to `body`
+in `style.css` (shared by all pages) - defaults to 0px wherever there's
+no inset (every non-notched device, Android, desktop, a plain browser
+tab), so this only ever does anything in the exact standalone-PWA/notched
+case it's meant for. `style.css?v=` bumped 5→6 in `index.html` (the only
+file that versions it - the other 15 pages load it unversioned, matching
+how they already were; not changed here).
+
+**Separately worth noting, ties back to Yoel's own earlier "too
+cluttered" comment relaying Papuli's feedback**: while investigating this,
+confirmed all 7 trend banners really are shown stacked at the very top of
+every homepage load, unconditionally - not a rotating/randomized single
+banner. If the "consolidate features" redesign (still unresolved, see
+below) happens, this stack is a concrete, visible example of exactly the
+clutter being described and a natural first thing to address.
+
 **Still open, not yet acted on**: Yoel separately raised a much bigger,
 genuinely ambiguous ask in the same message - consolidating "features
 under 7" into a menu on a separate page, after relaying that Papuli
