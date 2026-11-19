@@ -429,7 +429,18 @@
       // Got a definitive answer for an AI order - stop retrying and clear the pending marker.
       try { localStorage.removeItem(CCBILL_ORDER_KEY); } catch (_) { /* ignore */ }
 
-      if (!data.approved) return;
+      if (!data.approved) {
+        // A genuine CCBill denial (declined card etc.) landed here with
+        // zero feedback - the customer was left on whatever page they were
+        // on with nothing to show their payment failed, reading exactly
+        // like "nothing happened." Nothing to resume/deliver, so clear the
+        // stashed reading and tell them plainly - alert() works regardless
+        // of which section/page they were on, unlike writing into a
+        // specific result panel that may not exist here.
+        localStorage.removeItem(PENDING_READING_KEY);
+        alert(t("payment.denied"));
+        return;
+      }
 
       state.paidAccess = true;
       localStorage.setItem("degajaPaidAccess", "1");

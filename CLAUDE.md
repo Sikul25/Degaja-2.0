@@ -2635,6 +2635,55 @@ proof they're in, instead of the modal just closing to nothing.
 `i18n.js?v=` bumped 83→84 across all 10 files that load it;
 `script.js?v=` bumped 42→43 in `index.html`.
 
+## Proactive full-site audit (2026-11-19): denied CCBill payments gave zero feedback
+
+Per Yoel's explicit request to keep checking the whole site continuously
+rather than wait for him to find the next bug by hand, ran a focused
+background audit for the exact bug class repeatedly found today (an
+action silently fails/hangs with no visible feedback). Found one real,
+high-severity finding, confirmed by reading the actual code:
+
+**The bug**: in both `script.js`'s `verifyAiPayment()` and
+`live-consult.js`'s `verify()`, the CCBill polling loop correctly
+detects a genuine denial (`data.found && !data.approved` - e.g. a
+declined card, `eventType: "NewSaleFailure"`) and correctly stops
+retrying/clears the pending-order key, but then just `return`s with
+**zero** visible feedback - `script.js` had nothing at all, `live-
+consult.js` only had an invisible `console.warn`. A customer whose
+card gets declined is left exactly where they were with no indication
+anything failed - the identical "looks like nothing happened" symptom
+already fixed today for sign-in and the loading screens, just in the
+one flow that actually loses real money if a customer gives up instead
+of retrying.
+
+**Fixed**: both now show `alert(t("payment.denied"))` on a genuine
+denial. `alert()` was chosen deliberately over writing into a specific
+result panel (the pattern used elsewhere, e.g. `live.checkoutFailTitle/
+Desc`) because CCBill's denial redirect always lands on `index.html`
+regardless of where the purchase started (standalone page, the voice
+booking flow on `live-call.html`, etc.) - `index.html` doesn't have
+every other page's result panel/`#degajaCall` element, so a fixed
+target would silently do nothing on whichever page actually receives
+the redirect. `alert()` already has precedent elsewhere in this
+codebase (the standalone pages' own checkout-failure handling) and
+works regardless of DOM state. New shared `payment.denied` i18n key
+(all 11 languages) covers both files. `script.js`'s branch also clears
+`PENDING_READING_KEY` since there's nothing to resume on a denial.
+
+Confirmed NOT an issue (same audit, everything else already has the
+fix pattern applied): every fetch() across script.js/live-consult.js/
+pre-chat.js/all 7 standalone pages' AI calls has a client-side timeout
+and a fallback/error path; checkout buttons have in-flight guards and
+try/finally re-enable; birthdate/consent validation scrolls into view;
+the explicit `flag==='cancelled'` path (user actively cancelled on
+CCBill's own page, so they already know) was deliberately left as-is -
+not the same "surprised by silence" problem as a denial they didn't
+expect.
+
+`i18n.js?v=` bumped 84→85 across all 10 files that load it;
+`script.js?v=` bumped 43→44, `live-consult.js?v=` bumped 44→45, both
+in `index.html` (and `live-consult.js` also in `live-call.html`).
+
 ## Behavioral notes
 
 - Never reintroduce Talmud/Judaism framing, or Chinese law/regulation

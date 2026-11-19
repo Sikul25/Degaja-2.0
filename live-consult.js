@@ -293,7 +293,15 @@
       }
       // Got a definitive answer for a voice order - stop retrying and clear the pending marker.
       try{localStorage.removeItem(CCBILL_ORDER_KEY)}catch(_){}
-      if(!d.approved){console.warn('DEGAJA payment verification failed');return;}
+      if(!d.approved){
+        // A genuine CCBill denial landed here with zero visible feedback -
+        // console.warn is invisible to a real customer. This runs after
+        // the redirect lands on index.html (CCBill's denial URL is always
+        // the homepage), where #degajaCall doesn't exist, so alert() is
+        // used instead of writing into a panel that may not be present.
+        alert(t('payment.denied'));
+        return;
+      }
       if(d.alreadyRedeemed){return;}
       const advisor=d.advisorId?setSelectedAdvisor(d.advisorId):getSelectedAdvisor();
       localStorage.setItem('degajaPaidVoice','1');
