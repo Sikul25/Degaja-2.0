@@ -2166,6 +2166,144 @@ scope (which features, what "under 7" means, what the menu/page
 structure should look like) before any of it is built. Ask him directly
 next time this comes up rather than guessing at a full homepage redesign.
 
+## New bottom tab: "Free" directory, separated from paid live-advisor booking (2026-11-19)
+
+Yoel reported the free anonymous pre-chat widget and the paid Papuli
+booking card still looked mixed/confusing ("זה שוב מוביל להטעיה") even
+after they were technically on separate elements - both lived inside
+`#human .human-wrap`, stacked one after another (pre-chat.js and
+live-consult.js's `card()` both `appendChild`'d into the same
+container). His instruction: "תפריד תיצור עמוד נפרד בתפריט למטה לכל מה
+שחינם. ואז אם ירצו להמשיך יעברו לתשלום" - separate it, create a
+dedicated page in the bottom tab menu for everything free, with a path
+from there to payment if they want to continue.
+
+First pass: added a new `#freechat` section/tab (`data-tab="freechat"`,
+bottom-tab button "💭 Chat"), moved `pre-chat.js`'s mount point there
+(`$('#freechat .human-wrap')` instead of `$('#human .human-wrap')`),
+so the free chat and the paid advisor card are now on fully separate
+tabs. Its existing "Continue in person" button already used
+`window.degajaGoTo` (tabs.js's helper, which finds the target element's
+own `data-tab` ancestor and switches tabs automatically), so "move to
+payment if they want to continue" needed no new code.
+
+Yoel then clarified further - he meant ALL free applications, not just
+the chat widget: "תיצור בתפריט למטה תפריט Free שיוביל לכל האפליקציות
+חינם". Expanded `#freechat` into a full directory: renamed the tab to
+"🆓 Free"/localized-per-language, and added a `.services-grid` (reusing
+the exact same classes/i18n keys already used by the homepage's own
+services grid, so no new CSS) linking to every genuinely free feature -
+the main-site first-use-free readings (oracle, palm, coffee, gematria,
+numerology, bazi, horoscope, hypnosis) plus the free-reveal standalone
+pages (quiz, dream, love-quiz, time-tunnel, aura, mind-clinic,
+zohar-wheel) plus the zh-only chinaCards experience. Each card's href
+is a `#section` anchor or external page exactly like the homepage grid
+already uses, so clicking one still correctly switches tabs via
+`degajaGoTo` (e.g. `#oracle`/`#bazi` land on the "readings" tab).
+
+Did NOT remove these cards from the main homepage services grid (the
+"start" tab) - only added the new Free-tab directory alongside it. The
+main grid still mixing free and paid cards together is part of the
+separately-flagged, still-open "consolidate under 7 into a menu"
+redesign question above, not resolved here.
+
+i18n.js bumped to v=79 (new keys: `tab.freechat`, `freechat.eyebrow`,
+`freechat.title1/title2/intro`, `freechat.moreEyebrow`,
+`services.freechat.title/desc`, `services.quiz.title` - all 11
+languages); `pre-chat.js?v=` bumped 8→9.
+
+## Live-advisor: auto-join instead of requiring the advisor to tap twice (2026-11-19)
+
+Yoel reported Papuli wasn't responding to a call even though she showed
+"online" in her own availability toggle, and asked if the accept flow
+could be made simpler. Investigated and confirmed the architecture was
+working as designed, just not obviously so: "online" in her toggle is
+a separate status (availability for new bookings) from accepting THIS
+specific already-created session - she still had to open the WhatsApp
+join link AND then find and tap a separate "Join" button in the
+incoming-call panel (`openAdvisorJoinLink()` only pre-filled the code
+and played a ringtone; `advisorJoin()`, which actually requests the mic
+and connects the call, only ever ran from that button's `onclick`).
+
+That second tap was our own extra gate (old code comment: "so she
+explicitly consents to mic access"), not a real browser requirement -
+`getUserMedia()`'s own native OS/browser permission prompt already IS
+the explicit-consent step, and opening the link itself is her explicit
+action. Simplified: `openAdvisorJoinLink()` now calls `advisorJoin()`
+automatically as soon as the link opens, instead of waiting for a
+manual tap. The manual "Join" button stays visible and wired as a
+fallback in case the auto-attempt fails (e.g. a stricter in-app browser
+blocking the request) - she can still tap it herself in that case.
+`live-consult.js?v=` bumped 39→40 in both `index.html` and
+`live-call.html`.
+
+Not yet independently confirmed with a real test call after this fix -
+ask Yoel to retest the WhatsApp join flow next time it comes up.
+
+## CCBill: confirmed stable across repeated real test payments (2026-11-19)
+
+Yoel ran 3 more real test transactions through CCBill (same Test
+Transaction User mechanism as the first 2026-11-12 success, documented
+above) and reported all 3 succeeded without issue ("ccbill מתפקד טוב
+אחרי 3 ניסויים עם הטסט לא איכזב" - CCBill is functioning well, didn't
+disappoint across 3 test attempts). This is in addition to, not instead
+of, the first confirmed success and the two real production purchases
+already logged above - strengthens confidence that the integration is
+genuinely stable, not a one-off. Still worth checking `get_runtime_logs`
+for `api/ccbill-webhook`/`api/_tiktok.js` after a real (non-test)
+purchase to confirm the TikTok Events API server-side call (added
+2026-11-17, never independently confirmed as actually succeeding against
+TikTok's side) is landing correctly.
+
+Relevant to the still-paused TikTok Ads launch decision above ("Yoel
+explicitly decided to hold off launching/paying for any TikTok campaign
+until the CCBill cutover is fully live") - this repeated-success result
+is evidence toward that gate being satisfied, but Yoel hasn't explicitly
+reopened/confirmed the launch decision itself yet; don't assume it's
+unblocked without him saying so directly.
+
+## TikTok organic comments: getting removed as spam, especially under competitor-callout videos (2026-11-19)
+
+Yoel posted a promotional comment ("Try DEGAJA 🔮 - AI tarot, palm,
+coffee, gematria, numerology & horoscope readings. Full price shown
+upfront, one-time payment only, no subscription ever.") under a TikTok
+video and it was removed for violating Community Guidelines - almost
+certainly TikTok's spam-detection treating a templated business-promo
+comment (emoji + feature list + price claim) as unsolicited advertising,
+especially since it reads identically across posts rather than looking
+like organic engagement.
+
+Gave Yoel several more natural-sounding rewrites to rotate across
+different videos (never post the same one twice) instead of the single
+templated line. Important correction mid-conversation: the comments are
+posted from the official `@Degaja` TikTok account itself, not a
+personal account - so any "a friend recommended this to me" / first-person
+personal-testimonial framing is wrong and potentially deceptive coming
+from the brand's own account; rewrote them as a brand genuinely engaging
+("Thanks for watching!", "Love this energy!") rather than faking a
+personal review. That kind of personal-testimonial framing would only
+make sense posted from a separate personal account, if Yoel has one -
+asked him, not yet confirmed either way.
+
+Separately flagged a second, compounding risk: Yoel has been commenting
+specifically under "scam alert" videos calling out competitor Nebula
+(ties back to the earlier-established "never reference Nebula/the FTC
+case directly in ad creative" caution above) - even without naming
+Nebula in the comment text itself, commenting under those specific
+callout threads both (a) faces heavier spam/report scrutiny since such
+threads already attract many reports from both sides of the dispute,
+and (b) associates DEGAJA with that public controversy by context alone.
+Recommended sticking to comments under general tarot/astrology/spiritual
+content instead of competitor-callout videos specifically. Yoel has
+already posted at least one comment under such a video since this was
+raised (without naming Nebula) - outcome not yet confirmed either way.
+
+Also noted for Yoel: organic comment-spam filtering is unrelated to the
+already-planned paid TikTok Ads campaign (€100/day, DACH+US, still
+paused pending CCBill per the section above) - a paid campaign goes
+through TikTok's ad-review process, not comment-spam detection, so this
+organic-comment friction doesn't block or affect that separate plan.
+
 ## Behavioral notes
 
 - Never reintroduce Talmud/Judaism framing, or Chinese law/regulation
