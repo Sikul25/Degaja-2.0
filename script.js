@@ -185,6 +185,17 @@
     });
   }
 
+  // live-call.html's "please sign in" state has no sign-in UI of its own
+  // (that whole modal/form lives only here, in script.js) - it links back
+  // here with ?login=1 instead, so the visitor isn't left with no way to
+  // actually sign in once they're off the homepage.
+  function openLoginIfRequested() {
+    const params = new URLSearchParams(location.search);
+    if (params.get("login") !== "1") return;
+    history.replaceState({}, document.title, location.pathname + location.hash);
+    if (!state.user) authView("signin");
+  }
+
   function accountView() {
     if (!state.user) {
       authView("signin");
@@ -1409,4 +1420,5 @@
 
   redeemPromoCredits();
   verifyAiPayment();
+  openLoginIfRequested();
 })();

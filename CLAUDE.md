@@ -2074,6 +2074,32 @@ again and found two more things, both real:
 
 `live-consult.js?v=` bumped 36→37 in both files for this second round.
 
+**Same day, third round: two more real bugs caught while retesting.**
+1. **No way to sign in from `live-call.html`**: the whole sign-in
+   modal/form lives only in `script.js`/`index.html` (`#modal`,
+   `authView()`, etc.) - `live-call.html` doesn't load `script.js` at all.
+   A signed-out visitor landing there on `start()`'s "please sign in
+   first" message had no way to actually sign in - a dead end introduced
+   by moving the booking form off the homepage. **Fixed**: that message
+   now includes a link to `index.html?login=1#human`; a new
+   `openLoginIfRequested()` in `script.js` (called at the end of its own
+   init, alongside `verifyAiPayment()`) opens the sign-in modal
+   automatically when that param is present, landing the visitor right at
+   `#human` so they can click "Start Call" again once signed in.
+2. **Advisor cards never reflected real availability**: Yoel reported
+   Papuli showing offline on the homepage despite being online - checked
+   directly against the live `/api/advisors` endpoint and Edge Config,
+   both confirmed `available: true` at the time, ruling out a server bug.
+   Root cause: `card()`'s advisor-card grid (the online/offline dot and
+   label on each card) renders once from `fallbackAdvisors` - which has
+   no `available` field at all - before `loadRemoteData()`'s real fetch
+   to `/api/advisors` has a chance to resolve, and was never re-rendered
+   once that real data arrived. `loadRemoteData().then()` already
+   refreshed the `<select>` and the separate status badge
+   (`statusText()`), just never the card grid itself. **Fixed**: that
+   same callback now also re-renders `#advisorCards` with the real data,
+   keeping the current selection highlighted.
+
 **Still open, not yet acted on**: Yoel separately raised a much bigger,
 genuinely ambiguous ask in the same message - consolidating "features
 under 7" into a menu on a separate page, after relaying that Papuli

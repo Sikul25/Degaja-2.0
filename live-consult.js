@@ -171,7 +171,14 @@
 
   function start(){
     const u=getUser(), host=$('#degajaCall'); if(!host)return;
-    if(!u){host.innerHTML=`<div class="degaja-call-panel"><b>${t('live.pleaseSignIn')}</b><p class="degaja-live-copy">${t('live.pleaseSignInDesc')}</p></div>`;return;}
+    if(!u){
+      // The sign-in form itself only exists in script.js/index.html - this
+      // page has no copy of it, so link back there with ?login=1 (opens
+      // the sign-in modal automatically) instead of leaving the visitor
+      // with no way to actually sign in from here.
+      host.innerHTML=`<div class="degaja-call-panel"><b>${t('live.pleaseSignIn')}</b><p class="degaja-live-copy">${t('live.pleaseSignInDesc')}</p><a href="index.html?login=1#human" class="gold" style="display:inline-block;text-decoration:none;border-radius:999px;padding:12px 18px;font-weight:800;margin-top:10px">${t('nav.login')} →</a></div>`;
+      return;
+    }
     const a=getSelectedAdvisor();
     if(a.available===false){
       host.innerHTML=`<div class="degaja-call-panel"><h4 style="color:#18334a">${t('live.notAvailableTitle')}</h4><p class="degaja-live-copy">${fmt(t('live.notAvailableDesc'),{name:esc(a.name)})}</p><a href="#oracle" class="dark" style="display:inline-block;text-decoration:none;border-radius:999px;padding:12px 18px;font-weight:800">${t('live.tryOracleBtn')}</a><div class="degaja-notify"><p class="degaja-live-copy">${fmt(t('live.leaveContactLabel'),{name:esc(a.name)})}</p><input id="degajaNotifyContact" maxlength="120" placeholder="${t('live.leaveContactPlaceholder')}"><button class="soft" id="degajaNotifyBtn">${t('live.leaveContactBtn')}</button><div class="degaja-status" id="degajaNotifyStatus"></div></div></div>`;
@@ -485,6 +492,14 @@
     loadRemoteData().then(()=>{
       const select=document.getElementById('degajaAdvisorSelect');
       if(select){ select.innerHTML=advisorOptions(); select.value=getSelectedAdvisor().id; }
+      // The advisor-card grid itself (the online/offline dot + label on
+      // each card) was rendered once in card(), before this fetch had a
+      // chance to resolve, using fallbackAdvisors - which has no
+      // `available` field at all, so every card showed no status
+      // indicator whatsoever until this real data arrived. Re-render it
+      // now with the real data, keeping the current selection highlighted.
+      const cardsHost=document.getElementById('advisorCards');
+      if(cardsHost) cardsHost.innerHTML=advisorCards(getSelectedAdvisor().id);
       creditText();
       statusText();
     });
