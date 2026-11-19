@@ -7,7 +7,7 @@ export default async function handler(req, res) {
 
   const { birthDate, birthTime = "", birthPlace = "", question = "", lang = "de" } = req.body || {};
 
-  const LANGUAGE_NAMES = { de: "German", en: "English", us: "English", fr: "French", es: "Spanish", it: "Italian", pt: "Portuguese", ru: "Russian", uk: "Ukrainian", br: "Brazilian Portuguese", mx: "Mexican Spanish" };
+  const LANGUAGE_NAMES = { de: "German", en: "English", us: "English", fr: "French", es: "Spanish", it: "Italian", pt: "Portuguese", ru: "Russian", uk: "Ukrainian", br: "Brazilian Portuguese", mx: "Mexican Spanish", ja: "Japanese", zh: "Chinese", hi: "Hindi" };
   const languageName = LANGUAGE_NAMES[lang] || LANGUAGE_NAMES.de;
 
   const cleanBirthDate = typeof birthDate === "string" ? birthDate.slice(0, 20).trim() : "";

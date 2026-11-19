@@ -48,13 +48,13 @@ export default async function handler(req, res) {
   // same-digits symbol swap like GBP, so they need their own amounts here
   // and for voice topic tiers below. Stripe amounts are in the currency's
   // smallest unit (cents/centavos/paise) EXCEPT zero-decimal currencies
-  // like JPY, where the amount is the literal whole-unit price - ¥750 is
-  // unit_amount 750, not 75000. Getting this wrong would silently charge
+  // like JPY, where the amount is the literal whole-unit price - ¥900 is
+  // unit_amount 900, not 90000. Getting this wrong would silently charge
   // either 100x too much or too little.
   const AI_AMOUNTS_BY_CURRENCY = {
     brl: { single: 2499, pack: 4999 },
     mxn: { single: 8900, pack: 17900 },
-    jpy: { single: 750, pack: 1490 },
+    jpy: { single: 900, pack: 1490 },
     cny: { single: 3900, pack: 7900 },
     inr: { single: 24900, pack: 49900 }
   };

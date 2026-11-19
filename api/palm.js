@@ -5,7 +5,7 @@ export default async function handler(req, res) {
 
   const { image, mediaType = "image/jpeg", lang = "de", profile = {} } = req.body || {};
 
-  const LANGUAGE_NAMES = { de: "German", en: "English", us: "English", fr: "French", es: "Spanish", it: "Italian", pt: "Portuguese", ru: "Russian", uk: "Ukrainian", br: "Brazilian Portuguese", mx: "Mexican Spanish" };
+  const LANGUAGE_NAMES = { de: "German", en: "English", us: "English", fr: "French", es: "Spanish", it: "Italian", pt: "Portuguese", ru: "Russian", uk: "Ukrainian", br: "Brazilian Portuguese", mx: "Mexican Spanish", ja: "Japanese", zh: "Chinese", hi: "Hindi" };
   const languageName = LANGUAGE_NAMES[lang] || LANGUAGE_NAMES.de;
 
   if (!image || typeof image !== "string") {

@@ -2838,3 +2838,68 @@ languages - en/it still untested but use the identical code path.
   verifiable (no working fetch, no screenshot from Yoel yet), say plainly
   "I don't know, I don't have access to check" rather than describing it
   from general/training knowledge as if confirmed.
+
+## CCBill Dynamic Pricing: price range is currency-specific, not a blanket
+## USD-equivalent (confirmed 2026-11-19) — JPY single-reading price fixed
+
+Yoel reported a real checkout failure for Japan. The actual error, read
+directly from CCBill's own page:
+`com.ccbill.frontflex.common.exception.SubscriptionRuleException: Initial
+price: [750] is not in valid price range [900 - 50,000]`.
+
+This resolves a question flagged as unconfirmed earlier in this file
+(under "Dynamic Pricing — confirmed technical details"): CCBill's
+Dynamic Pricing min/max validation is **per-currency**, not a single
+USD-equivalent range applied to the raw number regardless of currency.
+Only USD's range ([5, 300]) was confirmed before; JPY's confirmed real
+range is **¥900–¥50,000**. The JPY single-reading price (¥750) was below
+this minimum - the JPY pack price (¥1,490) was already safely within it.
+
+**Fixed**: raised the JPY single-reading price from ¥750 to ¥900 (Yoel's
+explicit decision - "תעלה ל900 זה מינימום", i.e. go to exactly the
+confirmed minimum) in `api/checkout.js`'s `AI_AMOUNTS_BY_CURRENCY.jpy`,
+and every display string showing it: `i18n.js`'s ja-language
+`prices.single.btn/priceLabel`, `purchase.single`, `result.deepBtn`, and
+the embedded `cta`/`purchase_single` strings in all 7 standalone pages
+(quiz/love-quiz/dream/time-tunnel/aura/mind-clinic/zohar-wheel). Checked
+`VOICE_PRICES`' jpy tiers (`api/_data.js`) against this confirmed range
+too - all three (¥7,500/¥13,500/¥18,000) are safely within [900, 50000],
+not affected.
+
+**Not yet confirmed/checked**: whether CNY and INR have their own
+confirmed Dynamic Pricing ranges that the current pricing might violate -
+this real JPY failure is concrete evidence the earlier "unconfirmed,
+flagged rather than guessed" currency-range risk noted elsewhere in this
+file is real, not hypothetical, so this should be verified (a real test
+checkout in each currency, or asking CCBill support directly) before
+promoting paid features to zh/hi-speaking traffic or any ad spend
+targeting those markets - don't assume CNY/INR are fine just because
+JPY's specific range happened to accommodate the existing voice tiers.
+
+## Critical bug found and fixed: 7 of 9 AI reading endpoints fell back to
+## German instead of the visitor's real language for Japanese/Chinese/
+## Hindi (2026-11-19)
+
+Same report from Yoel ("התשובות לשאלות בפיצרים בגרמנית במקום ביפנית... תבדוק
+גם לגבי סין והודו" - answers in the features come back in German instead
+of Japanese... check China and India too). Confirmed by reading the code,
+not guessed: every AI endpoint builds its system prompt's "Answer in
+${languageName}" instruction from a local `LANGUAGE_NAMES` map, with
+`languageName = LANGUAGE_NAMES[lang] || LANGUAGE_NAMES.de` - i.e. any
+`lang` value missing from that endpoint's own map silently instructs the
+AI to answer in German instead of erroring or defaulting to English.
+
+**`api/bazi.js` and `api/dream.js` already had `ja`/`zh`/`hi` entries
+(correct) - but `api/oracle.js`, `api/coffee.js`, `api/gematria.js`,
+`api/horoscope.js`, `api/hypnosis.js`, `api/numerology.js` and
+`api/palm.js` (7 of the 9 AI endpoints, including Oracle/Tarot, the
+highest-traffic feature) did NOT** - every Japanese, Chinese or
+Hindi-speaking visitor using any of those 7 features got a real reading
+back written entirely in German, with no error, for as long as this bug
+existed. Fixed by adding `ja: "Japanese", zh: "Chinese", hi: "Hindi"` to
+all 7 of these files' `LANGUAGE_NAMES` maps, matching the pattern already
+correct in bazi.js/dream.js. Since `api/oracle.js` is the shared backend
+for every standalone page's paid "go deeper" step too, this one fix
+covers all 7 standalone pages as well as the main site's own 7
+German-fallback-affected features.
+`node --check` passed on all 7 edited files before deploying.
