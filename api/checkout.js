@@ -64,13 +64,21 @@ export default async function handler(req, res) {
     pack: { name: names.pack, amount: aiAmounts.pack, quantity: 1, type: "ai", credits: 3 }
   };
   // India bills in USD (INR is blocked by CCBill's WAF regardless of
-  // price - confirmed 2026-11-20), but a 3-reading pack is too small for
-  // a volume-driven market this size (Yoel's explicit call, same day) -
-  // the pack becomes a 10-reading bundle at a fixed $26.00, shown to
-  // visitors with a ₹2,490 label (same ₹249/reading rate as the single
-  // reading) plus a note that billing actually happens in USD.
+  // price - confirmed 2026-11-20). Yoel rejected a $5 single-reading
+  // price as too expensive for this market and said to cancel the $5
+  // option entirely ("תבטל את אופציית ה-5 דולאר") - but $5.00 is
+  // CCBill's enforced Dynamic Pricing minimum for any single USD charge,
+  // so a cheaper standalone single reading isn't possible while billing
+  // in USD. Resolved by making BOTH "single" and "pack" resolve to the
+  // same 10-reading bundle at the existing standard $9.99 pack price
+  // (reused, not a new number guessed here) - there is effectively only
+  // one purchasable offer for India now, and no $5.00 price appears
+  // anywhere in the flow. If Yoel wants a different exact dollar amount
+  // for this bundle, this is the one spot to change.
   if (lang === "hi") {
-    products.pack = { ...products.pack, amount: 2600, credits: 10 };
+    const indiaBundle = { amount: 999, credits: 10 };
+    products.single = { ...products.single, ...indiaBundle };
+    products.pack = { ...products.pack, ...indiaBundle };
   }
 
   let item = products[product];

@@ -3055,3 +3055,50 @@ before deploying. **Not yet independently confirmed with a real
 checkout test** - verify the next time India/`hi` comes up that a
 "pack" purchase actually grants 10 credits and charges $26.00 via a real
 or test transaction.
+
+**2026-11-20, same day, second follow-up: the $26/₹2,490 bundle above
+was rejected by Yoel as too expensive - the $5 single-reading price
+is cancelled entirely for India, not just discounted.** Exact words:
+"זה יקר מידי זה כפול מחיר" (too expensive, double the price) after
+seeing $26, then "תקשיב טוב תבטל את אופציית ה-5 דולאר" (listen well,
+cancel the $5 option) when asked directly whether the $5 single should
+stay. Important technical constraint explained to him and worth
+remembering: **$5.00 is CCBill's enforced Dynamic Pricing minimum for
+any single USD charge** (confirmed earlier via the real
+`SubscriptionRuleException` "[5 - 300]" range) - it is not possible to
+charge less than $5.00 for one standalone USD transaction, so "cancel
+the $5 option" could only mean removing the standalone single-reading
+purchase, not lowering its price further.
+
+**Implemented**: in `api/checkout.js`, for `lang === "hi"` both
+`products.single` AND `products.pack` are now overridden to the exact
+same bundle - `amount: 999` ($9.99, reusing the existing global
+standard pack price, not a new number) and `credits: 10`. Whichever
+button an Indian visitor clicks (the single "go deeper" CTA or the pack
+button), they get the same 10-credit bundle for $9.99 - there is
+effectively only one real offer for India now, and the $5.00/single-
+reading price and the earlier ₹2,490 rupee-label framing are both gone
+from every display string. Updated to match: `i18n.js`'s `hi` block
+(`prices.single.*` now says "10 Readings"/$9.99 instead of "Single
+Reading"/$5.00; `prices.pack.*` dropped the rupee label, now also
+$9.99/$1.00-per-reading; `purchase.single`/`purchase.pack` both read
+identically "10 रीडिंग्स · $9.99"; `result.deepBtn` is $9.99) and all 7
+standalone pages' `cta`/`purchase_single`/`purchase_pack` keys
+(`cta`'s trailing price changed to $9.99 only on the Hindi-language
+line in each file - confirmed via a Devanagari-script detection pass
+before editing so the English "us" block's own separate $5.00 lines
+were never touched).
+
+**This is a real, substantial discount from the original EUR/GBP/USD-
+pattern $5 single-reading price** (10 readings for $9.99 = $0.99/
+reading, vs. $5.00/reading everywhere else) - a deliberate, explicit
+business decision for the India market specifically (volume over
+per-unit price, per Yoel's own market-size reasoning earlier today),
+not something to extend to other currencies without him separately
+deciding that.
+`i18n.js?v=` bumped 89→90 across all 10 files. `node --check`/inline-
+script syntax re-verified on `api/checkout.js` and all 7 standalone
+pages before deploying. **Still not independently confirmed with a
+real checkout test** - verify next time India/`hi` comes up that both
+"single" and "pack" purchases now correctly grant 10 credits and
+charge exactly $9.99.
