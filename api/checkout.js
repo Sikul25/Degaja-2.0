@@ -56,7 +56,7 @@ export default async function handler(req, res) {
     mxn: { single: 8900, pack: 17900 },
     jpy: { single: 900, pack: 1490 },
     cny: { single: 3900, pack: 7900 },
-    inr: { single: 24900, pack: 49900 }
+    inr: { single: 24900, pack: 249000 }
   };
   const aiAmounts = AI_AMOUNTS_BY_CURRENCY[currency] || { single: 500, pack: 999 };
   const products = {
