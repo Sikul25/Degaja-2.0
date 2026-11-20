@@ -12,6 +12,10 @@
     { "source": "/mx", "destination": "/index.html" },
     { "source": "/ja", "destination": "/index.html" },
     { "source": "/zh", "destination": "/index.html" },
-    { "source": "/hi", "destination": "/index.html" }
+    { "source": "/hi", "destination": "/index.html" },
+    { "source": "/en/become-partner", "destination": "/werde-partner.html" },
+    { "source": "/us/become-partner", "destination": "/werde-partner.html" },
+    { "source": "/fr/devenir-partenaire", "destination": "/werde-partner.html" },
+    { "source": "/pt/torne-se-parceiro", "destination": "/werde-partner.html" }
   ]
 }
