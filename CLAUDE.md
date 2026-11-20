@@ -3009,3 +3009,49 @@ standalone pages before deploying.
 change.** Yoel's decision only addressed India; ask him explicitly
 before applying the same USD switch to `zh`/China, since that's a
 separate market/currency decision he hasn't made yet.
+
+**2026-11-20, same day, follow-up: India's pack size changed to 10
+readings, shown in rupees, billed in dollars.** After seeing the India
+astrology-app market's real size (outlookbusiness.com's $35B figure,
+"bigger than the US and Europe combined"), Yoel's explicit reasoning was
+this market is about volume, not per-reading price - and asked for a
+10-reading bundle instead of the standard 3-reading pack, **displayed
+with a rupee price (so Indian visitors see a familiar number) but
+explicitly explained as billed in USD** ("שים חבילה 10 דק בדולאר תרשום
+בכרטיס מחיר ברופיה ותסביר חיוב בדולאר").
+
+**Implemented**: `api/checkout.js` now overrides `products.pack` for
+`lang === "hi"` specifically to `amount: 2600` ($26.00 flat) and
+`credits: 10` - this reuses the exact same `product: "pack"` request
+every purchase surface already sends, so no new product id or UI
+restructuring was needed; it took effect everywhere a "pack" purchase
+already existed (main site + all 7 standalone pages) automatically.
+**The $26.00 figure is a direct conversion of Yoel's own stated ₹2,490**
+(his original "10 units at the same ₹249/unit rate" idea from earlier in
+the day, before the WAF/currency root cause was found - ₹2,490 ÷ ~₹95/$1
+≈ $26) - not independently chosen pricing. If he wants a different exact
+dollar amount, this is the one line to change
+(`products.pack = { ...products.pack, amount: 2600, credits: 10 }`).
+
+Display updated to match: `i18n.js`'s `hi` block
+(`prices.pack.title/desc/btn` now say "10" not "3", `priceLabel` is
+`₹2,490`, `perUnit` and `purchase.pack` both spell out "USD में चार्ज
+होगा (≈$26)" - billed in USD, ~$26 - right next to the rupee number,
+per Yoel's explicit ask to explain the USD billing alongside the rupee
+price) and all 7 standalone pages' `purchase_pack` key, identically.
+**Note the resulting inconsistency, by design, not an oversight**: the
+single reading shows a plain `$5.00` (per the earlier same-day USD
+switch), while the pack shows `₹2,490` with a USD-billing note - this
+mismatch is exactly what Yoel asked for (single in dollars, pack
+anchored in rupees with an explanation), not something to "fix" for
+visual consistency without him reopening it.
+**Also note**: at ₹249/unit-equivalent, this pack carries no real
+discount over the single price (unlike the standard 3-pack's 33% off) -
+deliberately not framed as a discount in the copy, since claiming
+savings that don't exist would be misleading.
+`i18n.js?v=` bumped 88→89 across all 10 files. `node --check`/inline-
+script syntax verified on `api/checkout.js` and all 7 standalone pages
+before deploying. **Not yet independently confirmed with a real
+checkout test** - verify the next time India/`hi` comes up that a
+"pack" purchase actually grants 10 credits and charges $26.00 via a real
+or test transaction.

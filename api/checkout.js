@@ -63,6 +63,15 @@ export default async function handler(req, res) {
     single: { name: names.single, amount: aiAmounts.single, quantity: 1, type: "ai", credits: 1 },
     pack: { name: names.pack, amount: aiAmounts.pack, quantity: 1, type: "ai", credits: 3 }
   };
+  // India bills in USD (INR is blocked by CCBill's WAF regardless of
+  // price - confirmed 2026-11-20), but a 3-reading pack is too small for
+  // a volume-driven market this size (Yoel's explicit call, same day) -
+  // the pack becomes a 10-reading bundle at a fixed $26.00, shown to
+  // visitors with a ₹2,490 label (same ₹249/reading rate as the single
+  // reading) plus a note that billing actually happens in USD.
+  if (lang === "hi") {
+    products.pack = { ...products.pack, amount: 2600, credits: 10 };
+  }
 
   let item = products[product];
   let type = "ai";
