@@ -2943,3 +2943,26 @@ checking out in Chinese or Hindi (zh/hi site languages) currently hits a
 dead-end 503 with no clear error - this affects real production traffic,
 not just a hypothetical. Flagging this as the priority follow-up before
 any ad spend or feature promotion targeting zh/hi-speaking markets.
+
+**2026-11-20: tested Yoel's "require a minimum 10-reading bundle"
+hypothesis for India - price is NOT the cause, confirmed.** Yoel's
+instinct (mirroring the JPY fix) was to require a bigger minimum
+purchase: raise INR's pack price to ₹2,490 (10 readings at the existing
+₹249/unit rate). Temporarily set this in `AI_AMOUNTS_BY_CURRENCY.inr.pack`,
+deployed, and tested the real resulting FlexForm URL the same way as
+every other test in this file. **Still got the identical F5 WAF 503** -
+no change at all from ₹499. This rules out price entirely as the cause
+for INR (and by extension, very likely CNY too, same error family) -
+unlike JPY, this is not a Dynamic Pricing range problem a price change
+can fix. **Reverted the test price back to ₹499** (no net change to
+production pricing from this experiment).
+
+**This means CNY/INR are very likely either not enabled for Dynamic
+Pricing on this account at all, or blocked by some other account-level
+config** - not something fixable by changing numbers in our own code.
+The only remaining path is asking CCBill support directly
+(support@ccbill.com / merchantsupport@ccbill.com) whether INR and CNY
+are enabled for Dynamic Pricing on account 955732/subaccount 0000, and
+if not, what enabling them requires. Do not try further price-based
+workarounds for these two currencies without new information from
+CCBill - the price hypothesis is now conclusively tested and ruled out.
