@@ -2903,3 +2903,43 @@ for every standalone page's paid "go deeper" step too, this one fix
 covers all 7 standalone pages as well as the main site's own 7
 German-fallback-affected features.
 `node --check` passed on all 7 edited files before deploying.
+
+## CNY and INR checkout currently fails - a different, WAF-level 503, not a
+## price-range error like JPY's (found 2026-11-19, NOT yet fixed)
+
+Per Yoel's ask to also check China and India's payment after the JPY fix,
+tested both directly: called the real production `/api/checkout` for
+`lang=zh` (CNY, ¥39.00) and `lang=hi` (INR, ₹249.00), got back real
+FlexForm URLs, then fetched each via a throwaway Vercel Sandbox + curl
+(same method used throughout this file for CCBill testing, since this
+session has no direct network access to api.ccbill.com). A USD ($5.00)
+request from the exact same sandbox/IP in the same test loaded CCBill's
+real checkout page fine ("Processed by CCBill") - ruling out a general
+IP/WAF block on this session's testing method.
+
+**Both CNY and INR instead got CCBill's F5 WAF rejection** - the same
+generic error family documented earlier in this file
+(`Error 503 - Service Unavailable`, `F5 site: ...-dc12-ash`), reproduced
+on repeated attempts for both currencies. This is **not** the same kind
+of error JPY hit (a real app-level `SubscriptionRuleException` naming
+the exact valid price range) - it's a WAF-level rejection before the
+request ever reaches CCBill's price-validation logic, giving no
+diagnostic detail at all about why.
+
+**Root cause NOT confirmed - do not guess at one.** Plausible
+explanations not yet distinguished: these currencies may not be enabled
+at all on this Flex ID/account's Dynamic Pricing config (recall the
+portal's pricing-creation screen was found 2026-11-10 to only offer
+USD/EUR as options), or something else entirely. Per the standing
+"don't guess, verify" rule in this file's Behavioral notes, the next
+step is either (a) a real test checkout in CNY/INR from Yoel's own
+browser to confirm the same error independently of this session's sandbox
+method, or (b) asking CCBill support directly (support@ccbill.com /
+merchantsupport@ccbill.com) whether CNY and INR are enabled for Dynamic
+Pricing on account 955732/subaccount 0000.
+
+**Practical impact**: unlike JPY (now fixed), every real customer
+checking out in Chinese or Hindi (zh/hi site languages) currently hits a
+dead-end 503 with no clear error - this affects real production traffic,
+not just a hypothetical. Flagging this as the priority follow-up before
+any ad spend or feature promotion targeting zh/hi-speaking markets.
