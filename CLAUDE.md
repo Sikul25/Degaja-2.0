@@ -3102,3 +3102,25 @@ pages before deploying. **Still not independently confirmed with a
 real checkout test** - verify next time India/`hi` comes up that both
 "single" and "pack" purchases now correctly grant 10 credits and
 charge exactly $9.99.
+
+## Partner commission reverted back to 40% - stays 40%/10% (2026-11-20, same day)
+
+Yoel reversed the 50% decision above within the same conversation
+("הכל צריך להיות 40%" - everything needs to be 40%), after reacting
+with frustration that the change didn't match what he actually wanted
+(exact disagreement never fully resolved - possibly he'd already
+written/sent a different document elsewhere using 40% and wanted the
+site to match that, rather than the verbal "50%" instruction being
+taken literally). **Reverted via `git revert` of the 50% commit**
+(clean revert, no conflicts, confirmed via grep that the only
+remaining "50%" text anywhere is `apply.hero.commission` - a separate,
+pre-existing figure for the advisor program on `werde-beraterin.html`,
+never touched by either the 50% change or this revert). The
+partner-outreach letter file was also reverted to its original 40%
+wording and resent to Yoel.
+
+**Current, confirmed state: partner commission is 40% on live
+consultations, 10% on automated readings** - matching what it was
+before any of today's changes. Do not change this again without a
+clear, unambiguous instruction - this number was changed and reverted
+twice in one session already.
