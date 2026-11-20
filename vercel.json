@@ -16,6 +16,7 @@
     { "source": "/en/become-partner", "destination": "/werde-partner.html" },
     { "source": "/us/become-partner", "destination": "/werde-partner.html" },
     { "source": "/fr/devenir-partenaire", "destination": "/werde-partner.html" },
-    { "source": "/pt/torne-se-parceiro", "destination": "/werde-partner.html" }
+    { "source": "/pt/torne-se-parceiro", "destination": "/werde-partner.html" },
+    { "source": "/it/diventa-partner", "destination": "/werde-partner.html" }
   ]
 }
