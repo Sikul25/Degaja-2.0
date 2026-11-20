@@ -3102,3 +3102,104 @@ pages before deploying. **Still not independently confirmed with a
 real checkout test** - verify next time India/`hi` comes up that both
 "single" and "pack" purchases now correctly grant 10 credits and
 charge exactly $9.99.
+
+**CONFIRMED WORKING 2026-11-20, end to end against real CCBill**: both
+`product:"single"` and `product:"pack"` for `lang:"hi"` now return
+`currencyCode=840`/`initialPrice=9.99`, and both resulting FlexForm URLs
+load CCBill's real checkout page ("Processed by CCBill") with no F5 WAF
+503 - tested directly via a Vercel Sandbox + curl against the live
+production `/api/checkout` endpoint and the resulting CCBill URLs.
+
+## India payment alternatives explored: Razorpay hit a real blocker,
+## EximPe application submitted (2026-11-20)
+
+Separately from the USD-billing fix above, explored whether a
+dedicated Indian rupee payment gateway could work for DEGAJA instead
+(Yoel's own idea, after seeing AstroTalk's ₹1,823 crore/~$192M one-year
+revenue and the India astrology-app market's real scale). Researched
+three options (Razorpay's Import Stack, EximPe, PhonePe) via WebSearch
+- see the earlier message history for the full comparison. Key findings:
+
+- **Razorpay: hit a real blocker, confirmed by Yoel directly in their
+  signup flow** (`accounts.razorpay.com`) - the "select the country your
+  business is incorporated in" step offers only India/Singapore/United
+  States. **DEGAJA's actual registered entity is Sagacitas Ltd,
+  136 Capel Street, Dublin D01 T2C9, Ireland** (confirmed from
+  `impressum.html`) - not one of the three options, with no visible way
+  to add a different country. This is very likely a hard blocker for
+  Razorpay's self-serve Import Stack specifically for an Ireland-
+  incorporated business, not just a UX inconvenience. Also separately
+  found (news coverage, not Razorpay's own confirmation): the RBI had at
+  some point directed Razorpay to pause onboarding new merchants
+  entirely - unclear if still in effect, never independently confirmed.
+  **Yoel decided to stop pursuing Razorpay** ("לא אהבתי את רזור שיטה" -
+  didn't like Razorpay's approach) rather than contact their support to
+  work around the country-selection issue.
+- **EximPe: looks more promising, application already submitted.**
+  Their own marketing explicitly names "UK Ltd" as an example of the
+  foreign-entity KYC they're built for (alongside Delaware C-corp,
+  Singapore Pte. Ltd.) - more encouraging than Razorpay's closed
+  3-country list for an Ireland Ltd, though Ireland itself was never
+  explicitly confirmed. Yoel submitted an initial lead-gen application
+  via their site (merchant.eximpe.com, under `ceo@degaja.com`, company
+  name "Sagacitas Ltd") - this was just a short form (no country-of-
+  incorporation question hit, unlike Razorpay), got a "Thank you! Your
+  application has been received" confirmation, and is now awaiting
+  EximPe's own follow-up/KYC process.
+- **PhonePe**: found to be mostly a card-only international-payments
+  route for Indian merchants with less clear foreign-merchant onboarding
+  info available - not pursued further.
+
+**Critical open question, not yet resolved - ask EximPe directly when
+they follow up, per the same "fortune-telling" risk already flagged for
+Razorpay/other processors**: whether their restricted-business policy
+(`eximpe.com/prohibited-business-list` - this session could not fetch it
+directly, no network access to eximpe.com) permits an astrology/tarot/
+palm-reading AI entertainment platform. Several other major processors
+(PayPal/Braintree, Amazon Pay, Paddle) explicitly list "fortune
+telling"/"horoscopes"/"astrology" as prohibited categories - the exact
+same risk pattern that forced the original move away from Stripe. Per
+Yoel's own instruction ("לא לקרוא לזה רק טארוט, אנחנו יותר
+אינטרטיינמנט" - don't call it just tarot, we're more entertainment),
+any future outreach to a payment processor should frame DEGAJA as an
+"AI-generated digital entertainment platform for personal reflection/
+self-exploration" rather than leading with "tarot"/"fortune-telling"
+terminology - consistent with the site's own existing "reflective
+entertainment" framing in the AI system prompts.
+
+**Status as of this writing**: waiting on EximPe to respond to the
+submitted application. Nothing else actioned on this front - the
+India-in-USD fix above (confirmed working) remains the live, working
+solution regardless of whether an INR-native gateway ever gets added.
+
+## Partner program commission raised from 40% to 50% on live
+## consultations (2026-11-20)
+
+Yoel's explicit decision ("תשנה בכתר רשמנו 50% עמלה" - change it in the
+text, write 50% commission). The partner program has always been a
+**two-tier** commission, not a flat rate: 10% on automated AI readings,
+and a separate, higher rate on live-advisor voice consultations - this
+higher tier was 40%, now raised to **50%**. The 10% AI-reading rate was
+left unchanged (not mentioned in his instruction).
+
+**Updated everywhere this number appears** (confirmed via grep before
+and after, no leftover "40%" commission references found anywhere):
+- `i18n.js`: `partner.hero.commission`, `partner.step3.rest`,
+  `partner.meta.description`, `join.desc`, `partner.nudge.desc` - all 11
+  base languages (55 individual string edits total across 5 keys).
+- `werde-partner.html`: the static German fallback text shown before
+  `data-i18n` swaps it (meta description/og/twitter tags, hero `<p>`,
+  step 3 `<span>`), AND - this is the part that actually changes real
+  money owed to partners, not just display copy - the commission
+  calculator's own `VOICE_RATE` constant (`0.40` → `0.50`). The `AI_RATE`
+  (`0.10`) constant was left unchanged.
+- `index.html`: the static German fallback for `join.desc` (the
+  homepage's own "become an advisor or partner" nudge section).
+- The partner-outreach letter (4 languages, sent to Yoel earlier today
+  as a file to forward to prospective advisors) was also updated to
+  match before any further copies go out - the version already sent
+  still said 40% and should not be reused without the updated figure.
+
+`i18n.js?v=` bumped 90→91 across all 10 files that load it. `node
+--check`/inline-script syntax verified on `i18n.js` and
+`werde-partner.html` before deploying.
