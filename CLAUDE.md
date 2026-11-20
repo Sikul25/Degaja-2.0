@@ -3148,3 +3148,82 @@ since this exact deploy — ask Yoel to retest next time the live
 advisor comes up, and treat this as the expected-working state rather
 than fully proven until he confirms the join link actually arrives via
 the new template.
+
+## Partner page: language-matched URL slugs, and the relative-path bug they introduced (2026-11-20)
+
+Yoel pointed out that advisors he's recruiting are spread across several
+countries (Germany, Portugal, France, UK, US) and the `werde-partner.html`
+link he was sending them all showed German by default regardless of the
+recipient's language - the page had no language-specific URL the way the
+homepage does (`/en`, `/fr`, etc.).
+
+**Added language-matched slugs** via `vercel.json` rewrites, all pointing
+at the same physical `werde-partner.html` file:
+- `/en/become-partner` (UK)
+- `/us/become-partner` (US)
+- `/fr/devenir-partenaire`
+- `/pt/torne-se-parceiro`
+- `/it/diventa-partner`
+- German stays the plain `/werde-partner.html` (no prefix), matching the
+  homepage's existing pattern where German has no `/de` path.
+
+No JS changes were needed for the language itself to display correctly -
+`i18n.js`'s existing `syncLangFromPath()` already reads only the path's
+*first* segment and matches it against `PATH_LANGS`, so `/fr/devenir-
+partenaire` resolves to French exactly the same way `/fr` does on the
+homepage. Verified directly (Vercel Sandbox + Playwright, real rendered
+DOM, not just curl) that all 5 pages show the correct `h1` and the
+correct 40%/10% commission text in their own language.
+
+**Real bug this introduced, found from Yoel's own screenshot**: the new
+slugs are **two path segments deep** (`/fr/devenir-partenaire`), unlike
+the homepage's single-segment language paths (`/fr`). Every *relative*
+href/src in `werde-partner.html` (`style.css`, the nav links to
+`index.html`, the footer's legal-page links, the logo image, the
+favicons) resolved against the wrong base under a two-segment URL - a
+browser resolves `style.css` from `/fr/devenir-partenaire` as
+`/fr/style.css` (treating `devenir-partenaire` as the "file" and `fr`
+as the "directory"), which 404s. Net effect: the page rendered
+completely unstyled - Yoel's screenshot showed the header nav links
+concatenated with no spacing ("AccueilOracleConseil") and the CTA
+button as a plain underlined blue link, because zero CSS was loading.
+This only affects pages whose rewrite destination sits more than one
+path segment deep - the homepage's own `/en`, `/fr` etc. links never
+had this problem since a single segment resolves relative paths against
+the site root correctly.
+
+**Fixed**: every relative href/src in `werde-partner.html` (`style.css`,
+`index.html`/`index.html#oracle`/`index.html#human`, `impressum.html`,
+`datenschutz.html`, `agb.html`, `widerruf.html`, `dmca.html`,
+`favicon.svg`/`favicon.ico`/`apple-touch-icon.png`,
+`assets/degaja-logo.png`) changed to an absolute path (leading `/`), so
+they resolve correctly regardless of how many path segments precede the
+page. **Confirmed fixed** both via a direct fetch of the live page
+(`href="/style.css"` now present, and `https://www.degaja.com/style.css`
+returns 200) and by Yoel re-testing on his own phone ("נראה טוב עכשיו" -
+looks good now).
+
+**If any future page gets a similar multi-segment language-specific URL
+via a `vercel.json` rewrite, check it for the same relative-path trap
+first** - grep the file for `href="` / `src="` values that don't start
+with `/`, `http`, `#` or `mailto:`, and make them absolute before
+shipping the new route, rather than finding out from a broken
+screenshot.
+
+Also found while verifying (minor, not yet fixed - Yoel hasn't said
+whether it's worth it): on `/en/become-partner` specifically, if a
+visitor's geo-IP resolves to the US (e.g. this session's own Vercel
+Sandbox, run from `iad1`), `i18n.js`'s geo-upgrade logic correctly
+upgrades the stored language from `en` to `us` for currency purposes,
+but re-running `applyTranslations()` as part of that upgrade re-sets
+`document.title` to the generic homepage `meta.title` key (which `us`
+inherits from `en`, hence it's the same English text either way) -
+clobbering `werde-partner.html`'s own more specific one-time
+`partner.meta.title` override, which only ever runs once on the
+initial `DOMContentLoaded` and has no way to re-fire when the async
+geo lookup resolves later. Purely cosmetic (browser tab title only,
+not page content, not SEO-critical since the canonical/meta description
+aren't affected the same way) and only reproducible when the visitor's
+real-world location is detected as US while using the UK-targeted link -
+an unlikely combination for Yoel's actual UK-based audience. Low
+priority; revisit if it turns out to matter.
