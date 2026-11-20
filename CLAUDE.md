@@ -3124,3 +3124,27 @@ consultations, 10% on automated readings** - matching what it was
 before any of today's changes. Do not change this again without a
 clear, unambiguous instruction - this number was changed and reverted
 twice in one session already.
+
+## CCBill/WhatsApp advisor notification saga — permanent fix deployed (2026-11-20)
+
+The approved WhatsApp message template (`degaja_session_code`, English
+version, Utility category, dynamic URL button — submitted and approved
+per the entries above) is now live: Yoel confirmed the Meta approval
+email, gave explicit go-ahead, and `META_TEMPLATE_SESSION_CODE` was set
+in Vercel (production + preview) to `degaja_session_code`, followed by
+a redeploy (`dpl_Gt5XRTjZaGbrFERLpdZtC3ECZcXQ`, confirmed `READY` and
+aliased to `www.degaja.com`).
+
+This removes the interim daily-message workaround documented above
+(Papuli no longer needs to WhatsApp the business number at the start
+of each shift to open the 24h customer-service window) — `api/_whatsapp.js`
+now has a real approved template name to send, so `api/notify-advisor.js`
+can deliver the tappable join link reliably via the template path
+instead of falling back to the unreliable `hello_world`+free-text
+pattern.
+
+**Not yet independently confirmed**: a real test call with Papuli
+since this exact deploy — ask Yoel to retest next time the live
+advisor comes up, and treat this as the expected-working state rather
+than fully proven until he confirms the join link actually arrives via
+the new template.
