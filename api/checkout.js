@@ -24,7 +24,7 @@ export default async function handler(req, res) {
   if (!isAdultBirthDate(birthDate)) {
     return res.status(400).json({ error: "A valid date of birth confirming you are 18 or older is required." });
   }
-  const CURRENCY_BY_LANG = { en: "gbp", us: "usd", br: "brl", mx: "mxn", ja: "jpy", zh: "cny", hi: "inr" };
+  const CURRENCY_BY_LANG = { en: "gbp", us: "usd", br: "brl", mx: "mxn", ja: "jpy", zh: "cny", hi: "usd" };
   const currency = CURRENCY_BY_LANG[lang] || "eur";
   const PRODUCT_NAMES = {
     de: { single: "degaja.com – Einzelne Lesung", pack: "degaja.com – 3 Lesungen", voice: n => `DEGAJA Live Audio – ${n} ${n === 1 ? "Thema" : "Themen"}` },

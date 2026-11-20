@@ -71,7 +71,7 @@
 
   // Mirrors api/checkout.js's CURRENCY_BY_LANG — kept in sync manually since
   // this is a plain browser script (not a module) with no shared import.
-  const CURRENCY_BY_LANG = { en: 'gbp', us: 'usd', br: 'brl', mx: 'mxn', ja: 'jpy', zh: 'cny', hi: 'inr' };
+  const CURRENCY_BY_LANG = { en: 'gbp', us: 'usd', br: 'brl', mx: 'mxn', ja: 'jpy', zh: 'cny', hi: 'usd' };
 
   async function loadRemoteData(){
     try{

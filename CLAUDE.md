@@ -2966,3 +2966,46 @@ are enabled for Dynamic Pricing on account 955732/subaccount 0000, and
 if not, what enabling them requires. Do not try further price-based
 workarounds for these two currencies without new information from
 CCBill - the price hypothesis is now conclusively tested and ruled out.
+
+**2026-11-20: India (hi) switched to bill in USD instead of INR**
+(Yoel's explicit decision - "אז צריך בדולאר בלבד" - after seeing the
+market is large enough to be worth keeping (India astrology-app market
+estimated $163M-$2B+, growing 20-49%/yr, AstroTalk alone reporting
+₹1,823 crore/~$220M revenue in one year) and that the blocker is purely
+CCBill-side, not the market itself. CNY/China was NOT included in this
+change - only `hi`/India. Implemented:
+- `api/checkout.js`: `CURRENCY_BY_LANG.hi` changed from `"inr"` to
+  `"usd"` - Indian visitors are now charged in USD, using the existing
+  default USD amounts ($5.00 single / $9.99 pack, same as every other
+  currency not explicitly listed in `AI_AMOUNTS_BY_CURRENCY`) and the
+  USD Dynamic Pricing range ([5, 300]) already confirmed safe.
+- `live-consult.js`'s own mirrored `CURRENCY_BY_LANG` (kept in manual
+  sync with `api/checkout.js`'s, per its own code comment) updated the
+  same way - voice/live-advisor bookings for `hi` now also request and
+  charge in USD. `VOICE_PRICES`' existing `usd` entries (already present
+  for every tier, added in the 2026-10-29 audit) cover this with no new
+  data needed.
+- `i18n.js`'s `hi` block: `currency.symbol` (₹→$), `prices.single/pack.*`,
+  `purchase.single/pack`, `result.deepBtn` all changed from
+  ₹249/₹499/₹166-per-reading to $5.00/$9.99/$3.33-per-reading (matching
+  the US block's exact values/format) - display now matches what's
+  actually charged, avoiding a repeat of the 2026-11-12 "displayed price
+  didn't match charged currency" bug.
+- All 7 standalone pages' `hi` STR blocks (`cta`/`purchase_single`/
+  `purchase_pack`) updated the same way (₹249→$5.00, ₹499→$9.99).
+- `AI_AMOUNTS_BY_CURRENCY.inr` and `VOICE_PRICES`' `inr` entries were
+  left in place (now unreferenced by `hi` but harmless - not deleted in
+  case a future language ever wants INR, or CCBill later confirms INR
+  can be enabled).
+- Rituale pricing (`rituale.*.price`) for `hi` was NOT touched - out of
+  scope for this fix, same as the still-open `T.mx` gap noted elsewhere
+  in this file.
+`i18n.js?v=` bumped 87→88 across all 10 files; `live-consult.js?v=`
+bumped 47→48 in `index.html`/`live-call.html`. `node --check` passed on
+all edited `.js` files; inline-script syntax verified on all 7
+standalone pages before deploying.
+
+**CNY/China was deliberately left as INR - not switched to USD in this
+change.** Yoel's decision only addressed India; ask him explicitly
+before applying the same USD switch to `zh`/China, since that's a
+separate market/currency decision he hasn't made yet.
