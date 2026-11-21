@@ -13,7 +13,7 @@
 // Uses the same event_id (our orderId) as the browser-side ttq.track()
 // call so TikTok can deduplicate the two into a single conversion instead
 // of double-counting.
-const PIXEL_CODE = "DBU37GRC77UB463C4KE0";
+const PIXEL_CODE = "DC0LCHBC77U6OQMIAE8G";
 
 // Uses the same global Web Crypto `crypto` object api/checkout.js already
 // relies on for crypto.randomUUID() - no Node "crypto" module import needed.
