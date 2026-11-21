@@ -32,7 +32,7 @@ export async function sendTikTokPurchaseEvent({ orderId, email, amount, currency
     pixel_code: PIXEL_CODE,
     event: "Purchase",
     event_id: orderId,
-    timestamp: new Date().toISOString(),
+    event_time: Math.floor(Date.now() / 1000),
     context: normalizedEmail ? { user: { email: await sha256Hex(normalizedEmail) } } : {},
     properties: {
       contents: [{ content_id: orderId, content_type: "product", content_name: contentName || "reading" }],
