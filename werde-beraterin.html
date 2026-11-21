@@ -111,6 +111,28 @@
         <input id="applySocial" placeholder="@deinprofil" data-i18n-placeholder="apply.form.socialPlaceholder">
         <label for="applyMessage" data-i18n="apply.form.message">Kurze Nachricht an uns</label>
         <textarea id="applyMessage" placeholder="Erzähl uns kurz von dir und deiner Erfahrung." data-i18n-placeholder="apply.form.messagePlaceholder"></textarea>
+
+        <h3 class="apply-quiz-title" data-i18n="apply.quiz.title" style="color:#18334a;margin:10px 0 4px">Kurzer Fachtest</h3>
+        <p class="apply-quiz-intro" data-i18n="apply.quiz.intro" style="color:#687384;font-size:13px;margin:0 0 16px">Bitte beantworte die folgenden Fragen schriftlich, damit wir deine Erfahrung einschätzen können.</p>
+
+        <label for="applyQ1" data-i18n="apply.quiz.q1">Wie ist die Kompatibilität des Paares? Martha 31.10.1972, Emil 17.01.1966.</label>
+        <textarea id="applyQ1" required data-i18n-placeholder="apply.quiz.placeholder" placeholder="Deine Antwort..."></textarea>
+
+        <label for="applyQ2" data-i18n="apply.quiz.q2">Welche Perspektiven hat die Beziehung zwischen Daniel und Katarina? Vergangenheit – die Wurzel der Situation: IV. Gegenwart – die Situation im Moment: VI. Zukunft: III (Minus), Sigma XIII, IV.</label>
+        <textarea id="applyQ2" required data-i18n-placeholder="apply.quiz.placeholder" placeholder="Deine Antwort..."></textarea>
+
+        <label for="applyQ3" data-i18n="apply.quiz.q3">Welche Karten aus welchen Elementen können einer Karte in einer Legung eine solche Kraft verleihen? Karte 1: XII (-)</label>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+          <div>
+            <label for="applyQ3Card2" style="font-weight:600" data-i18n="apply.quiz.q3.card2">Karte 2</label>
+            <input id="applyQ3Card2" required>
+          </div>
+          <div>
+            <label for="applyQ3Card3" style="font-weight:600" data-i18n="apply.quiz.q3.card3">Karte 3</label>
+            <input id="applyQ3Card3" required>
+          </div>
+        </div>
+
         <button type="submit" class="apply-submit" data-i18n="apply.form.submit">Bewerbung senden →</button>
       </form>
       <p class="apply-note" id="applyNote" data-i18n="apply.form.note">Deine Angaben werden nur zur Bearbeitung deiner Bewerbung verwendet. Beim Klick öffnet sich dein E-Mail-Programm mit einer vorausgefüllten Nachricht an uns.</p>
@@ -120,7 +142,7 @@
 </main>
 <footer><div class="footer-brand"><img src="assets/degaja-logo.png" alt="DEGAJA" class="footer-logo"></div><p data-i18n="footer.tagline">Deine Frage. Dein Weg.</p><div class="footer-links"><a href="impressum.html" data-i18n="footer.impressum">Impressum</a><a href="datenschutz.html" data-i18n="footer.datenschutz">Datenschutz</a><a href="agb.html" data-i18n="footer.agb">AGB</a><a href="widerruf.html" data-i18n="footer.widerruf">Widerruf</a><a href="dmca.html" data-i18n="footer.dmca">DMCA & Inhalte</a><a href="mailto:cs@degaja.com" data-i18n="footer.kontakt">Kontakt</a></div><div class="footer-company">Operated by Sagacitas Ltd, 136 Capel Street, Dublin D01 T2C9, Ireland</div></footer>
 <script defer src="/_vercel/insights/script.js?v=2"></script>
-<script src="/i18n.js?v=90"></script>
+<script src="/i18n.js?v=91"></script>
 <script>
   // i18n.js's own applyTranslations() sets document.title/meta description
   // from the homepage's meta.title/meta.description keys. Override them
@@ -141,15 +163,34 @@
     const val = id => document.getElementById(id)?.value.trim() || '';
     const name = val('applyName'), email = val('applyEmail');
     if (!name || !email) return;
+    const q1 = val('applyQ1'), q2 = val('applyQ2'), q3card2 = val('applyQ3Card2'), q3card3 = val('applyQ3Card3');
+    const specialty = val('applySpecialty'), social = val('applySocial'), phone = val('applyPhone'), message = val('applyMessage');
+
+    // Best-effort WhatsApp ping to Papuli/Yoel - fire-and-forget, never
+    // blocks or replaces the real mailto: application below.
+    try {
+      fetch('/api/advisor-apply-notify', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        keepalive: true,
+        body: JSON.stringify({ name, email, phone, specialty, social, message, q1, q2, q3card2, q3card3 })
+      }).catch(() => {});
+    } catch {}
+
     const body = [
       `${t('apply.mail.name')} ${name}`,
       `${t('apply.mail.email')} ${email}`,
-      `${t('apply.mail.phone')} ${val('applyPhone') || '-'}`,
-      `${t('apply.mail.specialty')} ${val('applySpecialty') || '-'}`,
-      `${t('apply.mail.social')} ${val('applySocial') || '-'}`,
+      `${t('apply.mail.phone')} ${phone || '-'}`,
+      `${t('apply.mail.specialty')} ${specialty || '-'}`,
+      `${t('apply.mail.social')} ${social || '-'}`,
       '',
       `${t('apply.mail.message')}`,
-      val('applyMessage') || '-'
+      message || '-',
+      '',
+      t('apply.quiz.title'),
+      `1) ${q1 || '-'}`,
+      `2) ${q2 || '-'}`,
+      `3) ${t('apply.quiz.q3.card2')}: ${q3card2 || '-'} / ${t('apply.quiz.q3.card3')}: ${q3card3 || '-'}`
     ].join('\n');
     const mailto = `mailto:cs@degaja.com?subject=${encodeURIComponent(t('apply.mail.subject') + name)}&body=${encodeURIComponent(body)}`;
     window.location.href = mailto;
