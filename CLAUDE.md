@@ -3227,3 +3227,119 @@ aren't affected the same way) and only reproducible when the visitor's
 real-world location is detected as US while using the UK-targeted link -
 an unlikely combination for Yoel's actual UK-based audience. Low
 priority; revisit if it turns out to matter.
+
+## TikTok pixel lost, replaced, and the TikTok Ads campaign finally launched (2026-11-21)
+
+**The old TikTok pixel (`DBU37GRC77UB463C4KE0`, installed 2026-11-17)
+became permanently inaccessible.** Yoel checked both of his TikTok Ad
+Accounts and all of his Business Centers (he has three "Sagacitas"
+ones) - the pixel appeared in none of them. Root cause never identified
+(not CCBill/our side - it was purely a TikTok-side access/visibility
+issue); the pixel kept firing fine on the live site the entire time, so
+this was never a functional break, just a loss of the ability to manage
+it in TikTok's UI or generate a fresh Events API token for it.
+
+**Fixed by creating a new pixel** (`DC0LCHBC77U6OQMIAE8G`, via TikTok's
+own Events Manager "Create pixel" + Business Funnel wizard, template
+"E-commerce"). Swapped into all 8 places that reference it:
+- `ttq.load('...')` in `index.html` + all 7 standalone pages (client-side
+  pixel).
+- `PIXEL_CODE` in `api/_tiktok.js` (server-side Events API calls from
+  `api/ccbill-webhook.js`) - **this one was missed in the first pass**
+  and still pointed at the dead old pixel until caught and fixed
+  separately; every server-side Purchase event would have gone to the
+  wrong (inaccessible) pixel until this second fix shipped.
+
+**Critical, previously-unconfirmed bug found and fixed in the same pass**:
+`api/_tiktok.js` sent a field named `timestamp` (ISO string) in its
+Events API payload. TikTok's real v1.3 Events API doesn't recognize this
+field at all - confirmed empirically by firing a real test call (Vercel
+Sandbox + curl) and getting back `{"code":40002,"message":"Missing
+required field(s): data.0.event_time."}`. The correct field is
+**`event_time`**, a Unix epoch integer in seconds. **This means every
+real server-side Purchase event sent since this code was built
+(2026-11-17) was almost certainly silently rejected by TikTok with this
+exact error** - the CLAUDE.md entry from that date flagged this as "not
+yet confirmed... check get_runtime_logs for a non-OK response," and
+this is that confirmation, found the hard way. Fixed and
+re-verified live: after correcting the field name, the identical test
+call got back `{"code": 0, "message": "OK"}`.
+
+A fresh Events API access token was also generated for the new pixel
+(TikTok's token-generation screen has **no expiration field at all** -
+unlike Meta's System User tokens, there's no "never expire" option to
+choose; whatever caused the old one to stop working was unrelated to
+expiry settings) and set as `TIKTOK_EVENTS_API_ACCESS_TOKEN` in Vercel,
+replacing the old one.
+
+**TikTok's Events Manager initially showed "Status: Not ready for
+campaign"** (new pixel, no events received yet) and a separate
+"Diagnostics: Missing events (Critical)" warning naming all four
+expected commerce-funnel events: **View content, Add to cart, Initiate
+checkout, Purchase**. Confirmed via code review that our site currently
+only ever fires `Purchase` (via `fireTikTokPurchase()` in
+`script.js`/`live-consult.js`, and server-side via `api/_tiktok.js`) -
+there is no `ttq.track()` call anywhere for ViewContent, AddToCart, or
+InitiateCheckout. This is a real, still-open gap (TikTok's own note:
+"commerce advertisers who implement a complete event funnel have seen
+an average CPA reduction between 5.7% and 7.7%") - **not fixed in this
+session**, flagged for later; TikTok's own "Event Builder" (point-and-
+click, no code) was suggested to Yoel as the lower-effort option if he
+wants to close this himself, as an alternative to a real code change
+across `script.js` + all 7 standalone pages + `live-consult.js`.
+
+Sent one real diagnostic test `Purchase` event via the Events API
+directly (fake order data, real API call) specifically to clear the
+"at least one standard event received" blocker - worked, campaign
+creation became possible shortly after (TikTok's own UI warned status
+updates can take up to 24h, but it cleared faster in practice).
+
+**The TikTok Ads campaign itself was finally launched** - the one
+"Yoel explicitly decided to hold off... until the CCBill cutover is
+fully live," per the entry above, and which he explicitly green-lit
+today ("בוא נתחיל את הקמפיין"). Two separate campaigns were published
+(both "Sales" objective, "Conversions" optimization goal, "Purchase" as
+the optimization event, the coffee-cup-reading TikTok video as creative -
+the same one analyzed earlier in this file, confirmed to show the actual
+reading ritual clearly on camera, not just the Galata Tower location):
+- **DACH** (Germany + Austria + Switzerland in one targeting group):
+  €60/day, Custom schedule, 7 days (2026-11-21 to 2026-11-28), not
+  "Run continuously" - Yoel's explicit preference, so it auto-stops
+  rather than relying on him remembering to pause it. Language
+  deliberately left unrestricted (not narrowed to German only) so it
+  still reaches Turkish/Greek-German audiences - Yoel's own market
+  research (shared mid-session) confirmed coffee-cup reading (Kaffeesatz-
+  lesen/Fal) is a real, named tradition in Germany specifically among
+  Turkish/Greek immigrant communities (Berlin's Kreuzberg/Neukölln/
+  Gesundbrunnen, Cologne, Frankfurt, Munich), with real-world prices
+  (€10-90/session) well above DEGAJA's.
+  Call-to-action set: removed "Apply now"/"Interested" (irrelevant,
+  lead-gen-style CTAs TikTok pre-selects by default) and kept only
+  purchase-relevant ones (Visit store, Watch now, Sign up, Order now,
+  Check it out, Read more, View now, Learn more).
+- **US**: €40/day, same Custom 7-day schedule, same CTA cleanup. Two
+  creatives running together here (not just one): the same coffee-
+  reading video, plus a Time Tunnel-themed promotional video (glowing
+  clock/portal graphic with Turkish-style music, 253-254 organic views)
+  - Yoel's reasoning for adding the second one: a curiosity-driven
+    "what is this?" hook. UK was briefly added to this same ad group,
+    then explicitly removed again after being reminded this directly
+    contradicts the standing, deliberate "UK/France/Italy/Spain stay
+    unfunded" decision documented above (risk of diluting the budget
+    below TikTok's per-market learning-phase threshold) - Yoel's own
+    call once reminded, reasoning "US is exactly the market where
+    Nebula has its own mess (the FTC case) - that's our opportunity."
+
+Both campaigns published successfully and show **"Under review"** in
+TikTok's dashboard - normal for freshly-published campaigns, usually
+clears within a few hours. **Not yet confirmed**: actual ad delivery,
+real spend, or any conversions from this campaign - that needs a
+check-in in the next day or two. If spend looks right but conversions
+don't register, check first whether the ViewContent/AddToCart/
+InitiateCheckout funnel gap above is suppressing delivery optimization,
+since TikTok's own diagnostic specifically warned about this.
+
+Separately, confirmed via Vercel Web Analytics the same session: last
+30 days (2026-10-22 to 2026-11-21) show only **112 unique visitors /
+393 pageviews total** on production - stark confirmation of why this
+campaign matters; organic traffic alone is not remotely enough.
