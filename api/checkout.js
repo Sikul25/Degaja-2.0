@@ -93,6 +93,11 @@ export default async function handler(req, res) {
   }
   if (!item) return res.status(400).json({ error: "Invalid product" });
 
+  // CCBill deliberately disabled 2026-11-22 (Yoel's explicit instruction) while
+  // the site transitions to an independent, simplified setup - do not
+  // re-enable without him asking directly.
+  return res.status(503).json({ error: "Payments are not configured" });
+  // eslint-disable-next-line no-unreachable
   if (!process.env.CCBILL_ENCRYPTION_KEY) {
     return res.status(503).json({ error: "Payments are not configured" });
   }
